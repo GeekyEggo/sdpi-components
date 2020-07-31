@@ -1,0 +1,29 @@
+{
+    "name": "sdpi",
+    "version": "1.0.0",
+    "description": "Stream Deck Property Inspector web components",
+    "main": "main.ts",
+    "scripts": {
+        "build:plugin": "browserify src/index.ts -p [ tsify ] -o C:\\Users\\Richard\\AppData\\Roaming\\Elgato\\StreamDeck\\Plugins\\com.geekyeggo.counternet48.sdPlugin\\pi\\index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/GeekyEggo/sdpi.git"
+    },
+    "keywords": [
+        "stream-deck",
+        "stream",
+        "deck",
+        "property-inspector"
+    ],
+    "author": "GeekyEggo",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/GeekyEggo/sdpi/issues"
+    },
+    "homepage": "https://github.com/GeekyEggo/sdpi#readme",
+    "devDependencies": {
+        "tsify": "^5.0.0",
+        "typescript": "^3.9.7"
+    }
+}
