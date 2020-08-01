@@ -15,6 +15,7 @@ export default class SDPIElement extends HTMLElement {
 
     private label: HTMLLabelElement;
     private storeKey?: string;
+    private useGlobalSettings: boolean = false;
 
     /**
      * Gets the observed attributes.
@@ -35,6 +36,7 @@ export default class SDPIElement extends HTMLElement {
             console.warn('Unable to save input as there is no id assigned');
         }
 
+        this.useGlobalSettings = this.hasAttribute('global');
         this.classList.add('sdpi-item');
         
         // construct the label
@@ -87,9 +89,9 @@ export default class SDPIElement extends HTMLElement {
         }
         
         // monitor for changes from the Stream Deck
-        store.addEventListener(STORE_EVENT.settingsChange, (ev: Event) => {
+        store.addEventListener(this.useGlobalSettings ? STORE_EVENT.globalSettings : STORE_EVENT.settings, (ev: Event) => {
             const data = (<MessageEvent>ev).data;
-            if (data && this.storeKey && data.hasOwnProperty(this.storeKey)) {
+            if (data && this.storeKey) {
                 onChange(data[this.storeKey]);
             }
         });
@@ -103,7 +105,7 @@ export default class SDPIElement extends HTMLElement {
      */
     private saveValue(value?: any): void {
         if (this.storeKey) {
-            store.set(this.storeKey, value);
+            store.set(this.storeKey, value, this.useGlobalSettings);
         }
     }
 }
