@@ -42,7 +42,7 @@ export default class StreamDeckConnection extends EventTarget {
      * @param {string} event The event name.
      * @param {any} payload The optional payload.
      */
-    public async send(event: string, payload?: any) {
+    public async send(event: string, payload?: any): Promise<void> {
         try {
             await this.connection.promise;
 
@@ -50,7 +50,7 @@ export default class StreamDeckConnection extends EventTarget {
                 event: event,
                 context: this.inPropertyInspectorUUID,
                 payload: payload,
-                action: this.actionInfo?.action
+                action: this.actionInfo.action
             }));
         } catch {
             console.error(`Unable to send request '${event}' as there is no connection.`);
@@ -61,8 +61,7 @@ export default class StreamDeckConnection extends EventTarget {
      * Handles the message event of the web socket.
      * @param ev The event arguments.
      */
-    private onMessage(ev: any) {
-        console.log(ev.data);
+    private onMessage(ev: any): void {
         this.dispatchEvent(new MessageEvent('message', {
             data: JSON.parse(ev.data)
         }));
@@ -72,7 +71,7 @@ export default class StreamDeckConnection extends EventTarget {
      * Handles the open event of the web socket.
      * @param ev The event arguments.
      */
-    private onOpen(ev: any) {
+    private onOpen(ev: any): void {
         try {
             this.webSocket.send(JSON.stringify({
                 event: this.inRegisterEvent,
