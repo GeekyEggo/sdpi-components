@@ -1,0 +1,37 @@
+{
+    "$schema": "https://raw.githubusercontent.com/GeekyEggo/SharpDeck/master/src/SharpDeck.PropertyInspector/manifest-schema.json",
+    "Name": "Counter",
+    "Version": "1.0.0",
+    "Author": "Richard Herman",
+    "Actions": [
+        {
+            "Name": "Counter",
+            "UUID": "com.geekyeggo.sdpi.counter",
+            "Icon": "Images/Counter/Icon",
+            "Tooltip": "A counter action",
+            "PropertyInspectorPath": "pi/index.html",
+            "States": [
+                {
+                    "FontSize": "18",
+                    "Image": "Images/Counter/Image",
+                    "TitleAlignment": "middle"
+                }
+            ]
+        }
+    ],
+    "Category": "sdpi Example",
+    "CategoryIcon": "Images/Plugin/CategoryIcon",
+    "CodePath": "sdpi.exe",
+    "Description": "An example plugin demonstrating sdpi web components",
+    "Icon": "Images/Plugin/Icon",
+    "SDKVersion": 2,
+    "Software": {
+        "MinimumVersion": "4.1"
+    },
+    "OS": [
+        {
+            "MinimumVersion": "10",
+            "Platform": "windows"
+        }
+    ]
+}
