@@ -1,4 +1,4 @@
-import "./components/textfield"
+import "./components/SDPITextField";
 
 window.connectElgatoStreamDeckSocket = (inPort: string,  inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string) => {
     console.log(inPort);

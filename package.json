@@ -5,7 +5,7 @@
     "main": "src/index.ts",
     "scripts": {
         "build": "browserify %npm_package_main% -p [ tsify ] -o dist/bundle.js",
-        "watch": "watchify %npm_package_main%s -p [ tsify ] -o %APPDATA%/Elgato/StreamDeck/Plugins/com.geekyeggo.sdpi.sdPlugin/pi/sdpi.js"
+        "watch": "watchify %npm_package_main% -p [ tsify ] -o %APPDATA%/Elgato/StreamDeck/Plugins/com.geekyeggo.sdpi.sdPlugin/pi/sdpi.js"
     },
     "repository": {
         "type": "git",

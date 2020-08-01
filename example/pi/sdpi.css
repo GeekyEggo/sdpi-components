@@ -1596,3 +1596,8 @@ input[type="range"].colortemperature::-webkit-slider-thumb {
         opacity: 1;
         transition: opacity 0.25s ease-out;
     }
+
+/* custom */
+.sdpi-item-label {
+    padding-right: 6px !important;
+}
