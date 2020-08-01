@@ -4,7 +4,7 @@
     "description": "Stream Deck Property Inspector web components",
     "main": "main.ts",
     "scripts": {
-        "build:plugin": "browserify src/index.ts -p [ tsify ] -o C:\\Users\\Richard\\AppData\\Roaming\\Elgato\\StreamDeck\\Plugins\\com.geekyeggo.counternet48.sdPlugin\\pi\\index.js"
+        "build:debug": "browserify src/index.ts -p [ tsify ] -o C:\\Users\\Richard\\AppData\\Roaming\\Elgato\\StreamDeck\\Plugins\\com.geekyeggo.sdpi.sdPlugin\\pi\\sdpi.js"
     },
     "repository": {
         "type": "git",

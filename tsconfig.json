@@ -1,9 +1,16 @@
 {
     "compilerOptions": {
+        /* core */
+        "target": "ES6",
         "module": "commonjs",
+        "rootDir": "./src",
+        "outDir": "./dist/lib",
+        /* config */
         "noImplicitAny": true,
+        "strict": true,
         "removeComments": true,
-        "sourceMap": false
+        "sourceMap": true,
+        "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     },
     "exclude": [
         "node_modules"

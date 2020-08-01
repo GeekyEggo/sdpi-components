@@ -106,3 +106,7 @@ dist
 # dotnet
 bin
 obj
+
+# TypeScript
+src/**/*.js*
+.gitignore
