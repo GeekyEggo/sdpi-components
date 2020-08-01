@@ -1,4 +1,4 @@
-import SDPIElement from './SDPIElement';
+import SDPIElement from './sdpiElement';
 
 /**
  * A Stream Deck property inspector text field. 
