@@ -17,14 +17,14 @@ export default class SDPIElement extends HTMLElement {
      * Gets the observed attributes.
      * @returns {string[]} The observed attributes.
      */
-    public static get observedAttributes() : string[] {
+    public static get observedAttributes(): string[] {
         return [ 'label' ];
     }
 
     /**
      * Called every time the element is inserted into the DOM.
      */
-    public connectedCallback() : void {
+    public connectedCallback(): void {
         this.classList.add('sdpi-item');
         
         // construct the label
@@ -42,7 +42,7 @@ export default class SDPIElement extends HTMLElement {
      * @param oldValue The attributes old value.
      * @param newValue The attributes new value.
      */
-    public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null) : void {
+    public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
         if (attrName === 'label') {
             this.label.innerText = this.getAttribute('label') ?? '';
         }
@@ -55,7 +55,7 @@ export default class SDPIElement extends HTMLElement {
      * @param oldValue The attributes old value.
      * @param newValue The attributes new value.
      */
-    protected cloneAttribute(target: HTMLElement, attrName: string, oldValue: string | null, newValue: string | null) {
+    protected cloneAttribute(target: HTMLElement, attrName: string, oldValue: string | null, newValue: string | null): void {
         if (newValue === null) {
             target.removeAttribute(attrName);
         } else {
@@ -67,7 +67,7 @@ export default class SDPIElement extends HTMLElement {
      * Transfers the id attribute from this element, to the target.
      * @param target The target element.
      */
-    protected transferIdentifierTo(target: HTMLElement) {
+    protected transferIdentifierTo(target: HTMLElement): void {
         if (this.hasAttribute('id')) {
             target.id = <string>this.getAttribute('id');
             this.removeAttribute('id');

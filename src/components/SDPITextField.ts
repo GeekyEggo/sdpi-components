@@ -18,7 +18,7 @@ class SDPITextField extends SDPIElement {
      * Gets the observed attributes.
      * @returns {string[]} The observed attributes.
      */
-    public static get observedAttributes() : string[] {
+    public static get observedAttributes(): string[] {
         return super.observedAttributes.concat([
             'password',
             'pattern',
@@ -30,7 +30,7 @@ class SDPITextField extends SDPIElement {
     /**
      * Called every time the element is inserted into the DOM.
      */
-    public connectedCallback() : void {
+    public connectedCallback(): void {
         super.connectedCallback();
 
         // construct the input
@@ -46,7 +46,7 @@ class SDPITextField extends SDPIElement {
      * @param oldValue The attributes old value.
      * @param newValue The attributes new value.
      */
-    public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null) : void {
+    public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
         super.attributeChangedCallback(attrName, oldValue, newValue);
 
         switch (attrName) {
