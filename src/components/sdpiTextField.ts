@@ -1,4 +1,5 @@
 import SDPIElement from './sdpiElement';
+import store from '../core/store';
 
 /**
  * A Stream Deck property inspector text field. 
@@ -13,6 +14,7 @@ class SDPITextField extends SDPIElement {
     }
 
     private input : HTMLInputElement;
+    private setSetting: (value?: any) => void = _ => { };
 
     /**
      * Gets the observed attributes.
@@ -34,9 +36,15 @@ class SDPITextField extends SDPIElement {
         super.connectedCallback();
 
         // construct the input
+        this.setSetting = super.useSettings((value?: any) => {
+            this.input.value = value;
+        }, this.input);
+
         this.input.classList.add('sdpi-item-value');
-        super.transferIdentifierTo(this.input);
-        
+        this.input.addEventListener('change', _ => {
+            this.setSetting(this.input.value);
+        });
+
         this.appendChild(this.input);
     }
 

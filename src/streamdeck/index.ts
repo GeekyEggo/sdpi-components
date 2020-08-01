@@ -1,4 +1,5 @@
-import StreamDeckConnection from "./streamDeckConnection";
+import StreamDeckConnection from './streamDeckConnection';
+import store from '../core/store';
 
 /**
  * Called by the Stream Deck to enable registration of the property inspector.
@@ -10,5 +11,5 @@ import StreamDeckConnection from "./streamDeckConnection";
  */
 window.connectElgatoStreamDeckSocket = (inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void => {
     const connection = new StreamDeckConnection(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
-    connection.send('getGlobalSettings');
+    store.attach(connection);
 }

@@ -1,3 +1,5 @@
+import store from "../core/store";
+
 /**
  * Provides a base Stream Deck property inspector element.
  */
@@ -12,6 +14,7 @@ export default class SDPIElement extends HTMLElement {
     }
 
     private label: HTMLLabelElement;
+    private storeKey?: string;
 
     /**
      * Gets the observed attributes.
@@ -25,6 +28,13 @@ export default class SDPIElement extends HTMLElement {
      * Called every time the element is inserted into the DOM.
      */
     public connectedCallback(): void {
+        // set the store key
+        if (this.hasAttribute('id')) {
+            this.storeKey = <string>this.getAttribute('id');
+        } else {
+            console.warn('Unable to save input as there is no id assigned');
+        }
+
         this.classList.add('sdpi-item');
         
         // construct the label
@@ -64,13 +74,36 @@ export default class SDPIElement extends HTMLElement {
     }
 
     /**
-     * Transfers the id attribute from this element, to the target.
-     * @param target The target element.
+     * Registers the element against the Stream Deck settings, monitoring for changes.
+     * @param onChange Called when new settings are received.
+     * @param element The target element.
+     * @returns A function to set the value and store it against the Stream Deck action settings.
      */
-    protected transferIdentifierTo(target: HTMLElement): void {
-        if (this.hasAttribute('id')) {
-            target.id = <string>this.getAttribute('id');
+    protected useSettings(onChange: (value?: any) => void, element?: HTMLElement): (value?: any) => void {
+        // transfer the identifer to the element
+        if (this.id && element) {
+            element.id = this.id;
             this.removeAttribute('id');
+        }
+        
+        // monitor for changes from the Stream Deck
+        store.addEventListener('settingsChange', (ev: Event) => {
+            const data = (<MessageEvent>ev).data;
+            if (data && this.storeKey && data.hasOwnProperty(this.storeKey)) {
+                onChange(data[this.storeKey]);
+            }
+        });
+        
+        return this.saveValue;
+    }
+
+    /**
+     * Saves the value against the action settings.
+     * @param value The value.
+     */
+    private saveValue(value?: any): void {
+        if (this.storeKey) {
+            store.set(this.storeKey, value);
         }
     }
 }

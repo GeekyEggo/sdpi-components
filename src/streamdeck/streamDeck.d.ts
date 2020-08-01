@@ -64,3 +64,28 @@ export interface Coordinates {
     column: number;
     row: number;
 }
+
+// https://developer.elgato.com/documentation/stream-deck/sdk/events-received/
+
+export interface StreamDeckEventArgs {
+    event: string
+}
+
+export interface StreamDeckPayloadEventArgs<T> extends StreamDeckEventArgs {
+    payload: T
+}
+
+export interface ActionEventArgs<T> extends StreamDeckPayloadEventArgs<T> {
+    action: string
+    context: string;
+    device: string;
+}
+
+export interface SettingsPayload {
+    settings: any
+}
+
+export interface ActionPayload extends SettingsPayload {
+    coordinates: Coordinates;
+    isInMultiAction: boolean;
+}
