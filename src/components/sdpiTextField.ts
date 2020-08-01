@@ -1,5 +1,4 @@
 import SDPIElement from './sdpiElement';
-import store from '../core/store';
 
 /**
  * A Stream Deck property inspector text field. 

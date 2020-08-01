@@ -1,4 +1,4 @@
-import store from "../core/store";
+import store, { STORE_EVENT } from "../core/store";
 
 /**
  * Provides a base Stream Deck property inspector element.
@@ -87,7 +87,7 @@ export default class SDPIElement extends HTMLElement {
         }
         
         // monitor for changes from the Stream Deck
-        store.addEventListener('settingsChange', (ev: Event) => {
+        store.addEventListener(STORE_EVENT.settingsChange, (ev: Event) => {
             const data = (<MessageEvent>ev).data;
             if (data && this.storeKey && data.hasOwnProperty(this.storeKey)) {
                 onChange(data[this.storeKey]);

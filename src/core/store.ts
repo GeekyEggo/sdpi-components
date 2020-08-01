@@ -2,6 +2,13 @@ import StreamDeckConnection from '../streamdeck/streamDeckConnection';
 import { StreamDeckPayloadEventArgs, ActionPayload } from '../streamdeck/streamDeck';
 
 /**
+ * Defines the events that can be dispatched by the store.
+ */
+export const STORE_EVENT = {
+    settingsChange: 'settingsChange'
+}
+
+/**
  * Provides a store for managing settings stored within the Stream Deck.
  */
 class Store extends EventTarget {
@@ -38,11 +45,15 @@ class Store extends EventTarget {
      */
     private dispatchSettings(settings: any): void {
         this.settings = settings || {};
-        this.dispatchEvent(new MessageEvent('settingsChange', {
+        this.dispatchEvent(new MessageEvent(STORE_EVENT.settingsChange, {
             data: this.settings
         }))
     }
     
+    /**
+     * Handles receiving a message from the Stream Deck connection.
+     * @param ev The event arguments.
+     */
     private onConnectionMessage(ev: Event): void {
         let sdEvent = <StreamDeckPayloadEventArgs<ActionPayload>>(<MessageEvent>ev).data;
         if (sdEvent.event === 'didReceiveSettings') {
