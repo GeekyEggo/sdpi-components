@@ -1,5 +1,6 @@
 import StreamDeckConnection from '../streamdeck/streamDeckConnection';
-import { StreamDeckPayloadEventArgs, ActionPayload, SettingsPayload } from '../streamdeck/streamDeck';
+import { StreamDeckPayloadEventArgs, SettingsPayload } from '../streamdeck/streamDeck';
+import { delay } from './timeout';
 
 /**
  * Defines the events that can be dispatched by the store.
@@ -87,4 +88,46 @@ class Store extends EventTarget {
 }
 
 const store = new Store();
+
+/**
+ * Registers the update callback against the store for the given key, and returns a setter.
+ * @param key The settings key.
+ * @param global Determines whether the setting is global.
+ * @param updateCallback The update callback invoked when the settings were updated from the Stream Deck.
+ * @returns A function to be used to persist the setting to the Stream Deck.
+ */
+export function useStore(key: string, global: boolean, updateCallback: (value: any) => void): (value?: any) => void {
+    // monitor for changes from the Stream Deck
+    store.addEventListener(global ? STORE_EVENT.globalSettings : STORE_EVENT.settings, (ev: Event) => {
+        const data = (<MessageEvent>ev).data;
+        if (data) {
+            updateCallback(data[key]);
+        }
+    });
+    
+    // return the setter
+    return (value?: any) => {
+        store.set(key, value, global);
+    }
+}
+
+/**
+ * A wrapper function for useStore, whereby changes are automatically watched on the inputs value.
+ * @param key The settings key.
+ * @param global Determines whether the setting is global.
+ * @param input The input element.
+ * @param timeout The delay before the changes are saved; when undefined the save will occur on change.
+ */
+export function useStoreWithInput(key: string, global: boolean, input: HTMLInputElement, timeout?: number | null): void {
+    const save = useStore(key, global, (value?: any) => {
+        input.value = value;
+    })
+
+    if (timeout) {
+        delay(() => save(input.value), timeout, input);
+    } else {
+        input.addEventListener('change', _ => save(input.value));
+    }
+}
+
 export default store;

@@ -1,4 +1,5 @@
 import SDPIElement from './sdpiElement';
+import { useStoreWithInput } from '../core/store';
 
 /**
  * A Stream Deck property inspector text field. 
@@ -11,9 +12,6 @@ class SDPITextField extends SDPIElement {
         super();
         this.input = document.createElement('input');
     }
-
-    private input : HTMLInputElement;
-    private setSetting: (value?: any) => void = _ => { };
 
     /**
      * Gets the observed attributes.
@@ -29,21 +27,26 @@ class SDPITextField extends SDPIElement {
     }
 
     /**
+     * Gets the element that should be focused when the label is clicked.
+     */
+    protected get focusElement(): HTMLElement | null {
+        return this.input;
+    }
+
+    /**
+     * Gets the main input.
+     */
+    private input : HTMLInputElement;
+
+    /**
      * Called every time the element is inserted into the DOM.
      */
     public connectedCallback(): void {
         super.connectedCallback();
 
-        // construct the input
-        this.setSetting = super.useSettings((value?: any) => {
-            this.input.value = value;
-        }, this.input);
-
+        useStoreWithInput(this.id, this.global, this.input, 300);
         this.input.classList.add('sdpi-item-value');
-        this.input.addEventListener('change', _ => {
-            this.setSetting(this.input.value);
-        });
-
+     
         this.appendChild(this.input);
     }
 

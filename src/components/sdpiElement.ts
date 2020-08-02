@@ -3,7 +3,7 @@ import store, { STORE_EVENT } from "../core/store";
 /**
  * Provides a base Stream Deck property inspector element.
  */
-export default class SDPIElement extends HTMLElement {
+export default abstract class SDPIElement extends HTMLElement {
     /**
      * Initializes a new base element.
      */
@@ -12,10 +12,6 @@ export default class SDPIElement extends HTMLElement {
 
         this.label = document.createElement('label');
     }
-
-    private label: HTMLLabelElement;
-    private storeKey?: string;
-    private useGlobalSettings: boolean = false;
 
     /**
      * Gets the observed attributes.
@@ -26,24 +22,36 @@ export default class SDPIElement extends HTMLElement {
     }
 
     /**
+     * Gets the element that should be focused when the label is clicked.
+     */
+    protected abstract get focusElement(): HTMLElement | null;
+    
+    /**
+     * Gets the main label.
+     */
+    private label: HTMLLabelElement;
+
+    /**
+     * Gets a value indicating whether the setting is global.
+     */
+    protected get global(): boolean {
+        return this.hasAttribute('global');
+    }
+
+    /**
      * Called every time the element is inserted into the DOM.
      */
     public connectedCallback(): void {
-        // set the store key
-        if (this.hasAttribute('id')) {
-            this.storeKey = <string>this.getAttribute('id');
-        } else {
+        if (!this.id) {
             console.warn('Unable to save input as there is no id assigned');
+        } else if (this.focusElement) {
+            this.focusElement.id = `sdpi__${this.id}`;
+            this.label.htmlFor = this.focusElement.id;
         }
 
-        this.useGlobalSettings = this.hasAttribute('global');
+        // assign the classes.
         this.classList.add('sdpi-item');
-        
-        // construct the label
         this.label.classList.add('sdpi-item-label');
-        if (this.hasAttribute('id')) {
-            this.label.htmlFor = <string>this.getAttribute('id');
-        }
 
         this.appendChild(this.label);
     }
@@ -72,40 +80,6 @@ export default class SDPIElement extends HTMLElement {
             target.removeAttribute(attrName);
         } else {
             target.setAttribute(attrName, newValue);
-        }
-    }
-
-    /**
-     * Registers the element against the Stream Deck settings, monitoring for changes.
-     * @param onChange Called when new settings are received.
-     * @param element The target element.
-     * @returns A function to set the value and store it against the Stream Deck action settings.
-     */
-    protected useSettings(onChange: (value?: any) => void, element?: HTMLElement): (value?: any) => void {
-        // transfer the identifer to the element
-        if (this.id && element) {
-            element.id = this.id;
-            this.removeAttribute('id');
-        }
-        
-        // monitor for changes from the Stream Deck
-        store.addEventListener(this.useGlobalSettings ? STORE_EVENT.globalSettings : STORE_EVENT.settings, (ev: Event) => {
-            const data = (<MessageEvent>ev).data;
-            if (data && this.storeKey) {
-                onChange(data[this.storeKey]);
-            }
-        });
-        
-        return this.saveValue;
-    }
-
-    /**
-     * Saves the value against the action settings.
-     * @param value The value.
-     */
-    private saveValue(value?: any): void {
-        if (this.storeKey) {
-            store.set(this.storeKey, value, this.useGlobalSettings);
         }
     }
 }
