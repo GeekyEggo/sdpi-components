@@ -120,7 +120,7 @@ export function useStore(key: string, global: boolean, updateCallback: (value: a
  */
 export function useStoreWithInput(key: string, global: boolean, input: HTMLInputElement, timeout?: number | null): void {
     const save = useStore(key, global, (value?: any) => {
-        input.value = value;
+        input.value = value || '';
     })
 
     if (timeout) {
