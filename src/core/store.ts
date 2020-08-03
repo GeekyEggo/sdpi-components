@@ -1,7 +1,7 @@
 import { delay } from './timeout';
 import EventDispatcher, { IEventSubscriber } from './eventDispatcher';
-import StreamDeckClient, { DidReceiveGlobalSettingsEventArgs, DidReceiveSettingsEventArgs } from '../streamdeck/streamDeckClient';
-import { ActionEventArgs, ActionInfoPayload } from '../streamdeck/streamdeck';
+import StreamDeckClient, { DidReceiveGlobalSettingsEventArgs, DidReceiveSettingsEventArgs } from '../streamDeck/streamDeckClient';
+import { ActionEventArgs, ActionInfoPayload } from '../streamDeck/streamDeck';
 
 type PartialActionSettingsEventArgs = DidReceiveSettingsEventArgs | ActionEventArgs<ActionInfoPayload>;
 
@@ -65,7 +65,6 @@ class Store {
     private dispatchSettings(data: PartialActionSettingsEventArgs) {
         this.settings = data.payload.settings;
         this._settingsChange.dispatch(this.settings);
-        console.log(this.settings);
     }
 }
 

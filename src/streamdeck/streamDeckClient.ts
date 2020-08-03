@@ -1,4 +1,4 @@
-import { ActionEventArgs, StreamDeckEventArgs, SettingsPayload, StreamDeckPayloadEventArgs } from './streamdeck';
+import { ActionEventArgs, StreamDeckEventArgs, SettingsPayload, StreamDeckPayloadEventArgs } from './streamDeck';
 import StreamDeckConnection from './streamDeckConnection';
 import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
 

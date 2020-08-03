@@ -1,4 +1,4 @@
-import { ActionEventArgs, ActionInfoPayload, Info, StreamDeckEventArgs } from './streamdeck';
+import { ActionEventArgs, ActionInfoPayload, Info, StreamDeckEventArgs } from './streamDeck';
 import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
 import PromiseCompletionSource from '../core/promiseCompletionSource';
 
