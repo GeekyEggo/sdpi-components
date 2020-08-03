@@ -2,20 +2,15 @@ import StreamDeckConnection from '../streamdeck/streamDeckConnection';
 import { StreamDeckPayloadEventArgs, SettingsPayload } from '../streamdeck/streamDeck';
 import { delay } from './timeout';
 
-/**
- * Defines the events that can be dispatched by the store.
- */
-export const STORE_EVENT = {
-    settings: 'settings',
-    globalSettings: 'globalSettings'
-}
+const SETTINGS_MESSAGE = 'settings';
+const GLOBAL_SETTINGS_MESSAGE = 'globalSettings';
 
 /**
- * Defines an internal dispatch message
+ * Defines a dispatch message.
  */
 interface DispatchMessage {
+    type: typeof SETTINGS_MESSAGE | typeof GLOBAL_SETTINGS_MESSAGE;
     data: any;
-    event: string;
 }
 
 /**
@@ -35,7 +30,7 @@ class Store extends EventTarget {
         this.connection.send('getGlobalSettings');
 
         this.dispatch({
-            event: STORE_EVENT.settings,
+            type: SETTINGS_MESSAGE,
             data: connection.actionInfo.payload.settings
         });
     }
@@ -47,7 +42,7 @@ class Store extends EventTarget {
      * @param global Determines whether the setting is a global setting.
      */
     public set(key: string, value?: any, global: boolean = false): void {
-        const settings = this.settings[global ? STORE_EVENT.globalSettings : STORE_EVENT.settings];
+        const settings = this.settings[global ? GLOBAL_SETTINGS_MESSAGE : SETTINGS_MESSAGE];
         settings[key] = value;
 
         if (this.connection) {
@@ -60,8 +55,8 @@ class Store extends EventTarget {
      * @param msg The dispatch message.
      */
     private dispatch(msg: DispatchMessage): void {
-        this.settings[msg.event] = msg.data || { };
-        this.dispatchEvent(new MessageEvent(msg.event, {
+        this.settings[msg.type] = msg.data || { };
+        this.dispatchEvent(new MessageEvent(msg.type, {
             data: msg.data
         }));
     }
@@ -75,12 +70,12 @@ class Store extends EventTarget {
 
         if (sdEvent.event === 'didReceiveSettings') {
             this.dispatch({
-                event: STORE_EVENT.settings,
+                type: SETTINGS_MESSAGE,
                 data: sdEvent.payload.settings
             });
         } else if (sdEvent.event === 'didReceiveGlobalSettings') {
             this.dispatch({
-                event: STORE_EVENT.globalSettings,
+                type: GLOBAL_SETTINGS_MESSAGE,
                 data: sdEvent.payload.settings
             });
         }
@@ -88,17 +83,25 @@ class Store extends EventTarget {
 }
 
 const store = new Store();
+export default store;
+
+/**
+ * The interface returned when using the store.
+ */
+interface IUseStore { 
+    set(value?: any): void
+}
 
 /**
  * Registers the update callback against the store for the given key, and returns a setter.
  * @param key The settings key.
  * @param global Determines whether the setting is global.
  * @param updateCallback The update callback invoked when the settings were updated from the Stream Deck.
- * @returns A function to be used to persist the setting to the Stream Deck.
+ * @returns An object allowing for interaction with the store.
  */
-export function useStore(key: string, global: boolean, updateCallback: (value: any) => void): (value?: any) => void {
+export function useStore(key: string, global: boolean, updateCallback: (value: any) => void): IUseStore {
     // monitor for changes from the Stream Deck
-    store.addEventListener(global ? STORE_EVENT.globalSettings : STORE_EVENT.settings, (ev: Event) => {
+    store.addEventListener(global ? GLOBAL_SETTINGS_MESSAGE : SETTINGS_MESSAGE, (ev: Event) => {
         const data = (<MessageEvent>ev).data;
         if (data) {
             updateCallback(data[key]);
@@ -106,8 +109,10 @@ export function useStore(key: string, global: boolean, updateCallback: (value: a
     });
     
     // return the setter
-    return (value?: any) => {
-        store.set(key, value, global);
+    return {
+        set: (value?: any) => {
+            store.set(key, value, global);
+        }
     }
 }
 
@@ -119,15 +124,13 @@ export function useStore(key: string, global: boolean, updateCallback: (value: a
  * @param timeout The delay before the changes are saved; when undefined the save will occur on change.
  */
 export function useStoreWithInput(key: string, global: boolean, input: HTMLInputElement, timeout?: number | null): void {
-    const save = useStore(key, global, (value?: any) => {
+    const { set } = useStore(key, global, (value?: any) => {
         input.value = value || '';
-    })
+    });
 
     if (timeout) {
-        delay(() => save(input.value), timeout, input);
+        input.addEventListener('input', delay(() => set(input.value), timeout));
     } else {
-        input.addEventListener('change', _ => save(input.value));
+        input.addEventListener('change', () => set(input.value));
     }
 }
-
-export default store;

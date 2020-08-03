@@ -1,18 +1,12 @@
 /**
- * A helper method whereby the callback is invoked when the input value changes, but subsequent changes are delayed.
+ * A helper method for triggering and delaying a timeout.
  * @param callback The callback to invoke when the timeout expires.
  * @param timeout The timeout duration.
- * @param input The input element to observe.
  */
-export function delay(callback: () => void, timeout: number, input: HTMLElement): void {
+export function delay(callback: () => void, timeout: number): () => void {
     let handle: number | undefined;
-    input.addEventListener('input', _ => {
-        // if we have a handle, clear it
-        if (handle) {
-            clearTimeout(handle)
-        }
-
-        // restart the handle
-        handle = setTimeout(callback, timeout);
-    })
+    return (...args: any[]) => {
+        clearTimeout(handle);
+        handle = setTimeout(callback, timeout, args);
+    };
 }

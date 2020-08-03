@@ -1,5 +1,3 @@
-import store, { STORE_EVENT } from "../core/store";
-
 /**
  * Provides a base Stream Deck property inspector element.
  */
