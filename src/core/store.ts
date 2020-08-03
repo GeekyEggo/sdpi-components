@@ -1,38 +1,45 @@
-import StreamDeckConnection from '../streamdeck/streamDeckConnection';
-import { StreamDeckPayloadEventArgs, SettingsPayload } from '../streamdeck/streamDeck';
 import { delay } from './timeout';
+import EventDispatcher, { IEventSubscriber } from './eventDispatcher';
+import StreamDeckClient, { DidReceiveGlobalSettingsEventArgs, DidReceiveSettingsEventArgs } from '../streamdeck/streamDeckClient';
+import { ActionEventArgs, ActionInfoPayload } from '../streamdeck/streamdeck';
 
-const SETTINGS_MESSAGE = 'settings';
-const GLOBAL_SETTINGS_MESSAGE = 'globalSettings';
-
-/**
- * Defines a dispatch message.
- */
-interface DispatchMessage {
-    type: typeof SETTINGS_MESSAGE | typeof GLOBAL_SETTINGS_MESSAGE;
-    data: any;
-}
+type PartialActionSettingsEventArgs = DidReceiveSettingsEventArgs | ActionEventArgs<ActionInfoPayload>;
 
 /**
  * Provides a store for managing settings stored within the Stream Deck.
  */
-class Store extends EventTarget {
-    private connection?: StreamDeckConnection;
-    private settings : Record<string, any> = { };
-
+class Store {
     /**
-     * Attaches the Stream Deck connection to the store.
-     * @param connection The connection to the Stream Deck.
+     * Attaches the Stream Deck client to the store.
+     * @param client The Stream Deck client.
      */
-    public attach(connection: StreamDeckConnection): void {
-        this.connection = connection;
-        this.connection.addEventListener('message', this.onConnectionMessage.bind(this));
-        this.connection.send('getGlobalSettings');
+    public attach(client: StreamDeckClient): void {
+        this.client = client;
 
-        this.dispatch({
-            type: SETTINGS_MESSAGE,
-            data: connection.actionInfo.payload.settings
-        });
+        this.client.didReceiveGlobalSettings.subscribe((data: DidReceiveGlobalSettingsEventArgs) => {
+            this.globalSettings = data.payload.settings;
+            this._globalSettingsChange.dispatch(this.globalSettings);
+        })
+
+        this.client.didReceiveSettings.subscribe((data: DidReceiveSettingsEventArgs) => {
+            this.dispatchSettings(data);
+        })
+
+        this.client.getGlobalSettings();
+        this.dispatchSettings(this.client.connection.actionInfo);
+    }
+    
+    private _globalSettingsChange: EventDispatcher<any> = new EventDispatcher<any>();
+    private _settingsChange: EventDispatcher<any> = new EventDispatcher<any>();
+    private client?: StreamDeckClient;
+    private globalSettings: any;
+    private settings: any;
+
+    public get globalSettingsChange(): IEventSubscriber<any> {
+        return this._globalSettingsChange;
+    }
+    public get settingsChange(): IEventSubscriber<any> {
+        return this._settingsChange;
     }
 
     /**
@@ -42,43 +49,23 @@ class Store extends EventTarget {
      * @param global Determines whether the setting is a global setting.
      */
     public set(key: string, value?: any, global: boolean = false): void {
-        const settings = this.settings[global ? GLOBAL_SETTINGS_MESSAGE : SETTINGS_MESSAGE];
-        settings[key] = value;
-
-        if (this.connection) {
-            this.connection.send(global ? 'setGlobalSettings' : 'setSettings', settings);
+        if (global) {
+            this.globalSettings[key] = value;
+            this.client?.setGlobalSettings(this.globalSettings);
+        } else {
+            this.settings[key] = value;
+            this.client?.setSettings(this.settings);
         }
     }
 
     /**
-     * Updates the settings and dispatches the changes.
-     * @param msg The dispatch message.
+     * Dispatches the settings change.
+     * @param data The data containing the settings.
      */
-    private dispatch(msg: DispatchMessage): void {
-        this.settings[msg.type] = msg.data || { };
-        this.dispatchEvent(new MessageEvent(msg.type, {
-            data: msg.data
-        }));
-    }
-    
-    /**
-     * Handles receiving a message from the Stream Deck connection.
-     * @param ev The event arguments.
-     */
-    private onConnectionMessage(ev: Event): void {
-        const sdEvent = <StreamDeckPayloadEventArgs<SettingsPayload>>(<MessageEvent>ev).data;
-
-        if (sdEvent.event === 'didReceiveSettings') {
-            this.dispatch({
-                type: SETTINGS_MESSAGE,
-                data: sdEvent.payload.settings
-            });
-        } else if (sdEvent.event === 'didReceiveGlobalSettings') {
-            this.dispatch({
-                type: GLOBAL_SETTINGS_MESSAGE,
-                data: sdEvent.payload.settings
-            });
-        }
+    private dispatchSettings(data: PartialActionSettingsEventArgs) {
+        this.settings = data.payload.settings;
+        this._settingsChange.dispatch(this.settings);
+        console.log(this.settings);
     }
 }
 
@@ -100,13 +87,18 @@ interface IUseStore {
  * @returns An object allowing for interaction with the store.
  */
 export function useStore(key: string, global: boolean, updateCallback: (value: any) => void): IUseStore {
-    // monitor for changes from the Stream Deck
-    store.addEventListener(global ? GLOBAL_SETTINGS_MESSAGE : SETTINGS_MESSAGE, (ev: Event) => {
-        const data = (<MessageEvent>ev).data;
+    const settingsChangeHandler = (data: any): void => {
         if (data) {
             updateCallback(data[key]);
         }
-    });
+    }
+
+    // subscribe to changes
+    if (global) {
+        store.globalSettingsChange.subscribe(settingsChangeHandler);
+    } else {
+        store.settingsChange.subscribe(settingsChangeHandler);
+    }
     
     // return the setter
     return {

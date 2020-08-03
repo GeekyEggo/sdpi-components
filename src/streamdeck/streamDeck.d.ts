@@ -48,15 +48,7 @@ export enum DeviceType {
 
 // https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#inactioninfo-parameter
 
-export interface ActionInfo {
-    action: string;
-    context: string;
-    device: string;
-    payload: Payload;
-}
-
-export interface Payload {
-    settings: any;
+export interface ActionInfoPayload extends SettingsPayload {
     coordinates: Coordinates;
 }
 
@@ -85,7 +77,6 @@ export interface SettingsPayload {
     settings: any
 }
 
-export interface ActionPayload extends SettingsPayload {
-    coordinates: Coordinates;
+export interface ActionPayload extends ActionInfoPayload {
     isInMultiAction: boolean;
 }

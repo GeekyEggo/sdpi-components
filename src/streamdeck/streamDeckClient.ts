@@ -6,8 +6,8 @@ import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
 export const DID_RECEIVE_GLOBAL_SETTINGS_MESSAGE = 'didReceiveGlobalSettings';
 export const DID_RECEIVE_SETTINGS_MESSAGE = 'didReceiveSettings';
 
-type DidReceiveGlobalSettingsEventArgs = StreamDeckPayloadEventArgs<SettingsPayload>
-type DidReceiveSettingsEventArgs = ActionEventArgs<SettingsPayload>;
+export type DidReceiveGlobalSettingsEventArgs = StreamDeckPayloadEventArgs<SettingsPayload>
+export type DidReceiveSettingsEventArgs = ActionEventArgs<SettingsPayload>;
 
 // sent
 const SET_SETTINGS_MESSAGE = 'setSettings';

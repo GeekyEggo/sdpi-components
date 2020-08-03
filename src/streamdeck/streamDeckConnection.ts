@@ -1,4 +1,4 @@
-import { ActionInfo, Info, StreamDeckEventArgs } from './streamdeck';
+import { ActionEventArgs, ActionInfoPayload, Info, StreamDeckEventArgs } from './streamdeck';
 import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
 import PromiseCompletionSource from '../core/promiseCompletionSource';
 
@@ -29,7 +29,7 @@ export default class StreamDeckConnection {
            this.webSocket.addEventListener('open', this.onOpen.bind(this));
         }
         
-    public actionInfo: ActionInfo;
+    public actionInfo: ActionEventArgs<ActionInfoPayload>;
     public info: Info;
     public inPropertyInspectorUUID: string;
     public inRegisterEvent: string;
