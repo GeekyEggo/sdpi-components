@@ -1,10 +1,12 @@
-import { ActionInfo, Info } from './streamdeck';
+import { ActionInfo, Info, StreamDeckEventArgs } from './streamdeck';
+import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
 import PromiseCompletionSource from '../core/promiseCompletionSource';
 
 /**
  * Provides a connection between the property inspector and the Stream Deck.
  */
-export default class StreamDeckConnection extends EventTarget {
+export default class StreamDeckConnection {
+    
     /**
      * Initializes a new instance of a Stream Deck connection.
      * @constructor
@@ -13,29 +15,62 @@ export default class StreamDeckConnection extends EventTarget {
      * @param inRegisterEvent The event type that should be used to register the plugin once the WebSocket is opened. For Property Inspector this is
      * @param inInfo A JSON object containing information about the application. (see below Info parameter)
      * @param inActionInfo A JSON object containing information about the action. (see below inActionInfo parameter.
-     */
-    constructor(inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string) {
-        super();
-
-        // the settings supplied by the Stream Deck
-        this.inPropertyInspectorUUID = inPropertyInspectorUUID;
-        this.inRegisterEvent = inRegisterEvent;
-        this.info = JSON.parse(inInfo);
-        this.actionInfo = JSON.parse(inActionInfo);
-
-        // register the web socket
-        this.webSocket = new WebSocket(`ws://localhost:${inPort}`);
-        this.webSocket.addEventListener('message', this.onMessage.bind(this));
-        this.webSocket.addEventListener('open', this.onOpen.bind(this));
-    }
-
+        */
+       constructor(inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string) {
+           // the settings supplied by the Stream Deck
+           this.inPropertyInspectorUUID = inPropertyInspectorUUID;
+           this.inRegisterEvent = inRegisterEvent;
+           this.info = JSON.parse(inInfo);
+           this.actionInfo = JSON.parse(inActionInfo);
+           
+           // register the web socket
+           this.webSocket = new WebSocket(`ws://localhost:${inPort}`);
+           this.webSocket.addEventListener('message', (ev: MessageEvent) => this._message.dispatch(JSON.parse(ev.data)));
+           this.webSocket.addEventListener('open', this.onOpen.bind(this));
+        }
+        
     public actionInfo: ActionInfo;
     public info: Info;
     public inPropertyInspectorUUID: string;
     public inRegisterEvent: string;
-
+    
+    private _message: EventDispatcher<StreamDeckEventArgs> = new EventDispatcher();
     private connection: PromiseCompletionSource<StreamDeckConnection> = new PromiseCompletionSource<StreamDeckConnection>();
     private webSocket: WebSocket;
+
+    /**
+     * Gets the message subscriber.
+     * @returns The event subscriber.
+     */
+    public get message(): IEventSubscriber<StreamDeckEventArgs> {
+        return this._message;
+    }
+
+    /**
+     * Sends a request to the Stream Deck, and awaits the first message matching the `waitFor` parameter.
+     * @param event The event name.
+     * @param waitFor The event name to wait for.
+     * @param payload The optional payload.
+     * @returns The promise containing the result of the request.
+     */
+    public async get(event: string, waitFor: string, payload?: any): Promise<any> {
+        const resolver = new PromiseCompletionSource<any>();
+
+        // construct the listener; this will set the result and remove itself
+        let listener: (ev: MessageEvent) => void;
+        listener = (ev: MessageEvent) => {
+            if (ev.data.event === waitFor) {
+                this.webSocket.removeEventListener('message', listener);
+                resolver.setResult(ev.data);
+            }
+        };
+
+        // add the event listener and send the request
+        this.webSocket.addEventListener('message', listener);
+        await this.send(event, payload);
+
+        return resolver.promise;
+    }
 
     /**
      * Sends a request to the Stream Deck.
@@ -55,16 +90,6 @@ export default class StreamDeckConnection extends EventTarget {
         } catch {
             console.error(`Unable to send request '${event}' as there is no connection.`);
         }
-    }
-
-    /**
-     * Handles the message event of the web socket.
-     * @param ev The event arguments.
-     */
-    private onMessage(ev: any): void {
-        this.dispatchEvent(new MessageEvent('message', {
-            data: JSON.parse(ev.data)
-        }));
     }
 
     /**
