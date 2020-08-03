@@ -107,6 +107,9 @@ dist
 bin
 obj
 
+# VSCode
+.vs/slnx.sqlite
+
 # TypeScript
 src/**/*.js*
 .gitignore
