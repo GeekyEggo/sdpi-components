@@ -387,8 +387,8 @@ input.sdpi-item-value {
 
 .sdpi-item-value button,
 button.sdpi-item-value {
-    margin-left: 6px;
-    margin-right: 14px;
+    margin-left: 5px;
+    margin-right: 12px;
 }
 
 .sdpi-item-value.range {
@@ -691,6 +691,9 @@ textarea {
     margin-bottom: 2px;
     min-width: 219px;
 }
+    textarea {
+        margin-bottom: 0;
+    }
 
     textarea + label {
         display: flex;
@@ -1605,4 +1608,8 @@ input[type="range"].colortemperature::-webkit-slider-thumb {
 /* custom */
 .sdpi-item-label {
     padding-right: 6px !important;
+}
+.sdpi-item-label[hidden] {
+    display: inherit;
+    visibility: hidden;
 }

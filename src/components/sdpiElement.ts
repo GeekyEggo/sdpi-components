@@ -11,6 +11,7 @@ export default abstract class SDPIElement<T extends HTMLElement> extends HTMLEle
 
         this.input = input;
         this.label = document.createElement('label');
+        this.label.toggleAttribute('hidden', true);
     }
 
     /**
@@ -18,7 +19,24 @@ export default abstract class SDPIElement<T extends HTMLElement> extends HTMLEle
      * @returns {string[]} The observed attributes.
      */
     public static get observedAttributes(): string[] {
-        return [ 'label' ];
+        return [
+            'disabled',
+            'label'
+        ];
+    }
+
+    /**
+     * Gets the disabled state.
+     */
+    public get disabled(): boolean {
+        return this.input.hasAttribute('disabled');
+    }
+
+    /**
+     * Sets the disabled state.
+     */
+    public set disabled(value: boolean) {
+        this.input.toggleAttribute('disabled', value);
     }
 
     /**
@@ -42,9 +60,7 @@ export default abstract class SDPIElement<T extends HTMLElement> extends HTMLEle
      * Called every time the element is inserted into the DOM.
      */
     public connectedCallback(): void {
-        if (!this.id) {
-            console.warn('Unable to save input as there is no id assigned');
-        } else if (this.input) {
+        if (this.input && this.id) {
             this.input.id = `sdpi__${this.id}`;
             this.label.htmlFor = this.input.id;
         }
@@ -52,6 +68,7 @@ export default abstract class SDPIElement<T extends HTMLElement> extends HTMLEle
         // assign the classes.
         this.classList.add('sdpi-item');
         this.label.classList.add('sdpi-item-label');
+        this.input.classList.add('sdpi-item-value');
 
         this.appendChild(this.label);
     }
@@ -63,8 +80,15 @@ export default abstract class SDPIElement<T extends HTMLElement> extends HTMLEle
      * @param newValue The attributes new value.
      */
     public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
-        if (attrName === 'label') {
-            this.label.innerText = this.getAttribute('label') ?? '';
+        switch (attrName) {
+            case 'disabled':
+                this.disabled = this.hasAttribute(attrName);
+                break;
+
+            case 'label':
+                this.label.innerText = this.getAttribute('label') ?? '';
+                this.label.toggleAttribute('hidden', this.label.innerText === '');
+                break;
         }
     }
 

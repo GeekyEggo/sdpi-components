@@ -41,7 +41,7 @@ class SDPITextArea extends SDPIElement<HTMLTextAreaElement> {
         if (this.input) {
             // create the wrapper
             const wrapper = document.createElement('span');
-            wrapper.classList.add('sdpi-item-value', 'textarea');
+            wrapper.classList.add('textarea');
 
             // init the input and counter
             anyChange(this.input, this.refreshCount.bind(this));
