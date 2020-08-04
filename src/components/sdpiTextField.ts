@@ -4,13 +4,12 @@ import { useStoreWithInput } from '../core/store';
 /**
  * A Stream Deck property inspector text field. 
  */
-class SDPITextField extends SDPIElement {
+class SDPITextField extends SDPIElement<HTMLInputElement> {
     /**
      * Initializes a new text field.
      */
     constructor() {
-        super();
-        this.input = document.createElement('input');
+        super(document.createElement('input'));
     }
 
     /**
@@ -27,27 +26,17 @@ class SDPITextField extends SDPIElement {
     }
 
     /**
-     * Gets the element that should be focused when the label is clicked.
-     */
-    protected get focusElement(): HTMLElement | null {
-        return this.input;
-    }
-
-    /**
-     * Gets the main input.
-     */
-    private input : HTMLInputElement;
-
-    /**
      * Called every time the element is inserted into the DOM.
      */
     public connectedCallback(): void {
         super.connectedCallback();
 
-        useStoreWithInput(this.id, this.global, this.input, 300);
-        this.input.classList.add('sdpi-item-value');
-     
-        this.appendChild(this.input);
+        if (this.input) {
+            useStoreWithInput(this.id, this.global, this.input);
+            this.input.classList.add('sdpi-item-value');
+        
+            this.appendChild(this.input);
+        }
     }
 
     /**
@@ -58,6 +47,10 @@ class SDPITextField extends SDPIElement {
      */
     public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
         super.attributeChangedCallback(attrName, oldValue, newValue);
+        
+        if (!this.input) {
+            return;
+        }
 
         switch (attrName) {
             case 'password':
@@ -67,7 +60,7 @@ class SDPITextField extends SDPIElement {
             case 'pattern':
             case 'placeholder':
             case 'required':
-                super.cloneAttribute(this.input, attrName, oldValue, newValue);
+                super.cloneAttribute(attrName, this.input);
                 break;
         }
     }

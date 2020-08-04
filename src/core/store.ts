@@ -114,9 +114,12 @@ export function useStore(key: string, global: boolean, updateCallback: (value: a
  * @param input The input element.
  * @param timeout The delay before the changes are saved; when undefined the save will occur on change.
  */
-export function useStoreWithInput(key: string, global: boolean, input: HTMLInputElement, timeout?: number | null): void {
+export function useStoreWithInput(key: string, global: boolean, input: HTMLInputElement | HTMLTextAreaElement, timeout: number | null = 250): void {
     const { set } = useStore(key, global, (value?: any) => {
-        input.value = value || '';
+        if (input.value != value) {
+            input.value = value || '';
+            input.dispatchEvent(new Event('change'));
+        }
     });
 
     if (timeout) {

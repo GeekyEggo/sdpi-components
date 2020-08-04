@@ -1,13 +1,15 @@
 /**
  * Provides a base Stream Deck property inspector element.
  */
-export default abstract class SDPIElement extends HTMLElement {
+export default abstract class SDPIElement<T extends HTMLElement> extends HTMLElement {
     /**
-     * Initializes a new base element.
+     * Initializes a new SDPI element.
+     * @param input The input.
      */
-    constructor() {
+    constructor(input: T) {
         super();
 
+        this.input = input;
         this.label = document.createElement('label');
     }
 
@@ -20,12 +22,12 @@ export default abstract class SDPIElement extends HTMLElement {
     }
 
     /**
-     * Gets the element that should be focused when the label is clicked.
+     * Gets or sets the main input.
      */
-    protected abstract get focusElement(): HTMLElement | null;
+    protected input: T;
     
     /**
-     * Gets the main label.
+     * Gets or sets the main label.
      */
     private label: HTMLLabelElement;
 
@@ -42,9 +44,9 @@ export default abstract class SDPIElement extends HTMLElement {
     public connectedCallback(): void {
         if (!this.id) {
             console.warn('Unable to save input as there is no id assigned');
-        } else if (this.focusElement) {
-            this.focusElement.id = `sdpi__${this.id}`;
-            this.label.htmlFor = this.focusElement.id;
+        } else if (this.input) {
+            this.input.id = `sdpi__${this.id}`;
+            this.label.htmlFor = this.input.id;
         }
 
         // assign the classes.
@@ -68,16 +70,16 @@ export default abstract class SDPIElement extends HTMLElement {
 
     /**
      * Clones the attribute presence and value from this element to the target element.
-     * @param target The element to clone the attribute to.
      * @param attrName The attribute name.
-     * @param oldValue The attributes old value.
-     * @param newValue The attributes new value.
+     * @param target The element to clone the attribute to.
      */
-    protected cloneAttribute(target: HTMLElement, attrName: string, oldValue: string | null, newValue: string | null): void {
-        if (newValue === null) {
-            target.removeAttribute(attrName);
+    protected cloneAttribute(attrName: string, target: HTMLElement, ): void {
+        const value = this.getAttribute(attrName);
+
+        if (value !== undefined && value !== null) {
+            target.setAttribute(attrName, value);
         } else {
-            target.setAttribute(attrName, newValue);
+            target.removeAttribute(attrName);
         }
     }
 }

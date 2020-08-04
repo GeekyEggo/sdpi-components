@@ -1,2 +1,3 @@
-import "./streamdeck";
-import "./components/sdpiTextField";
+import './streamdeck';
+import './components/sdpiTextField';
+import './components/sdpiTextarea';
