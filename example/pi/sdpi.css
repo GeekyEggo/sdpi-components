@@ -9,6 +9,7 @@
     --sdpi-fontweight: normal;
     --sdpi-letterspacing: -0.25pt;
     --sdpi-fontsize: 8pt;
+    --sdpi-fontfamily: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 html {
@@ -31,12 +32,11 @@ html, body {
     --sdpi-bgcolor: #2D2D2D;
     --sdpi-background: #3D3D3D;
     --sdpi-color: #d8d8d8;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: var(--sdpi-fontfamily);
     font-size: var(--sdpi-fontsize);
     background-color: var(--sdpi-bgcolor);
     color: #9a9a9a;
 }
-
 body {
     height: 100%;
     padding: 0;
@@ -697,6 +697,10 @@ textarea {
         justify-content: flex-end
     }
 
+    textarea + label[hidden] {
+        display: none;
+    }
+
 input[type="radio"],
 input[type="checkbox"] {
     display: none;
@@ -920,6 +924,7 @@ input[type="color"] {
 }
 
 textarea {
+    font-family: var(--sdpi-fontfamily);
     height: 3em;
     word-break: break-word;
     line-height: 1.5em;
