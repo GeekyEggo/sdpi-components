@@ -7,9 +7,9 @@
     --sdpi-borderradius: 0px;
     --sdpi-width: 224px;
     --sdpi-fontweight: normal;
-    --sdpi-letterspacing: -0.25pt;
+    --sdpi-letterspacing: normal;
     --sdpi-fontsize: 8pt;
-    --sdpi-fontfamily: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --sdpi-fontfamily: Arial, "Segoe UI", Roboto, Helvetica sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 html {
@@ -67,7 +67,7 @@ hr2,
     flex-basis: 100%;
     align-items: center;
     color: inherit;
-    font-size: 9pt;
+    font-size: var(--sdpi-fontsize);
     margin: 8px 0px;
 }
 
@@ -96,6 +96,7 @@ option,
 input,
 select,
 button {
+    font-family: var(--sdpi-fontfamily);
     font-size: var(--sdpi-fontsize);
     font-weight: var(--sdpi-fontweight);
     letter-spacing: var(--sdpi-letterspacing);
@@ -184,7 +185,7 @@ progress {
     cursor: pointer;
     padding: 5px 30px;
     color: #16a2d7;
-    font-size: 9pt;
+    font-size: var(--sdpi-fontsize);
     border-bottom: 2px solid transparent;
 }
 
@@ -685,11 +686,12 @@ textarea {
     background: var(--sdpi-background);
     color: var(--sdpi-color);
     font-weight: normal;
-    font-size: 9pt;
+    font-size: var(--sdpi-fontsize);
     border: none;
     margin-top: 2px;
     margin-bottom: 2px;
     min-width: 219px;
+    padding: 4px;
 }
     textarea.sdpi-item-value {
         margin: 2px auto 0 5px;
@@ -712,7 +714,7 @@ input[type="checkbox"] {
 
     input[type="radio"] + label,
     input[type="checkbox"] + label {
-        font-size: 9pt;
+        font-size: var(--sdpi-fontsize);
         color: var(--sdpi-color);
         font-weight: normal;
         margin-right: 8px;
