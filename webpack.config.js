@@ -22,8 +22,19 @@ module.exports = env => {
                     use: 'ts-loader',
                     exclude: /node_modules/,
                 },
+                {
+                    test: /\.s(a|c)ss$/,
+                    use: [
+                        'style-loader',
+                        {
+                            loader: 'css-loader',
+                            options: { modules: true }
+                        },
+                        'sass-loader'
+                    ]
+                }
             ]
         },
-        devtool: 'inline-source-map'
+        devtool: env && env.INSTALL ? 'inline-source-map' : ''
     }
 };
