@@ -14,6 +14,7 @@ class SDPITextArea extends SDPIElement<HTMLTextAreaElement> {
 
         this.input.setAttribute('type', 'textarea');
         this.count = document.createElement('label');
+        this.count.toggleAttribute('hidden', true);
     }
 
     /**
@@ -81,12 +82,15 @@ class SDPITextArea extends SDPIElement<HTMLTextAreaElement> {
         }
     }
 
-    /**
+    /** 
      * Refreshes the count label.
      */
     private refreshCount(): void {
         if (this.input) {
-            this.count.innerText = `${this.input.value.length}/${this.input.maxLength}`;
+            this.count.innerText = this.input.value.length.toString();
+            if (this.input.maxLength > -1) {
+                this.count.innerText += `/${this.input.maxLength}`;
+            }
         }
     }
 }

@@ -695,7 +695,6 @@ textarea {
 }
     textarea.sdpi-item-value {
         margin: 2px auto 0 5px;
-        width: 223px;
     }
 
     textarea + label {
