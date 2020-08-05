@@ -1,4 +1,4 @@
-import './index.scss';
+import './styles/index.scss';
 
 import './streamdeck';
 import './components/sdpiButton';
