@@ -1,7 +1,9 @@
+import { HTMLInput } from '../core/input';
+
 /**
  * Provides a base Stream Deck property inspector element.
  */
-export default abstract class SDPIElement<T extends HTMLElement> extends HTMLElement {
+export default abstract class SDPIElement<T extends HTMLInput> extends HTMLElement {
     /**
      * Initializes a new SDPI element.
      * @param input The input.
@@ -37,6 +39,21 @@ export default abstract class SDPIElement<T extends HTMLElement> extends HTMLEle
      */
     public set disabled(value: boolean) {
         this.input.toggleAttribute('disabled', value);
+    }
+
+    /**
+     * Gets the value.
+     */
+    public get value(): any {
+        return this.input.value;
+    }
+
+    /**
+     * Sets the value.
+     */
+    public set value(value: any) {
+        this.input.value = value;
+        this.input.dispatchEvent(new Event('change'));
     }
 
     /**

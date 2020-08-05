@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         /* core */
-        "target": "ES6",
+        "target": "ES2016",
         "module": "commonjs",
         "rootDir": "./src",
         "outDir": "./dist/lib",

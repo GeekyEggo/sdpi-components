@@ -1,3 +1,4 @@
+import { dispatchChange, HTMLInput } from '../core/input';
 import { delay } from './timeout';
 import EventDispatcher, { IEventSubscriber } from './eventDispatcher';
 import StreamDeckClient, { DidReceiveGlobalSettingsEventArgs, DidReceiveSettingsEventArgs } from '../streamDeck/streamDeckClient';
@@ -114,11 +115,11 @@ export function useStore(key: string, global: boolean, updateCallback: (value: a
  * @param input The input element.
  * @param timeout The delay before the changes are saved; when undefined the save will occur on change.
  */
-export function useStoreWithInput(key: string, global: boolean, input: HTMLInputElement | HTMLTextAreaElement, timeout: number | null = 250): void {
+export function useStoreWithInput(key: string, global: boolean, input: HTMLInput, timeout: number | null = 250): void {
     const { set } = useStore(key, global, (value?: any) => {
         if (input.value != value) {
             input.value = value || '';
-            input.dispatchEvent(new Event('change'));
+            dispatchChange(input);
         }
     });
 

@@ -4,7 +4,7 @@ import { useStoreWithInput } from '../core/store';
 /**
  * A Stream Deck property inspector text field. 
  */
-class SDPITextField extends SDPIElement<HTMLInputElement> {
+class SDPITextbox extends SDPIElement<HTMLInputElement> {
     /**
      * Initializes a new text field.
      */
@@ -64,4 +64,4 @@ class SDPITextField extends SDPIElement<HTMLInputElement> {
     }
 }
 
-customElements.define('sdpi-textfield', SDPITextField);
+customElements.define('sdpi-textbox', SDPITextbox);
