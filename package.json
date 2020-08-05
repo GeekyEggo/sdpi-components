@@ -4,8 +4,8 @@
     "description": "Stream Deck Property Inspector web components",
     "main": "src/index.ts",
     "scripts": {
-        "build": "browserify %npm_package_main% -p [ tsify ] -o dist/bundle.js",
-        "watch": "watchify %npm_package_main% -p [ tsify ] -o %APPDATA%/Elgato/StreamDeck/Plugins/com.geekyeggo.sdpi.sdPlugin/pi/sdpi.js"
+        "build": "webpack",
+        "watch": "webpack --env.INSTALL"
     },
     "repository": {
         "type": "git",
@@ -24,8 +24,9 @@
     },
     "homepage": "https://github.com/GeekyEggo/sdpi#readme",
     "devDependencies": {
-        "tsify": "^5.0.0",
+        "ts-loader": "^8.0.2",
         "typescript": "^3.9.7",
-        "watchify": "^3.11.1"
+        "webpack": "^4.44.1",
+        "webpack-cli": "^3.3.12"
     }
 }
