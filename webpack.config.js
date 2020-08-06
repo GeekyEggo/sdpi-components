@@ -1,8 +1,9 @@
 const path = require('path');
-const { SymbolDisplayPartKind } = require('typescript');
 
 module.exports = env => {
-    const outputPath = env && env.INSTALL
+    const isLocal = env && env.LOCAL;
+
+    const outputPath = isLocal
         ? path.resolve(process.env.APPDATA, 'Elgato/StreamDeck/Plugins/com.geekyeggo.sdpi.sdPlugin/pi')
         : path.resolve(__dirname, 'dist')
 
@@ -26,10 +27,7 @@ module.exports = env => {
                     test: /\.s(a|c)ss$/,
                     use: [
                         'style-loader',
-                        {
-                            loader: 'css-loader',
-                            options: { modules: true }
-                        },
+                        'css-loader',
                         'sass-loader'
                     ]
                 }
