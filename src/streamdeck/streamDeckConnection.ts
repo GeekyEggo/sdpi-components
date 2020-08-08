@@ -1,6 +1,6 @@
-import { ActionEventArgs, ActionInfoPayload, Info, StreamDeckEventArgs } from './streamDeck';
 import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
 import PromiseCompletionSource from '../core/promiseCompletionSource';
+import { ActionEventArgsWithPayload, ActionPayload, RegistrationInfo, StreamDeckEventArgs } from 'stream-deck';
 
 /**
  * Provides a connection between the property inspector and the Stream Deck.
@@ -29,8 +29,8 @@ export default class StreamDeckConnection {
            this.webSocket.addEventListener('open', this.onOpen.bind(this));
         }
         
-    public actionInfo: ActionEventArgs<ActionInfoPayload>;
-    public info: Info;
+    public actionInfo: ActionEventArgsWithPayload<ActionPayload>;
+    public info: RegistrationInfo;
     public inPropertyInspectorUUID: string;
     public inRegisterEvent: string;
     

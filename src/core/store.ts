@@ -1,10 +1,10 @@
-import { dispatchChange, HTMLInput } from '../core/input';
-import { delay } from './timeout';
 import EventDispatcher, { IEventSubscriber } from './eventDispatcher';
 import StreamDeckClient, { DidReceiveGlobalSettingsEventArgs, DidReceiveSettingsEventArgs } from '../streamDeck/streamDeckClient';
-import { ActionEventArgs, ActionInfoPayload } from '../streamDeck/streamDeck';
+import { ActionEventArgsWithPayload, ActionPayload } from 'stream-deck';
+import { delay } from './timeout';
+import { dispatchChange, HTMLInput } from '../core/input';
 
-type PartialActionSettingsEventArgs = DidReceiveSettingsEventArgs | ActionEventArgs<ActionInfoPayload>;
+type PartialActionSettingsEventArgs = DidReceiveSettingsEventArgs | ActionEventArgsWithPayload<ActionPayload>;
 
 /**
  * Provides a store for managing settings stored within the Stream Deck.

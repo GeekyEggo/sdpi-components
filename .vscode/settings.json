@@ -2,5 +2,7 @@
     "files.exclude": {
         "src/**/*.js*": true,
         "node_modules": true
-    }
+    },
+    "typescript.extension.sortImports.maxNamedImportsInSingleLine": 10,
+    "typescript.extension.sortImports.sortOnSave": true
 }

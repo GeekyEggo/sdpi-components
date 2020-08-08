@@ -1,13 +1,13 @@
-import { ActionEventArgs, StreamDeckEventArgs, SettingsPayload, StreamDeckPayloadEventArgs } from './streamDeck';
-import StreamDeckConnection from './streamDeckConnection';
 import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
+import StreamDeckConnection from './streamDeckConnection';
+import { ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload } from 'stream-deck';
 
 // received
 export const DID_RECEIVE_GLOBAL_SETTINGS_MESSAGE = 'didReceiveGlobalSettings';
 export const DID_RECEIVE_SETTINGS_MESSAGE = 'didReceiveSettings';
 
-export type DidReceiveGlobalSettingsEventArgs = StreamDeckPayloadEventArgs<SettingsPayload>
-export type DidReceiveSettingsEventArgs = ActionEventArgs<SettingsPayload>;
+export type DidReceiveGlobalSettingsEventArgs = StreamDeckEventArgsWithPayload<SettingsPayload>
+export type DidReceiveSettingsEventArgs = ActionEventArgsWithPayload<SettingsPayload>;
 
 // sent
 const SET_SETTINGS_MESSAGE = 'setSettings';
