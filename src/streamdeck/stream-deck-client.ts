@@ -1,5 +1,5 @@
-import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
-import StreamDeckConnection from './streamDeckConnection';
+import EventDispatcher, { IEventSubscriber } from '../core/event-dispatcher';
+import StreamDeckConnection from './stream-deck-connection';
 import { ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload } from 'stream-deck';
 
 // received

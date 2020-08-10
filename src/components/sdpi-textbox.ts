@@ -1,14 +1,15 @@
-import SDPIElement from './sdpiElement';
+import SDPIElement from './sdpi-element';
+import { useStoreWithInput } from '../core/store';
 
 /**
- * A Stream Deck property inspector button. 
+ * A Stream Deck property inspector text field. 
  */
-class SDPIButton extends SDPIElement<HTMLButtonElement> {
+class SDPITextbox extends SDPIElement<HTMLInputElement> {
     /**
-     * Initializes a new button.
+     * Initializes a new text field.
      */
     constructor() {
-        super(document.createElement('button'));
+        super(document.createElement('input'));
     }
 
     /**
@@ -17,26 +18,11 @@ class SDPIButton extends SDPIElement<HTMLButtonElement> {
      */
     public static get observedAttributes(): string[] {
         return super.observedAttributes.concat([
-            'max20',
-            'max30',
-            'max40',
-            'onclick',
-            'text'
+            'password',
+            'pattern',
+            'placeholder',
+            'required'
         ]);
-    }
-
-    /**
-     * Gets the on-click handler.
-     */
-    public get onclick(): ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null {
-        return this.input.onclick;
-    }
-
-    /**
-     * Sets the on-click handler.
-     */
-    public set onclick(value: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null) {
-        this.input.onclick = value;
     }
 
     /**
@@ -46,7 +32,7 @@ class SDPIButton extends SDPIElement<HTMLButtonElement> {
         super.connectedCallback();
 
         if (this.input) {
-            this.input.classList.add('sdpi-item-value');
+            useStoreWithInput(this.id, this.global, this.input);        
             this.appendChild(this.input);
         }
     }
@@ -65,22 +51,17 @@ class SDPIButton extends SDPIElement<HTMLButtonElement> {
         }
 
         switch (attrName) {
-            case 'max20':
-            case 'max30':
-            case 'max40':
-                this.input.classList.toggle(attrName, newValue !== null);
+            case 'password':
+                this.input.setAttribute('type', this.hasAttribute('password') ? 'password' : '');
                 break;
 
-            case 'onclick':
-                this.onclick = super.onclick;
-                super.onclick = null;
-                break;
-
-            case 'text':
-                this.input.innerText = newValue || '';
+            case 'pattern':
+            case 'placeholder':
+            case 'required':
+                super.cloneAttribute(attrName, this.input);
                 break;
         }
     }
 }
 
-customElements.define('sdpi-button', SDPIButton);
+customElements.define('sdpi-textbox', SDPITextbox);

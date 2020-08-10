@@ -24,7 +24,7 @@ export interface IEventHandler<T> {
  */
 export default class EventDispatcher<T> implements IEventDispatcher<T> {
     private handlers: IEventHandler<T>[] = [];
-
+    
     /**
      * Dispatches the event for all handlers.
      * @param args The arguments to invoke each handler with.

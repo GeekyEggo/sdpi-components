@@ -1,6 +1,6 @@
-import SDPIElement from './sdpiElement';
-import { useStoreWithInput } from '../core/store';
+import SDPIElement from './sdpi-element';
 import { anyChange } from '../core/input';
+import { useStoreWithInput } from '../core/store';
 
 /**
  * A Stream Deck property inspector textarea.

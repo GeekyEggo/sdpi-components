@@ -1,7 +1,6 @@
 import './styles/index.scss';
-
-import './streamdeck';
-import './components/sdpiButton';
-import './components/sdpiSelect';
-import './components/sdpiTextbox';
-import './components/sdpiTextarea';
+import './streamDeck/registration';
+import './components/sdpi-button';
+import './components/sdpi-select';
+import './components/sdpi-textbox';
+import './components/sdpi-textarea';

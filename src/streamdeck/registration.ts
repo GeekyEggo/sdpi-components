@@ -1,6 +1,6 @@
 import store from '../core/store';
-import StreamDeckClient from './streamDeckClient';
-import StreamDeckConnection from './streamDeckConnection';
+import StreamDeckClient from './stream-deck-client';
+import StreamDeckConnection from './stream-deck-connection';
 
 /**
  * Called by the Stream Deck to enable registration of the property inspector.

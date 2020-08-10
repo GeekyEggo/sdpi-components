@@ -1,5 +1,5 @@
-import EventDispatcher, { IEventSubscriber } from '../core/eventDispatcher';
-import PromiseCompletionSource from '../core/promiseCompletionSource';
+import EventDispatcher, { IEventSubscriber } from '../core/event-dispatcher';
+import PromiseCompletionSource from '../core/promise-completion-source';
 import { ActionEventArgsWithPayload, ActionPayload, RegistrationInfo, StreamDeckEventArgs } from 'stream-deck';
 
 /**
