@@ -1,5 +1,5 @@
 import EventDispatcher, { IEventSubscriber } from './event-dispatcher';
-import StreamDeckClient, { DidReceiveGlobalSettingsEventArgs, DidReceiveSettingsEventArgs } from '../streamDeck/stream-deck-client';
+import StreamDeckClient, { DidReceiveGlobalSettingsEventArgs, DidReceiveSettingsEventArgs } from '../stream-deck/stream-deck-client';
 import { ActionEventArgsWithPayload, ActionPayload } from 'stream-deck';
 import { delay } from './timeout';
 import { dispatchChange, HTMLInput } from '../core/input';
