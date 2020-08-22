@@ -16,7 +16,7 @@ module.exports = env => {
         mode: isLocal ? 'development' : 'production',
         devtool: isLocal ? 'inline-source-map' : '',
         resolve: {
-            extensions: ['.ts'],
+            extensions: [ '.ts' ]
         },
         module: {
             rules: [

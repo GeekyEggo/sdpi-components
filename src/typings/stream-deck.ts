@@ -1,52 +1,52 @@
 declare module 'stream-deck' {
-    export enum DeviceType {
-        StreamDeck = 0,
-        StreamDeckMini = 1,
-        StreamDeckXL = 2,
-        StreamDeckMobile = 3,
-        CorsairGKeys = 4
+    export const enum DeviceType {
+        StreamDeck = 'kESDSDKDeviceType_StreamDeck',
+        StreamDeckMini = 'kESDSDKDeviceType_StreamDeckMini',
+        StreamDeckXL = 'kESDSDKDeviceType_StreamDeckXL',
+        StreamDeckMobile = 'kESDSDKDeviceType_StreamDeckMobile',
+        CorsairGKeys = 'kESDSDKDeviceType_CorsairGKeys'
     }
 
-    export enum FontFamilyType {
-        Arial = 1,
-        ArialBlack = 2,
-        ComicSansMS = 3,
-        Courier = 4,
-        CourierNew = 5,
-        Georgia = 6,
-        Impact = 7,
-        MicrosoftSansSerif = 8,
-        Symbol = 9,
-        Tahoma = 10,
-        TimesNewRoman = 11,
-        TrebuchetMS = 12,
-        Verdana = 13,
-        Webdings = 14,
-        Wingdings = 15
+    export const enum FontFamilyType {
+        Arial = 'Arial',
+        ArialBlack = 'Arial Black',
+        ComicSansMS = 'Comic Sans MS',
+        Courier = 'Courier',
+        CourierNew = 'Courier New',
+        Georgia = 'Georgia',
+        Impact = 'Impact',
+        MicrosoftSansSerif = 'Microsoft Sans Serif',
+        Symbol = 'Symbol',
+        Tahoma = 'Tahoma',
+        TimesNewRoman = 'Times New Roman',
+        TrebuchetMS = 'Trebuchet MS',
+        Verdana = 'Verdana',
+        Webdings = 'Webdings',
+        Wingdings = 'Wingdings'
     }
 
-    export enum FontStyleType {
-        Regular = 0,
-        Bold = 1,
-        Italic = 2,
-        BoldItalic = 3
+    export const enum FontStyleType {
+        Regular = 'Regular',
+        Bold = 'Bold',
+        Italic = 'Italic',
+        BoldItalic = 'Bold Italic'
     }
 
-    export enum PlatformType {
-        Mac = 0,
-        Windows = 1
+    export const enum PlatformType {
+        Mac = 'mac',
+        Windows = 'windows'
     }
 
-    export enum TargetType {
+    export const enum TargetType {
         Both = 0,
         Hardware = 1,
         Software = 2
     }
 
-    export enum TitleAlignmentType {
-        Top = 0,
-        Middle = 1,
-        Bottom = 2
+    export const enum TitleAlignmentType {
+        Top = 'top',
+        Middle = 'middle',
+        Bottom = 'bottom'
     }
 
     export interface ActionEventArgs extends StreamDeckEventArgs {
