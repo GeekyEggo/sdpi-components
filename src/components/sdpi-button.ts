@@ -46,7 +46,6 @@ class SDPIButton extends SDPIElement<HTMLButtonElement> {
         super.connectedCallback();
 
         if (this.input) {
-            this.input.classList.add('sdpi-item-value');
             this.appendChild(this.input);
         }
     }
