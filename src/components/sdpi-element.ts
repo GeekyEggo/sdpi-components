@@ -1,3 +1,4 @@
+import { CssClass } from 'sdpi';
 import { HTMLInput } from '../core/input';
 
 /**
@@ -83,9 +84,9 @@ export default abstract class SDPIElement<T extends HTMLInput> extends HTMLEleme
         }
 
         // assign the classes.
-        this.classList.add('sdpi-item');
-        this.label.classList.add('sdpi-item-label');
-        this.input.classList.add('sdpi-item-value');
+        this.classList.add(CssClass.Item);
+        this.label.classList.add(CssClass.ItemLabel);
+        this.input.classList.add(CssClass.ItemValue);
 
         this.appendChild(this.label);
     }

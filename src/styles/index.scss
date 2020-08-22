@@ -1,2 +1,11 @@
 // temporarily importing sdpi to provide a default
-@import 'sdpi.scss'
+@import 'sdpi.scss';
+
+$font-color: #d8d8d8;
+
+.sdpi-file-info {
+    color: $font-color;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

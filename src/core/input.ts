@@ -1,4 +1,8 @@
-export type HTMLInput = HTMLButtonElement | HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+export type HTMLInput
+    = HTMLButtonElement
+    | HTMLInputElement
+    | HTMLSelectElement
+    | HTMLTextAreaElement;
 
 /**
  * Registers the event listener to change and input events.

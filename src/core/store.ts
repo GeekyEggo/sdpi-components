@@ -15,30 +15,44 @@ class Store {
      * @param client The Stream Deck client.
      */
     public attach(client: StreamDeckClient): void {
-        this.client = client;
+        this._client = client;
 
-        this.client.didReceiveGlobalSettings.subscribe((data: DidReceiveGlobalSettingsEventArgs) => {
+        this._client.didReceiveGlobalSettings.subscribe((data: DidReceiveGlobalSettingsEventArgs) => {
             this.globalSettings = data.payload.settings;
             this._globalSettingsChange.dispatch(this.globalSettings);
         })
 
-        this.client.didReceiveSettings.subscribe((data: DidReceiveSettingsEventArgs) => {
+        this._client.didReceiveSettings.subscribe((data: DidReceiveSettingsEventArgs) => {
             this.dispatchSettings(data);
         })
 
-        this.client.getGlobalSettings();
-        this.dispatchSettings(this.client.connection.actionInfo);
+        this._client.getGlobalSettings();
+        this.dispatchSettings(this._client.connection.actionInfo);
     }
     
+    private _client?: StreamDeckClient;
     private _globalSettingsChange: EventDispatcher<any> = new EventDispatcher<any>();
     private _settingsChange: EventDispatcher<any> = new EventDispatcher<any>();
-    private client?: StreamDeckClient;
     private globalSettings: any;
     private settings: any;
 
+    /**
+     * Gets the Stream Deck client associated with the store.
+     */
+    public get client(): StreamDeckClient | undefined {
+        return this._client;
+    }
+
+    /**
+     * Gets the event subscriber for when the global settings change.
+     */
     public get globalSettingsChange(): IEventSubscriber<any> {
         return this._globalSettingsChange;
     }
+
+    /**
+     * Gets the event subscriber for when the settings change.
+     */
     public get settingsChange(): IEventSubscriber<any> {
         return this._settingsChange;
     }
@@ -52,10 +66,10 @@ class Store {
     public set(key: string, value?: any, global: boolean = false): void {
         if (global) {
             this.globalSettings[key] = value;
-            this.client?.setGlobalSettings(this.globalSettings);
+            this._client?.setGlobalSettings(this.globalSettings);
         } else {
             this.settings[key] = value;
-            this.client?.setSettings(this.settings);
+            this._client?.setSettings(this.settings);
         }
     }
 
@@ -72,11 +86,13 @@ class Store {
 const store = new Store();
 export default store;
 
+export type StoreSetter = (value?: any) => void;
+
 /**
  * The interface returned when using the store.
  */
 interface IUseStore { 
-    set(value?: any): void
+    save: StoreSetter;
 }
 
 /**
@@ -102,7 +118,7 @@ export function useStore(key: string, global: boolean, updateCallback: (value: a
     
     // return the setter
     return {
-        set: (value?: any) => {
+        save: (value?: any) => {
             store.set(key, value, global);
         }
     }
@@ -116,7 +132,7 @@ export function useStore(key: string, global: boolean, updateCallback: (value: a
  * @param timeout The delay before the changes are saved; when undefined the save will occur on change.
  */
 export function useStoreWithInput(key: string, global: boolean, input: HTMLInput, timeout: number | null = 250): void {
-    const { set } = useStore(key, global, (value?: any) => {
+    const { save } = useStore(key, global, (value?: any) => {
         if (input.value != value) {
             input.value = value || '';
             dispatchChange(input);
@@ -124,8 +140,8 @@ export function useStoreWithInput(key: string, global: boolean, input: HTMLInput
     });
 
     if (timeout) {
-        input.addEventListener('input', delay(() => set(input.value), timeout));
+        input.addEventListener('input', delay(() => save(input.value), timeout));
     } else {
-        input.addEventListener('change', () => set(input.value));
+        input.addEventListener('change', () => save(input.value));
     }
 }
