@@ -1,7 +1,7 @@
 import SDPIElement from './sdpi-element';
-import store, { StoreSetter, useStore } from '../core/store';
 import { CssClass } from 'sdpi';
-import { PlatformType } from 'stream-deck';
+import { getFileName, sanitize as sanitizePath } from '../core/file';
+import { StoreSetter, useStore } from '../core/store';
 
 /**
  * A Stream Deck property inspector file input. 
@@ -14,11 +14,7 @@ class SDPIFile extends SDPIElement<HTMLInputElement> {
         super(document.createElement('input'));
 
         this.info = document.createElement('label');
-        this.button = document.createElement('label');
     }
-
-    private info: HTMLLabelElement;
-    private button: HTMLLabelElement;
 
     /**
      * Gets the observed attributes.
@@ -26,53 +22,70 @@ class SDPIFile extends SDPIElement<HTMLInputElement> {
      */
     public static get observedAttributes(): string[] {
         return super.observedAttributes.concat([
-            'accept'
+            'accept',
+            'show-name'
         ]);
     }
 
     /**
-     * Gets the sanitized value from the file input.
+     * Gets the value indicating whether only the name should be shown in the info.
      */
-    public get value(): string {
-        // decode and sanitize the path, changing slashes depending on the platform
-        let value = decodeURIComponent(this.input.value.replace(/^C:\\fakepath\\/, ''));
-        if (store.client?.connection.info.application.platform == PlatformType.Windows)
-        {
-            return value.replace(new RegExp('/', 'g'), '\\')
-        }
-
-        return value;
+    public get showName(): boolean {
+        return this.hasAttribute('show-name');
     }
+
+    /**
+     * Sets the value indicating whether only the name should be shown in the info.
+     */
+    public set showName(value: boolean) {
+        this.toggleAttribute('show-name', value);
+    }
+
+    /**
+     * Gets the value.
+     */
+    public get value(): any {
+        return this._value;
+    }
+
+    /**
+     * Sets the value.
+     */
+    public set value(value: any) {
+        this._value = sanitizePath(value);
+        this.refreshInfo();
+    }
+    
+    private _value: string | undefined;
+    private info: HTMLLabelElement;
+    private save?: StoreSetter;
 
     /**
      * Called every time the element is inserted into the DOM.
      */
     public connectedCallback(): void {
         super.connectedCallback();
-
+        this.save = useStore(this.id, this.global, (value: any) => this.value = value).save;
+        
         const grp = document.createElement('div')
         grp.classList.add(CssClass.ItemGroup, 'file');
         
+        this.input.addEventListener('change', () => this.onChanged());        
         this.input.hidden = true;
         this.input.type = 'file';
+        grp.appendChild(this.input);
         
         this.info.classList.add(CssClass.FileInfo)
         this.info.htmlFor = this.input.id;
+        grp.appendChild(this.info);
         
-        this.button.classList.add(CssClass.FileLabel);
-        this.button.innerText = 'Choose file...'
-        this.button.htmlFor = this.input.id;
-        
-        if (this.input) {
-            const { save } = useStore(this.id, this.global, (value: any) => this.updateInfo(value));
-            this.input.addEventListener('change', () => this.onChanged(save));
-            
-            grp.appendChild(this.input);
-            grp.appendChild(this.info);
-            grp.appendChild(this.button);
+        const button = document.createElement('label');
+        button.classList.add(CssClass.FileLabel);
+        button.htmlFor = this.input.id;
+        button.innerText = 'Choose File';
+        grp.appendChild(button);
 
-            this.appendChild(grp);
-        }
+        this.appendChild(grp);
     }
 
     /**
@@ -83,28 +96,36 @@ class SDPIFile extends SDPIElement<HTMLInputElement> {
      */
     public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
         super.attributeChangedCallback(attrName, oldValue, newValue);
-        super.cloneAttribute(attrName, this.input);
+
+        switch (attrName) {
+            case 'show-name':
+                this.refreshInfo();
+                break;
+
+            default:
+                super.cloneAttribute(attrName, this.input);
+                break;
+        }
     }
     
     /**
      * Handles the value of the input changing.
      * @param save The delegate used to update the store.
      */
-    private onChanged(save: StoreSetter): void {
-        const value = this.value;
-
-        save(value);
-        this.updateInfo(value);
+    private onChanged(): void {
+        this.value = this.input.value;
+        if (this.save) {
+            this.save(this.value);
+        }
     }
 
     /**
-     * Updates the visual display that represents the file value.
-     * @param value The value.
+     * Refreshes the information label that displays the value.
      */
-    private updateInfo(value: string): void {
-        if (value?.length) {
-            this.info.textContent = value;
-            this.info.title = value;
+    private refreshInfo(): void {
+        if (this.value?.length) {
+            this.info.textContent = this.showName ? getFileName(this.value) : this.value;
+            this.info.title = this.value;
         } else {
             this.info.textContent = 'No file.';
             this.info.title = '';

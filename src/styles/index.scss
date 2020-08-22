@@ -5,6 +5,7 @@ $font-color: #d8d8d8;
 
 .sdpi-file-info {
     color: $font-color;
+    min-width: 144px !important;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
