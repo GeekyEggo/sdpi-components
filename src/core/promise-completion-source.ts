@@ -2,7 +2,7 @@
  * Provides a promise completion source whereby a promise can be resolved at a later stage.
  */
 export default class PromiseCompletionSource<T> {
-    private _promise: Promise<T>;
+    private readonly _promise: Promise<T>;
 
     /**
      * Initializes a new instance of a promise completion source.
@@ -15,7 +15,7 @@ export default class PromiseCompletionSource<T> {
     }
 
     private reject: (reason?: any) => void = _ => { };
-    private resolve: (value?: T | undefined) => void = _ => { };
+    private resolve: (value: T | PromiseLike<T>) => void = _ => { };
 
     /**
      * Gets the promise.
@@ -28,7 +28,7 @@ export default class PromiseCompletionSource<T> {
      * Sets the result of the inner promise.
      * @param value The value.
      */
-    public setResult(value?: T | undefined): void {
+    public setResult(value: T | PromiseLike<T>): void {
         this.resolve(value);
     }
 

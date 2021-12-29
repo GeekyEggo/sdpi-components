@@ -1,4 +1,4 @@
-import store from './store';
+import store from '../stream-deck/store';
 import { PlatformType } from 'stream-deck';
 
 /**

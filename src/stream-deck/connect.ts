@@ -1,4 +1,4 @@
-import store from '../core/store';
+import store from './store';
 import StreamDeckClient from './stream-deck-client';
 import StreamDeckConnection from './stream-deck-connection';
 

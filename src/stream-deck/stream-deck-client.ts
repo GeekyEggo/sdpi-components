@@ -1,12 +1,9 @@
-import EventDispatcher, { IEventSubscriber } from '../core/event-dispatcher';
+import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
 import StreamDeckConnection from './stream-deck-connection';
 import { ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload } from 'stream-deck';
 
-export type DidReceiveGlobalSettingsEventArgs = StreamDeckEventArgsWithPayload<SettingsPayload>
-export type DidReceiveSettingsEventArgs = ActionEventArgsWithPayload<SettingsPayload>;
-
 enum Message {
-    // sent
+    // Sent.
     GET_SETTINGS = 'getSettings',
     GET_GLOBAL_SETTINGS = 'getGlobalSettings',
     LOG_MESSAGE = 'logMessage',
@@ -15,7 +12,7 @@ enum Message {
     SET_GLOBAL_SETTINGS = 'setGlobalSettings',
     SEND_TO_PLUGIN = 'sendToPlugin',
 
-    // received
+    // Received.
     DID_RECEIVE_GLOBAL_SETTINGS = 'didReceiveGlobalSettings',
     DID_RECEIVE_SETTINGS = 'didReceiveSettings'
 }
@@ -24,41 +21,28 @@ enum Message {
  * Provides a Stream Deck client wrapper for the connection.
  */
 export default class StreamDeckClient {
+    private readonly _didReceiveGlobalSettings: EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>> = new EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>>();
+    private readonly _didReceiveSettings: EventManager<ActionEventArgsWithPayload<SettingsPayload>> = new EventManager<ActionEventArgsWithPayload<SettingsPayload>>();
+
+    /**
+     * Initializes a new instance of the Stream Deck client class.
+     * @param connection The underlying connection to the Stream Deck.
+     * @constructor
+     */
     constructor(connection: StreamDeckConnection) {
-        this._connection = connection;
-        this.connection.message.subscribe(this.onMessage.bind(this));
+        connection.message.subscribe(this.onMessage.bind(this));
+        this.connection = connection;
     }
     
-    private _connection: StreamDeckConnection;
-    private _didReceiveGlobalSettings: EventDispatcher<DidReceiveGlobalSettingsEventArgs> = new EventDispatcher<DidReceiveGlobalSettingsEventArgs>();
-    private _didReceiveSettings: EventDispatcher<DidReceiveSettingsEventArgs> = new EventDispatcher<DidReceiveSettingsEventArgs>();
-
-    /**
-     * Gets the connection to the Stream Deck.
-     */
-    public get connection(): StreamDeckConnection {
-        return this._connection;
-    }
-
-    /**
-     * Gets the event subscriber for receiving the global settings.
-     */
-    public get didReceiveGlobalSettings(): IEventSubscriber<DidReceiveGlobalSettingsEventArgs> {
-        return this._didReceiveGlobalSettings;
-    }
-    
-    /**
-     * Gets the event subscriber for receiving the settings.
-     */
-    public get didReceiveSettings(): IEventSubscriber<DidReceiveSettingsEventArgs> {
-        return this._didReceiveSettings;
-    }
+    public readonly connection: StreamDeckConnection;
+    public get didReceiveGlobalSettings(): IEventSubscriber<StreamDeckEventArgsWithPayload<SettingsPayload>> { return this._didReceiveGlobalSettings; }
+    public get didReceiveSettings(): IEventSubscriber<ActionEventArgsWithPayload<SettingsPayload>> { return this._didReceiveSettings; }
 
     /**
      * Gets the global settings.
      * @returns The global settings as a promise.
      */
-    public getGlobalSettings(): Promise<DidReceiveGlobalSettingsEventArgs> {
+    public getGlobalSettings(): Promise<StreamDeckEventArgsWithPayload<SettingsPayload>> {
         return this.connection.get(Message.GET_GLOBAL_SETTINGS, Message.DID_RECEIVE_GLOBAL_SETTINGS);
     }
 
@@ -74,7 +58,7 @@ export default class StreamDeckClient {
      * Gets the settings.
      * @returns The settings as a promise.
      */
-    public getSettings(): Promise<DidReceiveSettingsEventArgs> {
+    public getSettings(): Promise<ActionEventArgsWithPayload<SettingsPayload>> {
         return this.connection.get(Message.GET_SETTINGS, Message.DID_RECEIVE_SETTINGS);
     }
 
@@ -93,11 +77,11 @@ export default class StreamDeckClient {
     private onMessage(data: StreamDeckEventArgs): void {
         switch (data.event) {
             case Message.DID_RECEIVE_GLOBAL_SETTINGS:
-                this._didReceiveGlobalSettings.dispatch(<DidReceiveGlobalSettingsEventArgs>data);
+                this._didReceiveGlobalSettings.dispatch(<StreamDeckEventArgsWithPayload<SettingsPayload>>data);
                 break;
 
             case Message.DID_RECEIVE_SETTINGS:
-                this._didReceiveSettings.dispatch(<DidReceiveSettingsEventArgs>data);
+                this._didReceiveSettings.dispatch(<ActionEventArgsWithPayload<SettingsPayload>>data);
                 break;
         }
     }
