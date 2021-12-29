@@ -5,7 +5,7 @@
     "main": "src/index.ts",
     "scripts": {
         "build": "webpack",
-        "watch": "webpack -w --env.LOCAL"
+        "watch": "webpack -w --env local"
     },
     "repository": {
         "type": "git",
@@ -24,13 +24,11 @@
     },
     "homepage": "https://github.com/GeekyEggo/sdpi#readme",
     "devDependencies": {
-        "css-loader": "^4.2.0",
-        "node-sass": "^4.14.1",
-        "sass-loader": "^9.0.2",
-        "style-loader": "^1.2.1",
-        "ts-loader": "^8.0.2",
-        "typescript": "^3.9.7",
-        "webpack": "^4.44.1",
-        "webpack-cli": "^3.3.12"
+        "css-loader": "^6.5.1",
+        "style-loader": "^3.3.1",
+        "ts-loader": "^9.2.6",
+        "typescript": "^4.5.2",
+        "webpack": "^5.64.4",
+        "webpack-cli": "^4.9.1"
     }
 }

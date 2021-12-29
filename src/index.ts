@@ -1,4 +1,4 @@
-import './styles/index.scss';
+import './styles/index.css';
 import './components/sdpi-button';
 import './components/sdpi-file';
 import './components/sdpi-select';

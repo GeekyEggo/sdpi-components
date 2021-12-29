@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = env => {
-    const isLocal = env && env.LOCAL;
+    const isLocal = env && env.local;
 
     const outputPath = isLocal
         ? path.resolve(process.env.APPDATA, 'Elgato/StreamDeck/Plugins/com.geekyeggo.sdpi.sdPlugin/pi')
@@ -14,7 +14,7 @@ module.exports = env => {
             path: outputPath,
         },
         mode: isLocal ? 'development' : 'production',
-        devtool: isLocal ? 'inline-source-map' : '',
+        devtool: isLocal ? 'inline-source-map' : 'hidden-source-map',
         resolve: {
             extensions: [ '.ts' ]
         },
@@ -26,11 +26,10 @@ module.exports = env => {
                     exclude: /node_modules/,
                 },
                 {
-                    test: /\.s(a|c)ss$/,
+                    test: /\.css$/,
                     use: [
                         'style-loader',
-                        'css-loader',
-                        'sass-loader'
+                        'css-loader'
                     ]
                 }
             ]
