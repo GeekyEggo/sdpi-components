@@ -2,42 +2,39 @@ import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
 import PromiseCompletionSource from '../core/promise-completion-source';
 import { ActionEventArgsWithPayload, ActionPayload, RegistrationInfo, StreamDeckEventArgs } from 'stream-deck';
 
+export interface IConnectionInfo {
+    actionInfo: ActionEventArgsWithPayload<ActionPayload>;
+    info: RegistrationInfo;
+    port: string,
+    propertyInspectorUUID: string;
+    registerEvent: string;
+}
+
 /**
  * Provides a connection between the property inspector and the Stream Deck.
  */
 export default class StreamDeckConnection {
+    private readonly _connection: PromiseCompletionSource<WebSocket> = new PromiseCompletionSource<WebSocket>();
+    private readonly _connectionInfo: PromiseCompletionSource<IConnectionInfo> = new PromiseCompletionSource<IConnectionInfo>();
     private readonly _message: EventManager<StreamDeckEventArgs> = new EventManager();
+    private _webSocket?: WebSocket;
     
-    /**
-     * Initializes a new instance of a Stream Deck connection.
-     * @constructor
-     * @param inPort The port that should be used to create the WebSocket
-     * @param inPropertyInspectorUUID A unique identifier string to register Property Inspector with Stream Deck software
-     * @param inRegisterEvent The event type that should be used to register the plugin once the WebSocket is opened. For Property Inspector this is
-     * @param inInfo A JSON object containing information about the application. (see below Info parameter)
-     * @param inActionInfo A JSON object containing information about the action. (see below inActionInfo parameter.
-     */
-    constructor(inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string) {
-        // The settings supplied by the Stream Deck.
-        this.inPropertyInspectorUUID = inPropertyInspectorUUID;
-        this.inRegisterEvent = inRegisterEvent;
-        this.info = JSON.parse(inInfo);
-        this.actionInfo = JSON.parse(inActionInfo);
-        
-        // Register the web socket.
-        this.webSocket = new WebSocket(`ws://localhost:${inPort}`);
-        this.webSocket.addEventListener('message', (ev: MessageEvent) => this._message.dispatch(JSON.parse(ev.data)));
-        this.webSocket.addEventListener('open', this.onOpen.bind(this));
-    }
-    
-    public readonly actionInfo: ActionEventArgsWithPayload<ActionPayload>;
-    public readonly info: RegistrationInfo;
-    public readonly inPropertyInspectorUUID: string;
-    public readonly inRegisterEvent: string;
     public get message(): IEventSubscriber<StreamDeckEventArgs> { return this._message; }
     
-    private readonly connection: PromiseCompletionSource<StreamDeckConnection> = new PromiseCompletionSource<StreamDeckConnection>();
-    private readonly webSocket: WebSocket;
+    /**
+     * Connects to the Stream Deck.
+     * @param info The connection information.
+     */
+    public async connect(info: IConnectionInfo): Promise<void> {
+        if (!this._webSocket) {
+            this._connectionInfo.setResult(info);
+            
+            // Register the web socket.
+            this._webSocket = new WebSocket(`ws://localhost:${info.port}`);
+            this._webSocket.addEventListener('message', (ev: MessageEvent) => this._message.dispatch(JSON.parse(ev.data)));
+            this._webSocket.addEventListener('open', this.onOpen.bind(this));
+        }
+    }
 
     /**
      * Sends a request to the Stream Deck, and awaits the first message matching the `waitFor` parameter.
@@ -47,19 +44,23 @@ export default class StreamDeckConnection {
      * @returns The promise containing the result of the request.
      */
     public async get(event: string, waitFor: string, payload?: any): Promise<any> {
+        const connection = await this._connection.promise;
         const resolver = new PromiseCompletionSource<any>();
 
         // Construct the listener; this will set the result and remove itself.
         let listener: (ev: MessageEvent) => void;
         listener = (ev: MessageEvent) => {
-            if (ev.data.event === waitFor) {
-                this.webSocket.removeEventListener('message', listener);
-                resolver.setResult(ev.data);
+            if (ev.data) {
+                const payload = JSON.parse(ev.data);
+                if (payload.event === waitFor) {
+                    connection.removeEventListener('message', listener);
+                    resolver.setResult(ev.data);
+                }
             }
         };
 
         // Add the event listener and send the request.
-        this.webSocket.addEventListener('message', listener);
+        connection.addEventListener('message', listener);
         await this.send(event, payload);
 
         return resolver.promise;
@@ -72,13 +73,14 @@ export default class StreamDeckConnection {
      */
     public async send(event: string, payload?: any): Promise<void> {
         try {
-            await this.connection.promise;
+            const connectionInfo = await this._connectionInfo.promise;
+            const connection = await this._connection.promise;
 
-            this.webSocket.send(JSON.stringify({
+            connection.send(JSON.stringify({
                 event: event,
-                context: this.inPropertyInspectorUUID,
+                context: connectionInfo.propertyInspectorUUID,
                 payload: payload,
-                action: this.actionInfo.action
+                action: connectionInfo.actionInfo.action
             }));
         } catch {
             console.error(`Unable to send request '${event}' as there is no connection.`);
@@ -89,16 +91,19 @@ export default class StreamDeckConnection {
      * Handles the open event of the web socket.
      * @param ev The event arguments.
      */
-    private onOpen(ev: any): void {
+    private async onOpen(ev: any): Promise<void> {
         try {
-            this.webSocket.send(JSON.stringify({
-                event: this.inRegisterEvent,
-                uuid: this.inPropertyInspectorUUID
-            }));
+            const connectionInfo = await this._connectionInfo.promise
+            if (this._webSocket) {
+                this._webSocket.send(JSON.stringify({
+                    event: connectionInfo.registerEvent,
+                    uuid: connectionInfo.propertyInspectorUUID
+                }));
 
-            this.connection.setResult(this);
+                this._connection.setResult(this._webSocket);
+            }
         } catch (ex) {
-            this.connection.setException(ex);
+            this._connection.setException(ex);
         }
     }
 }

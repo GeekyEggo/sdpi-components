@@ -13,7 +13,14 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
         return { 
             input: select
         };
+
     }
+
+    /*
+    return item.children && item.children instanceof Array
+            ? <optgroup key={item.label} label={item.label}>{item.children.map(this.mapOptions)}</optgroup>
+            : <option key={item.value} value={item.value}>{item.label}</option>
+    */
 }
 
 customElements.define('sdpi-select', SDPISelect);

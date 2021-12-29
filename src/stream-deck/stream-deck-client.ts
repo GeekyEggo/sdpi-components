@@ -1,6 +1,7 @@
 import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
-import StreamDeckConnection from './stream-deck-connection';
+import StreamDeckConnection, { IConnectionInfo } from './stream-deck-connection';
 import { ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload } from 'stream-deck';
+import PromiseCompletionSource from '../core/promise-completion-source';
 
 enum Message {
     // Sent.
@@ -20,23 +21,40 @@ enum Message {
 /**
  * Provides a Stream Deck client wrapper for the connection.
  */
-export default class StreamDeckClient {
+class StreamDeckClient {
     private readonly _didReceiveGlobalSettings: EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>> = new EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>>();
     private readonly _didReceiveSettings: EventManager<ActionEventArgsWithPayload<SettingsPayload>> = new EventManager<ActionEventArgsWithPayload<SettingsPayload>>();
-
+    private readonly _connectioninfo: PromiseCompletionSource<IConnectionInfo> = new PromiseCompletionSource<IConnectionInfo>();
+    
     /**
      * Initializes a new instance of the Stream Deck client class.
-     * @param connection The underlying connection to the Stream Deck.
      * @constructor
      */
-    constructor(connection: StreamDeckConnection) {
-        connection.message.subscribe(this.onMessage.bind(this));
-        this.connection = connection;
+    constructor() {
+        this.connection.message.subscribe(this.onMessage.bind(this));
     }
     
-    public readonly connection: StreamDeckConnection;
     public get didReceiveGlobalSettings(): IEventSubscriber<StreamDeckEventArgsWithPayload<SettingsPayload>> { return this._didReceiveGlobalSettings; }
     public get didReceiveSettings(): IEventSubscriber<ActionEventArgsWithPayload<SettingsPayload>> { return this._didReceiveSettings; }
+
+    private readonly connection: StreamDeckConnection = new StreamDeckConnection();
+
+    /**
+     * Connects to the Stream Deck.
+     * @param info The connection information.
+     */
+    public async connect(info: IConnectionInfo): Promise<void> {
+        this.connection.connect(info);
+        this._connectioninfo.setResult(info);
+    }
+
+    /**
+     * Gets the connection information.
+     * @returns The connection information.
+     */
+    public getConnectionInfo(): Promise<IConnectionInfo> {
+        return this._connectioninfo.promise;
+    }
 
     /**
      * Gets the global settings.
@@ -86,3 +104,6 @@ export default class StreamDeckClient {
         }
     }
 }
+
+const streamDeckClient = new StreamDeckClient();
+export default streamDeckClient;

@@ -108,6 +108,9 @@ dist
 bin
 obj
 
+# Visual Studio
+.suo
+
 # VSCode
 .vs/slnx.sqlite
 

@@ -1,18 +1,14 @@
 import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
-import StreamDeckClient from './stream-deck-client';
-import { ActionEventArgsWithPayload, StreamDeckEventArgsWithPayload, SettingsPayload } from 'stream-deck';
+import streamDeckClient from './stream-deck-client';
+import { ActionEventArgsWithPayload, StreamDeckEventArgsWithPayload, SettingsPayload, ActionPayload } from 'stream-deck';
 
 /**
  * Provides a store for managing settings stored within the Stream Deck.
  */
 class Store {
-    private _client? : StreamDeckClient;
     private readonly _globalSettingsChange: EventManager<any> = new EventManager<any>();
     private readonly _settingsChange: EventManager<any> = new EventManager<any>();
 
-    public get client(): StreamDeckClient | undefined {
-        return this._client;
-    }
     public get globalSettingsChange(): IEventSubscriber<any> {
         return this._globalSettingsChange;
     }
@@ -27,20 +23,18 @@ class Store {
      * Attaches the Stream Deck client to the store.
      * @param client The Stream Deck client.
      */
-    public attach(client: StreamDeckClient): void {
-        this._client = client;
-
-        client.didReceiveGlobalSettings.subscribe((data: StreamDeckEventArgsWithPayload<SettingsPayload>) => {
+    public connect(actionInfo: ActionEventArgsWithPayload<ActionPayload>): void {
+        streamDeckClient.didReceiveGlobalSettings.subscribe((data: StreamDeckEventArgsWithPayload<SettingsPayload>) => {
             this.globalSettings = data.payload.settings;
             this._globalSettingsChange.dispatch(this.globalSettings);
         })
 
-        client.didReceiveSettings.subscribe((data: ActionEventArgsWithPayload<SettingsPayload>) => {
+        streamDeckClient.didReceiveSettings.subscribe((data: ActionEventArgsWithPayload<SettingsPayload>) => {
             this.dispatchSettings(data);
         })
 
-        client.getGlobalSettings();
-        this.dispatchSettings(client.connection.actionInfo);
+        this.dispatchSettings(actionInfo);
+        streamDeckClient.getGlobalSettings();
     }
 
     /**
@@ -79,10 +73,10 @@ class Store {
     public set(key: string, value?: any, global: boolean = false): void {
         if (global) {
             this.globalSettings[key] = value;
-            this.client?.setGlobalSettings(this.globalSettings);
+            streamDeckClient.setGlobalSettings(this.globalSettings);
         } else {
             this.settings[key] = value;
-            this.client?.setSettings(this.settings);
+            streamDeckClient.setSettings(this.settings);
         }
     }
 

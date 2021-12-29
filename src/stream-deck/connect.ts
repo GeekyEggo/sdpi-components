@@ -1,6 +1,6 @@
 import store from './store';
-import StreamDeckClient from './stream-deck-client';
-import StreamDeckConnection from './stream-deck-connection';
+import streamDeckClient from './stream-deck-client';
+import { IConnectionInfo } from './stream-deck-connection';
 
 /**
  * Called by the Stream Deck to enable registration of the property inspector.
@@ -10,9 +10,15 @@ import StreamDeckConnection from './stream-deck-connection';
  * @param inInfo A json object containing information about the application.
  * @param inActionInfo A json object containing information about the action.
  */
-window.connectElgatoStreamDeckSocket = (inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void => {
-    const connection = new StreamDeckConnection(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
-    const client = new StreamDeckClient(connection);
-
-    store.attach(client);
+window.connectElgatoStreamDeckSocket = async (inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): Promise<void> => {
+    const info: IConnectionInfo =  {
+        actionInfo: JSON.parse(inActionInfo),
+        info: JSON.parse(inInfo),
+        propertyInspectorUUID: inPropertyInspectorUUID,
+        port: inPort,
+        registerEvent: inRegisterEvent
+    }
+    
+    await streamDeckClient.connect(info);    
+    store.connect(info.actionInfo);
 }
