@@ -40,7 +40,7 @@ export function useStore(key: string, global: boolean, input: HTMLInput, timeout
         }
     });
 
-    if (timeout) {
+    if ((input.type.toLowerCase() === 'text' || input.tagName.toLowerCase() === 'textarea') && timeout) {
         input.addEventListener('input', delay(() => save(input.value), timeout));
     } else {
         input.addEventListener('change', () => save(input.value));

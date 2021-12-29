@@ -1,16 +1,44 @@
 namespace Sdpi.Actions
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using SharpDeck;
     using SharpDeck.Events.Received;
-    using SharpDeck.Manifest;
+    using SharpDeck.PropertyInspectors;
+    using SharpDeck.PropertyInspectors.Payloads;
 
     /// <summary>
     /// The counter action; displays the count which is increment on each press.
     /// </summary>
-    [StreamDeckAction("Counter", "com.geekyeggo.sdpi.counter")]
+    [StreamDeckAction("com.geekyeggo.sdpi.counter")]
     public class CounterAction : StreamDeckAction<CounterSettings>
     {
+        /// <summary>
+        /// Gets the options.
+        /// </summary>
+        /// <returns>The options payload.</returns>
+        [PropertyInspectorMethod]
+        public OptionsPayload GetOptions()
+        {
+            return new OptionsPayload
+            {
+                Options = new List<Option>
+                {
+                    new Option("Odd Numbers", new List<Option>
+                    {
+                        new Option("One", "1"),
+                        new Option("Three", "3"),
+                        new Option("Five", "5")
+                    }),
+                    new Option("Even Numbers", new List<Option>
+                    {
+                        new Option("Two", "2"),
+                        new Option("Two", "4")
+                    })
+                }
+            };
+        }
+
         /// <summary>
         /// Occurs when <see cref="IStreamDeckConnection.WillAppear" /> is received for this instance.
         /// </summary>

@@ -4,6 +4,7 @@
     /* Box model */
     --spacer: 4px;
     --row-spacer: calc(var(--spacer) * 2);
+    --label-column-width: 103px;
     
     /* Background and typography */
     --color-primary: #9a9a9a;
@@ -16,7 +17,6 @@
 
 html, body {
     /* Box model */
-    width: 300px;
     margin: 0;
     padding-top: 2px;
 
@@ -25,7 +25,7 @@ html, body {
     color: var(--color-primary);
     font-size: var(--font-size);
     font-weight: normal;
-    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: Tahoma, Verdana, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 /* Layout */
@@ -43,7 +43,6 @@ html, body {
 
 .row > * {
     box-sizing: border-box;
-    outline: solid 1px red;
     padding: 0 var(--spacer);
 }
 
@@ -75,14 +74,24 @@ html, body {
 /* Layout (SDPI) */
 .col-label
 {
+    width: var(--label-column-width);
+    padding-top: var(--spacer);
+    padding-right: 11px;
+
     text-align: right;
-    width: 90px
 }
-.col-field { width: calc(100% - 90px); }
+.col-input {
+    width: calc(100% - var(--label-column-width) - 20px);
+    padding-left: 0;
+    padding-right: 0;
+}
 
 /* Spacing */
-.pl-0 { padding-left: 0 }
-.pr-0 { padding-right: 0 }
+.p-0 { padding: 0; }
+.pt-0 { padding-top: 0; }
+.pr-0 { padding-right: 0; }
+.pb-0 { padding-bottom: 0; }
+.pl-0 { padding-left: 0; }
 
 /* Typography */
 .text-right { text-align: right; }
