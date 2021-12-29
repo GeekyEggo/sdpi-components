@@ -1,6 +1,6 @@
 import SDPIElement from './sdpi-element';
 import { anyChange } from '../core/input';
-import { useStoreWithInput } from '../core/store';
+import { useStore } from '../core/input';
 
 /**
  * A Stream Deck property inspector textarea.
@@ -46,7 +46,7 @@ class SDPITextArea extends SDPIElement<HTMLTextAreaElement> {
 
             // init the input and counter
             anyChange(this.input, this.refreshCount.bind(this));
-            useStoreWithInput(this.id, this.global, this.input);
+            useStore(this.id, this.global, this.input);
             this.refreshCount();
             
             // add the elements

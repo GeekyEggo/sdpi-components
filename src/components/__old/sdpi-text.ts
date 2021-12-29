@@ -1,5 +1,5 @@
 import SDPIElement from './sdpi-element';
-import { useStoreWithInput } from '../core/store';
+import { useStore } from '../core/input';
 
 /**
  * A Stream Deck property inspector text field. 
@@ -32,7 +32,7 @@ class SDPIText extends SDPIElement<HTMLInputElement> {
         super.connectedCallback();
 
         if (this.input) {
-            useStoreWithInput(this.id, this.global, this.input);        
+            useStore(this.id, this.global, this.input);        
             this.appendChild(this.input);
         }
     }

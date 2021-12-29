@@ -1,7 +1,6 @@
 import SDPIElement from './sdpi-element';
-import { CssClass } from 'sdpi';
 import { getFileName, sanitize as sanitizePath } from '../core/file';
-import { StoreSetter, useStore } from '../core/store';
+import store from '../stream-deck/store';
 
 /**
  * A Stream Deck property inspector file input. 
@@ -58,29 +57,29 @@ class SDPIFile extends SDPIElement<HTMLInputElement> {
     
     private _value: string | undefined;
     private info: HTMLLabelElement;
-    private save?: StoreSetter;
+    private save?: (value?: any) => void;
 
     /**
      * Called every time the element is inserted into the DOM.
      */
     public connectedCallback(): void {
         super.connectedCallback();
-        this.save = useStore(this.id, this.global, (value: any) => this.value = value).save;
+        this.save = store.register(this.id, this.global, (value: any) => this.value = value);
         
         const grp = document.createElement('div')
-        grp.classList.add(CssClass.ItemGroup, 'file');
+        //grp.classList.add(CssClass.ItemGroup, 'file');
         
         this.input.addEventListener('change', () => this.onChanged());        
         this.input.hidden = true;
         this.input.type = 'file';
         grp.appendChild(this.input);
         
-        this.info.classList.add(CssClass.FileInfo)
+        //this.info.classList.add(CssClass.FileInfo)
         this.info.htmlFor = this.input.id;
         grp.appendChild(this.info);
         
         const button = document.createElement('label');
-        button.classList.add(CssClass.FileLabel);
+        //button.classList.add(CssClass.FileLabel);
         button.htmlFor = this.input.id;
         button.innerText = 'Choose File';
         grp.appendChild(button);

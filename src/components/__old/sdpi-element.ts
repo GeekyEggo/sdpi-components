@@ -1,4 +1,3 @@
-import { CssClass } from 'sdpi';
 import { HTMLInput } from '../core/input';
 
 /**
@@ -84,9 +83,9 @@ export default abstract class SDPIElement<T extends HTMLInput> extends HTMLEleme
         }
 
         // assign the classes.
-        this.classList.add(CssClass.Item);
-        this.label.classList.add(CssClass.ItemLabel);
-        this.input.classList.add(CssClass.ItemValue);
+        // this.classList.add(CssClass.Item);
+        // this.label.classList.add(CssClass.ItemLabel);
+        // this.input.classList.add(CssClass.ItemValue);
 
         this.appendChild(this.label);
     }
@@ -115,7 +114,7 @@ export default abstract class SDPIElement<T extends HTMLInput> extends HTMLEleme
      * @param attrName The attribute name.
      * @param target The element to clone the attribute to.
      */
-    protected cloneAttribute(attrName: string, target: HTMLElement, ): void {
+    protected cloneAttribute(attrName: string, target: HTMLElement): void {
         const value = this.getAttribute(attrName);
 
         if (value !== undefined && value !== null) {

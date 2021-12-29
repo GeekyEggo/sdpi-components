@@ -1,6 +1,6 @@
 import SDPIElement from './sdpi-element';
 import { observeChildList } from '../core/node';
-import { useStoreWithInput } from '../core/store';
+import { useStore } from '../core/input';
 
 /**
  * A Stream Deck property inspector select field. 
@@ -21,7 +21,7 @@ class SDPISelect extends SDPIElement<HTMLSelectElement> {
         super.connectedCallback();
         
         if (this.input) {
-            useStoreWithInput(this.id, this.global, this.input);        
+            useStore(this.id, this.global, this.input);        
             this.appendChild(this.input);
 
             observeChildList(this, (added: Node) => this.input.appendChild(added), 'OPTGROUP', 'OPTION');
