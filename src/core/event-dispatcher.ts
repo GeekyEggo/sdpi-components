@@ -2,7 +2,7 @@
  * Provides an event dispatcher whereby handlers can subscribe to events that are later dispatched.
  */
 export default class EventManager<T> implements IEventDispatcher<T>, IEventSubscriber<T> {
-    private readonly handlers: IEventHandler<T>[] = [];
+    private handlers: IEventHandler<T>[] = [];
     
     /**
      * Dispatches the event for all handlers.
@@ -16,16 +16,25 @@ export default class EventManager<T> implements IEventDispatcher<T>, IEventSubsc
     
     /**
      * Subscribes the handler to the event.
-     * @param handler The handler.
+     * @param {IEventHandler<T>} handler The handler to add.
      */
     public subscribe(handler: IEventHandler<T>): void {
         this.handlers.push(handler);
+    }
+
+    /**
+     * Unsubscribes the handler from the event.
+     * @param {IEventHandler<T>} handler The handler to remove.
+     */
+    public unsubscribe(handler: IEventHandler<T>): void {
+        this.handlers = this.handlers.filter(h => h !== handler);
     }
 }
 
 /* An event subscriber */
 export interface IEventSubscriber<T> {
     subscribe(handler: IEventHandler<T>): void;
+    unsubscribe(handler: IEventHandler<T>): void
 }
 
 /* An event dispatcher */

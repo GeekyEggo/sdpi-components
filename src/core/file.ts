@@ -1,5 +1,5 @@
 import { PlatformType } from 'stream-deck';
-import streamDeckClient from '../stream-deck/stream-deck-client';
+import streamDeckConnection from '../stream-deck/stream-deck-connection';
 
 /**
  * Gets the file name from the path.
@@ -33,6 +33,6 @@ export async function sanitize(path: string): Promise<string> {
  * @returns {boolean} true when the platform is windows; otherwise false.
  */
 export async function isWindows(): Promise<boolean> {
-    const connectionInfo = await streamDeckClient.getConnectionInfo();
+    const connectionInfo = await streamDeckConnection.getConnectionInfo();
     return connectionInfo.info.application.platform == PlatformType.Windows
 }

@@ -5,7 +5,6 @@ import { ActionEventArgsWithPayload, ActionPayload, RegistrationInfo, StreamDeck
 export interface IConnectionInfo {
     actionInfo: ActionEventArgsWithPayload<ActionPayload>;
     info: RegistrationInfo;
-    port: string,
     propertyInspectorUUID: string;
     registerEvent: string;
 }
@@ -13,7 +12,7 @@ export interface IConnectionInfo {
 /**
  * Provides a connection between the property inspector and the Stream Deck.
  */
-export default class StreamDeckConnection {
+class StreamDeckConnection {
     private readonly _connection: PromiseCompletionSource<WebSocket> = new PromiseCompletionSource<WebSocket>();
     private readonly _connectionInfo: PromiseCompletionSource<IConnectionInfo> = new PromiseCompletionSource<IConnectionInfo>();
     private readonly _message: EventManager<StreamDeckEventArgs> = new EventManager();
@@ -23,14 +22,23 @@ export default class StreamDeckConnection {
     
     /**
      * Connects to the Stream Deck.
-     * @param info The connection information.
+     * @param {string} port The port that should be used to create the WebSocket.
+     * @param {string} propertyInspectorUUID A unique identifier string to register Property Inspector with Stream Deck software.
+     * @param {string} registerEvent The event type that should be used to register the plugin once the WebSocket is opened. For Property Inspector this is "registerPropertyInspector".
+     * @param {string} info A JSON object containing information about the application.
+     * @param {string} actionInfo A JSON object containing information about the action.
      */
-    public async connect(info: IConnectionInfo): Promise<void> {
+    public async connect(port: string, propertyInspectorUUID: string, registerEvent: string, info: string, actionInfo: string): Promise<void> {
         if (!this._webSocket) {
-            this._connectionInfo.setResult(info);
+            this._connectionInfo.setResult({
+                actionInfo: JSON.parse(actionInfo),
+                info: JSON.parse(info),
+                propertyInspectorUUID: propertyInspectorUUID,
+                registerEvent: registerEvent
+            });
             
             // Register the web socket.
-            this._webSocket = new WebSocket(`ws://localhost:${info.port}`);
+            this._webSocket = new WebSocket(`ws://localhost:${port}`);
             this._webSocket.addEventListener('message', (ev: MessageEvent) => this._message.dispatch(JSON.parse(ev.data)));
             this._webSocket.addEventListener('open', this.onOpen.bind(this));
         }
@@ -38,32 +46,36 @@ export default class StreamDeckConnection {
 
     /**
      * Sends a request to the Stream Deck, and awaits the first message matching the `waitFor` parameter.
-     * @param event The event name.
-     * @param waitFor The event name to wait for.
-     * @param payload The optional payload.
-     * @returns The promise containing the result of the request.
+     * @param {string} event The event name.
+     * @param {StreamDeckEventArgs|any} canCallback The delegate used to determine if the event fulfils the callback requirements.
+     * @param {StreamDeckEventArgs|any} payload The optional payload.
+     * @returns {object} The promise containing the result of the request.
      */
-    public async get(event: string, waitFor: string, payload?: any): Promise<any> {
-        const connection = await this._connection.promise;
+    public async get(event: string, canCallback: (payload: StreamDeckEventArgs | any) => boolean, payload?: StreamDeckEventArgs | any): Promise<any> {
         const resolver = new PromiseCompletionSource<any>();
 
-        // Construct the listener; this will set the result and remove itself.
-        let listener: (ev: MessageEvent) => void;
-        listener = (ev: MessageEvent) => {
-            if (ev.data) {
-                const payload = JSON.parse(ev.data);
-                if (payload.event === waitFor) {
-                    connection.removeEventListener('message', listener);
-                    resolver.setResult(ev.data);
-                }
+        // Construct the temporary listener that is removed when the callback can be fulilled.
+        let listener: (args: StreamDeckEventArgs) => void;
+        listener = (args: StreamDeckEventArgs) => {
+            if (canCallback(args)) {
+                this.message.unsubscribe(listener);
+                resolver.setResult(args);
             }
-        };
+        }
 
-        // Add the event listener and send the request.
-        connection.addEventListener('message', listener);
+        // Await message, and send the request.
+        this.message.subscribe(listener);
         await this.send(event, payload);
 
         return resolver.promise;
+    }
+
+    /**
+     * Gets the connection information, once it has been set.
+     * @returns The connection info.
+     */
+    public async getConnectionInfo(): Promise<IConnectionInfo> {
+        return this._connectionInfo.promise;
     }
 
     /**
@@ -88,6 +100,13 @@ export default class StreamDeckConnection {
     }
 
     /**
+     * Waits for an active connection to be established.
+     */
+    public async waitForConnection(): Promise<void> {
+        await this._connection.promise;
+    }
+
+    /**
      * Handles the open event of the web socket.
      * @param ev The event arguments.
      */
@@ -107,3 +126,6 @@ export default class StreamDeckConnection {
         }
     }
 }
+
+const streamDeckConnection = new StreamDeckConnection();
+export default streamDeckConnection;

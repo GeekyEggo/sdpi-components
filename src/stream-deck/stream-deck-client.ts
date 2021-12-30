@@ -1,7 +1,7 @@
 import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
-import StreamDeckConnection, { IConnectionInfo } from './stream-deck-connection';
+import streamDeckConnection from './stream-deck-connection';
 import { ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload } from 'stream-deck';
-import PromiseCompletionSource from '../core/promise-completion-source';
+import { getUUID } from '../core/utils';
 
 enum Message {
     // Sent.
@@ -15,7 +15,8 @@ enum Message {
 
     // Received.
     DID_RECEIVE_GLOBAL_SETTINGS = 'didReceiveGlobalSettings',
-    DID_RECEIVE_SETTINGS = 'didReceiveSettings'
+    DID_RECEIVE_SETTINGS = 'didReceiveSettings',
+    SEND_TO_PROPERTY_INSPECTOR = 'sendToPropertyInspector'
 }
 
 /**
@@ -24,36 +25,34 @@ enum Message {
 class StreamDeckClient {
     private readonly _didReceiveGlobalSettings: EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>> = new EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>>();
     private readonly _didReceiveSettings: EventManager<ActionEventArgsWithPayload<SettingsPayload>> = new EventManager<ActionEventArgsWithPayload<SettingsPayload>>();
-    private readonly _connectioninfo: PromiseCompletionSource<IConnectionInfo> = new PromiseCompletionSource<IConnectionInfo>();
     
     /**
      * Initializes a new instance of the Stream Deck client class.
      * @constructor
      */
     constructor() {
-        this.connection.message.subscribe(this.onMessage.bind(this));
+        streamDeckConnection.message.subscribe(this.onMessage.bind(this));
     }
     
     public get didReceiveGlobalSettings(): IEventSubscriber<StreamDeckEventArgsWithPayload<SettingsPayload>> { return this._didReceiveGlobalSettings; }
     public get didReceiveSettings(): IEventSubscriber<ActionEventArgsWithPayload<SettingsPayload>> { return this._didReceiveSettings; }
-
-    private readonly connection: StreamDeckConnection = new StreamDeckConnection();
-
+    
     /**
-     * Connects to the Stream Deck.
-     * @param info The connection information.
+     * Sends a `get` request to the plugin, utilising SharpDeck libraries `PropertyInspectorMethod` attribute.
+     * @param {string} event The name of the event or method, i.e. URI endpoint.
+     * @param {object} payload The optional payload.
+     * @returns {object} A promise containing the result.
      */
-    public async connect(info: IConnectionInfo): Promise<void> {
-        this.connection.connect(info);
-        this._connectioninfo.setResult(info);
-    }
+    public async get(event: string, payload?: any): Promise<any> {
+        const request = {
+            event: event,
+            requestId: getUUID()
+        };
 
-    /**
-     * Gets the connection information.
-     * @returns The connection information.
-     */
-    public getConnectionInfo(): Promise<IConnectionInfo> {
-        return this._connectioninfo.promise;
+        return await streamDeckConnection.get(
+            Message.SEND_TO_PLUGIN,
+            args => args.event == Message.SEND_TO_PROPERTY_INSPECTOR && args.payload && args.payload.requestId == request.requestId,
+            { ...payload, ...request });
     }
 
     /**
@@ -61,7 +60,7 @@ class StreamDeckClient {
      * @returns The global settings as a promise.
      */
     public getGlobalSettings(): Promise<StreamDeckEventArgsWithPayload<SettingsPayload>> {
-        return this.connection.get(Message.GET_GLOBAL_SETTINGS, Message.DID_RECEIVE_GLOBAL_SETTINGS);
+        return streamDeckConnection.get(Message.GET_GLOBAL_SETTINGS, payload => payload.event == Message.DID_RECEIVE_GLOBAL_SETTINGS);
     }
 
     /**
@@ -69,7 +68,7 @@ class StreamDeckClient {
      * @param value The global settings.
      */
     public setGlobalSettings(value?: any): void {
-        this.connection.send(Message.SET_GLOBAL_SETTINGS, value);
+        streamDeckConnection.send(Message.SET_GLOBAL_SETTINGS, value);
     }
 
     /**
@@ -77,7 +76,7 @@ class StreamDeckClient {
      * @returns The settings as a promise.
      */
     public getSettings(): Promise<ActionEventArgsWithPayload<SettingsPayload>> {
-        return this.connection.get(Message.GET_SETTINGS, Message.DID_RECEIVE_SETTINGS);
+        return streamDeckConnection.get(Message.GET_SETTINGS, payload => payload.event == Message.DID_RECEIVE_SETTINGS);
     }
 
     /**
@@ -85,7 +84,7 @@ class StreamDeckClient {
      * @param value The settings.
      */
     public setSettings(value?: any): void {
-        this.connection.send(Message.SET_SETTINGS, value);
+        streamDeckConnection.send(Message.SET_SETTINGS, value);
     }    
 
     /**

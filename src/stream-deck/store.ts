@@ -1,6 +1,7 @@
 import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
 import streamDeckClient from './stream-deck-client';
 import { ActionEventArgsWithPayload, StreamDeckEventArgsWithPayload, SettingsPayload, ActionPayload } from 'stream-deck';
+import streamDeckConnection from './stream-deck-connection';
 
 /**
  * Provides a store for managing settings stored within the Stream Deck.
@@ -91,4 +92,11 @@ class Store {
 }
 
 const store = new Store();
+(async function() {
+    await streamDeckConnection.waitForConnection();
+
+    const connectionInfo = await streamDeckConnection.getConnectionInfo();
+    store.connect(connectionInfo.actionInfo);
+})();
+
 export default store;

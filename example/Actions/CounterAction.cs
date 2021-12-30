@@ -17,7 +17,7 @@ namespace Sdpi.Actions
         /// Gets the options.
         /// </summary>
         /// <returns>The options payload.</returns>
-        [PropertyInspectorMethod]
+        [PropertyInspectorMethod("GetOptions")]
         public OptionsPayload GetOptions()
         {
             return new OptionsPayload
