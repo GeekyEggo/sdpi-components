@@ -1,5 +1,5 @@
-import { observeChildList } from '../core/element';
-import { clearOptions, createOption, createOptionGroup } from '../core/input';
+import { createElement, observeChildList } from '../core/element';
+import { clearOptions, createOption, createOptionGroup, setOnlyOption } from '../core/input';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 import SDPIInput, { IFieldContent } from './sdpi-input';
 
@@ -10,54 +10,105 @@ interface Option {
 }
 
 export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
+    private _disabled: boolean = false;
+    private refresh?: HTMLButtonElement;
+
+    /* Gets the disabled state of this component */
+    public get disabled(): boolean {
+        return this._disabled;
+    }
+
+    /* Sets the input, and refresh button, to disabled */
+    public set disabled(value: boolean) {
+        if (this.input) {
+            this.input.disabled = value;
+        }
+
+        if (this.refresh) {
+            this.refresh.disabled = value;
+        }
+    }
+
     /**
      * Creates the content contained within the input column.
      * @returns The object that contains the input element, and the optional content wrapper.
      */
     protected createContent(): IFieldContent<HTMLSelectElement> {
-        const select = document.createElement('select');
+        let parent = null;
+        this.input = document.createElement('select');
 
-        const dataSourceEndpoint = this.getAttribute('data-source');
+        const dataSourceEndpoint = this.getAttribute('datasource');
         if (dataSourceEndpoint) {
-            this.loadOptions(select, dataSourceEndpoint);
+            const refreshEndpoint = this.getAttribute('refresh');
+            if (refreshEndpoint) {
+                this.refresh = createElement('button', ['refresh-icon']);
+                parent = createElement(
+                    'div',
+                    'row',
+                    [
+                        createElement('div', ['col', 'f-stretch'], [this.input]),
+                        createElement('div', ['col', 'ml-2'], [this.refresh])
+                    ]);
+
+                this.refresh.addEventListener('click', () => this.loadOptions(refreshEndpoint));
+            }
+
+            this.loadOptions(dataSourceEndpoint);
         } else {
-            observeChildList(this, (added: Node) => select.appendChild(added), 'OPTGROUP', 'OPTION');
+            observeChildList(this, (added: Node) => this.input?.appendChild(added), 'OPTGROUP', 'OPTION');
         }
 
         return {
-            input: select
+            parent: parent,
+            input: this.input
         };
     }
 
     /**
      * Loads the options from the specified data source, and populates the input.
-     * @param select The select input to populate.
      * @param dataSourceEndpoint The name of the endpoint to retrieve the options from.
      */
-    private async loadOptions(select: HTMLSelectElement, dataSourceEndpoint: string): Promise<void> {
-        const request = streamDeckClient.get(dataSourceEndpoint);
-
-        // Set the loading state of the dropdown.
-        select.disabled = true;
-        clearOptions(select);
-        select.options.add(createOption(this.getAttribute('loading-text') || 'Loading...', ''));
-        select.value = '';
-
-        // Wait for the data source, and then populate the select element.
-        const dataSource = await request;
-        if (dataSource.payload.options) {
-            const mapOptions = (item: Option): HTMLOptGroupElement | HTMLOptionElement => {
-                return item.children && item.children instanceof Array
-                    ? createOptionGroup(item.label, item.children?.map(mapOptions))
-                    : createOption(item.label, item.value);
-            }
-
-            clearOptions(select);
-            dataSource.payload.options.map(mapOptions).forEach((option: HTMLOptionElement | HTMLOptionElement) => select.options.add(option));
-            select.value = this.value;
+    private async loadOptions(dataSourceEndpoint: string): Promise<void> {
+        if (!this.input) {
+            return;
         }
 
-        select.disabled = false;
+        // Load the options.
+        const request = streamDeckClient.get(dataSourceEndpoint);
+        this.disabled = true;
+        setOnlyOption(this.input, 'Loading...');
+
+        // Set the options.
+        const dataSource = await request;
+        if (dataSource.payload && dataSource.payload.options) {
+            this.setOptions(<Option[]>dataSource.payload.options);
+        } else {
+            setOnlyOption(this.input, 'Failed to load');
+        }
+
+        this.disabled = false;
+
+    }
+
+    /**
+     * Sets the options of the input to the specified options.
+     * @param options The options.
+     */
+    private setOptions(options?: Option[]): void {
+        if (!this.input || !options) {
+            return;
+        }
+
+        const mapOptions = (item: Option): HTMLOptGroupElement | HTMLOptionElement => {
+            return item.children && item.children instanceof Array
+                ? createOptionGroup(item.label, item.children?.map(mapOptions))
+                : createOption(item.label, item.value);
+        }
+
+        clearOptions(this.input);
+        options.map(mapOptions).forEach(option => this.input?.options.add(option));
+
+        this.input.value = this.value || this.getAttribute('defaultvalue');
     }
 }
 

@@ -5,7 +5,7 @@ import store, { IStoreObject } from '../stream-deck/store';
 import SDPIElement from './sdpi-element';
 
 export interface IFieldContent<T extends HTMLInput> {
-    parent?: HTMLElement;
+    parent?: HTMLElement | null | undefined;
     input: T;
 }
 

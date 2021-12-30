@@ -19,10 +19,9 @@ export function anyChange(input: HTMLInput, listener: EventListenerOrEventListen
  * @param input The input.
  */
 export function clearOptions(input: HTMLSelectElement): void {
-    if (input.options) {
-        let i = input.options.length;
-        while (i--) {
-            input.options.remove(i);
+    if (input.childNodes) {
+        while (input.firstChild) {
+            input.removeChild(input.firstChild);
         }
     }
 }
@@ -64,4 +63,16 @@ export function createOptionGroup(label: string, children?: HTMLOptGroupElement[
  */
 export function dispatchChange(input: HTMLInput) {
     input.dispatchEvent(new Event('change'));
+}
+
+/**
+ * Removes all items within the select element, and appends the sole option.
+ * @param input The select input to amend.
+ * @param label The label of the only option.
+ */
+export function setOnlyOption(input: HTMLSelectElement, label: string) {
+    clearOptions(input);
+
+    input.options.add(createOption(label, ''));
+    input.value = '';
 }

@@ -6,4 +6,5 @@
     },
     "editor.formatOnSave": true,
     "importSorter.generalConfiguration.sortOnBeforeSave": true,
+    "html.format.wrapLineLength": 250
 }
