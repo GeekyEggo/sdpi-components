@@ -5,7 +5,7 @@
  * @param children The optional children to append to the element.
  * @returns The element.
  */
-export function createElement(tagName: string, classNames?: string | string[], children?: HTMLElement[]): HTMLElement {
+export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K, classNames?: string | string[], children?: HTMLElement[]): HTMLElementTagNameMap[K] {
     const element = document.createElement(tagName);
 
     if (classNames) {
@@ -26,7 +26,7 @@ export function createElement(tagName: string, classNames?: string | string[], c
  * @param addedCallback The callback invoked when nodes were added.
  * @param filter The filter that defines the node list to invoke the added callback for.
  */
- export function observeChildList(target: Node, addedCallback: (node: Node) => void, ...filter: string[]): void {
+export function observeChildList(target: Node, addedCallback: (node: Node) => void, ...filter: string[]): void {
     new MutationObserver((mutations: MutationRecord[]) => {
         mutations.forEach(mutation => mutation.addedNodes.forEach(node => {
             if (filter.includes(node.nodeName)) {

@@ -1,6 +1,3 @@
-import { delay } from './timeout';
-import store from '../stream-deck/store';
-
 export type HTMLInput
     = HTMLButtonElement
     | HTMLInputElement
@@ -18,31 +15,53 @@ export function anyChange(input: HTMLInput, listener: EventListenerOrEventListen
 }
 
 /**
+ * Removes all options from the input.
+ * @param input The input.
+ */
+export function clearOptions(input: HTMLSelectElement): void {
+    if (input.options) {
+        let i = input.options.length;
+        while (i--) {
+            input.options.remove(i);
+        }
+    }
+}
+
+/**
+ * Creates a new option element.
+ * @param text The option text.
+ * @param value The option value.
+ * @returns The option.
+ */
+export function createOption(text: string, value?: any): HTMLOptionElement {
+    const option = document.createElement('option');
+    option.text = text;
+    option.value = value;
+
+    return option;
+}
+
+/**
+ * Creates a new option group element.
+ * @param label The option group label.
+ * @param children The optional children.
+ * @returns The option group.
+ */
+export function createOptionGroup(label: string, children?: HTMLOptGroupElement[] | HTMLOptionElement[]): HTMLOptGroupElement {
+    const optGroup = document.createElement('optgroup');
+    optGroup.label = label;
+
+    if (children) {
+        children.forEach(child => optGroup.appendChild(child));
+    }
+
+    return optGroup;
+}
+
+/**
  * Dispatches the change event.
  * @param input The input to dispatch the change event on.
  */
 export function dispatchChange(input: HTMLInput) {
     input.dispatchEvent(new Event('change'));
-}
-
-/**
- * A wrapper function that monitors and maps changes to/from the input to/from the underlying store.
- * @param key The settings key.
- * @param global Determines whether the setting is global.
- * @param input The input element.
- * @param timeout The delay before the changes are saved; when undefined the save will occur on change.
- */
-export function useStore(key: string, global: boolean, input: HTMLInput, timeout: number | null = 250): void {
-    const save = store.register(key, global, (value?: any) => {
-        if (input.value != value) {
-            input.value = value || '';
-            dispatchChange(input);
-        }
-    });
-
-    if ((input.type.toLowerCase() === 'text' || input.tagName.toLowerCase() === 'textarea') && timeout) {
-        input.addEventListener('input', delay(() => save(input.value), timeout));
-    } else {
-        input.addEventListener('change', () => save(input.value));
-    }
 }

@@ -1,6 +1,8 @@
-import SDPIElement from './sdpi-element';
-import { HTMLInput, useStore } from '../core/input';
 import { createElement, setAttribute, withAttribute } from '../core/element';
+import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
+import { HTMLInput } from '../core/input';
+import store, { IStoreObject } from '../stream-deck/store';
+import SDPIElement from './sdpi-element';
 
 export interface IFieldContent<T extends HTMLInput> {
     parent?: HTMLElement;
@@ -10,7 +12,10 @@ export interface IFieldContent<T extends HTMLInput> {
 /**
  * Provides a base component that represents an SDPI input.
  */
-export default class SDPIInput<T extends HTMLInput> extends SDPIElement {
+export default class SDPIInput<T extends HTMLInput> extends SDPIElement implements IStoreObject {
+    private _change: EventManager<void> = new EventManager();
+    private _value?: any;
+
     /**
      * Initializes a new instance of the SDPI input.
      * @constructor
@@ -18,6 +23,28 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement {
     public constructor() {
         super();
         this.label = document.createElement('label');
+    }
+
+    /* Occurs when the value changes. */
+    public get change(): IEventSubscriber<void> {
+        return this._change;
+    }
+
+    /* Gets the value that the input represents. */
+    public get value(): any {
+        return this._value;
+    }
+
+    /* Set the value that the input represents, and dispatches a change event */
+    public set value(value: any) {
+        if (this._value != value || (this.input && this.input.value != value)) {
+            this._value = value;
+            if (this.input) {
+                this.input.value = value;
+            }
+
+            this._change.dispatch();
+        }
     }
 
     protected input?: T;
@@ -48,9 +75,8 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement {
      */
     public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
         if (attrName === 'label') {
-            withAttribute(this, 'label', value => this.label.innerText = `${value}:`, () => this.label.innerText = '');
-        }
-        if (SDPIInput.inputAttributes.indexOf(attrName) > -1) {
+            withAttribute(this, 'label', value => this.label.innerText = `${value}: `, () => this.label.innerText = '');
+        } else if (SDPIInput.inputAttributes.indexOf(attrName) > -1) {
             setAttribute(this.input, attrName, newValue);
         }
     }
@@ -74,7 +100,7 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement {
 
         // Label column.
         const labelColumn = createElement('div', ['col-label'], [this.label]);
-        withAttribute(this, 'label', value => this.label.innerText = `${value}:`);
+        withAttribute(this, 'label', value => this.label.innerText = `${value}: `);
 
         // Input column.        
         const inputColumn = createElement('div', ['col-input']);
@@ -82,9 +108,12 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement {
         this.input.id = `sdpi__${this.id}`;
         this.label.htmlFor = this.input.id;
         inputColumn.appendChild(content.parent || content.input);
-        
+
         this.appendChild(createElement('div', ['row'], [labelColumn, inputColumn]))
-        useStore(this.id, this.global, this.input);
+
+        // Setup the store.
+        this.input.addEventListener('change', () => this.value = this.input?.value);
+        store.use(this, this.id, this.global);
     }
 
     /**

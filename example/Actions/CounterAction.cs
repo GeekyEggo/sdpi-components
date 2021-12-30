@@ -40,6 +40,26 @@ namespace Sdpi.Actions
         }
 
         /// <summary>
+        /// Gets the options, with a forced refresh.
+        /// </summary>
+        /// <returns>The options payload.</returns>
+        [PropertyInspectorMethod("GetOptionsWithRefresh")]
+        public OptionsPayload GetOptionsWithRefresh()
+        {
+            return new OptionsPayload
+            {
+                Options = new List<Option>
+                {
+                    new Option("Refreshed", new List<Option>
+                    {
+                        new Option("One Hundred", "100"),
+                        new Option("Two Hundred", "200")
+                    })
+                }
+            };
+        }
+
+        /// <summary>
         /// Occurs when <see cref="IStreamDeckConnection.WillAppear" /> is received for this instance.
         /// </summary>
         /// <param name="args">The <see cref="ActionEventArgs{T}" /> instance containing the event data.</param>

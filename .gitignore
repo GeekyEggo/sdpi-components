@@ -113,6 +113,7 @@ obj
 
 # VSCode
 .vs/slnx.sqlite
+.vs
 
 # TypeScript
 src/**/*.js*

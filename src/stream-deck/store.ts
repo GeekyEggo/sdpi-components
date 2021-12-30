@@ -1,7 +1,16 @@
+import {
+    ActionEventArgsWithPayload, ActionPayload, SettingsPayload, StreamDeckEventArgsWithPayload
+} from 'stream-deck';
+
 import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
+import { delay } from '../core/timeout';
 import streamDeckClient from './stream-deck-client';
-import { ActionEventArgsWithPayload, StreamDeckEventArgsWithPayload, SettingsPayload, ActionPayload } from 'stream-deck';
 import streamDeckConnection from './stream-deck-connection';
+
+export interface IStoreObject {
+    value?: any;
+    change: IEventSubscriber<void>;
+}
 
 /**
  * Provides a store for managing settings stored within the Stream Deck.
@@ -16,7 +25,7 @@ class Store {
     public get settingsChange(): IEventSubscriber<any> {
         return this._settingsChange;
     }
-    
+
     private globalSettings: any;
     private settings: any;
 
@@ -58,7 +67,7 @@ class Store {
         } else {
             store.settingsChange.subscribe(settingsChangeHandler);
         }
-        
+
         // Return the setter that allows for the value to be saved to the store.
         return (value?: any) => {
             store.set(key, value, global);
@@ -82,6 +91,27 @@ class Store {
     }
 
     /**
+     * A wrapper function that monitors and maps changes to/from the value provider to/from the underlying store.
+     * @param obj The source object that provides value mapping.
+     * @param key The settings key.
+     * @param global Determines whether the setting is global.
+     * @param timeout The delay before the changes are saved; when undefined the save will occur on change.
+     */
+    public use(obj: IStoreObject, key: string, global: boolean, timeout: number | null = 250): void {
+        const save = store.register(key, global, (value?: any) => {
+            if (obj.value != value) {
+                obj.value = value || '';
+            }
+        });
+
+        if (timeout) {
+            obj.change.subscribe(delay(() => save(obj.value), timeout));
+        } else {
+            obj.change.subscribe(() => save(obj.value));
+        }
+    }
+
+    /**
      * Dispatches the settings change.
      * @param data The data containing the settings.
      */
@@ -92,7 +122,7 @@ class Store {
 }
 
 const store = new Store();
-(async function() {
+(async function () {
     await streamDeckConnection.waitForConnection();
 
     const connectionInfo = await streamDeckConnection.getConnectionInfo();
