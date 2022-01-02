@@ -30,6 +30,11 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement implemen
         return this._change;
     }
 
+    /* Gets the value that determines whether saving should be delayed; this typically applies to inputs that can change frequently. */
+    public get isDelayed(): boolean {
+        return true;
+    }
+
     /* Gets the value that the input represents. */
     public get value(): any {
         return this._value;
@@ -53,18 +58,9 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement implemen
         return this.hasAttribute('global');
     }
 
-    /**
-     * Gets the observed attributes.
-     */
+    /* Gets the observed attributes. */
     public static get attributess(): string[] {
-        return super.attributess.concat(this.inputAttributes);
-    }
-
-    /**
-     * Gets the attributes that should be mapped to the input.
-     */
-    public static get inputAttributes(): string[] {
-        return ['disabled', 'label'];
+        return super.attributess.concat(['disabled', 'label']);
     }
 
     /**
@@ -76,7 +72,7 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement implemen
     public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
         if (attrName === 'label') {
             withAttribute(this, 'label', value => this.label.innerText = `${value}: `, () => this.label.innerText = '');
-        } else if (SDPIInput.inputAttributes.indexOf(attrName) > -1) {
+        } else if (SDPIInput.attributess.indexOf(attrName) > -1) {
             setAttribute(this.input, attrName, newValue);
         }
     }
@@ -113,7 +109,7 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement implemen
 
         // Setup the store.
         this.input.addEventListener('change', () => this.value = this.input?.value);
-        store.use(this, this.id, this.global);
+        store.use(this, this.id, this.global, this.isDelayed ? 250 : undefined);
     }
 
     /**

@@ -21,6 +21,22 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(tagName: K,
 }
 
 /**
+ * Clones the attribute value from the source to the target; falls back to default value when specified, and the attribute was not found.
+ * @param source The source element.
+ * @param target The target element.
+ * @param attrName The attribute name.
+ * @param defaultValue The optional default value.
+ */
+export function cloneAttributeOrDefault(source: HTMLElement, target: HTMLElement, attrName: string, defaultValue?: string | undefined): void {
+    const value = source.getAttribute(attrName);
+    if (value) {
+        target.setAttribute(attrName, value);
+    } else if (defaultValue) {
+        target.setAttribute(attrName, defaultValue);
+    }
+}
+
+/**
  * Observes the child list of the target.
  * @param target The target node to observe.
  * @param addedCallback The callback invoked when nodes were added.
