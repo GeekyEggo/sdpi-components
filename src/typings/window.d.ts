@@ -1,4 +1,7 @@
 interface Window {
+    /* The Stream Deck client. */
+    streamDeckClient: any;
+
     /**
      * Called by the Stream Deck to enable registration of the property inspector.
      * @param inPort The port that should be used to create the WebSocket.
@@ -7,5 +10,5 @@ interface Window {
      * @param inInfo A json object containing information about the application.
      * @param inActionInfo A json object containing information about the action.
      */
-    connectElgatoStreamDeckSocket(inPort: string,  inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string) : void;
+    connectElgatoStreamDeckSocket(inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void;
 }

@@ -1,7 +1,10 @@
+import {
+    ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload
+} from 'stream-deck';
+
 import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
-import streamDeckConnection from './stream-deck-connection';
-import { ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload } from 'stream-deck';
 import { getUUID } from '../core/utils';
+import streamDeckConnection from './stream-deck-connection';
 
 enum Message {
     // Sent.
@@ -22,10 +25,10 @@ enum Message {
 /**
  * Provides a Stream Deck client wrapper for the connection.
  */
-class StreamDeckClient {
+export class StreamDeckClient {
     private readonly _didReceiveGlobalSettings: EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>> = new EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>>();
     private readonly _didReceiveSettings: EventManager<ActionEventArgsWithPayload<SettingsPayload>> = new EventManager<ActionEventArgsWithPayload<SettingsPayload>>();
-    
+
     /**
      * Initializes a new instance of the Stream Deck client class.
      * @constructor
@@ -33,10 +36,10 @@ class StreamDeckClient {
     constructor() {
         streamDeckConnection.message.subscribe(this.onMessage.bind(this));
     }
-    
+
     public get didReceiveGlobalSettings(): IEventSubscriber<StreamDeckEventArgsWithPayload<SettingsPayload>> { return this._didReceiveGlobalSettings; }
     public get didReceiveSettings(): IEventSubscriber<ActionEventArgsWithPayload<SettingsPayload>> { return this._didReceiveSettings; }
-    
+
     /**
      * Sends a `get` request to the plugin, utilising SharpDeck libraries `PropertyInspectorMethod` attribute.
      * @param {string} event The name of the event or method, i.e. URI endpoint.
@@ -85,7 +88,7 @@ class StreamDeckClient {
      */
     public setSettings(value?: any): void {
         streamDeckConnection.send(Message.SET_SETTINGS, value);
-    }    
+    }
 
     /**
      * Handles receiving a message from the connection.

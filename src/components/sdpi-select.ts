@@ -108,7 +108,7 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
         clearOptions(this.input);
         options.map(mapOptions).forEach(option => this.input?.options.add(option));
 
-        this.input.value = this.value || this.getAttribute('defaultvalue');
+        this.input.value = this.value || this.getAttribute('default');
     }
 }
 

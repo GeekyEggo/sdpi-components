@@ -3,7 +3,6 @@
 :root {
     /* Box model */
     --spacer: 4px;
-    --row-spacer: calc(var(--spacer) * 2);
     --label-column-width: 103px;
     
     /* Background and typography */
@@ -32,13 +31,14 @@ html, body {
 .container {
     display: flex;
     flex-direction: column;
-    row-gap: var(--row-spacer);
 }
 
 .row {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    
+    margin-bottom: var(--spacer);
 }
 
 .row > * {

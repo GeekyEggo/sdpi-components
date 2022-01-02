@@ -1,4 +1,8 @@
+import streamDeckClient from './stream-deck-client';
 import streamDeckConnection from './stream-deck-connection';
+
+/* The Stream Deck client */
+window.streamDeckClient = streamDeckClient;
 
 /**
  * Called by the Stream Deck to enable registration of the property inspector.
@@ -8,6 +12,6 @@ import streamDeckConnection from './stream-deck-connection';
  * @param inInfo A json object containing information about the application.
  * @param inActionInfo A json object containing information about the action.
  */
-window.connectElgatoStreamDeckSocket = function(inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void {
+window.connectElgatoStreamDeckSocket = function (inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void {
     streamDeckConnection.connect(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
 }
