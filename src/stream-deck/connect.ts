@@ -4,6 +4,8 @@ import streamDeckConnection from './stream-deck-connection';
 /* The Stream Deck client */
 window.streamDeckClient = streamDeckClient;
 
+const existing = window.connectElgatoStreamDeckSocket;
+
 /**
  * Called by the Stream Deck to enable registration of the property inspector.
  * @param inPort The port that should be used to create the WebSocket.
@@ -13,5 +15,6 @@ window.streamDeckClient = streamDeckClient;
  * @param inActionInfo A json object containing information about the action.
  */
 window.connectElgatoStreamDeckSocket = function (inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void {
+    existing && existing(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo)
     streamDeckConnection.connect(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
 }

@@ -1,7 +1,7 @@
 import { createElement, observeChildList } from '../core/element';
 import { clearOptions, createOption, createOptionGroup, setOnlyOption } from '../core/input';
 import streamDeckClient from '../stream-deck/stream-deck-client';
-import SDPIInput, { IFieldContent } from './sdpi-input';
+import SDPIInput from './sdpi-input';
 
 interface Option {
     children?: Option[];
@@ -30,38 +30,38 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
     }
 
     /**
-     * Creates the content contained within the input column.
-     * @returns The object that contains the input element, and the optional content wrapper.
+     * Allows for bespoke rendering to the specified root element.
+     * @param root The root element to append items to.
      */
-    protected createContent(): IFieldContent<HTMLSelectElement> {
-        let parent = null;
+    protected render(root: HTMLElement): void {
         this.input = document.createElement('select');
 
+        // Determine if we should show a refresh button.
+        const refreshEndpoint = this.getAttribute('refresh');
+        if (refreshEndpoint) {
+            this.refresh = createElement('button', ['refresh-icon']);
+            root.appendChild(createElement(
+                'div',
+                'row',
+                [
+                    createElement('div', ['col', 'f-stretch'], [this.input]),
+                    createElement('div', ['col', 'ml-2'], [this.refresh])
+                ]));
+
+            this.refresh.addEventListener('click', () => this.loadOptions(refreshEndpoint));
+        } else {
+            root.appendChild(this.input);
+        }
+
+        // Determine how we should populate the select input.
         const dataSourceEndpoint = this.getAttribute('datasource');
         if (dataSourceEndpoint) {
-            const refreshEndpoint = this.getAttribute('refresh');
-            if (refreshEndpoint) {
-                this.refresh = createElement('button', ['refresh-icon']);
-                parent = createElement(
-                    'div',
-                    'row',
-                    [
-                        createElement('div', ['col', 'f-stretch'], [this.input]),
-                        createElement('div', ['col', 'ml-2'], [this.refresh])
-                    ]);
-
-                this.refresh.addEventListener('click', () => this.loadOptions(refreshEndpoint));
-            }
-
             this.loadOptions(dataSourceEndpoint);
         } else {
             observeChildList(this, (added: Node) => this.input?.appendChild(added), 'OPTGROUP', 'OPTION');
         }
 
-        return {
-            parent: parent,
-            input: this.input
-        };
+        super.render(root);
     }
 
     /**
@@ -74,14 +74,14 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
         }
 
         // Load the options.
-        const request = streamDeckClient.get(dataSourceEndpoint);
+        const request = streamDeckClient.get<Option[]>(dataSourceEndpoint);
         this.disabled = true;
         setOnlyOption(this.input, 'Loading...');
 
         // Set the options.
         const dataSource = await request;
-        if (dataSource.payload && dataSource.payload.options) {
-            this.setOptions(<Option[]>dataSource.payload.options);
+        if (dataSource.payload && dataSource.payload.data) {
+            this.setOptions(<Option[]>dataSource.payload.data);
         } else {
             setOnlyOption(this.input, 'Failed to load');
         }

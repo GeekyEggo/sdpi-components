@@ -1,28 +1,25 @@
-import { createElement, setAttribute, withAttribute } from '../core/element';
+import { setAttribute } from '../core/element';
 import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
 import { HTMLInput } from '../core/input';
 import store, { IStoreObject } from '../stream-deck/store';
 import SDPIElement from './sdpi-element';
 
-export interface IFieldContent<T extends HTMLInput> {
-    parent?: HTMLElement | null | undefined;
-    input: T;
-}
-
 /**
  * Provides a base component that represents an SDPI input.
  */
 export default class SDPIInput<T extends HTMLInput> extends SDPIElement implements IStoreObject {
+    protected input?: T;
     private _change: EventManager<void> = new EventManager();
     private _value?: any;
 
-    /**
-     * Initializes a new instance of the SDPI input.
-     * @constructor
-     */
-    public constructor() {
-        super();
-        this.label = document.createElement('label');
+    /* Gets the observed attributes that are mapped directly to the input. */
+    public static get observedInputAttributes(): string[] {
+        return ['disabled'];
+    }
+
+    /* Gets the observed attributes */
+    public static get observedAttributes(): string[] {
+        return super.observedAttributes.concat(this.observedInputAttributes);
     }
 
     /* Occurs when the value changes. */
@@ -52,15 +49,9 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement implemen
         }
     }
 
-    protected input?: T;
-    protected readonly label: HTMLLabelElement;
+    /* Gets a value determining whether the persisted value is a global setting */
     protected get global(): boolean {
         return this.hasAttribute('global');
-    }
-
-    /* Gets the observed attributes. */
-    public static get attributess(): string[] {
-        return super.attributess.concat(['disabled', 'label']);
     }
 
     /**
@@ -70,51 +61,29 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement implemen
      * @param newValue The attributes new value.
      */
     public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
-        if (attrName === 'label') {
-            withAttribute(this, 'label', value => this.label.innerText = `${value}: `, () => this.label.innerText = '');
-        } else if (SDPIInput.attributess.indexOf(attrName) > -1) {
+        if (SDPIInput.observedAttributes.indexOf(attrName) > -1) {
             setAttribute(this.input, attrName, newValue);
         }
     }
 
     /**
-     * Renders the element to the DOM.
+     * Allows for bespoke rendering to the specified root element.
+     * @param root The root element to append items to.
      */
-    protected render(): void {
-        super.render && super.render();
+    protected render(root: HTMLElement): void {
+        super.render && super.render(root);
 
-        // Ensure we have an id to map against settings.
-        if (this.id === undefined || this.id === null) {
-            throw 'Element must define an "id".'
+        // Setup the store when there is an id, and the input has been set.
+        if (this.input) {
+            this.input.addEventListener('change', () => this.value = this.input?.value);
+
+            const propertyName = this.getAttribute('property');
+            if (propertyName) {
+                this.input.id = `sdpi__${propertyName}`;
+                this.label.htmlFor = this.input.id;
+
+                store.use(this, propertyName, this.global, this.isDelayed ? 250 : undefined);
+            }
         }
-
-        // Get the input column content.
-        const content = this.createContent && this.createContent();
-        if (content === undefined || content == null) {
-            throw 'Input content cannot be empty.'
-        }
-
-        // Label column.
-        const labelColumn = createElement('div', ['col-label'], [this.label]);
-        withAttribute(this, 'label', value => this.label.innerText = `${value}: `);
-
-        // Input column.        
-        const inputColumn = createElement('div', ['col-input']);
-        this.input = content.input;
-        this.input.id = `sdpi__${this.id}`;
-        this.label.htmlFor = this.input.id;
-        inputColumn.appendChild(content.parent || content.input);
-
-        this.appendChild(createElement('div', ['row'], [labelColumn, inputColumn]))
-
-        // Setup the store.
-        this.input.addEventListener('change', () => this.value = this.input?.value);
-        store.use(this, this.id, this.global, this.isDelayed ? 250 : undefined);
     }
-
-    /**
-     * Creates the content contained within the input column.
-     * @returns The object that contains the input element, and the optional content wrapper.
-     */
-    protected createContent?(): IFieldContent<T>;
 }

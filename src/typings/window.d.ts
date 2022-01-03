@@ -10,5 +10,5 @@ interface Window {
      * @param inInfo A json object containing information about the application.
      * @param inActionInfo A json object containing information about the action.
      */
-    connectElgatoStreamDeckSocket(inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void;
+    connectElgatoStreamDeckSocket?(inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void;
 }

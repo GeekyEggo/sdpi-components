@@ -92,7 +92,7 @@ html, body {
     
     text-align: right;
 }
-.col-input {
+.col-content {
     width: calc(100% - var(--label-column-width) - 20px);
     padding-left: 0;
     padding-right: 0;
@@ -180,13 +180,13 @@ input[type="submit"] {
     /* Background and typography */
     background-color: var(--color-secondary-bg);
     color: var(--color-secondary);
-    cursor: pointer;
 }
 
-button:hover:hover:not(:disabled),
+button:hover:not(:disabled),
 input[type="button"]:hover:not(:disabled),
-input[type="submit"]:hover:hover:not(:disabled) {
+input[type="submit"]:hover:not(:disabled) {
     border: solid 1px var(--color-secondary);
+    cursor: pointer;
 }
 
 button:active,

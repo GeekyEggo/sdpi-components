@@ -1,3 +1,4 @@
+import { PropertyInspectorPayload } from 'sharp-deck';
 import {
     ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload
 } from 'stream-deck';
@@ -43,10 +44,10 @@ export class StreamDeckClient {
     /**
      * Sends a `get` request to the plugin, utilising SharpDeck libraries `PropertyInspectorMethod` attribute.
      * @param {string} event The name of the event or method, i.e. URI endpoint.
-     * @param {object} payload The optional payload.
+     * @param {object} parameters The optional data that contains the parameters
      * @returns {object} A promise containing the result.
      */
-    public async get(event: string, payload?: any): Promise<any> {
+    public async get<T>(event: string, parameters?: any): Promise<StreamDeckEventArgsWithPayload<PropertyInspectorPayload<T>>> {
         const request = {
             event: event,
             requestId: getUUID()
@@ -55,8 +56,8 @@ export class StreamDeckClient {
         return await streamDeckConnection.get(
             Message.SEND_TO_PLUGIN,
             args => args.event == Message.SEND_TO_PROPERTY_INSPECTOR && args.payload && args.payload.requestId == request.requestId,
-            { ...payload, ...request });
-    }
+            { data: { ...parameters }, ...request });
+    };
 
     /**
      * Gets the global settings.

@@ -1,6 +1,9 @@
+import {
+    ActionEventArgsWithPayload, ActionPayload, RegistrationInfo, StreamDeckEventArgs
+} from 'stream-deck';
+
 import EventManager, { IEventSubscriber } from '../core/event-dispatcher';
 import PromiseCompletionSource from '../core/promise-completion-source';
-import { ActionEventArgsWithPayload, ActionPayload, RegistrationInfo, StreamDeckEventArgs } from 'stream-deck';
 
 export interface IConnectionInfo {
     actionInfo: ActionEventArgsWithPayload<ActionPayload>;
@@ -17,9 +20,9 @@ class StreamDeckConnection {
     private readonly _connectionInfo: PromiseCompletionSource<IConnectionInfo> = new PromiseCompletionSource<IConnectionInfo>();
     private readonly _message: EventManager<StreamDeckEventArgs> = new EventManager();
     private _webSocket?: WebSocket;
-    
+
     public get message(): IEventSubscriber<StreamDeckEventArgs> { return this._message; }
-    
+
     /**
      * Connects to the Stream Deck.
      * @param {string} port The port that should be used to create the WebSocket.
@@ -36,7 +39,7 @@ class StreamDeckConnection {
                 propertyInspectorUUID: propertyInspectorUUID,
                 registerEvent: registerEvent
             });
-            
+
             // Register the web socket.
             this._webSocket = new WebSocket(`ws://localhost:${port}`);
             this._webSocket.addEventListener('message', (ev: MessageEvent) => this._message.dispatch(JSON.parse(ev.data)));

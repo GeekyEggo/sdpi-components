@@ -1,10 +1,10 @@
 import { cloneAttributeOrDefault, createElement, withAttribute } from '../core/element';
-import SDPIInput, { IFieldContent } from './sdpi-input';
+import SDPIInput from './sdpi-input';
 
 export default class SDPIRange extends SDPIInput<HTMLInputElement> {
     /* Gets the observed attributes. */
-    public static get attributess(): string[] {
-        return super.attributess.concat(['min', 'max', 'step']);
+    public static get observedInputAttributes(): string[] {
+        return super.observedInputAttributes.concat(['min', 'max', 'step']);
     }
 
     /* Gets the value that determines whether saving should be delayed; this typically applies to inputs that can change frequently. */
@@ -13,10 +13,10 @@ export default class SDPIRange extends SDPIInput<HTMLInputElement> {
     }
 
     /**
-     * Creates the content contained within the input column.
-     * @returns The object that contains the input element, and the optional content wrapper.
+     * Allows for bespoke rendering to the specified root element.
+     * @param root The root element to append items to.
      */
-    protected createContent(): IFieldContent<HTMLInputElement> {
+    protected render(root: HTMLElement): void {
         // Min value text.
         let components: HTMLElement[] = [];
         withAttribute(this, 'mintext', value => {
@@ -52,10 +52,8 @@ export default class SDPIRange extends SDPIInput<HTMLInputElement> {
             components.push(valueText);
         });
 
-        return {
-            parent: createElement('div', 'row', components),
-            input: this.input
-        };
+        root.appendChild(createElement('div', 'row', components));
+        super.render(root);
     }
 }
 
