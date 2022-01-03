@@ -98,6 +98,10 @@ html, body {
     padding-right: 0;
 }
 
+p {
+    margin: 0 0 var(--spacer) 0;
+}
+
 /* Spacing */
 .p-0 { padding: 0; }
 .pt-0 { padding-top: 0; }
@@ -117,6 +121,11 @@ html, body {
 .ml-3 { margin-left: calc(var(--spacer) * 3); }
 
 /* Background and typography */
+.hidden {
+    display: none;
+    visibility: collapse;
+}
+
 :disabled {
     cursor: default;
     opacity: 0.5;

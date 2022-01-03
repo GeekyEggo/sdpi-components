@@ -61,6 +61,8 @@ export default class SDPIInput<T extends HTMLInput> extends SDPIElement implemen
      * @param newValue The attributes new value.
      */
     public attributeChangedCallback(attrName: string, oldValue: string | null, newValue: string | null): void {
+        super.attributeChangedCallback(attrName, oldValue, newValue);
+
         if (SDPIInput.observedAttributes.indexOf(attrName) > -1) {
             setAttribute(this.input, attrName, newValue);
         }

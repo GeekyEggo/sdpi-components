@@ -11,7 +11,7 @@ interface Option {
 
 export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
     private _disabled: boolean = false;
-    private refresh?: HTMLButtonElement;
+    private refreshButton?: HTMLButtonElement;
 
     /* Gets the disabled state of this component */
     public get disabled(): boolean {
@@ -24,8 +24,22 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
             this.input.disabled = value;
         }
 
-        if (this.refresh) {
-            this.refresh.disabled = value;
+        if (this.refreshButton) {
+            this.refreshButton.disabled = value;
+        }
+    }
+
+    /**
+     * Invokes a refresh of the drop down.
+     */
+    public refresh(): void {
+        if (this.refreshButton) {
+            this.refreshButton.click();
+        } else {
+            const dataSourceEndpoint = this.getAttribute('datasource');
+            if (dataSourceEndpoint) {
+                this.loadOptions(dataSourceEndpoint);
+            }
         }
     }
 
@@ -39,16 +53,16 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
         // Determine if we should show a refresh button.
         const refreshEndpoint = this.getAttribute('refresh');
         if (refreshEndpoint) {
-            this.refresh = createElement('button', ['refresh-icon']);
+            this.refreshButton = createElement('button', ['refresh-icon']);
             root.appendChild(createElement(
                 'div',
                 'row',
                 [
                     createElement('div', ['col', 'f-stretch'], [this.input]),
-                    createElement('div', ['col', 'ml-2'], [this.refresh])
+                    createElement('div', ['col', 'ml-2'], [this.refreshButton])
                 ]));
 
-            this.refresh.addEventListener('click', () => this.loadOptions(refreshEndpoint));
+            this.refreshButton.addEventListener('click', () => this.loadOptions(refreshEndpoint));
         } else {
             root.appendChild(this.input);
         }

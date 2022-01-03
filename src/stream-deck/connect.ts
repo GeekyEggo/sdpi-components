@@ -15,6 +15,9 @@ const existing = window.connectElgatoStreamDeckSocket;
  * @param inActionInfo A json object containing information about the action.
  */
 window.connectElgatoStreamDeckSocket = function (inPort: string, inPropertyInspectorUUID: string, inRegisterEvent: string, inInfo: string, inActionInfo: string): void {
-    existing && existing(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo)
+    if (existing) {
+        existing(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo)
+    };
+
     streamDeckConnection.connect(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
 }
