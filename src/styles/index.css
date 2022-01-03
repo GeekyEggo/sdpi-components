@@ -36,7 +36,7 @@ html, body {
 .row {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .container > * > .row {
@@ -109,6 +109,9 @@ html, body {
     padding-left: var(--spacer);
     padding-right: var(--spacer);
 }
+
+.mr-2 { margin-right: calc(var(--spacer) * 2); }
+.mr-3 { margin-right: calc(var(--spacer) * 3); }
 
 .ml-2 { margin-left: calc(var(--spacer) * 2); }
 .ml-3 { margin-left: calc(var(--spacer) * 3); }

@@ -1,9 +1,7 @@
-import { cloneAttributeOrDefault, createElement } from '../core/element';
+import { cloneAttributeOrDefault, createElement, withAttribute } from '../core/element';
 import SDPIInput, { IFieldContent } from './sdpi-input';
 
 export default class SDPIRange extends SDPIInput<HTMLInputElement> {
-    private valueText?: HTMLSpanElement;
-
     /* Gets the observed attributes. */
     public static get attributess(): string[] {
         return super.attributess.concat(['min', 'max', 'step']);
@@ -19,32 +17,43 @@ export default class SDPIRange extends SDPIInput<HTMLInputElement> {
      * @returns The object that contains the input element, and the optional content wrapper.
      */
     protected createContent(): IFieldContent<HTMLInputElement> {
-        let parent = null;
+        // Min value text.
+        let components: HTMLElement[] = [];
+        withAttribute(this, 'mintext', value => {
+            const minText = createElement('div', ['col', 'a-center-center', 'mr-2']);
+            minText.innerText = value;
 
+            components.push(minText);
+        });
+
+        // The range input.
         this.input = document.createElement('input');
         this.input.setAttribute('type', 'range');
 
         cloneAttributeOrDefault(this, this.input, 'min', '0');
         cloneAttributeOrDefault(this, this.input, 'max', '100');
         cloneAttributeOrDefault(this, this.input, 'step', '5');
+        components.push(createElement('div', ['col', 'f-stretch'], [this.input]))
 
-        if (this.getAttribute('showvalue')) {
+        // Max value text.
+        withAttribute(this, 'maxtext', value => {
+            const maxText = createElement('div', ['col', 'a-center-center', 'ml-2']);
+            maxText.innerText = value;
 
-            this.valueText = document.createElement('span');
-            parent = createElement(
-                'div',
-                'row',
-                [
-                    createElement('div', ['col', 'f-stretch'], [this.input]),
-                    createElement('div', ['col', 'col-1', 'ml-3', 'a-center-center'], [this.valueText])
-                ]);
+            components.push(maxText);
+        })
 
-            this.input.addEventListener('input', () => this.valueText!.innerText = `${this.input!.value}%`);
-            this.change.subscribe(() => this.valueText!.innerText = `${this.value}%`);
-        }
+        // Current value text.
+        withAttribute(this, 'showvalue', _ => {
+            const valueText = createElement('div', ['col', 'a-center-center', 'ml-2']);
+            this.input!.addEventListener('input', () => valueText.innerText = `${this.input!.value}%`);
+            this.change.subscribe(() => valueText.innerText = `${this.value}%`);
+
+            components.push(valueText);
+        });
 
         return {
-            parent: parent,
+            parent: createElement('div', 'row', components),
             input: this.input
         };
     }
