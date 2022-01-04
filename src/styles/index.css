@@ -27,22 +27,49 @@ html, body {
     font-family: Tahoma, Verdana, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+::-webkit-scrollbar-thumb {
+    background-color: #999999;
+    outline: 1px solid slategrey;
+    border-radius: 8px;
+}
+
+/* Elements */
+p {
+    margin: 0 0 var(--spacer) 0;
+}
+p:last-child {
+    margin: 0;
+}
+
+ul, ol {
+    margin: var(--spacer) 0;
+    padding-left: calc(var(--spacer) * 6);
+}
+li {
+    line-height: 1.5em;
+}
+
+
 /* Layout */
 .container {
     display: flex;
     flex-direction: column;
 }
-
 .row {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
 }
-
 .container > * > .row {
     margin-bottom: calc(var(--spacer) * 2);
 }
-
 .row > * {
     box-sizing: border-box;
 }
@@ -93,14 +120,15 @@ html, body {
     text-align: right;
 }
 .col-content {
-    width: calc(100% - var(--label-column-width) - 20px);
+    margin-left: var(--label-column-width);
+    width: 227px;
     padding-left: 0;
     padding-right: 0;
 }
-
-p {
-    margin: 0 0 var(--spacer) 0;
+.col-label + .col-content {
+    margin-left: 0;
 }
+
 
 /* Spacing */
 .p-0 { padding: 0; }
