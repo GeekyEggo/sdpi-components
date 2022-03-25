@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>com.geekyeggo.sdpi.counter</title>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <script>
+        function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
+            console.log('Initializing plug-in.');
+            const webSocket = new webSocket(`ws://127.0.0.1:${inPort}`);
+
+            // Handle messages from the Stream Deck.
+            webSocket.onmessage = (e) => {
+                const msg = JSON.parse(e.data);
+                const { event, action, context } = msg;
+
+                switch (event) {
+                    case 'keyDown':
+                        console.log('Key down...');
+                        break;
+                }
+            };
+
+            // Register the plugin when the connection opens.
+            webSocket.onopen = () => {
+                console.log('Registering plug-in...');
+                webSocket.send(JSON.stringify({
+                    'event': inRegisterEvent,
+                    'uuid': inPluginUUID
+                }));
+            };
+        };
+    </script>
+</body>
+
+</html>
