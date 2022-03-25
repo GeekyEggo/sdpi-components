@@ -44,7 +44,7 @@ export class StreamDeckClient {
     /**
      * Sends a `get` request to the plugin, utilising SharpDeck libraries `PropertyInspectorMethod` attribute.
      * @param {string} event The name of the event or method, i.e. URI endpoint.
-     * @param {object} parameters The optional data that contains the parameters
+     * @param {object} parameters The optional object that contains the parameters
      * @returns {object} A promise containing the result.
      */
     public async get<T>(event: string, parameters?: any): Promise<StreamDeckEventArgsWithPayload<PropertyInspectorPayload<T>>> {
@@ -56,7 +56,7 @@ export class StreamDeckClient {
         return await streamDeckConnection.get(
             Message.SEND_TO_PLUGIN,
             args => args.event == Message.SEND_TO_PROPERTY_INSPECTOR && args.payload && args.payload.requestId == request.requestId,
-            { data: { ...parameters }, ...request });
+            { parameters: { ...parameters }, ...request });
     };
 
     /**

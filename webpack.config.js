@@ -4,7 +4,7 @@ module.exports = env => {
     const isLocal = env && env.local;
 
     const outputPath = isLocal
-        ? path.resolve(process.env.APPDATA, 'Elgato/StreamDeck/Plugins/com.geekyeggo.sdpi.sdPlugin/pi')
+        ? path.resolve('C:\\git\\GoveeController\\src\\GoveeController\\pi\\js')
         : path.resolve(__dirname, 'dist');
 
     return {
@@ -16,7 +16,7 @@ module.exports = env => {
         mode: isLocal ? 'development' : 'production',
         devtool: isLocal ? 'inline-source-map' : 'hidden-source-map',
         resolve: {
-            extensions: [ '.ts' ]
+            extensions: ['.ts']
         },
         module: {
             rules: [
