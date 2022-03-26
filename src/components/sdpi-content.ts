@@ -1,4 +1,4 @@
-import { observeChildList, withAttribute } from '../core/element';
+import { withAttribute } from '../core/element';
 import SDPIElement from './sdpi-element';
 
 export default class SDPIContent extends SDPIElement {
@@ -29,7 +29,7 @@ export default class SDPIContent extends SDPIElement {
      * @param root The root element to append items to.
      */
     protected render(root: HTMLElement): void {
-        withAttribute(this, 'text', value => this.text.innerText = value);
+        withAttribute(this, 'text', (value) => (this.text.innerText = value));
 
         this.container.appendChild(this.text);
         root.appendChild(this.container);

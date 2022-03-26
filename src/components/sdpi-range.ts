@@ -18,8 +18,8 @@ export default class SDPIRange extends SDPIInput<HTMLInputElement> {
      */
     protected render(root: HTMLElement): void {
         // Min value text.
-        let components: HTMLElement[] = [];
-        withAttribute(this, 'mintext', value => {
+        const components: HTMLElement[] = [];
+        withAttribute(this, 'mintext', (value) => {
             const minText = createElement('div', ['col', 'a-center-center', 'mr-2']);
             minText.innerText = value;
 
@@ -33,21 +33,21 @@ export default class SDPIRange extends SDPIInput<HTMLInputElement> {
         cloneAttributeOrDefault(this, this.input, 'min', '0');
         cloneAttributeOrDefault(this, this.input, 'max', '100');
         cloneAttributeOrDefault(this, this.input, 'step', '5');
-        components.push(createElement('div', ['col', 'f-stretch'], [this.input]))
+        components.push(createElement('div', ['col', 'f-stretch'], [this.input]));
 
         // Max value text.
-        withAttribute(this, 'maxtext', value => {
+        withAttribute(this, 'maxtext', (value) => {
             const maxText = createElement('div', ['col', 'a-center-center', 'ml-2']);
             maxText.innerText = value;
 
             components.push(maxText);
-        })
+        });
 
         // Current value text.
-        withAttribute(this, 'showvalue', _ => {
+        withAttribute(this, 'showvalue', () => {
             const valueText = createElement('div', ['col', 'a-center-center', 'ml-2']);
-            this.input!.addEventListener('input', () => valueText.innerText = `${this.input!.value}%`);
-            this.change.subscribe(() => valueText.innerText = `${this.value}%`);
+            this.input!.addEventListener('input', () => (valueText.innerText = `${this.input!.value}%`));
+            this.change.subscribe(() => (valueText.innerText = `${this.value}%`));
 
             components.push(valueText);
         });

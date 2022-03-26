@@ -27,8 +27,8 @@ enum Message {
  * Provides a Stream Deck client wrapper for the connection.
  */
 export class StreamDeckClient {
-    private readonly _didReceiveGlobalSettings: EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>> = new EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>>();
-    private readonly _didReceiveSettings: EventManager<ActionEventArgsWithPayload<SettingsPayload>> = new EventManager<ActionEventArgsWithPayload<SettingsPayload>>();
+    private readonly _didReceiveGlobalSettings = new EventManager<StreamDeckEventArgsWithPayload<SettingsPayload>>();
+    private readonly _didReceiveSettings = new EventManager<ActionEventArgsWithPayload<SettingsPayload>>();
 
     /**
      * Initializes a new instance of the Stream Deck client class.
@@ -38,8 +38,13 @@ export class StreamDeckClient {
         streamDeckConnection.message.subscribe(this.onMessage.bind(this));
     }
 
-    public get didReceiveGlobalSettings(): IEventSubscriber<StreamDeckEventArgsWithPayload<SettingsPayload>> { return this._didReceiveGlobalSettings; }
-    public get didReceiveSettings(): IEventSubscriber<ActionEventArgsWithPayload<SettingsPayload>> { return this._didReceiveSettings; }
+    public get didReceiveGlobalSettings(): IEventSubscriber<StreamDeckEventArgsWithPayload<SettingsPayload>> {
+        return this._didReceiveGlobalSettings;
+    }
+
+    public get didReceiveSettings(): IEventSubscriber<ActionEventArgsWithPayload<SettingsPayload>> {
+        return this._didReceiveSettings;
+    }
 
     /**
      * Sends a `get` request to the plugin, utilising SharpDeck libraries `PropertyInspectorMethod` attribute.
@@ -55,23 +60,24 @@ export class StreamDeckClient {
 
         return await streamDeckConnection.get(
             Message.SEND_TO_PLUGIN,
-            args => args.event == Message.SEND_TO_PROPERTY_INSPECTOR && args.payload && args.payload.requestId == request.requestId,
-            { parameters: { ...parameters }, ...request });
-    };
+            (args) => args.event == Message.SEND_TO_PROPERTY_INSPECTOR && args.payload && args.payload.requestId == request.requestId,
+            { parameters: { ...parameters }, ...request }
+        );
+    }
 
     /**
      * Gets the global settings.
      * @returns The global settings as a promise.
      */
     public getGlobalSettings(): Promise<StreamDeckEventArgsWithPayload<SettingsPayload>> {
-        return streamDeckConnection.get(Message.GET_GLOBAL_SETTINGS, payload => payload.event == Message.DID_RECEIVE_GLOBAL_SETTINGS);
+        return streamDeckConnection.get(Message.GET_GLOBAL_SETTINGS, (payload) => payload.event == Message.DID_RECEIVE_GLOBAL_SETTINGS);
     }
 
     /**
      * Sets the global settings.
      * @param value The global settings.
      */
-    public setGlobalSettings(value?: any): void {
+    public setGlobalSettings(value?: unknown): void {
         streamDeckConnection.send(Message.SET_GLOBAL_SETTINGS, value);
     }
 
@@ -80,14 +86,14 @@ export class StreamDeckClient {
      * @returns The settings as a promise.
      */
     public getSettings(): Promise<ActionEventArgsWithPayload<SettingsPayload>> {
-        return streamDeckConnection.get(Message.GET_SETTINGS, payload => payload.event == Message.DID_RECEIVE_SETTINGS);
+        return streamDeckConnection.get(Message.GET_SETTINGS, (payload) => payload.event == Message.DID_RECEIVE_SETTINGS);
     }
 
     /**
      * Sets the settings.
      * @param value The settings.
      */
-    public setSettings(value?: any): void {
+    public setSettings(value?: unknown): void {
         streamDeckConnection.send(Message.SET_SETTINGS, value);
     }
 

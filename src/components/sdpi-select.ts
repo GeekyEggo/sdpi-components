@@ -10,7 +10,7 @@ interface Option {
 }
 
 export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
-    private _disabled: boolean = false;
+    private _disabled = false;
     private refreshButton?: HTMLButtonElement;
 
     /* Gets the disabled state of this component */
@@ -54,13 +54,12 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
         const refreshEndpoint = this.getAttribute('refresh');
         if (refreshEndpoint) {
             this.refreshButton = createElement('button', ['refresh-icon']);
-            root.appendChild(createElement(
-                'div',
-                'row',
-                [
+            root.appendChild(
+                createElement('div', 'row', [
                     createElement('div', ['col', 'f-stretch'], [this.input]),
                     createElement('div', ['col', 'ml-2'], [this.refreshButton])
-                ]));
+                ])
+            );
 
             this.refreshButton.addEventListener('click', () => this.loadOptions(refreshEndpoint));
         } else {
@@ -101,7 +100,6 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
         }
 
         this.disabled = false;
-
     }
 
     /**
@@ -117,10 +115,10 @@ export default class SDPISelect extends SDPIInput<HTMLSelectElement> {
             return item.children && item.children instanceof Array
                 ? createOptionGroup(item.label, item.children?.map(mapOptions))
                 : createOption(item.label, item.value);
-        }
+        };
 
         clearOptions(this.input);
-        options.map(mapOptions).forEach(option => this.input?.options.add(option));
+        options.map(mapOptions).forEach((option) => this.input?.options.add(option));
 
         this.input.value = this.value || this.getAttribute('default');
     }

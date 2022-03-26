@@ -21,7 +21,9 @@ class StreamDeckConnection {
     private readonly _message: EventManager<StreamDeckEventArgs> = new EventManager();
     private _webSocket?: WebSocket;
 
-    public get message(): IEventSubscriber<StreamDeckEventArgs> { return this._message; }
+    public get message(): IEventSubscriber<StreamDeckEventArgs> {
+        return this._message;
+    }
 
     /**
      * Connects to the Stream Deck.
@@ -55,16 +57,15 @@ class StreamDeckConnection {
      * @returns {object} The promise containing the result of the request.
      */
     public async get(event: string, canCallback: (payload: StreamDeckEventArgs | any) => boolean, payload?: StreamDeckEventArgs | any): Promise<any> {
-        const resolver = new PromiseCompletionSource<any>();
+        const resolver = new PromiseCompletionSource<StreamDeckEventArgs | any>();
 
         // Construct the temporary listener that is removed when the callback can be fulilled.
-        let listener: (args: StreamDeckEventArgs) => void;
-        listener = (args: StreamDeckEventArgs) => {
+        const listener = (args: StreamDeckEventArgs) => {
             if (canCallback(args)) {
                 this.message.unsubscribe(listener);
                 resolver.setResult(args);
             }
-        }
+        };
 
         // Await message, and send the request.
         this.message.subscribe(listener);
@@ -86,17 +87,19 @@ class StreamDeckConnection {
      * @param {string} event The event name.
      * @param {any} payload The optional payload.
      */
-    public async send(event: string, payload?: any): Promise<void> {
+    public async send(event: string, payload?: unknown): Promise<void> {
         try {
             const connectionInfo = await this._connectionInfo.promise;
             const connection = await this._connection.promise;
 
-            connection.send(JSON.stringify({
-                event: event,
-                context: connectionInfo.propertyInspectorUUID,
-                payload: payload,
-                action: connectionInfo.actionInfo.action
-            }));
+            connection.send(
+                JSON.stringify({
+                    event: event,
+                    context: connectionInfo.propertyInspectorUUID,
+                    payload: payload,
+                    action: connectionInfo.actionInfo.action
+                })
+            );
         } catch {
             console.error(`Unable to send request '${event}' as there is no connection.`);
         }
@@ -111,16 +114,17 @@ class StreamDeckConnection {
 
     /**
      * Handles the open event of the web socket.
-     * @param ev The event arguments.
      */
-    private async onOpen(ev: any): Promise<void> {
+    private async onOpen(): Promise<void> {
         try {
-            const connectionInfo = await this._connectionInfo.promise
+            const connectionInfo = await this._connectionInfo.promise;
             if (this._webSocket) {
-                this._webSocket.send(JSON.stringify({
-                    event: connectionInfo.registerEvent,
-                    uuid: connectionInfo.propertyInspectorUUID
-                }));
+                this._webSocket.send(
+                    JSON.stringify({
+                        event: connectionInfo.registerEvent,
+                        uuid: connectionInfo.propertyInspectorUUID
+                    })
+                );
 
                 this._connection.setResult(this._webSocket);
             }

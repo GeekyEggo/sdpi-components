@@ -16,7 +16,7 @@ export default class SDPIElement extends HTMLElement {
         return this.getAttribute('disabled') != undefined;
     }
 
-    /* Sets the disabled state of this instance. */;
+    /* Sets the disabled state of this instance. */
     public set disabled(value: boolean) {
         if (value) {
             this.setAttribute('disabled', 'disabled');
@@ -43,7 +43,7 @@ export default class SDPIElement extends HTMLElement {
     public connectedCallback(): void {
         // Label and primary content column
         const labelColumn = createElement('div', ['col-label'], [this.label]);
-        withAttribute(this, 'label', value => this.label.innerText = `${value}: `);
+        withAttribute(this, 'label', (value) => (this.label.innerText = `${value}: `));
         const contentColumn = createElement('div', ['col-content']);
 
         // Container row.

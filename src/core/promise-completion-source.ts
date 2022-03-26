@@ -14,8 +14,8 @@ export default class PromiseCompletionSource<T> {
         });
     }
 
-    private reject: (reason?: any) => void = _ => { };
-    private resolve: (value: T | PromiseLike<T>) => void = _ => { };
+    private reject?: (reason?: unknown) => void;
+    private resolve?: (value: T | PromiseLike<T>) => void;
 
     /**
      * Gets the promise.
@@ -29,14 +29,18 @@ export default class PromiseCompletionSource<T> {
      * @param value The value.
      */
     public setResult(value: T | PromiseLike<T>): void {
-        this.resolve(value);
+        if (this.resolve) {
+            this.resolve(value);
+        }
     }
 
     /**
      * Rejects the inner promise.
      * @param reason The reason.
      */
-    public setException(reason?: any): void {
-        this.reject(reason);
+    public setException(reason?: unknown): void {
+        if (this.reject) {
+            this.reject(reason);
+        }
     }
 }
