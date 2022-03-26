@@ -10,13 +10,5 @@
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended",
         "prettier"
-    ],
-    "rules": {
-        "@typescript-eslint/no-inferrable-types": [
-            2,
-            {
-                "ignoreParameters": true
-            }
-        ]
-    }
+    ]
 }
