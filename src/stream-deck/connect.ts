@@ -1,5 +1,4 @@
 import streamDeckClient from './stream-deck-client';
-import streamDeckConnection from './stream-deck-connection';
 
 /* The Stream Deck client */
 window.streamDeckClient = streamDeckClient;
@@ -25,5 +24,5 @@ window.connectElgatoStreamDeckSocket = function (
         existing(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
     }
 
-    streamDeckConnection.connect(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
+    streamDeckClient.connect(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
 };

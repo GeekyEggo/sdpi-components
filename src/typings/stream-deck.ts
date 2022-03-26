@@ -147,7 +147,7 @@ declare module 'stream-deck' {
     }
 
     export interface RegistrationMessage extends Message {
-        uUID: string;
+        UUID: string;
     }
 
     export interface RegistrationParameters {
@@ -166,7 +166,7 @@ declare module 'stream-deck' {
     }
 
     export interface SettingsPayload {
-        settings: any;
+        settings: Record<string, unknown>;
     }
 
     export interface SetTitlePayload extends TargetPayload {

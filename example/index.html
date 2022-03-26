@@ -10,7 +10,7 @@
     <script>
         function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
             console.log('Initializing plug-in.');
-            const webSocket = new webSocket(`ws://127.0.0.1:${inPort}`);
+            const webSocket = new WebSocket(`ws://127.0.0.1:${inPort}`);
 
             // Handle messages from the Stream Deck.
             webSocket.onmessage = (e) => {

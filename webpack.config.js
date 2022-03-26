@@ -4,7 +4,7 @@ module.exports = env => {
     const isLocal = env && env.local;
 
     const outputPath = isLocal
-        ? path.resolve('C:\\git\\GoveeController\\src\\GoveeController\\pi\\js')
+        ? path.resolve(__dirname, 'example/pi')
         : path.resolve(__dirname, 'dist');
 
     return {

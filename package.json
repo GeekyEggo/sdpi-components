@@ -8,8 +8,8 @@
         "watch": "webpack -w --env local & npm run watch:example",
         "format": "prettier --config .prettierrc './src/**/*.ts' --write",
         "lint": "eslint . --ext .ts",
-        "install:example": "onchange './example/**/*.*' -- npm run install:example",
-        "watch:example": "node ./scripts/install-example.js"
+        "install:example": "node ./scripts/install-example.js",
+        "watch:example": "onchange './example/**/*.*' -- npm run install:example"
     },
     "repository": {
         "type": "git",
@@ -35,6 +35,7 @@
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.0.0",
         "fs-extra": "^10.0.1",
+        "lit": "^2.2.1",
         "onchange": "^7.1.0",
         "prettier": "^2.6.1",
         "style-loader": "^3.3.1",
