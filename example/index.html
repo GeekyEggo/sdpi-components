@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>com.geekyeggo.sdpi.counter</title>
+    <title>com.geekyeggo.sdpi.sdPlugin</title>
     <meta charset="utf-8" />
 </head>
 
@@ -10,6 +10,7 @@
     <script>
         function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
             console.log('Initializing plug-in.');
+            let count = 0;
             const webSocket = new WebSocket(`ws://127.0.0.1:${inPort}`);
 
             // Handle messages from the Stream Deck.
@@ -19,7 +20,16 @@
 
                 switch (event) {
                     case 'keyDown':
-                        console.log('Key down...');
+                        webSocket.send(
+                            JSON.stringify({
+                                event: 'setTitle',
+                                context,
+                                payload: {
+                                    title: `${++count}`
+                                }
+                            })
+                        );
+
                         break;
                 }
             };
