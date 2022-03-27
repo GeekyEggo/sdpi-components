@@ -4,9 +4,15 @@ import { css } from 'lit';
  * Defines styles of elements commonly found in forms.
  */
 export default css`
+    :host {
+        --input-bg: var(--color-secondary-bg);
+        --input-padding: calc(var(--spacer) + 2px) var(--spacer);
+    }
+
     button,
     input,
-    select {
+    select,
+    textarea {
         /* Box model */
         box-sizing: border-box;
         outline: none;
@@ -18,17 +24,6 @@ export default css`
         /* Background and typography */
         color: var(--color-secondary);
         font-size: var(--font-size);
-    }
-
-    button,
-    input:not([type='range']),
-    select {
-        background-color: var(--color-secondary-bg);
-    }
-
-    input[type='text'] {
-        height: 25px;
-        padding: calc(var(--spacer) + 2px) var(--spacer);
     }
 
     input:required {

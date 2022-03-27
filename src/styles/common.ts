@@ -14,6 +14,7 @@ export default css`
         --color-secondary: #d8d8d8;
         --color-secondary-bg: #3d3d3d;
         --color-input-bg: #969696;
+        --font-family: Arial, 'Segoe UI', Roboto, Helvetica sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
         --font-size: 8pt;
 
         /* Background and typography */
@@ -21,7 +22,7 @@ export default css`
         color: var(--color-primary);
         font-size: var(--font-size);
         font-weight: normal;
-        font-family: Tahoma, Verdana, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        font-family: var(--font-family);
     }
 
     .container {

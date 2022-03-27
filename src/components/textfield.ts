@@ -1,5 +1,5 @@
 import { HTMLInputEvent } from 'dom';
-import { html } from 'lit';
+import { css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { commonCss, inputCss } from '../styles';
@@ -7,7 +7,18 @@ import { SettingsElement } from './settings-element';
 
 @customElement('sdpi-textfield')
 export class Textfield extends SettingsElement<string> {
-    static styles = [commonCss, inputCss];
+    static styles = [
+        commonCss,
+        inputCss,
+        css`
+            input {
+                background-color: var(--input-bg);
+                font-family: var(--font-family);
+                height: 25px;
+                padding: var(--input-padding);
+            }
+        `
+    ];
 
     /**
      * The optional pattern to be applied when validating the value.
