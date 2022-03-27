@@ -1,5 +1,5 @@
 import { HTMLInputEvent } from 'dom';
-import { css, html, TemplateResult } from 'lit';
+import { css, html, PropertyValueMap, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -13,8 +13,7 @@ export class Textarea extends SettingsElement<string> {
         inputCss,
         css`
             textarea {
-                background-color: var(--input-bg);
-                font-family: var(--font-family);
+                background-color: var(--color-secondary-bg);
                 padding: var(--input-padding);
                 resize: none;
             }
@@ -47,7 +46,7 @@ export class Textarea extends SettingsElement<string> {
      * The current length of the text area.
      */
     @state()
-    private length = 0;
+    private _length = 0;
 
     /**
      * Renders the component.
@@ -72,18 +71,20 @@ export class Textarea extends SettingsElement<string> {
     private getLengthLabel(): TemplateResult<1> | undefined {
         if (this.showlength || this.maxlength) {
             const maxLengthLabel = this.maxlength ? html`/${this.maxlength}` : undefined;
-            return html`<label id="length" for=${this.inputID}>${this.length}${maxLengthLabel}</label>`;
+            return html`<label id="length" for=${this.inputID}>${this._length}${maxLengthLabel}</label>`;
         }
 
         return undefined;
     }
 
     /**
-     * Invoked when the value changed.
-     * @param value The value of the setting.
+     * Occurs before rendering, after a property or state has changed.
+     * @param _changedProperties The changed properties.
      */
-    protected valueChanged?(value: string | undefined): void {
-        this.length = value ? value.length : 0;
+    protected willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        if (_changedProperties.has('value')) {
+            this._length = this.value ? this.value.length : 0;
+        }
     }
 
     /**
@@ -92,7 +93,7 @@ export class Textarea extends SettingsElement<string> {
      */
     private handleInput(ev: HTMLInputEvent<HTMLInputElement>) {
         this.value = ev.target.value;
-        this.length = this.value.length;
+        this._length = this.value.length;
 
         if (this.save) {
             this.save(this.value);

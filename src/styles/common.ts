@@ -26,16 +26,18 @@ export default css`
     }
 
     .container {
+        align-items: start;
         display: grid;
         grid-template-columns: 103px 1fr;
-        align-items: center;
         margin: 5px 0 10px 0;
         max-width: 330px;
         -webkit-user-drag: none;
     }
 
     .container > div:first-child {
-        text-align: right;
+        margin-top: 5px;
+        display: inline-block;
         padding-right: 11px;
+        text-align: right;
     }
 `;

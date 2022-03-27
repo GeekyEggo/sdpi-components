@@ -38,27 +38,10 @@ export class SettingsElement<T> extends LitElement {
     public setting?: string;
 
     /**
-     * Gets the value that this instance represents within the persisted settings.
+     * Gets or sets the underlying value that this element represents, and persists.
      */
-    public get value(): T | undefined {
-        return this._value;
-    }
-
-    /**
-     * Sets the value that this instance represents within the persisted settings.
-     */
-    public set value(value: T | undefined) {
-        if (this._value != value) {
-            const oldValue = this._value;
-            this._value = value;
-
-            if (this.valueChanged) {
-                this.valueChanged(value);
-            }
-
-            super.requestUpdate('value', oldValue);
-        }
-    }
+    @property({ attribute: false })
+    public value?: T;
 
     /**
      * Occurs when the component is first updated, and is responsible for initializing the save method.
@@ -75,10 +58,4 @@ export class SettingsElement<T> extends LitElement {
      * @param value The value of the setting.
      */
     protected save?(value: T): void;
-
-    /**
-     * Invoked when the value changed.
-     * @param value The value of the setting.
-     */
-    protected valueChanged?(value: T | undefined): void;
 }
