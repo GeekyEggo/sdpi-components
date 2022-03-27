@@ -1,6 +1,4 @@
-import {
-    ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgsWithPayload
-} from 'stream-deck';
+import { ActionEventArgsWithPayload, SettingsPayload, StreamDeckEventArgsWithPayload } from 'stream-deck';
 
 import { delay } from '../core/timeout';
 import streamDeckClient from './stream-deck-client';

@@ -1,7 +1,4 @@
-import {
-    ActionEventArgsWithPayload, ActionPayload, RegistrationInfo, SettingsPayload,
-    StreamDeckEventArgs, StreamDeckEventArgsWithPayload
-} from 'stream-deck';
+import { ActionEventArgsWithPayload, ActionPayload, RegistrationInfo, SettingsPayload, StreamDeckEventArgs, StreamDeckEventArgsWithPayload } from 'stream-deck';
 
 import { EventManager } from '../core/events';
 import { PromiseCompletionSource } from '../core/promises';
