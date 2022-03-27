@@ -9,6 +9,16 @@
     <script src="sdpi.js"></script>
     <sdpi-textfield setting="first_name" label="First name" placeholder="First name..." required pattern="[A-z\s\-]*"></sdpi-textfield>
     <sdpi-textarea setting="last_name" label="Last name" maxlength="25"></sdpi-textarea>
+    <sdpi-select setting="fav_color" placeholder="Please choose a color">
+        <optgroup label="Primary Colors">
+            <option value="red">Red</option>
+            <option value="yellow">Yellow</option>
+            <option value="blue">Blue</option>
+        </optgroup>
+        <optgroup label="Others">
+            <option value="blue">Blue</option>
+        </optgroup>
+    </sdpi-select>
     <sdpi-button onclick="javascript:alert('Hello')">Something</sdpi-button>
 </body>
 

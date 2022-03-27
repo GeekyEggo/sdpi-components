@@ -13,8 +13,7 @@ export class Textfield extends SettingsElement<string> {
         css`
             input {
                 background-color: var(--color-secondary-bg);
-                height: 25px;
-                padding: var(--input-padding);
+                padding: calc(var(--spacer) + 3px) var(--spacer);
             }
 
             input:required {
@@ -57,22 +56,19 @@ export class Textfield extends SettingsElement<string> {
     render() {
         return html`
             <div class="container">
-                <div><label for=${this.inputID}>${this.label ? this.label + ':' : ''}</label></div>
+                <div>${this.getLabel()}</div>
                 <div>
-                    <input id=${this.inputID} type="text" @input=${this.handleInput} .pattern=${this.pattern} .placeholder=${this.placeholder} .required=${this.required} .value=${this.value || ''} />
+                    <input
+                        type="text"
+                        .id=${this.inputID}
+                        .pattern=${this.pattern}
+                        .placeholder=${this.placeholder}
+                        .required=${this.required}
+                        .value=${this.value || ''}
+                        @input=${(ev: HTMLInputEvent<HTMLInputElement>) => this.save(ev.target.value)}
+                    />
                 </div>
             </div>
         `;
-    }
-
-    /**
-     * Handles the input changing
-     * @param ev The event arguments.
-     */
-    private handleInput(ev: HTMLInputEvent<HTMLInputElement>) {
-        this.value = ev.target.value;
-        if (this.save) {
-            this.save(this.value);
-        }
     }
 }

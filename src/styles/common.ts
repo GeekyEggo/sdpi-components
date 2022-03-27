@@ -24,6 +24,18 @@ export default css`
         font-family: var(--font-family);
     }
 
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #999999;
+        border-radius: 8px;
+        outline: 1px solid slategrey;
+    }
+
     .container {
         align-items: start;
         display: grid;

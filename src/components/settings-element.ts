@@ -1,4 +1,4 @@
-import { LitElement } from 'lit';
+import { html, LitElement, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 import { getUUID } from '../core/utils';
@@ -8,22 +8,18 @@ import { useSettings } from '../stream-deck/settings';
  * Provides a base element for components that persist settings within the Stream Deck.
  */
 export class SettingsElement<T> extends LitElement {
-    protected readonly inputID: string;
+    protected readonly inputID: string = getUUID();
     private _value?: T;
-
-    /**
-     * Initializes a new instance of a Stream Deck Property Inspector element that persists settings.
-     */
-    constructor() {
-        super();
-        this.inputID = getUUID();
-    }
+    private _save?: (value: T) => void;
 
     /**
      * When true, the setting will be persisted against the global settings.
      */
-    @property({ type: Boolean })
-    public global = false;
+    @property({
+        attribute: 'global',
+        type: Boolean
+    })
+    public isGlobal = false;
 
     /**
      * The label displayed next to the input.
@@ -48,14 +44,33 @@ export class SettingsElement<T> extends LitElement {
      */
     protected firstUpdated(): void {
         super.firstUpdated;
+
         if (this.setting) {
-            this.save = useSettings<T>(this.setting, this.global, (value) => (this.value = value));
+            this._save = useSettings<T>(this.setting, this.isGlobal, (value) => (this.value = value));
         }
+    }
+
+    /**
+     * Gets the template that represents the label.
+     * @returns The template.
+     */
+    protected getLabel(): TemplateResult<1> | undefined {
+        if (!this.label) {
+            return undefined;
+        }
+
+        return html`<label for=${this.inputID}>${this.label}:</label>`;
     }
 
     /**
      * Saves the `value` to the Stream Deck settings.
      * @param value The value of the setting.
      */
-    protected save?(value: T): void;
+    protected save(value: T): void {
+        this.value = value;
+
+        if (this._save) {
+            this._save(this.value);
+        }
+    }
 }

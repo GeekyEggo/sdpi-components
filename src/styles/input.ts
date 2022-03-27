@@ -4,10 +4,6 @@ import { css } from 'lit';
  * Defines styles of elements commonly found in forms.
  */
 export default css`
-    :host {
-        --input-padding: calc(var(--spacer) + 2px) var(--spacer);
-    }
-
     button,
     input,
     select,

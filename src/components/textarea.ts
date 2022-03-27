@@ -14,7 +14,7 @@ export class Textarea extends SettingsElement<string> {
         css`
             textarea {
                 background-color: var(--color-secondary-bg);
-                padding: var(--input-padding);
+                padding: calc(var(--spacer) + 3px) var(--spacer);
                 resize: none;
             }
 
@@ -27,8 +27,11 @@ export class Textarea extends SettingsElement<string> {
     /**
      * The maximum length the text value can be.
      */
-    @property({ type: Number })
-    public maxlength?: number | undefined;
+    @property({
+        attribute: 'maxlength',
+        type: Number
+    })
+    public maxLength?: number;
 
     /**
      * Defines the rows property of the text area.
@@ -39,12 +42,12 @@ export class Textarea extends SettingsElement<string> {
     /**
      * Determines whether to show the length of the text value.
      */
-    @property({ type: Boolean })
-    public showlength = false;
+    @property({
+        attribute: 'showlength',
+        type: Boolean
+    })
+    public showLength = false;
 
-    /**
-     * The current length of the text area.
-     */
     @state()
     private _length = 0;
 
@@ -55,9 +58,16 @@ export class Textarea extends SettingsElement<string> {
     render() {
         return html`
             <div class="container">
-                <div><label for=${this.inputID}>${this.label ? this.label + ':' : ''}</label></div>
+                <div>${this.getLabel()}</div>
                 <div>
-                    <textarea type="textarea" id=${this.inputID} @input=${this.handleInput} rows=${this.rows} maxlength=${ifDefined(this.maxlength)} .value=${this.value || ''}></textarea>
+                    <textarea
+                        type="textarea"
+                        maxlength=${ifDefined(this.maxLength)}
+                        .id=${this.inputID}
+                        .rows=${this.rows}
+                        .value=${this.value || ''}
+                        @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this.save(ev.target.value)}
+                    ></textarea>
                     ${this.getLengthLabel()}
                 </div>
             </div>
@@ -69,8 +79,8 @@ export class Textarea extends SettingsElement<string> {
      * @returns The template used to render the length of the value.
      */
     private getLengthLabel(): TemplateResult<1> | undefined {
-        if (this.showlength || this.maxlength) {
-            const maxLengthLabel = this.maxlength ? html`/${this.maxlength}` : undefined;
+        if (this.showLength || this.maxLength) {
+            const maxLengthLabel = this.maxLength ? html`/${this.maxLength}` : undefined;
             return html`<label id="length" for=${this.inputID}>${this._length}${maxLengthLabel}</label>`;
         }
 
@@ -86,19 +96,6 @@ export class Textarea extends SettingsElement<string> {
 
         if (_changedProperties.has('value')) {
             this._length = this.value ? this.value.length : 0;
-        }
-    }
-
-    /**
-     * Handles the input changing
-     * @param ev The event arguments.
-     */
-    private handleInput(ev: HTMLInputEvent<HTMLInputElement>) {
-        this.value = ev.target.value;
-        this._length = this.value.length;
-
-        if (this.save) {
-            this.save(this.value);
         }
     }
 }
