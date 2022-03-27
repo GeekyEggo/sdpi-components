@@ -1,7 +1,7 @@
 /**
  * Provides a promise completion source whereby a promise can be resolved at a later stage.
  */
-export default class PromiseCompletionSource<T> {
+export class PromiseCompletionSource<T> {
     private readonly _promise: Promise<T>;
 
     /**

@@ -4,7 +4,7 @@ import {
 } from 'stream-deck';
 
 import { EventManager } from '../core/events';
-import PromiseCompletionSource from '../core/promise-completion-source';
+import { PromiseCompletionSource } from '../core/promises';
 
 enum Message {
     // Sent.
