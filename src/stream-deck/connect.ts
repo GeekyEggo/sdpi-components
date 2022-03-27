@@ -18,5 +18,7 @@ window.connectElgatoStreamDeckSocket = function (inPort: string, inPropertyInspe
         existing(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
     }
 
+    console.log(JSON.parse(inInfo));
+
     streamDeckClient.connect(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
 };

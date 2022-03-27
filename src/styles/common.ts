@@ -5,20 +5,19 @@ import { css } from 'lit';
  */
 export default css`
     :host {
-        /* Box model variables */
+        /* Box model */
         --spacer: 4px;
 
-        /* Background and typography variables */
+        /* Colors */
         --color-primary: #9a9a9a;
         --color-primary-bg: #2d2d2d;
         --color-secondary: #d8d8d8;
         --color-secondary-bg: #3d3d3d;
-        --color-input-bg: #969696;
+
+        /* Typography */
         --font-family: Arial, 'Segoe UI', Roboto, Helvetica sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
         --font-size: 8pt;
 
-        /* Background and typography */
-        background-color: var(--color-primary-bg);
         color: var(--color-primary);
         font-size: var(--font-size);
         font-weight: normal;
@@ -35,7 +34,7 @@ export default css`
     }
 
     .container > div:first-child {
-        margin-top: 5px;
+        margin-top: 6px;
         display: inline-block;
         padding-right: 11px;
         text-align: right;

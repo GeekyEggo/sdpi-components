@@ -1,5 +1,5 @@
 import { HTMLInputEvent } from 'dom';
-import { css, html, PropertyValueMap, TemplateResult } from 'lit';
+import { css, html, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -81,7 +81,9 @@ export class Textarea extends SettingsElement<string> {
      * Occurs before rendering, after a property or state has changed.
      * @param _changedProperties The changed properties.
      */
-    protected willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+    protected willUpdate(_changedProperties: PropertyValues): void {
+        super.willUpdate(_changedProperties);
+
         if (_changedProperties.has('value')) {
             this._length = this.value ? this.value.length : 0;
         }
