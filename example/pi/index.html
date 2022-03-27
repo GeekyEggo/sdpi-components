@@ -3,12 +3,18 @@
 
 <head lang="en-gb">
     <meta charset="utf-8">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body>
     <script src="sdpi.js"></script>
-    <sdpi-textfield setting="first_name"></sdpi-textfield>
-    <sdpi-textfield setting="last_name" global></sdpi-textfield>
+    <sdpi-textfield setting="first_name" label="First name" placeholder="First name..." required pattern="[A-z\s\-]*"></sdpi-textfield>
+    <sdpi-textfield setting="last_name" label="Last name"></sdpi-textfield>
 </body>
 
 </html>

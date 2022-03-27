@@ -1,44 +1,55 @@
 import { HTMLInputEvent } from 'dom';
-import { css, html, LitElement } from 'lit';
+import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { useSettings } from '../stream-deck/settings';
+import { commonCss, inputCss } from '../styles';
+import { SettingsElement } from './settings-element';
 
 @customElement('sdpi-textfield')
-export class Textfield extends LitElement {
-    private _setting?: string;
-    private _save?: (value: unknown) => void;
+export class Textfield extends SettingsElement<string> {
+    static styles = [commonCss, inputCss];
 
-    static styles = css`
-        :host {
-            color: blue;
-        }
-    `;
-
+    /**
+     * The optional pattern to be applied when validating the value.
+     */
     @property()
-    public setting?: string;
+    public pattern = '';
 
+    /**
+     * The optional placeholder text to be shown within the input.
+     */
     @property()
-    public value = '';
+    public placeholder = '';
 
+    /**
+     * Determines whether the setting is required.
+     */
     @property({ type: Boolean })
-    public global = false;
+    public required = false;
 
+    /**
+     * Renders the component.
+     * @returns The HTML template used to render the component.
+     */
     render() {
-        console.log(this.global);
-        return html`<input type="text" @input=${this.handleInput} .value=${this.value} /> `;
+        return html`
+            <div class="container">
+                <div><label for=${this.inputID}>${this.label ? this.label + ':' : ''}</label></div>
+                <div>
+                    <input id=${this.inputID} type="text" @input=${this.handleInput} .pattern=${this.pattern} .placeholder=${this.placeholder} .required=${this.required} .value=${this.value || ''} />
+                </div>
+            </div>
+        `;
     }
 
-    protected firstUpdated(): void {
-        if (this.setting) {
-            this._save = useSettings<string>(this.setting, this.global, (value) => (this.value = value));
-        }
-    }
-
+    /**
+     * Handles the input changing
+     * @param ev The event arguments.
+     */
     private handleInput(ev: HTMLInputEvent<HTMLInputElement>) {
         this.value = ev.target.value;
-        if (this._save) {
-            this._save(this.value);
+        if (this.save) {
+            this.save(this.value);
         }
     }
 }
