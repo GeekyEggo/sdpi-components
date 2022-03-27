@@ -3,7 +3,7 @@ import {
     StreamDeckEventArgs, StreamDeckEventArgsWithPayload
 } from 'stream-deck';
 
-import EventManager from '../core/event-dispatcher';
+import { EventManager } from '../core/events';
 import PromiseCompletionSource from '../core/promise-completion-source';
 
 enum Message {

@@ -166,7 +166,7 @@ declare module 'stream-deck' {
     }
 
     export interface SettingsPayload {
-        settings: Record<string, unknown>;
+        settings: Record<string, any>;
     }
 
     export interface SetTitlePayload extends TargetPayload {

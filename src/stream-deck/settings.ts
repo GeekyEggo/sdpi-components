@@ -13,7 +13,7 @@ class Settings {
     private _settings?: Record<string, unknown>;
 
     /**
-     * Initializes a new instance of the `Settings`.
+     * Initializes a new instance of the settings used to persist data.
      */
     constructor() {
         streamDeckClient.didReceiveGlobalSettings.subscribe((data: StreamDeckEventArgsWithPayload<SettingsPayload>) => (this._globalSettings = data.payload.settings));

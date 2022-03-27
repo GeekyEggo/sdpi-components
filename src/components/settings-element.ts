@@ -11,7 +11,7 @@ export class SettingsElement<T> extends LitElement {
     protected readonly inputID: string;
 
     /**
-     * Initializes a new instance.
+     * Initializes a new instance of a Stream Deck Property Inspector element that persists settings.
      */
     constructor() {
         super();

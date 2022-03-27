@@ -1,5 +1,5 @@
 /**
- * Generates a "unique" identifier.
+ * Generates a 'unique' identifier.
  * @returns The unique identifier.
  */
 export function getUUID(): string {
