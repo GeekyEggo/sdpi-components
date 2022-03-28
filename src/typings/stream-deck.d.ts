@@ -166,6 +166,7 @@ declare module 'stream-deck' {
     }
 
     export interface SettingsPayload {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         settings: Record<string, any>;
     }
 

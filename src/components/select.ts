@@ -2,24 +2,27 @@ import { HTMLInputEvent } from 'dom';
 import { css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
-import { commonCss, inputCss } from '../styles';
-import { SettingsElement } from './settings-element';
+import { SettingElement } from './shared/setting-element';
 
 @customElement('sdpi-select')
-export class Select extends SettingsElement<string> {
-    static styles = [
-        commonCss,
-        inputCss,
-        css`
-            select {
-                background-color: var(--color-secondary-bg);
-                font-family: var(--font-family);
-                font-size: var(--font-size);
-                padding: calc(var(--spacer) + 1px) 0;
-                text-overflow: ellipsis;
-            }
-        `
-    ];
+export class Select extends SettingElement<string> {
+    /**
+     * Gets the styles associated with the component.
+     */
+    public static get styles() {
+        return [
+            ...super.styles,
+            css`
+                select {
+                    background-color: var(--color-secondary-bg);
+                    font-family: var(--font-family);
+                    font-size: var(--font-size);
+                    padding: calc(var(--spacer) + 1px) 0;
+                    text-overflow: ellipsis;
+                }
+            `
+        ];
+    }
 
     /**
      * Initializes a new instance of a custom Stream Deck property inspector select input.
@@ -45,14 +48,21 @@ export class Select extends SettingsElement<string> {
     @property()
     public placeholder?: string;
 
+    /**
+     * The item nodes of the component.
+     */
     @state()
     private _items: Node[] = [];
+
+    /**
+     * The observer used to monitor option and optgroup nodes, and render them as children of the component.
+     */
     private _observer: MutationObserver;
 
     /**
      * Invoked when the component is added to the DOM.
      */
-    connectedCallback() {
+    public connectedCallback() {
         super.connectedCallback();
         this._observer.observe(this, { childList: true });
     }
@@ -60,26 +70,21 @@ export class Select extends SettingsElement<string> {
     /**
      * Invoked when the component is removed from the DOM.
      */
-    disconnectedCallback(): void {
+    public disconnectedCallback(): void {
         super.disconnectedCallback();
         this._observer.disconnect();
     }
 
     /**
-     * Renders the component.
-     * @returns The HTML template used to render the component.
+     * Gets the contents rendered in the right column, typically representing the input.
+     * @returns {unknown} The contents.
      */
-    render() {
+    protected override getContents(): unknown {
         return html`
-            <div class="container">
-                <div><label for=${this.inputID}>${this.label ? this.label + ':' : ''}</label></div>
-                <div>
-                    <select .id=${this.inputID} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this.save(ev.target.value)}>
-                        <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
-                        ${this._items}
-                    </select>
-                </div>
-            </div>
+            <select .id=${this.inputID} .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this.save(ev.target.value)}>
+                <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
+                ${this._items}
+            </select>
         `;
     }
 }

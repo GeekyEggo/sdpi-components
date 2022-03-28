@@ -3,26 +3,29 @@ import { css, html, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
-import { commonCss, inputCss } from '../styles';
-import { SettingsElement } from './settings-element';
+import { SettingElement } from './shared/setting-element';
 
 @customElement('sdpi-textarea')
-export class Textarea extends SettingsElement<string> {
-    static styles = [
-        commonCss,
-        inputCss,
-        css`
-            textarea {
-                background-color: var(--color-secondary-bg);
-                padding: calc(var(--spacer) + 3px) var(--spacer);
-                resize: none;
-            }
+export class Textarea extends SettingElement<string> {
+    /**
+     * Gets the styles associated with the component.
+     */
+    public static get styles() {
+        return [
+            ...super.styles,
+            css`
+                textarea {
+                    background-color: var(--color-secondary-bg);
+                    padding: calc(var(--spacer) + 3px) var(--spacer);
+                    resize: none;
+                }
 
-            #length {
-                float: right;
-            }
-        `
-    ];
+                #length {
+                    float: right;
+                }
+            `
+        ];
+    }
 
     /**
      * The maximum length the text value can be.
@@ -52,25 +55,21 @@ export class Textarea extends SettingsElement<string> {
     private _length = 0;
 
     /**
-     * Renders the component.
-     * @returns The HTML template used to render the component.
+     * Gets the contents rendered in the right column, typically representing the input.
+     * @returns {unknown} The contents.
      */
-    render() {
+    protected override getContents(): unknown {
         return html`
-            <div class="container">
-                <div>${this.getLabel()}</div>
-                <div>
-                    <textarea
-                        type="textarea"
-                        maxlength=${ifDefined(this.maxLength)}
-                        .id=${this.inputID}
-                        .rows=${this.rows}
-                        .value=${this.value || ''}
-                        @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this.save(ev.target.value)}
-                    ></textarea>
-                    ${this.getLengthLabel()}
-                </div>
-            </div>
+            <textarea
+                type="textarea"
+                maxlength=${ifDefined(this.maxLength)}
+                .id=${this.inputID}
+                .disabled=${this.disabled}
+                .rows=${this.rows}
+                .value=${this.value || ''}
+                @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this.save(ev.target.value)}
+            ></textarea>
+            ${this.getLengthLabel()}
         `;
     }
 
