@@ -7,8 +7,6 @@ import { InputElement } from './input-element';
  * An element that is persisted to the Stream Deck, and is represented as a label, and the input.
  */
 export abstract class SettingElement<TValue> extends InputElement {
-    private _save?: (value: TValue) => void;
-
     /**
      * When true, the setting will be persisted against the global settings.
      */
@@ -43,7 +41,7 @@ export abstract class SettingElement<TValue> extends InputElement {
 
     /**
      * Saves the `value` to the Stream Deck settings.
-     * @param value The value of the setting.
+     * @param value The value to save.
      */
     protected save(value: TValue): void {
         this.value = value;
@@ -52,4 +50,10 @@ export abstract class SettingElement<TValue> extends InputElement {
             this._save(this.value);
         }
     }
+
+    /**
+     * Persists the `value` to the Stream Deck settings.
+     * @param value The value to persist.
+     */
+    private _save?: (value: TValue) => void;
 }

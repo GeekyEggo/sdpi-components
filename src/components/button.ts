@@ -42,10 +42,10 @@ export class Button extends InputElement {
     }
 
     /**
-     * Gets the contents rendered in the right column, typically representing the input.
-     * @returns {unknown} The contents.
+     * Renders HTML template that represents the contents.
+     * @returns {unknown} The HTML template.
      */
-    protected override getContents(): unknown {
+    protected override renderContents(): unknown {
         return html`
             <button .id=${this.inputID} .disabled=${this.disabled}>
                 <slot></slot>

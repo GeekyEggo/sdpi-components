@@ -53,10 +53,10 @@ export class Textfield extends SettingElement<string> {
     public required = false;
 
     /**
-     * Gets the contents rendered in the right column, typically representing the input.
-     * @returns {unknown} The contents.
+     * Renders HTML template that represents the contents.
+     * @returns {unknown} The HTML template.
      */
-    protected override getContents(): unknown {
+    protected override renderContents(): unknown {
         return html`
             <input
                 type="text"

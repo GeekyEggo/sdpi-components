@@ -12,26 +12,26 @@ export abstract class LabeledContentElement extends LitElement {
 
     /**
      * Renders the component.
-     * @returns The HTML template used to render the component.
+     * @returns {unknown} The HTML template used to render the component.
      */
-    protected render() {
+    protected render(): unknown {
         return html`
             <div class="container">
-                <div>${this.getLabel && this.getLabel()}</div>
-                <div>${this.getContents()}</div>
+                <div>${this.renderLabel && this.renderLabel()}</div>
+                <div>${this.renderContents()}</div>
             </div>
         `;
     }
 
     /**
-     * Gets the contents rendered in the left column, typically representing a label.
-     * @returns {unknown} The label.
+     * Renders HTML template that represents the contents.
+     * @returns {unknown} The HTML template.
      */
-    protected getLabel?(): unknown;
+    protected abstract renderContents(): unknown;
 
     /**
-     * Gets the contents rendered in the right column, typically representing the input.
-     * @returns {unknown} The contents.
+     * Renders HTML template that represents the label.
+     * @returns {unknown} The HTML template.
      */
-    protected abstract getContents(): unknown;
+    protected renderLabel?(): unknown;
 }

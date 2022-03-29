@@ -1,6 +1,7 @@
 import { HTMLInputEvent } from 'dom';
 import { css, html } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
+import { ChildNodesController } from '../controllers/childNodesController';
 
 import { SettingElement } from './shared/setting-element';
 
@@ -29,17 +30,7 @@ export class Select extends SettingElement<string> {
      */
     constructor() {
         super();
-
-        // We have to use an observer to extract the child elements, and use them within the shadow-DOM.
-        this._observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                mutation.addedNodes.forEach((node) => {
-                    if (node.nodeName === 'OPTION' || node.nodeName === 'OPTGROUP') {
-                        this._items = [...this._items, node];
-                    }
-                });
-            });
-        });
+        this._childNodesController = new ChildNodesController(this);
     }
 
     /**
@@ -49,42 +40,43 @@ export class Select extends SettingElement<string> {
     public placeholder?: string;
 
     /**
-     * The item nodes of the component.
+     * Provides an observer that monitors the child nodes of the component on the DOM.
      */
-    @state()
-    private _items: Node[] = [];
+    private _childNodesController: ChildNodesController;
 
     /**
-     * The observer used to monitor option and optgroup nodes, and render them as children of the component.
+     * Renders HTML template that represents the contents.
+     * @returns {unknown} The HTML template.
      */
-    private _observer: MutationObserver;
-
-    /**
-     * Invoked when the component is added to the DOM.
-     */
-    public connectedCallback() {
-        super.connectedCallback();
-        this._observer.observe(this, { childList: true });
-    }
-
-    /**
-     * Invoked when the component is removed from the DOM.
-     */
-    public disconnectedCallback(): void {
-        super.disconnectedCallback();
-        this._observer.disconnect();
-    }
-
-    /**
-     * Gets the contents rendered in the right column, typically representing the input.
-     * @returns {unknown} The contents.
-     */
-    protected override getContents(): unknown {
+    protected override renderContents(): unknown {
         return html`
             <select .id=${this.inputID} .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this.save(ev.target.value)}>
                 <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
-                ${this._items}
+                ${this.renderChildNodes()}
             </select>
         `;
+    }
+
+    /**
+     * Gets the option groups and options associated with the `_childNodesController.childNodes`.
+     * @returns {unknown} The HTML template that contains the options.
+     */
+    private renderChildNodes(): unknown {
+        if (this.childNodes.length === 0) {
+            return undefined;
+        }
+
+        const mapOptions = (item: Node): unknown => {
+            switch (item.nodeName) {
+                case 'OPTGROUP':
+                    return html`<optgroup .label=${(<HTMLOptGroupElement>item).label}>${Array.from(item.childNodes).map(mapOptions)}</optgroup>`;
+                case 'OPTION':
+                    return html`<option .disabled=${(<HTMLOptionElement>item).disabled} .value=${(<HTMLOptionElement>item).text}>${(<HTMLOptionElement>item).label}</option>`;
+                default:
+                    return undefined;
+            }
+        };
+
+        return html`${this._childNodesController.childNodes.map(mapOptions)}`;
     }
 }

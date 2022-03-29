@@ -1,6 +1,5 @@
 import { html } from 'lit';
 import { property } from 'lit/decorators.js';
-
 import { getUUID } from '../../core/utils';
 import { inputCss } from '../../styles';
 import { LabeledContentElement } from './labeled-content-element';
@@ -17,11 +16,6 @@ export abstract class InputElement extends LabeledContentElement {
     }
 
     /**
-     * Gets the identifier associated with the input element.
-     */
-    protected readonly inputID: string = getUUID();
-
-    /**
      * Determines whether the input is disabled.
      */
     @property({ type: Boolean })
@@ -34,10 +28,15 @@ export abstract class InputElement extends LabeledContentElement {
     public label?: string;
 
     /**
-     * Gets the contents rendered in the right column, typically representing the input.
-     * @returns {unknown} The contents.
+     * Gets the identifier associated with the input element.
      */
-    protected getLabel(): unknown {
+    protected readonly inputID: string = getUUID();
+
+    /**
+     * Renders HTML template that represents the label.
+     * @returns {unknown} The HTML template.
+     */
+    protected renderLabel(): unknown {
         if (this.label) {
             return html`<label for=${this.inputID}>${this.label}:</label>`;
         }

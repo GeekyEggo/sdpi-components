@@ -1,6 +1,6 @@
 import { HTMLInputEvent } from 'dom';
-import { css, html, PropertyValues, TemplateResult } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { SettingElement } from './shared/setting-element';
@@ -51,14 +51,11 @@ export class Textarea extends SettingElement<string> {
     })
     public showLength = false;
 
-    @state()
-    private _length = 0;
-
     /**
-     * Gets the contents rendered in the right column, typically representing the input.
-     * @returns {unknown} The contents.
+     * Renders HTML template that represents the contents.
+     * @returns {unknown} The HTML template.
      */
-    protected override getContents(): unknown {
+    protected override renderContents(): unknown {
         return html`
             <textarea
                 type="textarea"
@@ -75,26 +72,14 @@ export class Textarea extends SettingElement<string> {
 
     /**
      * Gets the label that denotes the length of the text area.
-     * @returns The template used to render the length of the value.
+     * @returns {unknown} The template used to render the length of the value.
      */
-    private getLengthLabel(): TemplateResult<1> | undefined {
+    private getLengthLabel(): unknown {
         if (this.showLength || this.maxLength) {
             const maxLengthLabel = this.maxLength ? html`/${this.maxLength}` : undefined;
-            return html`<label id="length" for=${this.inputID}>${this._length}${maxLengthLabel}</label>`;
+            return html`<label id="length" for=${this.inputID}>${this.value?.length}${maxLengthLabel}</label>`;
         }
 
         return undefined;
-    }
-
-    /**
-     * Occurs before rendering, after a property or state has changed.
-     * @param _changedProperties The changed properties.
-     */
-    protected willUpdate(_changedProperties: PropertyValues): void {
-        super.willUpdate(_changedProperties);
-
-        if (_changedProperties.has('value')) {
-            this._length = this.value ? this.value.length : 0;
-        }
     }
 }
