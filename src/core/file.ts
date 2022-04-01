@@ -1,5 +1,3 @@
-import { PlatformType } from 'stream-deck';
-
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 /**
@@ -31,5 +29,5 @@ export async function sanitize(path: string): Promise<string> {
  */
 export async function isWindows(): Promise<boolean> {
     const connectionInfo = await streamDeckClient.getConnectionInfo();
-    return connectionInfo.info.application.platform == PlatformType.Windows;
+    return connectionInfo.info.application.platform == 'windows';
 }

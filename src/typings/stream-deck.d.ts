@@ -1,217 +1,141 @@
 declare module 'stream-deck' {
+    /**
+     * Defines possible device types.
+     */
     export const enum DeviceType {
-        StreamDeck = 'kESDSDKDeviceType_StreamDeck',
-        StreamDeckMini = 'kESDSDKDeviceType_StreamDeckMini',
-        StreamDeckXL = 'kESDSDKDeviceType_StreamDeckXL',
-        StreamDeckMobile = 'kESDSDKDeviceType_StreamDeckMobile',
-        CorsairGKeys = 'kESDSDKDeviceType_CorsairGKeys'
+        StreamDeck = 0,
+        StreamDeckMini = 1,
+        StreamDeckXL = 2,
+        StreamDeckMobile = 3,
+        CorsairGKeys = 4
     }
 
-    export const enum FontFamilyType {
-        Arial = 'Arial',
-        ArialBlack = 'Arial Black',
-        ComicSansMS = 'Comic Sans MS',
-        Courier = 'Courier',
-        CourierNew = 'Courier New',
-        Georgia = 'Georgia',
-        Impact = 'Impact',
-        MicrosoftSansSerif = 'Microsoft Sans Serif',
-        Symbol = 'Symbol',
-        Tahoma = 'Tahoma',
-        TimesNewRoman = 'Times New Roman',
-        TrebuchetMS = 'Trebuchet MS',
-        Verdana = 'Verdana',
-        Webdings = 'Webdings',
-        Wingdings = 'Wingdings'
-    }
-
-    export const enum FontStyleType {
-        Regular = 'Regular',
-        Bold = 'Bold',
-        Italic = 'Italic',
-        BoldItalic = 'Bold Italic'
-    }
-
-    export const enum PlatformType {
-        Mac = 'mac',
-        Windows = 'windows'
-    }
-
-    export const enum TargetType {
-        Both = 0,
-        Hardware = 1,
-        Software = 2
-    }
-
-    export const enum TitleAlignmentType {
-        Top = 'top',
-        Middle = 'middle',
-        Bottom = 'bottom'
-    }
-
-    export interface ActionEventArgs extends StreamDeckEventArgs {
-        action: string;
-        context: string;
-        device: string;
-    }
-
-    export interface ActionEventArgsWithPayload<TPayload> extends StreamDeckEventArgsWithPayload<TPayload> {
-        action: string;
-        context: string;
-        device: string;
-    }
-
-    export interface ActionMessage<TPayload> extends ContextMessageWithPayload<TPayload> {
-        action: string;
-    }
-
-    export interface ActionPayload extends SettingsPayload {
-        coordinates: Coordinates;
-        isInMultiAction: boolean;
-    }
-
-    export interface AppearancePayload extends ActionPayload {
-        state: number;
-    }
-
-    export interface Application {
-        language: string;
-        platform: PlatformType;
-        version: string;
-    }
-
-    export interface ApplicationPayload {
-        application: string;
-    }
-
-    export interface ContextMessage extends Message {
-        context: string;
-    }
-
-    export interface ContextMessageWithPayload<TPayload> extends MessageWithPayload<TPayload> {
-        context: string;
-    }
-
-    export interface Coordinates {
-        column: number;
-        row: number;
-    }
-
-    export interface DeviceConnectEventArgs extends DeviceEventArgs {
-        deviceInfo: DeviceInfo;
-    }
-
-    export interface DeviceEventArgs extends StreamDeckEventArgs {
-        device: string;
-    }
-
-    export interface DeviceInfo {
-        name: string;
-        size: Size;
-        type: DeviceType;
-    }
-
-    export interface DeviceMessage<TPayload> extends ContextMessageWithPayload<TPayload> {
-        device: string;
-    }
-
-    export interface IdentifiableDeviceInfo extends DeviceInfo {
-        id: string;
-    }
-
-    export interface KeyPayload extends AppearancePayload {
-        userDesiredState: number;
-    }
-
-    export interface LogPayload {
-        message: string;
-    }
-
-    export interface Message {
-        event: string;
-    }
-
-    export interface MessageWithPayload<TPayload> extends Message {
-        payload: TPayload;
-    }
-
-    export interface PluginInfo {
-        version: string;
-    }
-
-    export interface RegistrationInfo {
-        application: Application;
+    /**
+     * Defines information about devices, the operating system, and the plugin, that is provided to the Stream Deck property inspector as a JSON object.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#info-parameter}
+     */
+    export type RegistrationInfo = {
+        application: {
+            font: string;
+            language: string;
+            platform: 'mac' | 'windows';
+            platformVersion: string;
+            version: string;
+        };
+        color: {
+            buttonMouseOverBackgroundColor: string;
+            buttonPressedBackgroundColor: string;
+            buttonPressedBorderColor: string;
+            buttonPressedTextColor: string;
+            highlightColor: string;
+        };
         devicePixelRatio: number;
-        plugin: PluginInfo;
-        devices: IdentifiableDeviceInfo[];
-    }
+        devices: {
+            id: string;
+            name: string;
+            size: {
+                columns: number;
+                rows: number;
+            };
+            type: DeviceType;
+        };
+        plugin: {
+            uuid: string;
+            version: string;
+        };
+    };
 
-    export interface RegistrationMessage extends Message {
-        UUID: string;
-    }
+    /**
+     * Defines information about the action provided to the Stream Deck property inspector as a JSON object.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#inactioninfo-parameter}
+     */
+    export type ActionInfo = {
+        action: string;
+        context: string;
+        device: string;
+        payload: {
+            coordinates?: {
+                column: number;
+                row: number;
+            };
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            settings?: Record<string, any>;
+        };
+    };
 
-    export interface RegistrationParameters {
-        event: string;
-        info: RegistrationInfo;
-        port: number;
-        pluginUUID: string;
-    }
+    /**
+     * Defines the types of messages that can be sent to the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent}
+     */
+    export type MessageSent =
+        | {
+              event: 'setSettings';
+              context: string;
+              payload: unknown;
+          }
+        | {
+              event: 'getSettings';
+              context: string;
+          }
+        | {
+              event: 'setGlobalSettings';
+              payload: unknown;
+          }
+        | {
+              event: 'getGlobalSettings';
+          }
+        | {
+              event: 'openUrl';
+              payload: {
+                  url: string;
+              };
+          }
+        | {
+              event: 'logMessage';
+              payload: {
+                  message: string;
+              };
+          }
+        | {
+              event: 'sendToPlugin';
+              action?: string;
+              context?: string;
+              payload: unknown;
+          };
 
-    export interface SetImagePayload extends TargetPayload {
-        image: string;
-    }
+    /**
+     * Defines the types of messages that can be received from the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received}
+     */
+    export type MessageReceived =
+        | ({
+              event: 'didReceiveGlobalSettings';
+              action: string;
+          } & AnyPayload)
+        | ({
+              event: 'didReceiveSettings';
+          } & AnyPayload)
+        | ({
+              action?: string;
+              event: 'sendToPropertyInspector';
+              context?: string;
+          } & AnyPayload);
 
-    export interface SetStatePayload {
-        state: number;
-    }
-
-    export interface SettingsPayload {
+    /**
+     * Defines the type of messages that are handled client-side, and therefore require the `any` keyword.
+     */
+    type AnyPayload = {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        settings: Record<string, any>;
-    }
+        payload: any;
+    };
 
-    export interface SetTitlePayload extends TargetPayload {
-        title: string;
-    }
+    /**
+     * All possible messages sent and received between the Stream Deck, and the property inspector.
+     */
+    export type Message = MessageSent | MessageReceived;
 
-    export interface Size {
-        columns: number;
-        rows: number;
-    }
-
-    export interface StreamDeckEventArgs {
-        event: string;
-    }
-
-    export interface StreamDeckEventArgsWithPayload<TPayload> extends StreamDeckEventArgs {
-        payload: TPayload;
-    }
-
-    export interface SwitchToProfilePayload {
-        profile: string;
-    }
-
-    export interface TargetPayload {
-        state: number | null;
-        target: TargetType;
-    }
-
-    export interface TitleParameters {
-        fontFamily: string;
-        fontSize: number;
-        fontStyle: string;
-        fontUnderline: boolean;
-        showTitle: boolean;
-        titleAlignment: TitleAlignmentType;
-        titleColor: string;
-    }
-
-    export interface TitlePayload {
-        title: string;
-        titleParameters: TitleParameters;
-    }
-
-    export interface UrlPayload {
-        url: string;
-    }
+    /**
+     * A helper type for extracting the message type by the messages `event` value.
+     */
+    export type Event<TEvent extends Message['event']> = Extract<Message, { event: TEvent }>;
 }
