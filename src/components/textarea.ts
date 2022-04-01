@@ -17,6 +17,10 @@ export class Textarea extends SettingElement<string> {
                     resize: none;
                 }
 
+                textarea:disabled {
+                    opacity: 0.5;
+                }
+
                 #length {
                     float: right;
                 }

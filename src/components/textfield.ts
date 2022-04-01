@@ -15,6 +15,10 @@ export class Textfield extends SettingElement<string> {
                     padding: calc(var(--spacer) + 3px) var(--spacer);
                 }
 
+                input:disabled {
+                    opacity: 0.5;
+                }
+
                 input:required {
                     background-position: 98% center;
                     background-repeat: no-repeat;

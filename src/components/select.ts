@@ -18,6 +18,10 @@ export class Select extends SettingElement<string> {
                     padding: calc(var(--spacer) + 1px) 0;
                     text-overflow: ellipsis;
                 }
+
+                select:disabled {
+                    opacity: 0.5;
+                }
             `
         ];
     }
