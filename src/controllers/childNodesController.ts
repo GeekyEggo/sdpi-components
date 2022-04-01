@@ -30,16 +30,12 @@ export class ChildNodesController implements ReactiveController {
      */
     private _observer: MutationObserver;
 
-    /**
-     * Called when the host is connected to the component tree. For custom element hosts, this corresponds to the `connectedCallback()` lifecycle, which is only called when the component is connected to the document.
-     */
+    /** @inheritdoc */
     public hostConnected(): void {
         this._observer.observe(this._host, { childList: true });
     }
 
-    /**
-     * Called when the host is disconnected from the component tree. For custom  element hosts, this corresponds to the `disconnectedCallback()` lifecycle, which is called the host or an ancestor component is disconnected from the document.
-     */
+    /** @inheritdoc */
     public hostDisconnected?(): void {
         this._observer.disconnect();
     }

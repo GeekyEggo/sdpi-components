@@ -7,9 +7,7 @@ import { SettingElement } from './shared/setting-element';
 
 @customElement('sdpi-select')
 export class Select extends SettingElement<string> {
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public static get styles() {
         return [
             ...super.styles,
@@ -44,9 +42,7 @@ export class Select extends SettingElement<string> {
      */
     private _childNodesController: ChildNodesController;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     protected override renderContents(): unknown {
         return html`
             <select .id=${this.inputID} .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this.save(ev.target.value)}>

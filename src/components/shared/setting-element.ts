@@ -28,9 +28,7 @@ export abstract class SettingElement<TValue> extends InputElement {
     @property({ attribute: false })
     public value?: TValue;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     protected firstUpdated(): void {
         super.firstUpdated;
 

@@ -1,13 +1,10 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-
 import { InputElement } from './shared/input-element';
 
 @customElement('sdpi-button')
 export class Button extends InputElement {
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public static get styles() {
         return [
             ...super.styles,
@@ -41,9 +38,7 @@ export class Button extends InputElement {
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     protected override renderContents(): unknown {
         return html`
             <button .id=${this.inputID} .disabled=${this.disabled}>

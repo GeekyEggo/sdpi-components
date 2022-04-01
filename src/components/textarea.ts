@@ -7,9 +7,7 @@ import { SettingElement } from './shared/setting-element';
 
 @customElement('sdpi-textarea')
 export class Textarea extends SettingElement<string> {
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public static get styles() {
         return [
             ...super.styles,
@@ -51,9 +49,7 @@ export class Textarea extends SettingElement<string> {
     })
     public showLength = false;
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     protected override renderContents(): unknown {
         return html`
             <textarea
