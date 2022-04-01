@@ -6,7 +6,7 @@ import { commonCss } from '../../styles';
  */
 export abstract class LabeledContentElement extends LitElement {
     /**
-     * Gets the styles associated with the component.
+     * @inheritdoc
      */
     public static styles = [commonCss];
 

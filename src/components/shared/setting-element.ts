@@ -29,7 +29,7 @@ export abstract class SettingElement<TValue> extends InputElement {
     public value?: TValue;
 
     /**
-     * Occurs when the component is first updated, and is responsible for initializing the save method.
+     * @inheritdoc
      */
     protected firstUpdated(): void {
         super.firstUpdated;

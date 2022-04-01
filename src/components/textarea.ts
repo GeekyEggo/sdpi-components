@@ -8,7 +8,7 @@ import { SettingElement } from './shared/setting-element';
 @customElement('sdpi-textarea')
 export class Textarea extends SettingElement<string> {
     /**
-     * Gets the styles associated with the component.
+     * @inheritdoc
      */
     public static get styles() {
         return [
@@ -52,8 +52,7 @@ export class Textarea extends SettingElement<string> {
     public showLength = false;
 
     /**
-     * Renders HTML template that represents the contents.
-     * @returns {unknown} The HTML template.
+     * @inheritdoc
      */
     protected override renderContents(): unknown {
         return html`

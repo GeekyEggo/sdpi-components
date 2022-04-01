@@ -7,7 +7,7 @@ import { SettingElement } from './shared/setting-element';
 @customElement('sdpi-textfield')
 export class Textfield extends SettingElement<string> {
     /**
-     * Gets the styles associated with the component.
+     * @inheritdoc
      */
     public static get styles() {
         return [
@@ -53,8 +53,7 @@ export class Textfield extends SettingElement<string> {
     public required = false;
 
     /**
-     * Renders HTML template that represents the contents.
-     * @returns {unknown} The HTML template.
+     * @inheritdoc
      */
     protected override renderContents(): unknown {
         return html`

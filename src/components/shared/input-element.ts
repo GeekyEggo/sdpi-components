@@ -9,7 +9,7 @@ import { LabeledContentElement } from './labeled-content-element';
  */
 export abstract class InputElement extends LabeledContentElement {
     /**
-     * Gets the styles associated with the component.
+     * @inheritdoc
      */
     public static get styles() {
         return [...super.styles, inputCss];
@@ -33,8 +33,7 @@ export abstract class InputElement extends LabeledContentElement {
     protected readonly inputID: string = getUUID();
 
     /**
-     * Renders HTML template that represents the label.
-     * @returns {unknown} The HTML template.
+     * @inheritdoc
      */
     protected renderLabel(): unknown {
         if (this.label) {
