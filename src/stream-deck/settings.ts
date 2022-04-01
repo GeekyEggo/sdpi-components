@@ -1,6 +1,7 @@
 import { Event } from 'stream-deck';
 
 import { delay } from '../core/timeout';
+import { get, set } from '../core/utils';
 import streamDeckClient from './stream-deck-client';
 
 /**
@@ -30,7 +31,7 @@ class Settings {
     public register<T>(key: string, isGlobal: boolean, onChange: (value: T) => void, timeout: number | null = 250): (value?: unknown) => void {
         const settingChangeHandler = (data: Event<'didReceiveSettings' | 'didReceiveGlobalSettings'>): void => {
             if (data && data.payload && data.payload.settings) {
-                onChange(data.payload.settings[key] || '');
+                onChange(get(key, data.payload.settings) || '');
             }
         };
 
@@ -58,12 +59,12 @@ class Settings {
     private set(key: string, isGlobal: boolean, value?: unknown): void {
         if (isGlobal) {
             if (this._globalSettings) {
-                this._globalSettings[key] = value;
+                set(key, this._globalSettings, value);
             }
             streamDeckClient.setGlobalSettings(this._globalSettings);
         } else {
             if (this._settings) {
-                this._settings[key] = value;
+                set(key, this._settings, value);
             }
             streamDeckClient.setSettings(this._settings);
         }
