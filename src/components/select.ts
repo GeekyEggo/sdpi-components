@@ -2,7 +2,6 @@ import { HTMLInputEvent } from 'dom';
 import { css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ChildNodesController } from '../controllers/childNodesController';
-
 import { SettingElement } from './shared/setting-element';
 
 @customElement('sdpi-select')
