@@ -1,20 +1,24 @@
-import { css, html } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { ChildNodesController } from '../controllers/child-nodes-controller';
-import { SettingElement } from './shared/setting-element';
+import { StoreController } from '../controllers/store-controller';
+import { Input, Labeled, Persisted } from '../mixins';
+import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
-export class Select extends SettingElement<string> {
+export class Select extends Labeled(Persisted(Input<typeof LitElement, string>(LitElement))) {
+    private _childNodes = new ChildNodesController(this);
+    private _store = new StoreController(this);
+
     /** @inheritdoc */
     public static get styles() {
         return [
             ...super.styles,
+            hostStyle,
             css`
                 select {
-                    background-color: var(--color-secondary-bg);
-                    font-family: var(--font-family);
-                    font-size: var(--font-size);
+                    background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 1px) 0;
                     text-overflow: ellipsis;
                 }
@@ -27,31 +31,20 @@ export class Select extends SettingElement<string> {
     }
 
     /**
-     * Initializes a new instance of a custom Stream Deck property inspector select input.
-     */
-    constructor() {
-        super();
-        this._childNodesController = new ChildNodesController(this);
-    }
-
-    /**
      * The optional placeholder text; added as the first item within the select, as a disable option, and selected by default.
      */
     @property()
     public placeholder?: string;
 
-    /**
-     * Provides an observer that monitors the child nodes of the component on the DOM.
-     */
-    private _childNodesController: ChildNodesController;
-
     /** @inheritdoc */
-    protected override renderContents(): unknown {
+    protected render() {
         return html`
-            <select .id=${this.inputID} .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this.save(ev.target.value)}>
-                <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
-                ${this.renderChildNodes()}
-            </select>
+            <sdpi-item .label=${this.label}>
+                <select .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this._store.save(ev.target.value)}>
+                    <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
+                    ${this.renderChildNodes()}
+                </select>
+            </sdpi-item>
         `;
     }
 
@@ -75,6 +68,6 @@ export class Select extends SettingElement<string> {
             }
         };
 
-        return html`${this._childNodesController.childNodes.map(mapOptions)}`;
+        return html`${this._childNodes.childNodes.map(mapOptions)}`;
     }
 }

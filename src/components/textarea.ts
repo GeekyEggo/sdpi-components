@@ -1,18 +1,23 @@
-import { css, html } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
-import { SettingElement } from './shared/setting-element';
+import { StoreController } from '../controllers/store-controller';
+import { Input, Labeled, Persisted } from '../mixins';
+import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-textarea')
-export class Textarea extends SettingElement<string> {
+export class Textarea extends Labeled(Persisted(Input<typeof LitElement, string>(LitElement))) {
+    private _store = new StoreController(this);
+
     /** @inheritdoc */
     public static get styles() {
         return [
             ...super.styles,
+            hostStyle,
             css`
                 textarea {
-                    background-color: var(--color-secondary-bg);
+                    background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
                     resize: none;
                 }
@@ -53,18 +58,20 @@ export class Textarea extends SettingElement<string> {
     public showLength = false;
 
     /** @inheritdoc */
-    protected override renderContents(): unknown {
+    protected render() {
         return html`
-            <textarea
-                type="textarea"
-                maxlength=${ifDefined(this.maxLength)}
-                .id=${this.inputID}
-                .disabled=${this.disabled}
-                .rows=${this.rows}
-                .value=${this.value || ''}
-                @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this.save(ev.target.value)}
-            ></textarea>
-            ${this.getLengthLabel()}
+            <sdpi-item .label=${this.label}>
+                <textarea
+                    type="textarea"
+                    maxlength=${ifDefined(this.maxLength)}
+                    .disabled=${this.disabled}
+                    .id=${this.inputId}
+                    .rows=${this.rows}
+                    .value=${this.value || ''}
+                    @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this._store.save(ev.target.value)}
+                ></textarea>
+                ${this.getLengthLabel()}
+            </sdpi-item>
         `;
     }
 
@@ -75,7 +82,7 @@ export class Textarea extends SettingElement<string> {
     private getLengthLabel(): unknown {
         if (this.showLength || this.maxLength) {
             const maxLengthLabel = this.maxLength ? html`/${this.maxLength}` : undefined;
-            return html`<label id="length" for=${this.inputID}>${this.value?.length}${maxLengthLabel}</label>`;
+            return html`<label id="length" for=${this.inputId}>${this.value?.length}${maxLengthLabel}</label>`;
         }
 
         return undefined;

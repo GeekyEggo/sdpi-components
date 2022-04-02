@@ -1,3 +1,22 @@
+import { CSSResultArray, CSSResultGroup, CSSResultOrNative } from 'lit';
+
+/**
+ * Converts a `CSSResultGroup` to an array.
+ * @param styles The styles to convert.
+ * @returns The array of `CSSResultOrNative` or `CSSResultArray`.
+ */
+export function asArray(styles?: CSSResultGroup): (CSSResultOrNative | CSSResultArray)[] {
+    if (styles === undefined) {
+        return [];
+    }
+
+    if (Array.isArray(styles)) {
+        return [...styles];
+    }
+
+    return [styles];
+}
+
 /**
  * Generates a 'unique' identifier.
  * @returns The unique identifier.

@@ -1,21 +1,19 @@
-import { css, html } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import { InputElement } from './shared/input-element';
+import { Input, Labeled } from '../mixins';
+import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-button')
-export class Button extends InputElement {
+export class Button extends Labeled(Input<typeof LitElement, string>(LitElement)) {
     /** @inheritdoc */
     public static get styles() {
         return [
             ...super.styles,
+            hostStyle,
             css`
-                :host {
-                    --bg-color: #303030;
-                }
-
                 button {
-                    background-color: var(--bg-color);
+                    background-color: var(--window-bg-color);
                     border: 1px solid #969696;
                     border-radius: 3px;
                     padding: calc(var(--spacer) * 2) var(--spacer);
@@ -27,7 +25,7 @@ export class Button extends InputElement {
                 }
 
                 button:not(:disabled):active {
-                    background-color: var(--bg-color);
+                    background-color: var(--window-bg-color);
                     border-color: #646464;
                     color: #969696;
                 }
@@ -40,11 +38,13 @@ export class Button extends InputElement {
     }
 
     /** @inheritdoc */
-    protected override renderContents(): unknown {
+    render() {
         return html`
-            <button .id=${this.inputID} .disabled=${this.disabled}>
-                <slot></slot>
-            </button>
+            <sdpi-item .label=${this.label}>
+                <button .disabled=${this.disabled} .value=${this.value || ''}>
+                    <slot></slot>
+                </button>
+            </sdpi-item>
         `;
     }
 }

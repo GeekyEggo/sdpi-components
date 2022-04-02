@@ -1,18 +1,22 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { reduceStyles } from '../core/styles';
-import { InputElement, LabeledContentElement, SettingsElement } from './mixins';
+import { StoreController } from '../controllers/store-controller';
+import { Input, Labeled, Persisted } from '../mixins';
+import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-textfield')
-export class Textfield extends LabeledContentElement(InputElement(SettingsElement<typeof LitElement, string>(LitElement))) {
+export class Textfield extends Labeled(Persisted(Input<typeof LitElement, string>(LitElement))) {
+    private _store = new StoreController(this);
+
     /** @inheritdoc */
     public static get styles() {
-        return reduceStyles(
-            super.styles,
+        return [
+            ...super.styles,
+            hostStyle,
             css`
                 input {
-                    background-color: var(--color-secondary-bg);
+                    background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
                 }
 
@@ -33,7 +37,7 @@ export class Textfield extends LabeledContentElement(InputElement(SettingsElemen
                     background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPgogICAgPHBhdGggZmlsbD0iI0Q4RDhEOCIgZD0iTTQuNSwwIEM2Ljk4NTI4MTM3LC00LjU2NTM4NzgyZS0xNiA5LDIuMDE0NzE4NjMgOSw0LjUgQzksNi45ODUyODEzNyA2Ljk4NTI4MTM3LDkgNC41LDkgQzIuMDE0NzE4NjMsOSAzLjA0MzU5MTg4ZS0xNiw2Ljk4NTI4MTM3IDAsNC41IEMtMy4wNDM1OTE4OGUtMTYsMi4wMTQ3MTg2MyAyLjAxNDcxODYzLDQuNTY1Mzg3ODJlLTE2IDQuNSwwIFogTTQsMSBMNCw2IEw1LDYgTDUsMSBMNCwxIFogTTQuNSw4IEM0Ljc3NjE0MjM3LDggNSw3Ljc3NjE0MjM3IDUsNy41IEM1LDcuMjIzODU3NjMgNC43NzYxNDIzNyw3IDQuNSw3IEM0LjIyMzg1NzYzLDcgNCw3LjIyMzg1NzYzIDQsNy41IEM0LDcuNzc2MTQyMzcgNC4yMjM4NTc2Myw4IDQuNSw4IFoiLz4KICA8L3N2Zz4);
                 }
             `
-        );
+        ];
     }
 
     /**
@@ -54,21 +58,20 @@ export class Textfield extends LabeledContentElement(InputElement(SettingsElemen
     @property({ type: Boolean })
     public required = false;
 
-    public render(): unknown {
-        return this.renderContents(
-            html`
+    /** @inheritdoc */
+    protected render() {
+        return html`
+            <sdpi-item .label=${this.label}>
                 <input
                     type="text"
-                    .id=${this.inputID}
                     .disabled=${this.disabled}
                     .pattern=${this.pattern}
                     .placeholder=${this.placeholder}
                     .required=${this.required}
                     .value=${this.value || ''}
-                    @input=${(ev: HTMLInputEvent<HTMLInputElement>) => this.save(ev.target.value)}
+                    @input=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.value)}
                 />
-            `,
-            this.renderLabel()
-        );
+            </sdpi-item>
+        `;
     }
 }

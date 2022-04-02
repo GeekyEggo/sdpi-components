@@ -7,11 +7,10 @@
 
 <body>
     <script src="sdpi.js"></script>
-    <sdpi-foo setting="mixin"></sdpi-foo>
-    <sdpi-checkbox setting="is_opted_in" label="Opt in"></sdpi-checkbox>
-    <sdpi-textfield setting="one.two.three.four" label="First name" placeholder="First name..." required pattern="[A-z\s\-]*"></sdpi-textfield>
-    <sdpi-textarea setting="last_name" label="Last name" maxlength="25"></sdpi-textarea>
-    <sdpi-select setting="fav_color" label="Color" placeholder="Please choose a color">
+    <sdpi-checkbox path="is_opted_in" label="Opt in"></sdpi-checkbox>
+    <sdpi-textfield path="one.two.three.four" label="First name" placeholder="First name..." required pattern="[A-z\s\-]*"></sdpi-textfield>
+    <sdpi-textarea path="last_name" label="Last name" maxlength="25"></sdpi-textarea>
+    <sdpi-select path="fav_color" label="Color" placeholder="Please choose a color">
         <optgroup label="Primary Colors">
             <option value="red">Red</option>
             <option value="yellow">Yellow</option>

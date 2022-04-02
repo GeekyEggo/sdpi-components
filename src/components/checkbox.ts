@@ -1,20 +1,25 @@
-import { css, html } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { SettingElement } from './shared/setting-element';
+import { StoreController } from '../controllers/store-controller';
+import { Input, Labeled, Persisted } from '../mixins';
+import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-checkbox')
-export class Checkbox extends SettingElement<boolean> {
+export class Checkbox extends Labeled(Persisted(Input<typeof LitElement, boolean>(LitElement))) {
+    private _store = new StoreController(this);
+
     /** @inheritdoc */
     public static get styles() {
         return [
             ...super.styles,
+            hostStyle,
             css`
                 :host {
                     --checkbox-size: 16px;
                 }
 
-                .checkbox-container {
+                .container {
                     align-items: center;
                     display: inline-flex;
                     margin: var(--spacer) 0;
@@ -27,7 +32,7 @@ export class Checkbox extends SettingElement<boolean> {
                 }
 
                 .checkmark {
-                    background: var(--color-secondary-bg);
+                    background: var(--input-bg-color);
                     border: 1px solid rgba(0, 0, 0, 0.2);
                     border-radius: 3px;
                     flex: var(--checkbox-size) var(--checkbox-size);
@@ -64,21 +69,17 @@ export class Checkbox extends SettingElement<boolean> {
     public text?: string;
 
     /** @inheritdoc */
-    protected renderContents(): unknown {
+    render() {
         const text = this.text ? html`<span class="text">${this.text}</span>` : undefined;
 
         return html`
-            <label class="checkbox-container">
-                <input
-                    type="checkbox"
-                    .id=${this.inputID}
-                    .checked=${this.value || false}
-                    .disabled=${this.disabled}
-                    @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this.save(ev.target.checked)}
-                />
-                <span class="checkmark" role="checkbox" aria-checked=${this.value || false}></span>
-                ${text}
-            </label>
+            <sdpi-item .label=${this.label}>
+                <label class="container">
+                    <input type="checkbox" .checked=${this.value || false} .disabled=${this.disabled} @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.checked)} />
+                    <span class="checkmark" role="checkbox" aria-checked=${this.value || false}></span>
+                    ${text}
+                </label>
+            </sdpi-item>
         `;
     }
 }
