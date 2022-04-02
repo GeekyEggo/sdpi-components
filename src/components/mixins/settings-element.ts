@@ -1,4 +1,4 @@
-import { LitElement } from 'lit';
+import { CSSResultGroup, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
 import { useSettings } from '../../stream-deck/settings';
@@ -8,7 +8,7 @@ import { useSettings } from '../../stream-deck/settings';
  * @param superClass The super class that this mixin will extend.
  * @returns The mixin as a class that extends `superClass`.
  */
-export const SettingsElement = <T extends Constructor<LitElement>, TValue>(superClass: T) => {
+export const SettingsElement = <T extends Constructor<LitElement> & { styles?: CSSResultGroup }, TValue>(superClass: T) => {
     class SettingsElement extends superClass {
         /**
          * When true, the setting will be persisted against the global settings.
