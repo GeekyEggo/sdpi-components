@@ -1,4 +1,5 @@
 import { Event } from 'stream-deck';
+
 import { delay } from '../core/timeout';
 import { get, set } from '../core/utils';
 import streamDeckClient from './stream-deck-client';

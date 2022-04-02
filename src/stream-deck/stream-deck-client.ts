@@ -1,4 +1,5 @@
-import { Message, Event, MessageReceived, MessageSent, RegistrationInfo, ActionInfo } from 'stream-deck';
+import { ActionInfo, Event, Message, MessageReceived, MessageSent, RegistrationInfo } from 'stream-deck';
+
 import { EventManager } from '../core/events';
 import { PromiseCompletionSource } from '../core/promises';
 

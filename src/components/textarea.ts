@@ -1,6 +1,7 @@
 import { css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+
 import { SettingElement } from './shared/setting-element';
 
 @customElement('sdpi-textarea')

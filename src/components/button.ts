@@ -1,5 +1,6 @@
 import { css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
+
 import { InputElement } from './shared/input-element';
 
 @customElement('sdpi-button')

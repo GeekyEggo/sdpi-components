@@ -1,4 +1,5 @@
 import { property } from 'lit/decorators.js';
+
 import { useSettings } from '../../stream-deck/settings';
 import { InputElement } from './input-element';
 
