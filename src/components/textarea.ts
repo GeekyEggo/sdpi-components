@@ -88,3 +88,9 @@ export class Textarea extends Labeled(Persisted(Input<typeof LitElement, string>
         return undefined;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'sdpi-textarea': Textarea;
+    }
+}

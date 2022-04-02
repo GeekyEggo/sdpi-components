@@ -83,3 +83,9 @@ export class Checkbox extends Labeled(Persisted(Input<typeof LitElement, boolean
         `;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'sdpi-checkbox': Checkbox;
+    }
+}

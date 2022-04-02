@@ -48,3 +48,9 @@ export class Button extends Labeled(Input<typeof LitElement, string>(LitElement)
         `;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'sdpi-button': Button;
+    }
+}

@@ -75,3 +75,9 @@ export class Textfield extends Labeled(Persisted(Input<typeof LitElement, string
         `;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'sdpi-textfield': Textfield;
+    }
+}

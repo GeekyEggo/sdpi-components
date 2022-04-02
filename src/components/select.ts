@@ -71,3 +71,9 @@ export class Select extends Labeled(Persisted(Input<typeof LitElement, string>(L
         return html`${this._childNodes.childNodes.map(mapOptions)}`;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'sdpi-select': Select;
+    }
+}

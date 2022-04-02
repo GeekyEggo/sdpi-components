@@ -55,3 +55,9 @@ export class SdpiItem extends Labeled(LitElement) {
         `;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'sdpi-item': SdpiItem;
+    }
+}
