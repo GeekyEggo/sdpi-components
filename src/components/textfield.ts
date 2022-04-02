@@ -1,4 +1,3 @@
-import { HTMLInputEvent } from 'dom';
 import { css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { SettingElement } from './shared/setting-element';
