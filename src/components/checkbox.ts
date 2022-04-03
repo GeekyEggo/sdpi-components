@@ -2,11 +2,11 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { StoreController } from '../controllers/store-controller';
-import { Input, Labeled, Persisted } from '../mixins';
+import { Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-checkbox')
-export class Checkbox extends Labeled(Persisted(Input<typeof LitElement, boolean>(LitElement))) {
+export class Checkbox extends Persisted(Input<typeof LitElement, boolean>(LitElement)) {
     private _store = new StoreController(this);
 
     /** @inheritdoc */
@@ -72,15 +72,15 @@ export class Checkbox extends Labeled(Persisted(Input<typeof LitElement, boolean
     render() {
         const text = this.text ? html`<span class="text">${this.text}</span>` : undefined;
 
-        return html`
-            <sdpi-item .label=${this.label}>
+        return this.renderInput(
+            html`
                 <label class="container">
                     <input type="checkbox" .checked=${this.value || false} .disabled=${this.disabled} @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.checked)} />
                     <span class="checkmark" role="checkbox" aria-checked=${this.value || false}></span>
                     ${text}
                 </label>
-            </sdpi-item>
-        `;
+            `
+        );
     }
 }
 

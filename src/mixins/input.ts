@@ -1,4 +1,4 @@
-import { css, CSSResultGroup, LitElement } from 'lit';
+import { css, CSSResultGroup, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
 import { asArray, getUUID } from '../core/utils';
@@ -45,6 +45,12 @@ export const Input = <TBase extends Constructor<LitElement> & { styles?: CSSResu
         public disabled = false;
 
         /**
+         * Gets or sets the label.
+         */
+        @property()
+        public label?: string;
+
+        /**
          * Gets or sets the value of the input.
          */
         @property({ attribute: false })
@@ -54,6 +60,15 @@ export const Input = <TBase extends Constructor<LitElement> & { styles?: CSSResu
          * The input identifier.
          */
         protected inputId = getUUID();
+
+        /**
+         * Renders the input, and returns the HTML template.
+         * @param input The input to render.
+         * @returns The template that contains the input, and how it should be rendered.
+         */
+        public renderInput(input: unknown): unknown {
+            return html`<sdpi-item .label=${this.label}>${input}</sdpi-item>`;
+        }
     }
 
     return Input;

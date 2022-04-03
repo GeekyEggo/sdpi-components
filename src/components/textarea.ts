@@ -3,11 +3,11 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { StoreController } from '../controllers/store-controller';
-import { Input, Labeled, Persisted } from '../mixins';
+import { Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-textarea')
-export class Textarea extends Labeled(Persisted(Input<typeof LitElement, string>(LitElement))) {
+export class Textarea extends Persisted(Input<typeof LitElement, string>(LitElement)) {
     private _store = new StoreController(this);
 
     /** @inheritdoc */
@@ -26,8 +26,12 @@ export class Textarea extends Labeled(Persisted(Input<typeof LitElement, string>
                     opacity: 0.5;
                 }
 
-                #length {
-                    float: right;
+                .length {
+                    color: var(--font-color);
+                    display: block;
+                    text-align: right;
+                    font-family: var(--font-family);
+                    font-size: var(--font-size);
                 }
             `
         ];
@@ -59,20 +63,18 @@ export class Textarea extends Labeled(Persisted(Input<typeof LitElement, string>
 
     /** @inheritdoc */
     protected render() {
-        return html`
-            <sdpi-item .label=${this.label}>
-                <textarea
-                    type="textarea"
-                    maxlength=${ifDefined(this.maxLength)}
-                    .disabled=${this.disabled}
-                    .id=${this.inputId}
-                    .rows=${this.rows}
-                    .value=${this.value || ''}
-                    @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this._store.save(ev.target.value)}
-                ></textarea>
-                ${this.getLengthLabel()}
-            </sdpi-item>
-        `;
+        return this.renderInput(html`
+            <textarea
+                type="textarea"
+                maxlength=${ifDefined(this.maxLength)}
+                .disabled=${this.disabled}
+                .id=${this.inputId}
+                .rows=${this.rows}
+                .value=${this.value || ''}
+                @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this._store.save(ev.target.value)}
+            ></textarea>
+            ${this.getLengthLabel()}
+        `);
     }
 
     /**
@@ -82,7 +84,7 @@ export class Textarea extends Labeled(Persisted(Input<typeof LitElement, string>
     private getLengthLabel(): unknown {
         if (this.showLength || this.maxLength) {
             const maxLengthLabel = this.maxLength ? html`/${this.maxLength}` : undefined;
-            return html`<label id="length" for=${this.inputId}>${this.value?.length}${maxLengthLabel}</label>`;
+            return html`<label class="length" for=${this.inputId}>${this.value?.length}${maxLengthLabel}</label>`;
         }
 
         return undefined;

@@ -2,11 +2,11 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { StoreController } from '../controllers/store-controller';
-import { Input, Labeled, Persisted } from '../mixins';
+import { Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-textfield')
-export class Textfield extends Labeled(Persisted(Input<typeof LitElement, string>(LitElement))) {
+export class Textfield extends Persisted(Input<typeof LitElement, string>(LitElement)) {
     private _store = new StoreController(this);
 
     /** @inheritdoc */
@@ -60,19 +60,17 @@ export class Textfield extends Labeled(Persisted(Input<typeof LitElement, string
 
     /** @inheritdoc */
     protected render() {
-        return html`
-            <sdpi-item .label=${this.label}>
-                <input
-                    type="text"
-                    .disabled=${this.disabled}
-                    .pattern=${this.pattern}
-                    .placeholder=${this.placeholder}
-                    .required=${this.required}
-                    .value=${this.value || ''}
-                    @input=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.value)}
-                />
-            </sdpi-item>
-        `;
+        return this.renderInput(html`
+            <input
+                type="text"
+                .disabled=${this.disabled}
+                .pattern=${this.pattern}
+                .placeholder=${this.placeholder}
+                .required=${this.required}
+                .value=${this.value || ''}
+                @input=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.value)}
+            />
+        `);
     }
 }
 

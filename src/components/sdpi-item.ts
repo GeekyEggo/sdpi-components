@@ -1,11 +1,10 @@
 import { css, html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
-import { Labeled } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-item')
-export class SdpiItem extends Labeled(LitElement) {
+export class SdpiItem extends LitElement {
     /** @inheritdoc */
     public static styles = [
         hostStyle,
@@ -24,18 +23,21 @@ export class SdpiItem extends Labeled(LitElement) {
             }
 
             .container {
-                align-items: start;
                 color: var(--font-color);
-                display: grid;
                 font-family: var(--font-family);
                 font-size: var(--font-size);
-                grid-template-columns: 95px 1fr;
                 margin: 0 0 10px 0;
                 max-width: 322px;
                 -webkit-user-drag: none;
             }
 
-            .container > div:first-child {
+            .grid {
+                align-items: start;
+                display: grid;
+                grid-template-columns: 95px 1fr;
+            }
+
+            .label {
                 margin-top: 6px;
                 justify-self: end;
                 padding-right: 11px;
@@ -43,12 +45,18 @@ export class SdpiItem extends Labeled(LitElement) {
         `
     ];
 
+    /**
+     * Gets or sets the label.
+     */
+    @property()
+    public label?: string;
+
     /** @inheritdoc */
     render() {
         const label = this.label ? html`<label>${this.label}:</label>` : undefined;
 
         return html`
-            <div class="container">
+            <div class="container grid">
                 <div class="label">${label}</div>
                 <div class="content"><slot></slot></div>
             </div>

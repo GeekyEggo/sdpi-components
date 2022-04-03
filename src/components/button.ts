@@ -1,11 +1,11 @@
 import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import { Input, Labeled } from '../mixins';
+import { Input } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-button')
-export class Button extends Labeled(Input<typeof LitElement, string>(LitElement)) {
+export class Button extends Input<typeof LitElement, string>(LitElement) {
     /** @inheritdoc */
     public static get styles() {
         return [
@@ -39,13 +39,13 @@ export class Button extends Labeled(Input<typeof LitElement, string>(LitElement)
 
     /** @inheritdoc */
     render() {
-        return html`
-            <sdpi-item .label=${this.label}>
+        return this.renderInput(
+            html`
                 <button .disabled=${this.disabled} .value=${this.value || ''}>
                     <slot></slot>
                 </button>
-            </sdpi-item>
-        `;
+            `
+        );
     }
 }
 

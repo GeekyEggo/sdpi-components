@@ -3,11 +3,11 @@ import { customElement, property } from 'lit/decorators.js';
 
 import { ChildNodesController } from '../controllers/child-nodes-controller';
 import { StoreController } from '../controllers/store-controller';
-import { Input, Labeled, Persisted } from '../mixins';
+import { Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
-export class Select extends Labeled(Persisted(Input<typeof LitElement, string>(LitElement))) {
+export class Select extends Persisted(Input<typeof LitElement, string>(LitElement)) {
     private _childNodes = new ChildNodesController(this);
     private _store = new StoreController(this);
 
@@ -38,14 +38,14 @@ export class Select extends Labeled(Persisted(Input<typeof LitElement, string>(L
 
     /** @inheritdoc */
     protected render() {
-        return html`
-            <sdpi-item .label=${this.label}>
+        return this.renderInput(
+            html`
                 <select .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this._store.save(ev.target.value)}>
                     <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
                     ${this.renderChildNodes()}
                 </select>
-            </sdpi-item>
-        `;
+            `
+        );
     }
 
     /**
