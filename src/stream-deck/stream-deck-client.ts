@@ -1,4 +1,4 @@
-import { ActionInfo, Event, Message, MessageReceived, MessageSent, RegistrationInfo } from 'stream-deck';
+import { ActionInfo, AsEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, RegistrationInfo } from 'stream-deck';
 
 import { EventManager } from '../core/events';
 import { PromiseCompletionSource } from '../core/promises';
@@ -18,9 +18,9 @@ export class StreamDeckClient {
     private readonly _connectionInfo = new PromiseCompletionSource<IConnectionInfo>();
     private _webSocket?: WebSocket;
 
-    public readonly didReceiveGlobalSettings = new EventManager<Event<'didReceiveGlobalSettings'>>();
-    public readonly didReceiveSettings = new EventManager<Event<'didReceiveSettings'>>();
-    public readonly message = new EventManager<Message>();
+    public readonly didReceiveGlobalSettings = new EventManager<DidReceiveGlobalSettingsEvent>();
+    public readonly didReceiveSettings = new EventManager<DidReceiveSettingsEvent>();
+    public readonly message = new EventManager<EventReceived>();
 
     /**
      * Connects to the Stream Deck.
@@ -56,8 +56,8 @@ export class StreamDeckClient {
      * Request the global persistent data.
      * @returns The global settings as a promise.
      */
-    public getGlobalSettings(): Promise<Event<'didReceiveGlobalSettings'>> {
-        return this.get('getGlobalSettings', 'didReceiveGlobalSettings');
+    public getGlobalSettings(): Promise<DidReceiveGlobalSettingsEvent> {
+        return this.get('getGlobalSettings', (ev) => ev.event === 'didReceiveGlobalSettings');
     }
 
     /**
@@ -73,8 +73,8 @@ export class StreamDeckClient {
      * Gets the settings.
      * @returns The settings as a promise.
      */
-    public getSettings(): Promise<Event<'didReceiveSettings'>> {
-        return this.get('getSettings', 'didReceiveSettings');
+    public getSettings(): Promise<DidReceiveSettingsEvent> {
+        return this.get('getSettings', (ev) => ev.event === 'didReceiveSettings');
     }
 
     /**
@@ -95,20 +95,24 @@ export class StreamDeckClient {
     }
 
     /**
-     * Sends a request to the Stream Deck, and awaits the first message matching the `canCallback` parameter.
-     * @param {string} send The event name.
-     * @param {TSend} canCallback The delegate used to determine if the event fulfils the callback requirements.
+     * Sends the given `send` event along with the `payload` to the Stream Deck, and continually awaits a response message that matches the `isComplete` delegate.
+     * @param {string} send The event to send.
+     * @param {Function} isComplete The delegate invokes upon receiving a message from the Stream Deck; when `true`, this promise is fulfilled.
      * @param {unknown} payload The optional payload.
-     * @returns {Promise<TSend>} The promise containing the result of the request.
+     * @returns {AsEvent<TReceived>} The first event received that fulfilled the `isComplete` delegate.
      */
-    private async get<TSend extends MessageSent['event'], TReceive extends MessageReceived['event']>(send: TSend, receive: TReceive, payload?: unknown): Promise<Event<TReceive>> {
-        const resolver = new PromiseCompletionSource<Event<TReceive>>();
+    private async get<TSent extends EventSent['event'], TReceived extends EventReceived['event']>(
+        send: TSent,
+        isComplete: (ev: EventReceived) => boolean,
+        payload?: unknown
+    ): Promise<AsEvent<TReceived>> {
+        const resolver = new PromiseCompletionSource<AsEvent<TReceived>>();
 
         // Construct the temporary listener that is removed when the callback can be fulilled.
-        const listener = (args: Message) => {
-            if (args.event == receive) {
+        const listener = (args: EventReceived) => {
+            if (isComplete(args)) {
                 this.message.unsubscribe(listener);
-                resolver.setResult(<Event<TReceive>>args);
+                resolver.setResult(<AsEvent<TReceived>>args);
             }
         };
 
@@ -124,7 +128,7 @@ export class StreamDeckClient {
      * @param {string} event The event name.
      * @param {unknown} payload The optional payload.
      */
-    private async send<T extends MessageSent['event']>(event: T, payload?: unknown): Promise<void> {
+    private async send<T extends EventSent['event']>(event: T, payload?: unknown): Promise<void> {
         try {
             const connectionInfo = await this._connectionInfo.promise;
             const connection = await this._connection.promise;
@@ -168,15 +172,15 @@ export class StreamDeckClient {
      * @param ev The message event that contains the data received.
      */
     private handleMessage(ev: MessageEvent<string>): void {
-        const data: MessageReceived = JSON.parse(ev.data);
+        const data: EventReceived = JSON.parse(ev.data);
 
         switch (data.event) {
             case 'didReceiveGlobalSettings':
-                this.didReceiveGlobalSettings.dispatch(<Event<'didReceiveGlobalSettings'>>data);
+                this.didReceiveGlobalSettings.dispatch(<DidReceiveGlobalSettingsEvent>data);
                 break;
 
             case 'didReceiveSettings':
-                this.didReceiveSettings.dispatch(<Event<'didReceiveSettings'>>data);
+                this.didReceiveSettings.dispatch(<DidReceiveSettingsEvent>data);
                 break;
         }
     }

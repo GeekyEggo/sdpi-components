@@ -67,62 +67,112 @@ declare module 'stream-deck' {
      * Defines the types of messages that can be sent to the Stream Deck.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent}
      */
-    export type MessageSent =
-        | {
-              event: 'setSettings';
-              context: string;
-              payload: unknown;
-          }
-        | {
-              event: 'getSettings';
-              context: string;
-          }
-        | {
-              event: 'setGlobalSettings';
-              payload: unknown;
-          }
-        | {
-              event: 'getGlobalSettings';
-          }
-        | {
-              event: 'openUrl';
-              payload: {
-                  url: string;
-              };
-          }
-        | {
-              event: 'logMessage';
-              payload: {
-                  message: string;
-              };
-          }
-        | {
-              event: 'sendToPlugin';
-              action?: string;
-              context?: string;
-              payload: unknown;
-          };
+    export type EventSent = SetSettingsEvent | GetSettingsEvents | SetGlobalSettingsEvent | GetGlobalSettingsEvent | OpenUrlEvent | LogMessageEvent | SendToPluginEvent;
+
+    /**
+     * Defines the message structure of the `setSettings` event sent to the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setsettings}
+     */
+    export type SetSettingsEvent = {
+        event: 'setSettings';
+        context: string;
+        payload: unknown;
+    };
+
+    /**
+     * Defines the message structure of the `getSettings` event sent to the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#getsettings}
+     */
+    export type GetSettingsEvents = {
+        event: 'getSettings';
+        context: string;
+    };
+
+    /**
+     * Defines the message structure of the `setGlobalSettings` event sent to the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings}
+     */
+    export type SetGlobalSettingsEvent = {
+        event: 'setGlobalSettings';
+        payload: unknown;
+    };
+
+    /**
+     * Defines the message structure of the `getGlobalSettings` event sent to the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#getglobalsettings}
+     */
+    export type GetGlobalSettingsEvent = {
+        event: 'getGlobalSettings';
+    };
+
+    /**
+     * Defines the message structure of the `openUrl` event sent to the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#openurl}
+     */
+    export type OpenUrlEvent = {
+        event: 'openUrl';
+        payload: {
+            url: string;
+        };
+    };
+
+    /**
+     * Defines the message structure of the `logMessage` event sent to the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#logmessage}
+     */
+    export type LogMessageEvent = {
+        event: 'logMessage';
+        payload: {
+            message: string;
+        };
+    };
+
+    /**
+     * Defines the message structure of the `sendToPlugin` event sent to the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#sendtoplugin}
+     */
+    export type SendToPluginEvent = {
+        event: 'sendToPlugin';
+        action?: string;
+        context?: string;
+        payload: unknown;
+    };
 
     /**
      * Defines the types of messages that can be received from the Stream Deck.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received}
      */
-    export type MessageReceived =
-        | ({
-              event: 'didReceiveGlobalSettings';
-              action: string;
-          } & AnyPayload)
-        | ({
-              event: 'didReceiveSettings';
-          } & AnyPayload)
-        | ({
-              action?: string;
-              event: 'sendToPropertyInspector';
-              context?: string;
-          } & AnyPayload);
+    export type EventReceived = DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent | SendToPropertyInspectorEvent;
 
     /**
-     * Defines the type of messages that are handled client-side, and therefore require the `any` keyword.
+     * Defines the message structure of the `didReceiveSettings` received from the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received/#didreceivesettings}
+     */
+    export type DidReceiveGlobalSettingsEvent = {
+        event: 'didReceiveGlobalSettings';
+        action: string;
+    } & AnyPayload;
+
+    /**
+     * Defines the message structure of the `didReceiveSettings` received from the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received/#didreceiveglobalsettings}
+     */
+    export type DidReceiveSettingsEvent = {
+        event: 'didReceiveSettings';
+    } & AnyPayload;
+
+    /**
+     * Defines the message structure of the `sendToPropertyInspector` received from the Stream Deck.
+     * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received/#sendtopropertyinspector}
+     */
+    export type SendToPropertyInspectorEvent = {
+        action?: string;
+        event: 'sendToPropertyInspector';
+        context?: string;
+    } & AnyPayload;
+
+    /**
+     * Defines the type of events that are handled at runtime, and therefore require the `any` keyword.
      */
     type AnyPayload = {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -130,12 +180,12 @@ declare module 'stream-deck' {
     };
 
     /**
-     * All possible messages sent and received between the Stream Deck, and the property inspector.
+     * All possible events sent and received between the Stream Deck, and the property inspector.
      */
-    export type Message = MessageSent | MessageReceived;
+    export type Event = EventSent | EventReceived;
 
     /**
-     * A helper type for extracting the message type by the messages `event` value.
+     * Provides a helper type for converting an event to its corresponding type, by its unique event literal.
      */
-    export type Event<TEvent extends Message['event']> = Extract<Message, { event: TEvent }>;
+    export type AsEvent<TEvent extends Event['event']> = Extract<Event, { event: TEvent }>;
 }

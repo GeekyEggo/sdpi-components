@@ -1,4 +1,4 @@
-import { Event } from 'stream-deck';
+import { DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent } from 'stream-deck';
 
 import { delay } from '../core/timeout';
 import { get, set } from '../core/utils';
@@ -15,8 +15,8 @@ class Settings {
      * Initializes a new instance of the settings used to persist data.
      */
     constructor() {
-        streamDeckClient.didReceiveGlobalSettings.subscribe((data: Event<'didReceiveGlobalSettings'>) => (this._globalSettings = data.payload.settings));
-        streamDeckClient.didReceiveSettings.subscribe((data: Event<'didReceiveSettings'>) => (this._settings = data.payload.settings));
+        streamDeckClient.didReceiveGlobalSettings.subscribe((data: DidReceiveGlobalSettingsEvent) => (this._globalSettings = data.payload.settings));
+        streamDeckClient.didReceiveSettings.subscribe((data: DidReceiveSettingsEvent) => (this._settings = data.payload.settings));
 
         streamDeckClient.getGlobalSettings();
     }
@@ -29,7 +29,7 @@ class Settings {
      * @returns A delegate that allows for updating the setting value.
      */
     public register<T>(key: string, isGlobal: boolean, onChange: (value: T) => void, timeout: number | null = 250): (value?: unknown) => void {
-        const settingChangeHandler = (data: Event<'didReceiveSettings' | 'didReceiveGlobalSettings'>): void => {
+        const settingChangeHandler = (data: DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent): void => {
             if (data && data.payload && data.payload.settings) {
                 onChange(get(key, data.payload.settings) || '');
             }
