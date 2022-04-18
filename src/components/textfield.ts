@@ -1,12 +1,13 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ref } from 'lit/directives/ref.js';
 
 import { StoreController } from '../controllers/store-controller';
-import { Input, Persisted } from '../mixins';
+import { Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-textfield')
-export class Textfield extends Persisted(Input<typeof LitElement, string>(LitElement)) {
+export class Textfield extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
     private _store = new StoreController(this);
 
     /** @inheritdoc */
@@ -62,6 +63,7 @@ export class Textfield extends Persisted(Input<typeof LitElement, string>(LitEle
     protected render() {
         return html`
             <input
+                ${ref(this.focusElement)}
                 type="text"
                 .disabled=${this.disabled}
                 .pattern=${this.pattern}

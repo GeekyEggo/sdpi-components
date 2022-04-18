@@ -4,7 +4,7 @@ import { useSettings } from '../stream-deck/settings';
 
 type ReactiveStoreControllerHost<T> = ReactiveControllerHost & {
     isGlobal: boolean;
-    path?: string;
+    setting?: string;
     value?: T;
 };
 
@@ -27,8 +27,8 @@ export class StoreController<T> implements ReactiveController {
 
     /** @inheritdoc */
     public hostConnected(): void {
-        if (this._host.path) {
-            this._save = useSettings<T>(this._host.path, this._host.isGlobal, (value) => (this._host.value = value));
+        if (this._host.setting) {
+            this._save = useSettings<T>(this._host.setting, this._host.isGlobal, (value) => (this._host.value = value));
         }
     }
 

@@ -1,13 +1,14 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { ref } from 'lit/directives/ref.js';
 
 import { StoreController } from '../controllers/store-controller';
-import { Input, Persisted } from '../mixins';
+import { Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-textarea')
-export class Textarea extends Persisted(Input<typeof LitElement, string>(LitElement)) {
+export class Textarea extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
     private _store = new StoreController(this);
 
     /** @inheritdoc */
@@ -65,6 +66,7 @@ export class Textarea extends Persisted(Input<typeof LitElement, string>(LitElem
     protected render() {
         return html`
             <textarea
+                ${ref(this.focusElement)}
                 type="textarea"
                 maxlength=${ifDefined(this.maxLength)}
                 .disabled=${this.disabled}

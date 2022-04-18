@@ -1,13 +1,14 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ref } from 'lit/directives/ref.js';
 
 import { ChildNodesController } from '../controllers/child-nodes-controller';
 import { StoreController } from '../controllers/store-controller';
-import { Input, Persisted } from '../mixins';
+import { Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
-export class Select extends Persisted(Input<typeof LitElement, string>(LitElement)) {
+export class Select extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
     private _childNodes = new ChildNodesController(this);
     private _store = new StoreController(this);
 
@@ -21,6 +22,10 @@ export class Select extends Persisted(Input<typeof LitElement, string>(LitElemen
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 1px) 0;
                     text-overflow: ellipsis;
+                }
+
+                select:focus {
+                    box-shadow: inset 0 0 1px var(--font-color);
                 }
 
                 select:disabled {
@@ -39,7 +44,7 @@ export class Select extends Persisted(Input<typeof LitElement, string>(LitElemen
     /** @inheritdoc */
     protected render() {
         return html`
-            <select .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this._store.save(ev.target.value)}>
+            <select ${ref(this.focusElement)} .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this._store.save(ev.target.value)}>
                 <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
                 ${this.renderChildNodes()}
             </select>

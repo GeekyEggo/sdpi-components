@@ -1,6 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+import { IFocusable } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-item')
@@ -57,10 +58,20 @@ export class SdpiItem extends LitElement {
 
         return html`
             <div class="container grid">
-                <div class="label">${label}</div>
+                <div class="label"><label @click=${this.handleLabelClick}>${label}</label></div>
                 <div class="content"><slot></slot></div>
             </div>
         `;
+    }
+
+    private handleLabelClick(): void {
+        for (const elem of this.querySelectorAll('*')) {
+            const focusable = elem as unknown as IFocusable;
+            if (focusable.canFocus) {
+                focusable.focus();
+                return;
+            }
+        }
     }
 }
 

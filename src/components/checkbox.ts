@@ -1,12 +1,13 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ref } from 'lit/directives/ref.js';
 
 import { StoreController } from '../controllers/store-controller';
-import { Input, Persisted } from '../mixins';
+import { Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-checkbox')
-export class Checkbox extends Persisted(Input<typeof LitElement, boolean>(LitElement)) {
+export class Checkbox extends Persisted(Focusable(Input<typeof LitElement, boolean>(LitElement))) {
     private _store = new StoreController(this);
 
     /** @inheritdoc */
@@ -63,18 +64,24 @@ export class Checkbox extends Persisted(Input<typeof LitElement, boolean>(LitEle
     }
 
     /**
-     * Gets the optional text to be shown next to the check-box.
+     * Gets the optional label to be shown next to the check-box.
      */
     @property()
-    public text?: string;
+    public label?: string;
 
     /** @inheritdoc */
     render() {
-        const text = this.text ? html`<span class="text">${this.text}</span>` : undefined;
+        const text = this.label ? html`<span class="text">${this.label}</span>` : undefined;
 
         return html`
             <label class="container">
-                <input type="checkbox" .checked=${this.value || false} .disabled=${this.disabled} @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.checked)} />
+                <input
+                    ${ref(this.focusElement)}
+                    type="checkbox"
+                    .checked=${this.value || false}
+                    .disabled=${this.disabled}
+                    @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.checked)}
+                />
                 <span class="checkmark" role="checkbox" aria-checked=${this.value || false}></span>
                 ${text}
             </label>
