@@ -7,21 +7,31 @@
 
 <body>
     <script src="sdpi.js"></script>
-    <sdpi-checkbox path="is_opted_in" label="Opt in"></sdpi-checkbox>
-    <sdpi-textfield path="one.two.three.four" label="First name" placeholder="First name..." required pattern="[A-z\s\-]*"></sdpi-textfield>
-    <sdpi-textarea path="last_name" label="Last name" maxlength="25"></sdpi-textarea>
-    <sdpi-select path="fav_color" label="Color" placeholder="Please choose a color">
-        <optgroup label="Primary Colors">
-            <option value="red">Red</option>
-            <option value="yellow">Yellow</option>
-            <option value="blue">Blue</option>
-        </optgroup>
-        <optgroup label="Others">
-            <option value="green">Green</option>
-            <option value="orange">Orange</option>
-        </optgroup>
-    </sdpi-select>
-    <sdpi-button onclick="javascript:alert('Hello')">Something</sdpi-button>
+    <sdpi-item label="Opt in">
+        <sdpi-checkbox setting="is_opted_in"></sdpi-checkbox>
+    </sdpi-item>
+    <sdpi-item label="First name">
+        <sdpi-textfield setting="one.two.three.four" placeholder="First name..." required pattern="[A-z\s\-]*"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="Last name">
+        <sdpi-textarea setting="last_name" maxlength="25"></sdpi-textarea>
+    </sdpi-item>
+    <sdpi-item label="Colour">
+        <sdpi-select setting="fav_color"placeholder="Please choose a color">
+            <optgroup label="Primary Colors">
+                <option value="red">Red</option>
+                <option value="yellow">Yellow</option>
+                <option value="blue">Blue</option>
+            </optgroup>
+            <optgroup label="Others">
+                <option value="green">Green</option>
+                <option value="orange">Orange</option>
+            </optgroup>
+        </sdpi-select>
+    </sdpi-item>
+    <sdpi-item>
+        <sdpi-button onclick="javascript:alert('Hello')">Something</sdpi-button>
+    </sdpi-item>
 </body>
 
 </html>

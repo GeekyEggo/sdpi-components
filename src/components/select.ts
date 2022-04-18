@@ -38,14 +38,12 @@ export class Select extends Persisted(Input<typeof LitElement, string>(LitElemen
 
     /** @inheritdoc */
     protected render() {
-        return this.renderInput(
-            html`
-                <select .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this._store.save(ev.target.value)}>
-                    <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
-                    ${this.renderChildNodes()}
-                </select>
-            `
-        );
+        return html`
+            <select .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this._store.save(ev.target.value)}>
+                <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
+                ${this.renderChildNodes()}
+            </select>
+        `;
     }
 
     /**

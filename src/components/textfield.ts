@@ -60,7 +60,7 @@ export class Textfield extends Persisted(Input<typeof LitElement, string>(LitEle
 
     /** @inheritdoc */
     protected render() {
-        return this.renderInput(html`
+        return html`
             <input
                 type="text"
                 .disabled=${this.disabled}
@@ -70,7 +70,7 @@ export class Textfield extends Persisted(Input<typeof LitElement, string>(LitEle
                 .value=${this.value || ''}
                 @input=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.value)}
             />
-        `);
+        `;
     }
 }
 

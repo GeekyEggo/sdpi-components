@@ -72,15 +72,13 @@ export class Checkbox extends Persisted(Input<typeof LitElement, boolean>(LitEle
     render() {
         const text = this.text ? html`<span class="text">${this.text}</span>` : undefined;
 
-        return this.renderInput(
-            html`
-                <label class="container">
-                    <input type="checkbox" .checked=${this.value || false} .disabled=${this.disabled} @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.checked)} />
-                    <span class="checkmark" role="checkbox" aria-checked=${this.value || false}></span>
-                    ${text}
-                </label>
-            `
-        );
+        return html`
+            <label class="container">
+                <input type="checkbox" .checked=${this.value || false} .disabled=${this.disabled} @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.checked)} />
+                <span class="checkmark" role="checkbox" aria-checked=${this.value || false}></span>
+                ${text}
+            </label>
+        `;
     }
 }
 

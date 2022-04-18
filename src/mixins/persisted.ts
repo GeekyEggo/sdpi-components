@@ -21,7 +21,7 @@ export const Persisted = <T extends Constructor<LitElement>>(superClass: T) => {
          * The property key of which the value is persisted against in the settings, e.g. 'name' would result in the settings being { 'name': value, ... }.
          */
         @property()
-        public path?: string;
+        public setting?: string;
     }
 
     return Persisted;

@@ -39,13 +39,11 @@ export class Button extends Input<typeof LitElement, string>(LitElement) {
 
     /** @inheritdoc */
     render() {
-        return this.renderInput(
-            html`
-                <button .disabled=${this.disabled} .value=${this.value || ''}>
-                    <slot></slot>
-                </button>
-            `
-        );
+        return html`
+            <button .disabled=${this.disabled} .value=${this.value || ''}>
+                <slot></slot>
+            </button>
+        `;
     }
 }
 

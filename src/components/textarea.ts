@@ -63,7 +63,7 @@ export class Textarea extends Persisted(Input<typeof LitElement, string>(LitElem
 
     /** @inheritdoc */
     protected render() {
-        return this.renderInput(html`
+        return html`
             <textarea
                 type="textarea"
                 maxlength=${ifDefined(this.maxLength)}
@@ -74,7 +74,7 @@ export class Textarea extends Persisted(Input<typeof LitElement, string>(LitElem
                 @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this._store.save(ev.target.value)}
             ></textarea>
             ${this.getLengthLabel()}
-        `);
+        `;
     }
 
     /**
