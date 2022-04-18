@@ -64,6 +64,9 @@ export class SdpiItem extends LitElement {
         `;
     }
 
+    /**
+     * Handles the label of the item being clicked, and attempts to find an element that can be focused.
+     */
     private handleLabelClick(): void {
         for (const elem of this.querySelectorAll('*')) {
             const focusable = elem as unknown as IFocusable;
