@@ -2,7 +2,7 @@
 
 Stream Deck Property Inspector Components (or sdpi-components for short) is a collection of web components designed to make persisting your plugin's settings simple, whilst also ensuring an accessibility-friendly and consistent experience for Stream Deck users.
 
-## ✏️ Basic Usage
+## ✏️ Basic Usage ([Example](https://github.com/GeekyEggo/sdpi-components/blob/main/example/pi/index.html))
 
 ```html
 <!DOCTYPE html>
