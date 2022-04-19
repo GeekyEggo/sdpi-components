@@ -1,7 +1,7 @@
 # Inputs
 
--   [Button](#📝-button), `sdpi-button`
--   [Checkbox (Single)](#📝-checkbox), `sdpi-checkbox`
+-   [Button](#-button), `sdpi-button`
+-   [Checkbox (Single)](#-checkbox), `sdpi-checkbox`
 -   Checkbox (Many)
 -   Color
 -   Date
@@ -10,9 +10,9 @@
 -   File
 -   Radio
 -   Range
--   [Textarea](#📝-textarea), `sdpi-textarea`
--   [Textfield](#📝-textfield), `sdpi-textfield`
--   [Select](#📝-select), `sdpi-select`
+-   [Textarea](#-textarea), `sdpi-textarea`
+-   [Textfield](#-textfield), `sdpi-textfield`
+-   [Select](#-select), `sdpi-select`
 
 ## ℹ️ Field Items
 
