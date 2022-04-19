@@ -1,6 +1,7 @@
 /* Components */
 import './components/button';
 import './components/checkbox';
+import './components/range';
 import './components/sdpi-item';
 import './components/select';
 import './components/textarea';
