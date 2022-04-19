@@ -1,4 +1,4 @@
-import { css, CSSResultGroup, html, LitElement } from 'lit';
+import { css, CSSResultGroup, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
 import { asArray, getUUID } from '../core/utils';
