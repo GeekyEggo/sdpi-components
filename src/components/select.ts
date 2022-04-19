@@ -9,7 +9,7 @@ import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
 export class Select extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
-    private _childNodes = new ChildNodesController(this);
+    private _childNodes = new ChildNodesController(this, ['optgroup', 'option']);
     private _store = new StoreController(this);
 
     /** @inheritdoc */
@@ -61,17 +61,16 @@ export class Select extends Persisted(Focusable(Input<typeof LitElement, string>
         }
 
         const mapOptions = (item: Node): unknown => {
-            switch (item.nodeName) {
-                case 'OPTGROUP':
-                    return html`<optgroup .label=${(<HTMLOptGroupElement>item).label}>${Array.from(item.childNodes).map(mapOptions)}</optgroup>`;
-                case 'OPTION':
-                    return html`<option .disabled=${(<HTMLOptionElement>item).disabled} .value=${(<HTMLOptionElement>item).text}>${(<HTMLOptionElement>item).label}</option>`;
-                default:
-                    return undefined;
+            if (item instanceof HTMLOptGroupElement) {
+                return html`<optgroup .label=${item.label}>${Array.from(item.childNodes).map(mapOptions)}</optgroup>`;
+            } else if (item instanceof HTMLOptionElement) {
+                return html`<option .disabled=${item.disabled} .value=${item.text}>${item.label}</option>`;
+            } else {
+                return undefined;
             }
         };
 
-        return html`${this._childNodes.childNodes.map(mapOptions)}`;
+        return html`${this._childNodes.items.map(mapOptions)}`;
     }
 }
 
