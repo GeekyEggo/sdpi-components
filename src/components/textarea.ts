@@ -86,7 +86,7 @@ export class Textarea extends Persisted(Focusable(Input<typeof LitElement, strin
     private getLengthLabel(): unknown {
         if (this.showLength || this.maxLength) {
             const maxLengthLabel = this.maxLength ? html`/${this.maxLength}` : undefined;
-            return html`<label class="length" for=${this.inputId}>${this.value?.length}${maxLengthLabel}</label>`;
+            return html`<label class="length" for=${this.inputId}>${this.value?.length || 0}${maxLengthLabel}</label>`;
         }
 
         return undefined;
