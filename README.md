@@ -54,60 +54,42 @@ An example of a property inspector HTML file using the web components can be fou
 
 This library is very much a work-in-progress, with the current objective to support inputs documented on the official [Stream Deck Developer Portal](https://developer.elgato.com/documentation/stream-deck/sdk/property-inspector/). Pull requests are welcomed. 💖
 
-### Inputs
+### ⚙️ Inputs
 
-| Component                 | Status | sdpi-component   | Notes                  |
-| ------------------------- | ------ | ---------------- | ---------------------- |
-| Button                    | ✅     | `sdpi-button`    |                        |
-| Checkbox (Single)         | ✅     | `sdpi-checkbox`  |                        |
-| Checkbox (Many)           | ❌     |                  | Partially implemented. |
-| Color                     | ❌     |                  |                        |
-| Date                      | ❌     |                  |                        |
-| Date (Month)              | ❌     |                  |                        |
-| Date (Week)               | ❌     |                  |                        |
-| Elements                  | ✅     | `sdpi-item`      |                        |
-| File                      | ❌     |                  |                        |
-| File (Property Inspector) | ❌     |                  |                        |
-| Radio                     | ✅     | `sdpi-radio`     |                        |
-| Range                     | ❌     |                  |                        |
-| Textarea                  | ✅     | `sdpi-textarea`  |                        |
-| Textfield                 | ✅     | `sdpi-textfield` |                        |
-| Select                    | ✅     | `sdpi-select`    |                        |
+| Component                       | Status | sdpi-component   | Notes                  |
+| ------------------------------- | ------ | ---------------- | ---------------------- |
+| [Button](#-button)              | ✅     | `sdpi-button`    |                        |
+| [Checkbox (Single)](#-checkbox) | ✅     | `sdpi-checkbox`  |                        |
+| Checkbox (Multiple)             | ❌     |                  | Partially implemented. |
+| Color                           | ❌     |                  |                        |
+| Date                            | ❌     |                  |                        |
+| Date (Month)                    | ❌     |                  |                        |
+| Date (Week)                     | ❌     |                  |                        |
+| File                            | ❌     |                  |                        |
+| File (Property Inspector)       | ❌     |                  |                        |
+| [Radio](#-radio)                | ✅     | `sdpi-radio`     |                        |
+| Range                           | ❌     |                  |                        |
+| [Textarea](#-textarea)          | ✅     | `sdpi-textarea`  |                        |
+| [Textfield](#-textfield)        | ✅     | `sdpi-textfield` |                        |
+| [Select](#-select               | ✅     | `sdpi-select`    |                        |
 
-### Styling
+### 🖌️ Styling
 
-| Component                  | Status | sdpi-component | Notes                                                |
-| -------------------------- | ------ | -------------- | ---------------------------------------------------- |
-| Headings, Groups, Dividers | ❌     |                | `h1..5`, `section`, `hr`                             |
-| Lists                      | ❌     |                | `ul`, `ol`, `li`                                     |
-| Meter                      | ❌     |                | `meter`                                              |
-| Progress                   | ❌     |                | `progress`                                           |
-| Tables                     | ❌     |                | `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` |
-| Details                    | ❌     |                | `detail`, `summary`                                  |
+| Component                    | Status | sdpi-component | Notes                                                |
+| ---------------------------- | ------ | -------------- | ---------------------------------------------------- |
+| [Field Items](#-field-items) | ✅     | `sdpi-item`    |                                                      |
+| Headings, Groups, Dividers   | ❌     |                | `h1..5`, `section`, `hr`                             |
+| Lists                        | ❌     |                | `ul`, `ol`, `li`                                     |
+| Meter                        | ❌     |                | `meter`                                              |
+| Progress                     | ❌     |                | `progress`                                           |
+| Tables                       | ❌     |                | `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` |
+| Details                      | ❌     |                | `detail`, `summary`                                  |
 
 ---
 
 ## 📖 Documentation
 
-### Inputs
-
--   [Button](#-button), `sdpi-button`
--   [Checkbox (Single)](#-checkbox), `sdpi-checkbox`
--   Checkbox (Many)
--   Color
--   Date
--   Date (Month)
--   Date (Week)
--   File
--   [Radio](#-radio), `sdpi-radio`
--   Range
--   [Textarea](#-textarea), `sdpi-textarea`
--   [Textfield](#-textfield), `sdpi-textfield`
--   [Select](#-select), `sdpi-select`
-
----
-
-### ℹ️ Field Items
+### 🖌️ Field Items
 
 The `sdpi-item` component is designed to complement inputs by providing a recognisable layout, as well as a label associated with the input. An `sdpi-item` will typically represent a single piece of information within the settings, although is not limited to.
 
@@ -128,7 +110,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ---
 
-### 📝 Button
+### ⚙️ Button
 
 #### Example
 
@@ -150,7 +132,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ---
 
-### 📝 Checkbox
+### ⚙️ Checkbox
 
 #### Example
 
@@ -177,7 +159,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ---
 
-### 📝 Radio
+### ⚙️ Radio
 
 #### Example
 
@@ -205,7 +187,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ---
 
-### 📝 Select
+### ⚙️ Select
 
 #### Example
 
@@ -235,7 +217,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ---
 
-### 📝 Textarea
+### ⚙️ Textarea
 
 #### Example
 
@@ -265,7 +247,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ---
 
-### 📝 Textfield
+### ⚙️ Textfield
 
 #### Example
 
