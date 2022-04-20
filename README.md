@@ -71,7 +71,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | Range                           | ❌     |                  |                        |
 | [Textarea](#-textarea)          | ✅     | `sdpi-textarea`  |                        |
 | [Textfield](#-textfield)        | ✅     | `sdpi-textfield` |                        |
-| [Select](#-select               | ✅     | `sdpi-select`    |                        |
+| [Select](#-select)              | ✅     | `sdpi-select`    |                        |
 
 ### 🖌️ Styling
 
