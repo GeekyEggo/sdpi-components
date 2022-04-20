@@ -21,24 +21,24 @@ export const Checkable = <TBase extends Constructor<LitElement> & { styles?: CSS
                     .checkable-container {
                         align-items: center;
                         display: inline-flex;
-                        margin: var(--spacer) 0;
+                        margin: var(-spacer) 0;
                         user-select: none;
                         width: auto;
                     }
 
-                    input {
+                    .checkable-container > input {
                         display: none;
                     }
 
-                    input:not(:disabled) ~ span {
+                    .checkable-container > input:not(:disabled) ~ span {
                         cursor: pointer;
                     }
 
-                    input:disabled ~ span {
+                    .checkable-container > input:disabled ~ span {
                         opacity: 0.5;
                     }
 
-                    .checkable-symbol {
+                    .checkable-container > .checkable-symbol {
                         background: var(--input-bg-color);
                         border: 1px solid rgba(0, 0, 0, 0.2);
                         border-radius: 3px;
@@ -47,25 +47,25 @@ export const Checkable = <TBase extends Constructor<LitElement> & { styles?: CSS
                         width: var(--checkbox-size);
                     }
 
-                    input[type='radio'] ~ .checkable-symbol {
+                    .checkable-container > input[type='radio'] ~ .checkable-symbol {
                         border-radius: 50%;
                     }
 
-                    .checkable-text {
+                    .checkable-container > .checkable-text {
                         flex: 1 1;
                         margin: 0 0 0 var(--spacer);
                     }
 
-                    input:checked ~ .checkable-symbol {
+                    .checkable-container > input:checked ~ .checkable-symbol {
                         background: #77f no-repeat center center;
                         border: 1px solid rgba(0, 0, 0, 0.4);
                     }
 
-                    input[type='checkbox']:checked ~ .checkable-symbol {
+                    .checkable-container > input[type='checkbox']:checked ~ .checkable-symbol {
                         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10' viewBox='0 0 12 10'%3E%3Cpolygon fill='%23FFF' points='7.2 7.5 7.2 -1.3 8.7 -1.3 8.6 9.1 2.7 8.7 2.7 7.2' transform='rotate(37 5.718 3.896)'/%3E%3C/svg%3E%0A");
                     }
 
-                    input[type='radio']:checked ~ .checkable-symbol {
+                    .checkable-container > input[type='radio']:checked ~ .checkable-symbol {
                         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 6 6'%3E%3Ccircle cx='3' cy='3' r='3' fill='%23FFF'/%3E%3C/svg%3E%0A");
                     }
                 `
