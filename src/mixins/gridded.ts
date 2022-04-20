@@ -18,12 +18,11 @@ export const Gridded = <TBase extends Constructor<LitElement> & { styles?: CSSRe
                     .gridded-container {
                         display: flex;
                         flex-wrap: wrap;
-                        padding-top: var(--spacer);
                     }
 
                     .gridded-container > .gridded-item {
                         box-sizing: border-box;
-                        margin: 0 var(--spacer) var(--spacer) 0;
+                        margin: 0 var(--spacer) 0 0;
                         flex: 0 1;
                     }
 
@@ -58,15 +57,6 @@ export const Gridded = <TBase extends Constructor<LitElement> & { styles?: CSSRe
                     .gridded-container > .gridded-col-5:nth-child(5n),
                     .gridded-container > .gridded-col-6:nth-child(6n) {
                         margin-right: 0;
-                    }
-
-                    .gridded-container > .gridded-col-1:nth-last-child(1),
-                    .gridded-container > .gridded-col-2:nth-last-child(-n + 2),
-                    .gridded-container > .gridded-col-3:nth-last-child(-n + 3),
-                    .gridded-container > .gridded-col-4:nth-last-child(-n + 4),
-                    .gridded-container > .gridded-col-5:nth-last-child(-n + 5),
-                    .gridded-container > .gridded-col-6:nth-last-child(-n + 6) {
-                        margin-bottom: 0;
                     }
                 `
             ];

@@ -65,8 +65,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | Date                                            | ❌     |                      |
 | Date (Month)                                    | ❌     |                      |
 | Date (Week)                                     | ❌     |                      |
-| File                                            | ❌     |                      |
-| File (Property Inspector)                       | ❌     |                      |
+| [File](#%EF%B8%8F-file)                         | ✅     | `sdpi-file`          |
 | [Radio](#%EF%B8%8F-radio)                       | ✅     | `sdpi-radio`         |
 | Range                                           | ❌     |                      |
 | [Textarea](#%EF%B8%8F-textarea)                 | ✅     | `sdpi-textarea`      |
@@ -145,7 +144,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 </sdpi-checkbox>
 ```
 
-![A checkbox input in the Stream Deck property inspector using the sdpi-checkbox web component](assets/sdpi-checkbox.png?raw=true 'sdpi-checkbox checkbox')
+![A checkbox input in the Stream Deck property inspector using the sdpi-checkbox web component](assets/sdpi-checkbox.png?raw=true 'sdpi-checkbox example')
 
 #### Configuration
 
@@ -174,7 +173,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 </sdpi-checkbox-list>
 ```
 
-![A list of checkbox inputs in the Stream Deck property inspector using the sdpi-checkbox-list web component](assets/sdpi-checkbox-list.png?raw=true 'sdpi-checkbox-list checkbox collection')
+![A list of checkbox inputs in the Stream Deck property inspector using the sdpi-checkbox-list web component](assets/sdpi-checkbox-list.png?raw=true 'sdpi-checkbox-list example')
 
 NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is `Set<string>` for the checked options. e.g.
 
@@ -193,6 +192,33 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 | `columns`  | `number`   | The number of columns to render the inputs in; valid values are 1-6.          |
 | `disabled` | `boolean`  | Determines whether the inputs are disabled.                                   |
 | `value`    | `string[]` | The value of the component, and the persisted setting.                        |
+
+---
+
+### ⚙️ File
+
+#### Example
+
+<!-- prettier-ignore -->
+```html
+<sdpi-file
+    setting="avatar"
+    accept="image/png, image/jpeg">
+</sdpi-file>
+```
+
+![A file input in the Stream Deck property inspector using the sdpi-file web component](assets/sdpi-file.png?raw=true 'sdpi-file example')
+
+#### Configuration
+
+| Name       | Type      | Description                                                                                 |
+| ---------- | --------- | ------------------------------------------------------------------------------------------- |
+| `setting`  | `string`  | The path to the property where the value should be persisted in the settings.               |
+| `global`   | `boolean` | When present, the value will be persisted to the global settings.                           |
+| `accept`   | `string`  | The types of files that can be selected; directly mapped to the input's `accept` attribute. |
+| `disabled` | `boolean` | Determines whether the inputs are disabled.                                                 |
+| `label`    | `string`  | Optional label displayed in the button used to activate the file selector (default `...`).  |
+| `value`    | `string`  | The value of the component, and the persisted setting.                                      |
 
 ---
 

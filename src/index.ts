@@ -2,6 +2,7 @@
 import './components/button';
 import './components/checkbox';
 import './components/checkbox-list';
+import './components/file';
 import './components/radio';
 import './components/sdpi-item';
 import './components/select';

@@ -38,12 +38,22 @@ export const Focusable = <T extends Constructor<LitElement>>(superClass: T) => {
 
         /** @inheritdoc */
         public focus(): void {
+            console.log(this.focusElement.value?.type);
             if (this.focusElement.value) {
-                if (this.focusElement.value.type === 'checkbox') {
-                    const checkbox = <HTMLInputElement>this.focusElement.value;
-                    checkbox.checked = !checkbox.checked;
-                } else {
-                    this.focusElement.value.focus();
+                switch (this.focusElement.value.type) {
+                    case 'checkbox': {
+                        const checkbox = <HTMLInputElement>this.focusElement.value;
+                        checkbox.checked = !checkbox.checked;
+                        break;
+                    }
+                    case 'file': {
+                        this.focusElement.value.click();
+                        break;
+                    }
+                    default: {
+                        this.focusElement.value.focus();
+                        break;
+                    }
                 }
             }
         }

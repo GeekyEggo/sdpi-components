@@ -16,7 +16,7 @@ export class Button extends Input<typeof LitElement, string>(LitElement) {
                     background-color: var(--window-bg-color);
                     border: 1px solid #969696;
                     border-radius: 3px;
-                    padding: calc(var(--spacer) * 2) var(--spacer);
+                    padding: calc(var(--spacer) * 1.5);
                 }
 
                 button:not(:disabled):hover {
