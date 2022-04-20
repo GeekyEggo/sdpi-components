@@ -7,7 +7,7 @@ Stream Deck Property Inspector Components (or sdpi-components for short) is a co
 ```html
 <!DOCTYPE html>
 <head lang="en-gb">
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components/dist/sdpi.js"></script>
 </head>
 <html>
@@ -20,7 +20,7 @@ Stream Deck Property Inspector Components (or sdpi-components for short) is a co
                 "fav_color": "red" | "green" | "blue"
             }
         -->
-        
+
         <sdpi-item label="Name">
             <sdpi-textfield setting="name"></sdpi-textfield>
         </sdpi-item>
@@ -39,6 +39,7 @@ Stream Deck Property Inspector Components (or sdpi-components for short) is a co
     </body>
 </html>
 ```
+
 ![image](https://user-images.githubusercontent.com/1429781/163813080-33d48b9c-5596-4f4e-8fb3-c94431728b8a.png)
 
 ## 🚧 Work In Progress
@@ -47,31 +48,31 @@ This library is very much a work-in-progress, with the current objective to supp
 
 ### Inputs
 
-| Component | Status | sdpi-component | Notes |
-| --------- | ------ | -------------- | ----- |
-| Button | ✅ | `sdpi-button` | |
-| Checkbox (Single) | ✅ | `sdpi-checkbox` | |
-| Checkbox (Many) | ❌ | | Partially implemented. |
-| Color | ❌ | | |
-| Date | ❌ | | |
-| Date (Month) | ❌ | | |
-| Date (Week) | ❌ | | |
-| Elements | ✅ | `sdpi-item` | |
-| File | ❌ | | |
-| File (Property Inspector) | ❌ | | |
-| Radio | ❌ | | |
-| Range | ❌ | | |
-| Textarea | ✅ | `sdpi-textarea` | |
-| Textfield | ✅ | `sdpi-textfield` | |
-| Select | ✅ | `sdpi-select` | |
+| Component                 | Status | sdpi-component   | Notes                  |
+| ------------------------- | ------ | ---------------- | ---------------------- |
+| Button                    | ✅     | `sdpi-button`    |                        |
+| Checkbox (Single)         | ✅     | `sdpi-checkbox`  |                        |
+| Checkbox (Many)           | ❌     |                  | Partially implemented. |
+| Color                     | ❌     |                  |                        |
+| Date                      | ❌     |                  |                        |
+| Date (Month)              | ❌     |                  |                        |
+| Date (Week)               | ❌     |                  |                        |
+| Elements                  | ✅     | `sdpi-item`      |                        |
+| File                      | ❌     |                  |                        |
+| File (Property Inspector) | ❌     |                  |                        |
+| Radio                     | ✅     | `sdpi-radio`     |                        |
+| Range                     | ❌     |                  |                        |
+| Textarea                  | ✅     | `sdpi-textarea`  |                        |
+| Textfield                 | ✅     | `sdpi-textfield` |                        |
+| Select                    | ✅     | `sdpi-select`    |                        |
 
 ### Styling
 
-| Component | Status | sdpi-component | Notes |
-| --------- | ------ | -------------- | ----- |
-| Headings, Groups, Dividers | ❌ | | `h1..5`, `section`, `hr` |
-| Lists | ❌ | | `ul`, `ol`, `li` |
-| Meter | ❌ | | `meter` |
-| Progress | ❌ | | `progress` |
-| Tables | ❌ | | `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` |
-| Details | ❌ | | `detail`, `summary` |
+| Component                  | Status | sdpi-component | Notes                                                |
+| -------------------------- | ------ | -------------- | ---------------------------------------------------- |
+| Headings, Groups, Dividers | ❌     |                | `h1..5`, `section`, `hr`                             |
+| Lists                      | ❌     |                | `ul`, `ol`, `li`                                     |
+| Meter                      | ❌     |                | `meter`                                              |
+| Progress                   | ❌     |                | `progress`                                           |
+| Tables                     | ❌     |                | `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` |
+| Details                    | ❌     |                | `detail`, `summary`                                  |

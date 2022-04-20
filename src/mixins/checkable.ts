@@ -39,10 +39,11 @@ export const Checkable = <TBase extends Constructor<LitElement> & { styles?: CSS
                     }
 
                     .checkable-container > .checkable-symbol {
+                        align-self: flex-start;
                         background: var(--input-bg-color);
                         border: 1px solid rgba(0, 0, 0, 0.2);
                         border-radius: 3px;
-                        flex: var(--checkbox-size) var(--checkbox-size);
+                        flex: 0 0 var(--checkbox-size);
                         height: var(--checkbox-size);
                         width: var(--checkbox-size);
                     }
@@ -52,7 +53,7 @@ export const Checkable = <TBase extends Constructor<LitElement> & { styles?: CSS
                     }
 
                     .checkable-container > .checkable-text {
-                        flex: 1 1;
+                        flex: 0 1 auto;
                         margin: 0 0 0 var(--spacer);
                     }
 
@@ -77,9 +78,9 @@ export const Checkable = <TBase extends Constructor<LitElement> & { styles?: CSS
          * @param type The type of the input.
          * @param input The input to substitute.
          * @param label Optional label to be displayed next to the input.
-         * @returns
+         * @returns The HTML template that contains the checkable input.
          */
-        public renderCheckable(type: 'checkbox' | 'radio', input: unknown, label?: string): unknown {
+        protected renderCheckable(type: 'checkbox' | 'radio', input: unknown, label?: string): unknown {
             return html`
                 <label class="checkable-container">
                     ${input}

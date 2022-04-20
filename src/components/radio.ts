@@ -3,10 +3,10 @@ import { customElement } from 'lit/decorators.js';
 
 import { ChildNodesController } from '../controllers/child-nodes-controller';
 import { StoreController } from '../controllers/store-controller';
-import { Checkable, Input, Persisted } from '../mixins';
+import { Checkable, Gridded, Input, Persisted } from '../mixins';
 
-@customElement('sdpi-range')
-export class Range extends Persisted(Checkable(Input<typeof LitElement, string>(LitElement))) {
+@customElement('sdpi-radio')
+export class Radio extends Gridded(Persisted(Checkable(Input<typeof LitElement, string>(LitElement)))) {
     private _childNodes = new ChildNodesController(this, ['option']);
     private _store = new StoreController(this);
 
@@ -17,8 +17,8 @@ export class Range extends Persisted(Checkable(Input<typeof LitElement, string>(
 
     /** @inheritdoc */
     protected render() {
-        return html`
-            ${this._childNodes.items.map((option) =>
+        return this.renderGrid(
+            this._childNodes.items.map((option) =>
                 this.renderCheckable(
                     'radio',
                     html`<input
@@ -31,13 +31,13 @@ export class Range extends Persisted(Checkable(Input<typeof LitElement, string>(
                     />`,
                     option.text
                 )
-            )}
-        `;
+            )
+        );
     }
 }
 
 declare global {
     interface HTMLElementTagNameMap {
-        'sdpi-range': Range;
+        'sdpi-radio': Radio;
     }
 }

@@ -8,7 +8,7 @@
 -   Date (Month)
 -   Date (Week)
 -   File
--   Radio
+-   [Radio](#-radio), `sdpi-radio`
 -   Range
 -   [Textarea](#-textarea), `sdpi-textarea`
 -   [Textfield](#-textfield), `sdpi-textfield`
@@ -77,6 +77,32 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `disabled` | `boolean` | Determines whether the input is disabled.                                     |
 | `label`    | `string`  | Optional label text shown to the right of the checkbox.                       |
 | `value`    | `boolean` | Value of the input (comparable to `checked`).                                 |
+
+## 📝 Radio
+
+#### Example
+
+```html
+<sdpi-radio setting="fav_number" cols="3">
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+    <option value="4">Four</option>
+    <option value="5">Five</option>
+</sdpi-radio>
+```
+
+![A collection of radio inputs in the Stream Deck property inspector using the sdpi-radio web component](imgs/sdpi-radio.png?raw=true 'sdpi-radio example')
+
+#### Attributes
+
+| Name       | Type      | Description                                                                   |
+| ---------- | --------- | ----------------------------------------------------------------------------- |
+| `setting`  | `string`  | The path to the property where the value should be persisted in the settings. |
+| `global`   | `boolean` | When present, the value will be persisted to the global settings.             |
+| `cols`     | `number`  | The number of columns to render the radio inputs in; valid values are 1-6.    |
+| `disabled` | `boolean` | Determines whether the input is disabled.                                     |
+| `value`    | `string`  | Value of the input.                                                           |
 
 ## 📝 Select
 
