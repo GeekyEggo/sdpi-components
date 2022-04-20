@@ -101,6 +101,8 @@ This library is very much a work-in-progress, with the current objective to supp
 -   [Textfield](#-textfield), `sdpi-textfield`
 -   [Select](#-select), `sdpi-select`
 
+---
+
 ### ℹ️ Field Items
 
 The `sdpi-item` component is designed to complement inputs by providing a recognisable layout, as well as a label associated with the input. An `sdpi-item` will typically represent a single piece of information within the settings, although is not limited to.
@@ -119,6 +121,8 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | Name    | Type     | Description                                                                                           |
 | ------- | -------- | ----------------------------------------------------------------------------------------------------- |
 | `label` | `string` | Label text that represents the field; when clicked, the first input within the component gains focus. |
+
+---
 
 ### 📝 Button
 
@@ -139,6 +143,8 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | ---------- | --------- | ----------------------------------------- |
 | `disabled` | `boolean` | Determines whether the input is disabled. |
 | `value`    | `string`  | Value of the input.                       |
+
+---
 
 ### 📝 Checkbox
 
@@ -165,6 +171,8 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `label`    | `string`  | Optional label text shown to the right of the checkbox.                       |
 | `value`    | `boolean` | Value of the input (comparable to `checked`).                                 |
 
+---
+
 ### 📝 Radio
 
 #### Example
@@ -190,6 +198,8 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `cols`     | `number`  | The number of columns to render the radio inputs in; valid values are 1-6.    |
 | `disabled` | `boolean` | Determines whether the input is disabled.                                     |
 | `value`    | `string`  | Value of the input.                                                           |
+
+---
 
 ### 📝 Select
 
@@ -219,6 +229,8 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `placeholder` | `string`  | Optional placeholder text shown in the input.                                 |
 | `value`       | `string`  | Value of the input.                                                           |
 
+---
+
 ### 📝 Textarea
 
 #### Example
@@ -246,6 +258,8 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `rows`       | `number`  | Defines the size, in rows, of the text area.                                  |
 | `showlength` | `boolean` | When present, the current length and maximum length will be disabled.         |
 | `value`      | `string`  | Value of the input.                                                           |
+
+---
 
 ### 📝 Textfield
 
