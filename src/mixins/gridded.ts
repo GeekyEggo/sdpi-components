@@ -75,10 +75,7 @@ export const Gridded = <TBase extends Constructor<LitElement> & { styles?: CSSRe
         /**
          * Gets or sets the number of columns the grid contains.
          */
-        @property({
-            attribute: 'cols',
-            type: Number
-        })
+        @property({ type: Number })
         public columns = 1;
 
         /**

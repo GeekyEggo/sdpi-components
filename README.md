@@ -56,22 +56,22 @@ This library is very much a work-in-progress, with the current objective to supp
 
 ### ⚙️ Inputs
 
-| Component                                | Status | sdpi-component   | Notes                  |
-| ---------------------------------------- | ------ | ---------------- | ---------------------- |
-| [Button](#%EF%B8%8F-button)              | ✅     | `sdpi-button`    |                        |
-| [Checkbox (Single)](#%EF%B8%8F-checkbox) | ✅     | `sdpi-checkbox`  |                        |
-| Checkbox (Multiple)                      | ❌     |                  | Partially implemented. |
-| Color                                    | ❌     |                  |                        |
-| Date                                     | ❌     |                  |                        |
-| Date (Month)                             | ❌     |                  |                        |
-| Date (Week)                              | ❌     |                  |                        |
-| File                                     | ❌     |                  |                        |
-| File (Property Inspector)                | ❌     |                  |                        |
-| [Radio](#%EF%B8%8F-radio)                | ✅     | `sdpi-radio`     |                        |
-| Range                                    | ❌     |                  |                        |
-| [Textarea](#%EF%B8%8F-textarea)          | ✅     | `sdpi-textarea`  |                        |
-| [Textfield](#%EF%B8%8F-textfield)        | ✅     | `sdpi-textfield` |                        |
-| [Select](#%EF%B8%8F-select)              | ✅     | `sdpi-select`    |                        |
+| Component                                       | Status | sdpi-component       |
+| ----------------------------------------------- | ------ | -------------------- |
+| [Button](#%EF%B8%8F-button)                     | ✅     | `sdpi-button`        |
+| [Checkbox (Single)](#%EF%B8%8F-checkbox)        | ✅     | `sdpi-checkbox`      |
+| [Checkbox (Multiple)](#%EF%B8%8F-checkbox-list) | ✅     | `sdpi-checkbox-list` |
+| Color                                           | ❌     |                      |
+| Date                                            | ❌     |                      |
+| Date (Month)                                    | ❌     |                      |
+| Date (Week)                                     | ❌     |                      |
+| File                                            | ❌     |                      |
+| File (Property Inspector)                       | ❌     |                      |
+| [Radio](#%EF%B8%8F-radio)                       | ✅     | `sdpi-radio`         |
+| Range                                           | ❌     |                      |
+| [Textarea](#%EF%B8%8F-textarea)                 | ✅     | `sdpi-textarea`      |
+| [Textfield](#%EF%B8%8F-textfield)               | ✅     | `sdpi-textfield`     |
+| [Select](#%EF%B8%8F-select)                     | ✅     | `sdpi-select`        |
 
 ### 🖌️ Styling
 
@@ -102,7 +102,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 </sdpi-item>
 ```
 
-#### Attributes
+#### Configuration
 
 | Name    | Type     | Description                                                                                           |
 | ------- | -------- | ----------------------------------------------------------------------------------------------------- |
@@ -123,12 +123,12 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ![An input button in the Stream Deck property inspector using the sdpi-button web component](assets/sdpi-button.png?raw=true 'sdpi-button example')
 
-#### Attributes
+#### Configuration
 
 | Name       | Type      | Description                               |
 | ---------- | --------- | ----------------------------------------- |
 | `disabled` | `boolean` | Determines whether the input is disabled. |
-| `value`    | `string`  | Value of the input.                       |
+| `value`    | `string`  | The value of the component.               |
 
 ---
 
@@ -147,15 +147,52 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ![A checkbox input in the Stream Deck property inspector using the sdpi-checkbox web component](assets/sdpi-checkbox.png?raw=true 'sdpi-checkbox checkbox')
 
-#### Attributes
+#### Configuration
 
-| Name       | Type      | Description                                                                   |
-| ---------- | --------- | ----------------------------------------------------------------------------- |
-| `setting`  | `string`  | The path to the property where the value should be persisted in the settings. |
-| `global`   | `boolean` | When present, the value will be persisted to the global settings.             |
-| `disabled` | `boolean` | Determines whether the input is disabled.                                     |
-| `label`    | `string`  | Optional label text shown to the right of the checkbox.                       |
-| `value`    | `boolean` | Value of the input (comparable to `checked`).                                 |
+| Name       | Type      | Description                                                                      |
+| ---------- | --------- | -------------------------------------------------------------------------------- |
+| `setting`  | `string`  | The path to the property where the value should be persisted in the settings.    |
+| `global`   | `boolean` | When present, the value will be persisted to the global settings.                |
+| `disabled` | `boolean` | Determines whether the input is disabled.                                        |
+| `label`    | `string`  | Optional label text shown to the right of the checkbox.                          |
+| `value`    | `boolean` | The value of the component (comparable to `checked`), and the persisted setting. |
+
+---
+
+### ⚙️ Checkbox List
+
+#### Example
+
+<!-- prettier-ignore -->
+```html
+<sdpi-checkbox-list setting="fav_numbers" columns="2">
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+    <option value="4">Four</option>
+    <option value="5">Five</option>
+</sdpi-checkbox-list>
+```
+
+![A list of checkbox inputs in the Stream Deck property inspector using the sdpi-checkbox-list web component](assets/sdpi-checkbox-list.png?raw=true 'sdpi-checkbox-list checkbox collection')
+
+NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is `Set<string>` for the checked options. e.g.
+
+```json
+{
+    "fav_numbers": ["1"]
+}
+```
+
+#### Configuration
+
+| Name       | Type       | Description                                                                   |
+| ---------- | ---------- | ----------------------------------------------------------------------------- |
+| `setting`  | `string`   | The path to the property where the value should be persisted in the settings. |
+| `global`   | `boolean`  | When present, the value will be persisted to the global settings.             |
+| `columns`  | `number`   | The number of columns to render the inputs in; valid values are 1-6.          |
+| `disabled` | `boolean`  | Determines whether the inputs are disabled.                                   |
+| `value`    | `string[]` | The value of the component, and the persisted setting.                        |
 
 ---
 
@@ -164,7 +201,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 #### Example
 
 ```html
-<sdpi-radio setting="fav_number" cols="3">
+<sdpi-radio setting="fav_number" columns="3">
     <option value="1">One</option>
     <option value="2">Two</option>
     <option value="3">Three</option>
@@ -175,15 +212,15 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ![A collection of radio inputs in the Stream Deck property inspector using the sdpi-radio web component](assets/sdpi-radio.png?raw=true 'sdpi-radio example')
 
-#### Attributes
+#### Configuration
 
 | Name       | Type      | Description                                                                   |
 | ---------- | --------- | ----------------------------------------------------------------------------- |
 | `setting`  | `string`  | The path to the property where the value should be persisted in the settings. |
 | `global`   | `boolean` | When present, the value will be persisted to the global settings.             |
-| `cols`     | `number`  | The number of columns to render the radio inputs in; valid values are 1-6.    |
-| `disabled` | `boolean` | Determines whether the input is disabled.                                     |
-| `value`    | `string`  | Value of the input.                                                           |
+| `columns`  | `number`  | The number of columns to render the inputs in; valid values are 1-6.          |
+| `disabled` | `boolean` | Determines whether the inputs are disabled.                                   |
+| `value`    | `string`  | The value of the component, and the persisted setting.                        |
 
 ---
 
@@ -205,7 +242,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ![A select input in the Stream Deck property inspector using the sdpi-select web component](assets/sdpi-select.png?raw=true 'sdpi-select example')
 
-#### Attributes
+#### Configuration
 
 | Name          | Type      | Description                                                                   |
 | ------------- | --------- | ----------------------------------------------------------------------------- |
@@ -213,7 +250,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `global`      | `boolean` | When present, the value will be persisted to the global settings.             |
 | `disabled`    | `boolean` | Determines whether the input is disabled.                                     |
 | `placeholder` | `string`  | Optional placeholder text shown in the input.                                 |
-| `value`       | `string`  | Value of the input.                                                           |
+| `value`       | `string`  | The value of the component, and the persisted setting.                        |
 
 ---
 
@@ -233,7 +270,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ![A textarea input in the Stream Deck property inspector using the sdpi-textarea web component](assets/sdpi-textarea.png?raw=true 'sdpi-textarea example')
 
-#### Attributes
+#### Configuration
 
 | Name         | Type      | Description                                                                   |
 | ------------ | --------- | ----------------------------------------------------------------------------- |
@@ -243,7 +280,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `maxlength`  | `number`  | Optional maximum length of the value.                                         |
 | `rows`       | `number`  | Defines the size, in rows, of the text area.                                  |
 | `showlength` | `boolean` | When present, the current length and maximum length will be disabled.         |
-| `value`      | `string`  | Value of the input.                                                           |
+| `value`      | `string`  | The value of the component, and the persisted setting.                        |
 
 ---
 
@@ -263,7 +300,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ![A text field input in the Stream Deck property inspector using the sdpi-textfield web component](assets/sdpi-textfield.png?raw=true 'sdpi-textfield example')
 
-#### Attributes
+#### Configuration
 
 | Name          | Type      | Description                                                                   |
 | ------------- | --------- | ----------------------------------------------------------------------------- |
@@ -273,4 +310,4 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `pattern`     | `string`  | Optional regular expression used to validate the input.                       |
 | `placeholder` | `string`  | Optional placeholder text shown in the input.                                 |
 | `required`    | `boolean` | When present, an icon is shown in the input if the value is empty.            |
-| `value`       | `string`  | Value of the input.                                                           |
+| `value`       | `string`  | The value of the component, and the persisted setting.                        |
