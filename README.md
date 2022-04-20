@@ -48,6 +48,8 @@ An example of a property inspector HTML file using the web components can be fou
 
 ![image](https://user-images.githubusercontent.com/1429781/163813080-33d48b9c-5596-4f4e-8fb3-c94431728b8a.png)
 
+---
+
 ## 🚧 Supported Components
 
 This library is very much a work-in-progress, with the current objective to support inputs documented on the official [Stream Deck Developer Portal](https://developer.elgato.com/documentation/stream-deck/sdk/property-inspector/). Pull requests are welcomed. 💖
@@ -82,6 +84,8 @@ This library is very much a work-in-progress, with the current objective to supp
 | Progress                   | ❌     |                | `progress`                                           |
 | Tables                     | ❌     |                | `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` |
 | Details                    | ❌     |                | `detail`, `summary`                                  |
+
+---
 
 ## 📖 Documentation
 
