@@ -2,9 +2,9 @@
 
 Stream Deck Property Inspector Components (or sdpi-components for short) is a collection of web components designed to make persisting your plugin's settings simple, whilst also ensuring an accessibility-friendly and consistent experience for Stream Deck users.
 
--   [✏️ Getting Stared](#-basic-usage-example)
--   [🚧 Supported Components](#-supported-components)
--   [📖 Documentation](#-documentation)
+-   [✏️ Getting Stared](#✏️-getting-stared)
+-   [🚧 Supported Components](#🚧-supported-components)
+-   [📖 Documentation](#📖-documentation)
 
 ## ✏️ Getting Stared
 
@@ -56,34 +56,34 @@ This library is very much a work-in-progress, with the current objective to supp
 
 ### ⚙️ Inputs
 
-| Component                       | Status | sdpi-component   | Notes                  |
-| ------------------------------- | ------ | ---------------- | ---------------------- |
-| [Button](#-button)              | ✅     | `sdpi-button`    |                        |
-| [Checkbox (Single)](#-checkbox) | ✅     | `sdpi-checkbox`  |                        |
-| Checkbox (Multiple)             | ❌     |                  | Partially implemented. |
-| Color                           | ❌     |                  |                        |
-| Date                            | ❌     |                  |                        |
-| Date (Month)                    | ❌     |                  |                        |
-| Date (Week)                     | ❌     |                  |                        |
-| File                            | ❌     |                  |                        |
-| File (Property Inspector)       | ❌     |                  |                        |
-| [Radio](#-radio)                | ✅     | `sdpi-radio`     |                        |
-| Range                           | ❌     |                  |                        |
-| [Textarea](#-textarea)          | ✅     | `sdpi-textarea`  |                        |
-| [Textfield](#-textfield)        | ✅     | `sdpi-textfield` |                        |
-| [Select](#-select)              | ✅     | `sdpi-select`    |                        |
+| Component                         | Status | sdpi-component   | Notes                  |
+| --------------------------------- | ------ | ---------------- | ---------------------- |
+| [Button](#⚙️-button)              | ✅     | `sdpi-button`    |                        |
+| [Checkbox (Single)](#⚙️-checkbox) | ✅     | `sdpi-checkbox`  |                        |
+| Checkbox (Multiple)               | ❌     |                  | Partially implemented. |
+| Color                             | ❌     |                  |                        |
+| Date                              | ❌     |                  |                        |
+| Date (Month)                      | ❌     |                  |                        |
+| Date (Week)                       | ❌     |                  |                        |
+| File                              | ❌     |                  |                        |
+| File (Property Inspector)         | ❌     |                  |                        |
+| [Radio](#⚙️-radio)                | ✅     | `sdpi-radio`     |                        |
+| Range                             | ❌     |                  |                        |
+| [Textarea](#⚙️-textarea)          | ✅     | `sdpi-textarea`  |                        |
+| [Textfield](#⚙️-textfield)        | ✅     | `sdpi-textfield` |                        |
+| [Select](#⚙️-select)              | ✅     | `sdpi-select`    |                        |
 
 ### 🖌️ Styling
 
-| Component                    | Status | sdpi-component | Notes                                                |
-| ---------------------------- | ------ | -------------- | ---------------------------------------------------- |
-| [Field Items](#-field-items) | ✅     | `sdpi-item`    |                                                      |
-| Headings, Groups, Dividers   | ❌     |                | `h1..5`, `section`, `hr`                             |
-| Lists                        | ❌     |                | `ul`, `ol`, `li`                                     |
-| Meter                        | ❌     |                | `meter`                                              |
-| Progress                     | ❌     |                | `progress`                                           |
-| Tables                       | ❌     |                | `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` |
-| Details                      | ❌     |                | `detail`, `summary`                                  |
+| Component                      | Status | sdpi-component | Notes                                                |
+| ------------------------------ | ------ | -------------- | ---------------------------------------------------- |
+| [Field Items](#🖌️-field-items) | ✅     | `sdpi-item`    |                                                      |
+| Headings, Groups, Dividers     | ❌     |                | `h1..5`, `section`, `hr`                             |
+| Lists                          | ❌     |                | `ul`, `ol`, `li`                                     |
+| Meter                          | ❌     |                | `meter`                                              |
+| Progress                       | ❌     |                | `progress`                                           |
+| Tables                         | ❌     |                | `table`, `thead`, `tbody`, `tfoot`, `tr`, `td`, `th` |
+| Details                        | ❌     |                | `detail`, `summary`                                  |
 
 ---
 
