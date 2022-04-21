@@ -66,6 +66,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | Date (Month)                                    | ❌     |                      |
 | Date (Week)                                     | ❌     |                      |
 | [File](#%EF%B8%8F-file)                         | ✅     | `sdpi-file`          |
+| [Password](#%EF%B8%8F-password)                 | ✅     | `sdpi-password`      |
 | [Radio](#%EF%B8%8F-radio)                       | ✅     | `sdpi-radio`         |
 | Range                                           | ❌     |                      |
 | [Textarea](#%EF%B8%8F-textarea)                 | ✅     | `sdpi-textarea`      |
@@ -241,6 +242,27 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 | `value`    | `string`  | The value of the component, and the persisted setting.                                      |
 
 ---
+
+### ⚙️ Password
+
+#### Example
+
+<!-- prettier-ignore -->
+```html
+<sdpi-password setting="api_key"></sdpi-password>
+```
+
+![A password field input in the Stream Deck property inspector using the sdpi-password web component](assets/sdpi-password.png?raw=true 'sdpi-password example')
+
+#### Configuration
+
+| Name        | Type      | Description                                                                   |
+| ----------- | --------- | ----------------------------------------------------------------------------- |
+| `setting`   | `string`  | The path to the property where the value should be persisted in the settings. |
+| `global`    | `boolean` | When present, the value will be persisted to the global settings.             |
+| `disabled`  | `boolean` | Determines whether the input is disabled.                                     |
+| `maxlength` | `number`  | Optional maximum length of the value.                                         |
+| `value`     | `string`  | The value of the component, and the persisted setting.                        |
 
 ### ⚙️ Radio
 

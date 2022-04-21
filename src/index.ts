@@ -4,6 +4,7 @@ import './components/checkbox';
 import './components/checkbox-list';
 import './components/color';
 import './components/file';
+import './components/password';
 import './components/radio';
 import './components/sdpi-item';
 import './components/select';
