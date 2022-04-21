@@ -65,6 +65,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | Date                                      | ❌     |                      |
 | Date (Month)                              | ❌     |                      |
 | Date (Week)                               | ❌     |                      |
+| Datetime                                  | ❌     |                      |
 | [File](#-file)                            | ✅     | `sdpi-file`          |
 | [Password](#-password)                    | ✅     | `sdpi-password`      |
 | [Radio](#-radio)                          | ✅     | `sdpi-radio`         |
@@ -72,6 +73,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | [Select](#-select)                        | ✅     | `sdpi-select`        |
 | [Textarea](#-textarea)                    | ✅     | `sdpi-textarea`      |
 | [Textfield](#-textfield)                  | ✅     | `sdpi-textfield`     |
+| Time                                      | ❌     |                      |
 
 ### 🖌️ Styling
 
