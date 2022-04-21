@@ -61,7 +61,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | [Button](#%EF%B8%8F-button)                     | ✅     | `sdpi-button`        |
 | [Checkbox (Single)](#%EF%B8%8F-checkbox)        | ✅     | `sdpi-checkbox`      |
 | [Checkbox (Multiple)](#%EF%B8%8F-checkbox-list) | ✅     | `sdpi-checkbox-list` |
-| Color                                           | ❌     |                      |
+| [Color](#%EF%B8%8F-color)                       | ✅     | `sdpi-color`         |
 | Date                                            | ❌     |                      |
 | Date (Month)                                    | ❌     |                      |
 | Date (Week)                                     | ❌     |                      |
@@ -192,6 +192,26 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 | `columns`  | `number`   | The number of columns to render the inputs in; valid values are 1-6.          |
 | `disabled` | `boolean`  | Determines whether the inputs are disabled.                                   |
 | `value`    | `string[]` | The value of the component, and the persisted setting.                        |
+
+---
+
+### ⚙️ Color
+
+#### Example
+
+```html
+<sdpi-color setting="selected_color"></sdpi-color>
+```
+
+![A color picker input in the Stream Deck property inspector using the sdpi-color web component](assets/sdpi-color.png?raw=true 'sdpi-color example')
+
+#### Configuration
+
+| Name      | Type      | Description                                                                   |
+| --------- | --------- | ----------------------------------------------------------------------------- |
+| `setting` | `string`  | The path to the property where the value should be persisted in the settings. |
+| `global`  | `boolean` | When present, the value will be persisted to the global settings.             |
+| `value`   | `string`  | The value of the component, and the persisted setting.                        |
 
 ---
 

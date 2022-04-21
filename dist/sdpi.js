@@ -178,7 +178,19 @@
                         .disabled=${this.disabled||t.disabled}
                         .value=${t.value}
                         @change=${this.handleChange}
-                    />`,t.text))))}handleChange(t){const e=new Set(this.value);t.target.checked?e.add(t.target.value):e.delete(t.target.value),this._store.save(Array.from(e))}};Lt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-checkbox-list")],Lt);class Ht{constructor(t){this.U=t}disconnect(){this.U=void 0}reconnect(t){this.U=t}deref(){return this.U}}class Bt{constructor(){this.Y=void 0,this.q=void 0}get(){return this.Y}pause(){var t;null!==(t=this.Y)&&void 0!==t||(this.Y=new Promise((t=>this.q=t)))}resume(){var t;null===(t=this.q)||void 0===t||t.call(this),this.Y=this.q=void 0}}const Gt=t=>{return!(e=t,null===e||"object"!=typeof e&&"function"!=typeof e||"function"!=typeof t.then);var e},Qt=ct(class extends vt{constructor(){super(...arguments),this._$Cwt=1073741823,this._$Cyt=[],this._$CG=new Ht(this),this._$CK=new Bt}render(...t){var e;return null!==(e=t.find((t=>!Gt(t))))&&void 0!==e?e:I}update(t,e){const i=this._$Cyt;let s=i.length;this._$Cyt=e;const n=this._$CG,o=this._$CK;this.isConnected||this.disconnected();for(let t=0;t<e.length&&!(t>this._$Cwt);t++){const r=e[t];if(!Gt(r))return this._$Cwt=t,r;t<s&&r===i[t]||(this._$Cwt=1073741823,s=0,Promise.resolve(r).then((async t=>{for(;o.get();)await o.get();const e=n.deref();if(void 0!==e){const i=e._$Cyt.indexOf(r);i>-1&&i<e._$Cwt&&(e._$Cwt=i,e.setValue(t))}})))}return I}disconnected(){this._$CG.disconnect(),this._$CK.pause()}reconnected(){this._$CG.reconnect(this),this._$CK.resume()}});async function Zt(){return"windows"==(await Mt.getConnectionInfo()).info.application.platform}var qt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},Yt=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let Wt=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.label="..."}static get styles(){return[...super.styles,n`
+                    />`,t.text))))}handleChange(t){const e=new Set(this.value);t.target.checked?e.add(t.target.value):e.delete(t.target.value),this._store.save(Array.from(e))}};Lt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-checkbox-list")],Lt);let Ht=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this)}static get styles(){return[...super.styles,n`
+                input {
+                    background-color: var(--input-bg-color);
+                }
+            `]}render(){return M`
+            <input
+                type="color"
+                ${$t(this.focusElement)}
+                .disabled=${this.disabled}
+                .defaultValue=${this.value||""}
+                @change=${t=>this._store.save(t.target.value)}
+            />
+        `}};Ht=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-color")],Ht);class Bt{constructor(t){this.U=t}disconnect(){this.U=void 0}reconnect(t){this.U=t}deref(){return this.U}}class Gt{constructor(){this.Y=void 0,this.q=void 0}get(){return this.Y}pause(){var t;null!==(t=this.Y)&&void 0!==t||(this.Y=new Promise((t=>this.q=t)))}resume(){var t;null===(t=this.q)||void 0===t||t.call(this),this.Y=this.q=void 0}}const Qt=t=>{return!(e=t,null===e||"object"!=typeof e&&"function"!=typeof e||"function"!=typeof t.then);var e},Zt=ct(class extends vt{constructor(){super(...arguments),this._$Cwt=1073741823,this._$Cyt=[],this._$CG=new Bt(this),this._$CK=new Gt}render(...t){var e;return null!==(e=t.find((t=>!Qt(t))))&&void 0!==e?e:I}update(t,e){const i=this._$Cyt;let s=i.length;this._$Cyt=e;const n=this._$CG,o=this._$CK;this.isConnected||this.disconnected();for(let t=0;t<e.length&&!(t>this._$Cwt);t++){const r=e[t];if(!Qt(r))return this._$Cwt=t,r;t<s&&r===i[t]||(this._$Cwt=1073741823,s=0,Promise.resolve(r).then((async t=>{for(;o.get();)await o.get();const e=n.deref();if(void 0!==e){const i=e._$Cyt.indexOf(r);i>-1&&i<e._$Cwt&&(e._$Cwt=i,e.setValue(t))}})))}return I}disconnected(){this._$CG.disconnect(),this._$CK.pause()}reconnected(){this._$CG.reconnect(this),this._$CK.resume()}});async function qt(){return"windows"==(await Mt.getConnectionInfo()).info.application.platform}var Yt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},Wt=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let Ft=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.label="..."}static get styles(){return[...super.styles,n`
                 .container {
                     align-items: stretch;
                     display: flex;
@@ -210,7 +222,7 @@
             `]}render(){return M`
             <div class="container">
                 <label class="value" for="file_input">
-                    <span .title=${this.value||""}>${Qt(async function(t){const e=await Zt()?"\\":"/",i=t.split(e);return 1==i.length?t:i[i.length-1]}(this.value||""))}</span>
+                    <span .title=${this.value||""}>${Zt(async function(t){const e=await qt()?"\\":"/",i=t.split(e);return 1==i.length?t:i[i.length-1]}(this.value||""))}</span>
                 </label>
                 <label class="button">
                     <sdpi-button @click=${()=>{var t;return null===(t=this.focusElement.value)||void 0===t?void 0:t.click()}}>
@@ -221,24 +233,24 @@
                             id="file_input"
                             .accept=${this.accept||""}
                             .disabled=${this.disabled}
-                            @change="${async t=>this._store.save(await async function(t){const e=decodeURIComponent(t.replace(/^C:\\fakepath\\/,""));return await Zt()?e.replace(new RegExp("/","g"),"\\"):e}(t.target.value))}"
+                            @change="${async t=>this._store.save(await async function(t){const e=decodeURIComponent(t.replace(/^C:\\fakepath\\/,""));return await qt()?e.replace(new RegExp("/","g"),"\\"):e}(t.target.value))}"
                         />
                     </sdpi-button>
                 </label>
             </div>
-        `}};qt([st(),Yt("design:type",String)],Wt.prototype,"accept",void 0),qt([st(),Yt("design:type",Object)],Wt.prototype,"label",void 0),Wt=qt([et("sdpi-file")],Wt);let Ft=class extends(wt(Rt(lt(Et(X))))){constructor(){super(...arguments),this._childNodes=new zt(this,["option"]),this._store=new Pt(this)}render(){return this.renderGrid(this._childNodes.items.map((t=>this.renderCheckable("radio",M`<input
+        `}};Yt([st(),Wt("design:type",String)],Ft.prototype,"accept",void 0),Yt([st(),Wt("design:type",Object)],Ft.prototype,"label",void 0),Ft=Yt([et("sdpi-file")],Ft);let Vt=class extends(wt(Rt(lt(Et(X))))){constructor(){super(...arguments),this._childNodes=new zt(this,["option"]),this._store=new Pt(this)}render(){return this.renderGrid(this._childNodes.items.map((t=>this.renderCheckable("radio",M`<input
                         type="radio"
                         name="_"
                         .checked=${this.value===t.value}
                         .disabled=${this.disabled||t.disabled}
                         .value=${t.value}
                         @change=${t=>this._store.save(t.target.value)}
-                    />`,t.text))))}};Ft=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-radio")],Ft);var Vt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let Kt=class extends X{render(){const t=this.label?M`<label>${this.label}:</label>`:void 0;return M`
+                    />`,t.text))))}};Vt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-radio")],Vt);var Kt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let Jt=class extends X{render(){const t=this.label?M`<label>${this.label}:</label>`:void 0;return M`
             <div class="container grid">
                 <div class="label"><label @click=${this.handleLabelClick}>${t}</label></div>
                 <div class="content"><slot></slot></div>
             </div>
-        `}handleLabelClick(){for(const t of this.querySelectorAll("*")){const e=t;if(e.canFocus)return void e.focus()}}};Kt.styles=[At,n`
+        `}handleLabelClick(){for(const t of this.querySelectorAll("*")){const e=t;if(e.canFocus)return void e.focus()}}};Jt.styles=[At,n`
             ::-webkit-scrollbar {
                 width: 5px;
             }
@@ -272,7 +284,7 @@
                 justify-self: end;
                 padding-right: 11px;
             }
-        `],Vt([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],Kt.prototype,"label",void 0),Kt=Vt([et("sdpi-item")],Kt);var Jt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let Xt=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._childNodes=new zt(this,["optgroup","option"]),this._store=new Pt(this)}static get styles(){return[...super.styles,At,n`
+        `],Kt([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],Jt.prototype,"label",void 0),Jt=Kt([et("sdpi-item")],Jt);var Xt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let te=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._childNodes=new zt(this,["optgroup","option"]),this._store=new Pt(this)}static get styles(){return[...super.styles,At,n`
                 select {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 1px) 0;
@@ -291,7 +303,7 @@
                 <option value="" disabled .hidden=${!this.placeholder||void 0!==this.value}>${this.placeholder}</option>
                 ${this.renderChildNodes()}
             </select>
-        `}renderChildNodes(){if(0===this.childNodes.length)return;const t=e=>e instanceof HTMLOptGroupElement?M`<optgroup .label=${e.label}>${Array.from(e.childNodes).map(t)}</optgroup>`:e instanceof HTMLOptionElement?M`<option .disabled=${e.disabled} .value=${e.text}>${e.label}</option>`:void 0;return M`${this._childNodes.items.map(t)}`}};Jt([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],Xt.prototype,"placeholder",void 0),Xt=Jt([et("sdpi-select")],Xt);var te=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},ee=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let ie=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.rows=3,this.showLength=!1}static get styles(){return[...super.styles,At,n`
+        `}renderChildNodes(){if(0===this.childNodes.length)return;const t=e=>e instanceof HTMLOptGroupElement?M`<optgroup .label=${e.label}>${Array.from(e.childNodes).map(t)}</optgroup>`:e instanceof HTMLOptionElement?M`<option .disabled=${e.disabled} .value=${e.text}>${e.label}</option>`:void 0;return M`${this._childNodes.items.map(t)}`}};Xt([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],te.prototype,"placeholder",void 0),te=Xt([et("sdpi-select")],te);var ee=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},ie=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let se=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.rows=3,this.showLength=!1}static get styles(){return[...super.styles,At,n`
                 textarea {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
@@ -321,7 +333,7 @@
                 @input=${t=>this._store.save(t.target.value)}
             ></textarea>
             ${this.getLengthLabel()}
-        `}getLengthLabel(){var t;if(this.showLength||this.maxLength){const e=this.maxLength?M`/${this.maxLength}`:void 0;return M`<label class="length" for=${this.inputId}>${(null===(t=this.value)||void 0===t?void 0:t.length)||0}${e}</label>`}}};te([st({attribute:"maxlength",type:Number}),ee("design:type",Number)],ie.prototype,"maxLength",void 0),te([st({type:Number}),ee("design:type",Object)],ie.prototype,"rows",void 0),te([st({attribute:"showlength",type:Boolean}),ee("design:type",Object)],ie.prototype,"showLength",void 0),ie=te([et("sdpi-textarea")],ie);var se=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},ne=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let oe=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.pattern="",this.placeholder="",this.required=!1}static get styles(){return[...super.styles,At,n`
+        `}getLengthLabel(){var t;if(this.showLength||this.maxLength){const e=this.maxLength?M`/${this.maxLength}`:void 0;return M`<label class="length" for=${this.inputId}>${(null===(t=this.value)||void 0===t?void 0:t.length)||0}${e}</label>`}}};ee([st({attribute:"maxlength",type:Number}),ie("design:type",Number)],se.prototype,"maxLength",void 0),ee([st({type:Number}),ie("design:type",Object)],se.prototype,"rows",void 0),ee([st({attribute:"showlength",type:Boolean}),ie("design:type",Object)],se.prototype,"showLength",void 0),se=ee([et("sdpi-textarea")],se);var ne=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},oe=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let re=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.pattern="",this.placeholder="",this.required=!1}static get styles(){return[...super.styles,At,n`
                 input {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
@@ -354,7 +366,7 @@
                 .value=${this.value||""}
                 @input=${t=>this._store.save(t.target.value)}
             />
-        `}};se([st(),ne("design:type",Object)],oe.prototype,"pattern",void 0),se([st(),ne("design:type",Object)],oe.prototype,"placeholder",void 0),se([st({type:Boolean}),ne("design:type",Object)],oe.prototype,"required",void 0),oe=se([et("sdpi-textfield")],oe),window.streamDeckClient=Mt;const re=window.connectElgatoStreamDeckSocket;window.connectElgatoStreamDeckSocket=function(t,e,i,s,n){re&&re(t,e,i,s,n),Mt.connect(t,e,i,s,n)};const le=document.createElement("style");le.innerHTML=n`
+        `}};ne([st(),oe("design:type",Object)],re.prototype,"pattern",void 0),ne([st(),oe("design:type",Object)],re.prototype,"placeholder",void 0),ne([st({type:Boolean}),oe("design:type",Object)],re.prototype,"required",void 0),re=ne([et("sdpi-textfield")],re),window.streamDeckClient=Mt;const le=window.connectElgatoStreamDeckSocket;window.connectElgatoStreamDeckSocket=function(t,e,i,s,n){le&&le(t,e,i,s,n),Mt.connect(t,e,i,s,n)};const ae=document.createElement("style");ae.innerHTML=n`
     /* Styles added by sdpi library. */
     ::-webkit-scrollbar {
         width: 5px;
@@ -368,4 +380,4 @@
         border-radius: 5px;
         outline: 1px solid slategrey;
     }
-`.cssText,document.head.appendChild(le)})();
+`.cssText,document.head.appendChild(ae)})();
