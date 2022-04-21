@@ -1,5 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
 import { StoreController } from '../controllers/store-controller';
@@ -42,6 +43,15 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
     }
 
     /**
+     * The maximum length the text value can be.
+     */
+    @property({
+        attribute: 'maxlength',
+        type: Number
+    })
+    public maxLength?: number;
+
+    /**
      * The optional pattern to be applied when validating the value.
      */
     @property()
@@ -65,6 +75,7 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
             <input
                 ${ref(this.focusElement)}
                 type="text"
+                maxlength=${ifDefined(this.maxLength)}
                 .disabled=${this.disabled}
                 .pattern=${this.pattern}
                 .placeholder=${this.placeholder}

@@ -353,6 +353,7 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 | `setting`     | `string`  | The path to the property where the value should be persisted in the settings. |
 | `global`      | `boolean` | When present, the value will be persisted to the global settings.             |
 | `disabled`    | `boolean` | Determines whether the input is disabled.                                     |
+| `maxlength`   | `number`  | Optional maximum length of the value.                                         |
 | `pattern`     | `string`  | Optional regular expression used to validate the input.                       |
 | `placeholder` | `string`  | Optional placeholder text shown in the input.                                 |
 | `required`    | `boolean` | When present, an icon is shown in the input if the value is empty.            |

@@ -303,7 +303,7 @@
                 <option value="" disabled .hidden=${!this.placeholder||void 0!==this.value}>${this.placeholder}</option>
                 ${this.renderChildNodes()}
             </select>
-        `}renderChildNodes(){if(0===this.childNodes.length)return;const t=e=>e instanceof HTMLOptGroupElement?M`<optgroup .label=${e.label}>${Array.from(e.childNodes).map(t)}</optgroup>`:e instanceof HTMLOptionElement?M`<option .disabled=${e.disabled} .value=${e.text}>${e.label}</option>`:void 0;return M`${this._childNodes.items.map(t)}`}};Xt([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],te.prototype,"placeholder",void 0),te=Xt([et("sdpi-select")],te);var ee=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},ie=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let se=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.rows=3,this.showLength=!1}static get styles(){return[...super.styles,At,n`
+        `}renderChildNodes(){if(0===this.childNodes.length)return;const t=e=>e instanceof HTMLOptGroupElement?M`<optgroup .label=${e.label}>${Array.from(e.childNodes).map(t)}</optgroup>`:e instanceof HTMLOptionElement?M`<option .disabled=${e.disabled} .value=${e.text}>${e.label}</option>`:void 0;return M`${this._childNodes.items.map(t)}`}};Xt([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],te.prototype,"placeholder",void 0),te=Xt([et("sdpi-select")],te);const ee=t=>null!=t?t:U;var ie=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},se=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let ne=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.rows=3,this.showLength=!1}static get styles(){return[...super.styles,At,n`
                 textarea {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
@@ -325,7 +325,7 @@
             <textarea
                 ${$t(this.focusElement)}
                 type="textarea"
-                maxlength=${(t=>null!=t?t:U)(this.maxLength)}
+                maxlength=${ee(this.maxLength)}
                 .disabled=${this.disabled}
                 .id=${this.inputId}
                 .rows=${this.rows}
@@ -333,7 +333,7 @@
                 @input=${t=>this._store.save(t.target.value)}
             ></textarea>
             ${this.getLengthLabel()}
-        `}getLengthLabel(){var t;if(this.showLength||this.maxLength){const e=this.maxLength?M`/${this.maxLength}`:void 0;return M`<label class="length" for=${this.inputId}>${(null===(t=this.value)||void 0===t?void 0:t.length)||0}${e}</label>`}}};ee([st({attribute:"maxlength",type:Number}),ie("design:type",Number)],se.prototype,"maxLength",void 0),ee([st({type:Number}),ie("design:type",Object)],se.prototype,"rows",void 0),ee([st({attribute:"showlength",type:Boolean}),ie("design:type",Object)],se.prototype,"showLength",void 0),se=ee([et("sdpi-textarea")],se);var ne=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},oe=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let re=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.pattern="",this.placeholder="",this.required=!1}static get styles(){return[...super.styles,At,n`
+        `}getLengthLabel(){var t;if(this.showLength||this.maxLength){const e=this.maxLength?M`/${this.maxLength}`:void 0;return M`<label class="length" for=${this.inputId}>${(null===(t=this.value)||void 0===t?void 0:t.length)||0}${e}</label>`}}};ie([st({attribute:"maxlength",type:Number}),se("design:type",Number)],ne.prototype,"maxLength",void 0),ie([st({type:Number}),se("design:type",Object)],ne.prototype,"rows",void 0),ie([st({attribute:"showlength",type:Boolean}),se("design:type",Object)],ne.prototype,"showLength",void 0),ne=ie([et("sdpi-textarea")],ne);var oe=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},re=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let le=class extends(Rt(_t(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.pattern="",this.placeholder="",this.required=!1}static get styles(){return[...super.styles,At,n`
                 input {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
@@ -359,6 +359,7 @@
             <input
                 ${$t(this.focusElement)}
                 type="text"
+                maxlength=${ee(this.maxLength)}
                 .disabled=${this.disabled}
                 .pattern=${this.pattern}
                 .placeholder=${this.placeholder}
@@ -366,7 +367,7 @@
                 .value=${this.value||""}
                 @input=${t=>this._store.save(t.target.value)}
             />
-        `}};ne([st(),oe("design:type",Object)],re.prototype,"pattern",void 0),ne([st(),oe("design:type",Object)],re.prototype,"placeholder",void 0),ne([st({type:Boolean}),oe("design:type",Object)],re.prototype,"required",void 0),re=ne([et("sdpi-textfield")],re),window.streamDeckClient=Mt;const le=window.connectElgatoStreamDeckSocket;window.connectElgatoStreamDeckSocket=function(t,e,i,s,n){le&&le(t,e,i,s,n),Mt.connect(t,e,i,s,n)};const ae=document.createElement("style");ae.innerHTML=n`
+        `}};oe([st({attribute:"maxlength",type:Number}),re("design:type",Number)],le.prototype,"maxLength",void 0),oe([st(),re("design:type",Object)],le.prototype,"pattern",void 0),oe([st(),re("design:type",Object)],le.prototype,"placeholder",void 0),oe([st({type:Boolean}),re("design:type",Object)],le.prototype,"required",void 0),le=oe([et("sdpi-textfield")],le),window.streamDeckClient=Mt;const ae=window.connectElgatoStreamDeckSocket;window.connectElgatoStreamDeckSocket=function(t,e,i,s,n){ae&&ae(t,e,i,s,n),Mt.connect(t,e,i,s,n)};const ce=document.createElement("style");ce.innerHTML=n`
     /* Styles added by sdpi library. */
     ::-webkit-scrollbar {
         width: 5px;
@@ -380,4 +381,4 @@
         border-radius: 5px;
         outline: 1px solid slategrey;
     }
-`.cssText,document.head.appendChild(ae)})();
+`.cssText,document.head.appendChild(ce)})();
