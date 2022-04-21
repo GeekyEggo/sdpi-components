@@ -3,7 +3,7 @@
 Stream Deck Property Inspector Components (or sdpi-components for short) is a collection of web components designed to make persisting your plugin's settings simple, whilst also ensuring an accessibility-friendly and consistent experience for Stream Deck users.
 
 -   [✏️ Getting Started](#%EF%B8%8F-getting-started)
--   [🚧 Supported Components](#-supported-components)
+-   [🚧 Components](#-components)
 -   [📖 Documentation](#-documentation)
 
 ## ✏️ Getting Started
@@ -50,7 +50,7 @@ An example of a property inspector HTML file using the web components can be fou
 
 ---
 
-## 🚧 Supported Components
+## 🚧 Components
 
 This library is very much a work-in-progress, with the current objective to support inputs documented on the official [Stream Deck Developer Portal](https://developer.elgato.com/documentation/stream-deck/sdk/property-inspector/). Pull requests are welcomed. 💖
 
@@ -93,8 +93,6 @@ This library is very much a work-in-progress, with the current objective to supp
 
 The `sdpi-item` component is designed to complement inputs by providing a recognisable layout, as well as a label associated with the input. An `sdpi-item` will typically represent a single piece of information within the settings, although is not limited to.
 
-#### Example
-
 <!-- prettier-ignore -->
 ```html
 <sdpi-item label="Name">
@@ -102,7 +100,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 </sdpi-item>
 ```
 
-#### Configuration
+**Configuration**
 
 | Name    | Type     | Description                                                                                           |
 | ------- | -------- | ----------------------------------------------------------------------------------------------------- |
@@ -112,7 +110,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ### ⚙️ Button
 
-#### Example
+![An input button in the Stream Deck property inspector using the sdpi-button web component](assets/sdpi-button.png?raw=true 'sdpi-button example')
 
 <!-- prettier-ignore -->
 ```html
@@ -121,9 +119,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 </sdpi-button>
 ```
 
-![An input button in the Stream Deck property inspector using the sdpi-button web component](assets/sdpi-button.png?raw=true 'sdpi-button example')
-
-#### Configuration
+**Configuration**
 
 | Name       | Type      | Description                               |
 | ---------- | --------- | ----------------------------------------- |
@@ -132,9 +128,9 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ---
 
-### ⚙️ Checkbox
+### ☑️ Checkbox
 
-#### Example
+![A checkbox input in the Stream Deck property inspector using the sdpi-checkbox web component](assets/sdpi-checkbox.png?raw=true 'sdpi-checkbox example')
 
 <!-- prettier-ignore -->
 ```html
@@ -145,9 +141,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 </sdpi-checkbox>
 ```
 
-![A checkbox input in the Stream Deck property inspector using the sdpi-checkbox web component](assets/sdpi-checkbox.png?raw=true 'sdpi-checkbox example')
-
-#### Configuration
+**Configuration**
 
 | Name       | Type      | Description                                                                      |
 | ---------- | --------- | -------------------------------------------------------------------------------- |
@@ -159,9 +153,9 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 ---
 
-### ⚙️ Checkbox List
+### ☑️ Checkbox List
 
-#### Example
+![A list of checkbox inputs in the Stream Deck property inspector using the sdpi-checkbox-list web component](assets/sdpi-checkbox-list.png?raw=true 'sdpi-checkbox-list example')
 
 <!-- prettier-ignore -->
 ```html
@@ -174,17 +168,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 </sdpi-checkbox-list>
 ```
 
-![A list of checkbox inputs in the Stream Deck property inspector using the sdpi-checkbox-list web component](assets/sdpi-checkbox-list.png?raw=true 'sdpi-checkbox-list example')
-
-NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is `Set<string>` for the checked options. e.g.
-
-```json
-{
-    "fav_numbers": ["1"]
-}
-```
-
-#### Configuration
+**Configuration**
 
 | Name       | Type       | Description                                                                   |
 | ---------- | ---------- | ----------------------------------------------------------------------------- |
@@ -194,19 +178,25 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 | `disabled` | `boolean`  | Determines whether the inputs are disabled.                                   |
 | `value`    | `string[]` | The value of the component, and the persisted setting.                        |
 
+NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is `Set<string>` for the checked options. e.g.
+
+```json
+{
+    "fav_numbers": ["1"]
+}
+```
+
 ---
 
-### ⚙️ Color
+### 🎨 Color
 
-#### Example
+![A color picker input in the Stream Deck property inspector using the sdpi-color web component](assets/sdpi-color.png?raw=true 'sdpi-color example')
 
 ```html
 <sdpi-color setting="selected_color"></sdpi-color>
 ```
 
-![A color picker input in the Stream Deck property inspector using the sdpi-color web component](assets/sdpi-color.png?raw=true 'sdpi-color example')
-
-#### Configuration
+**Configuration**
 
 | Name      | Type      | Description                                                                   |
 | --------- | --------- | ----------------------------------------------------------------------------- |
@@ -216,9 +206,9 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 
 ---
 
-### ⚙️ File
+### 💾 File
 
-#### Example
+![A file input in the Stream Deck property inspector using the sdpi-file web component](assets/sdpi-file.png?raw=true 'sdpi-file example')
 
 <!-- prettier-ignore -->
 ```html
@@ -228,9 +218,7 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 </sdpi-file>
 ```
 
-![A file input in the Stream Deck property inspector using the sdpi-file web component](assets/sdpi-file.png?raw=true 'sdpi-file example')
-
-#### Configuration
+**Configuration**
 
 | Name       | Type      | Description                                                                                 |
 | ---------- | --------- | ------------------------------------------------------------------------------------------- |
@@ -243,18 +231,16 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 
 ---
 
-### ⚙️ Password
+### 🔒 Password
 
-#### Example
+![A password field input in the Stream Deck property inspector using the sdpi-password web component](assets/sdpi-password.png?raw=true 'sdpi-password example')
 
 <!-- prettier-ignore -->
 ```html
 <sdpi-password setting="api_key"></sdpi-password>
 ```
 
-![A password field input in the Stream Deck property inspector using the sdpi-password web component](assets/sdpi-password.png?raw=true 'sdpi-password example')
-
-#### Configuration
+**Configuration**
 
 | Name        | Type      | Description                                                                   |
 | ----------- | --------- | ----------------------------------------------------------------------------- |
@@ -264,9 +250,9 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 | `maxlength` | `number`  | Optional maximum length of the value.                                         |
 | `value`     | `string`  | The value of the component, and the persisted setting.                        |
 
-### ⚙️ Radio
+### 🔘 Radio
 
-#### Example
+![A collection of radio inputs in the Stream Deck property inspector using the sdpi-radio web component](assets/sdpi-radio.png?raw=true 'sdpi-radio example')
 
 ```html
 <sdpi-radio setting="fav_number" columns="3">
@@ -278,9 +264,7 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 </sdpi-radio>
 ```
 
-![A collection of radio inputs in the Stream Deck property inspector using the sdpi-radio web component](assets/sdpi-radio.png?raw=true 'sdpi-radio example')
-
-#### Configuration
+**Configuration**
 
 | Name       | Type      | Description                                                                   |
 | ---------- | --------- | ----------------------------------------------------------------------------- |
@@ -292,9 +276,9 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 
 ---
 
-### ⚙️ Select
+### 📚 Select
 
-#### Example
+![A select input in the Stream Deck property inspector using the sdpi-select web component](assets/sdpi-select.png?raw=true 'sdpi-select example')
 
 ```html
 <sdpi-select setting="color" placeholder="Please choose a color">
@@ -308,9 +292,7 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 </sdpi-select>
 ```
 
-![A select input in the Stream Deck property inspector using the sdpi-select web component](assets/sdpi-select.png?raw=true 'sdpi-select example')
-
-#### Configuration
+**Configuration**
 
 | Name          | Type      | Description                                                                   |
 | ------------- | --------- | ----------------------------------------------------------------------------- |
@@ -322,9 +304,9 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 
 ---
 
-### ⚙️ Textarea
+### 📝 Textarea
 
-#### Example
+![A textarea input in the Stream Deck property inspector using the sdpi-textarea web component](assets/sdpi-textarea.png?raw=true 'sdpi-textarea example')
 
 <!-- prettier-ignore -->
 ```html
@@ -336,9 +318,7 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 </sdpi-textarea>
 ```
 
-![A textarea input in the Stream Deck property inspector using the sdpi-textarea web component](assets/sdpi-textarea.png?raw=true 'sdpi-textarea example')
-
-#### Configuration
+**Configuration**
 
 | Name         | Type      | Description                                                                   |
 | ------------ | --------- | ----------------------------------------------------------------------------- |
@@ -352,9 +332,9 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 
 ---
 
-### ⚙️ Textfield
+### 📝 Textfield
 
-#### Example
+![A text field input in the Stream Deck property inspector using the sdpi-textfield web component](assets/sdpi-textfield.png?raw=true 'sdpi-textfield example')
 
 <!-- prettier-ignore -->
 ```html
@@ -366,9 +346,7 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 </sdpi-textfield>
 ```
 
-![A text field input in the Stream Deck property inspector using the sdpi-textfield web component](assets/sdpi-textfield.png?raw=true 'sdpi-textfield example')
-
-#### Configuration
+**Configuration**
 
 | Name          | Type      | Description                                                                   |
 | ------------- | --------- | ----------------------------------------------------------------------------- |
