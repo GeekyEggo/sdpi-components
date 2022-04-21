@@ -56,22 +56,22 @@ This library is very much a work-in-progress, with the current objective to supp
 
 ### ⚙️ Inputs
 
-| Component                                       | Status | sdpi-component       |
-| ----------------------------------------------- | ------ | -------------------- |
-| [Button](#%EF%B8%8F-button)                     | ✅     | `sdpi-button`        |
-| [Checkbox (Single)](#%EF%B8%8F-checkbox)        | ✅     | `sdpi-checkbox`      |
-| [Checkbox (Multiple)](#%EF%B8%8F-checkbox-list) | ✅     | `sdpi-checkbox-list` |
-| [Color](#%EF%B8%8F-color)                       | ✅     | `sdpi-color`         |
-| Date                                            | ❌     |                      |
-| Date (Month)                                    | ❌     |                      |
-| Date (Week)                                     | ❌     |                      |
-| [File](#%EF%B8%8F-file)                         | ✅     | `sdpi-file`          |
-| [Password](#%EF%B8%8F-password)                 | ✅     | `sdpi-password`      |
-| [Radio](#%EF%B8%8F-radio)                       | ✅     | `sdpi-radio`         |
-| Range                                           | ❌     |                      |
-| [Textarea](#%EF%B8%8F-textarea)                 | ✅     | `sdpi-textarea`      |
-| [Textfield](#%EF%B8%8F-textfield)               | ✅     | `sdpi-textfield`     |
-| [Select](#%EF%B8%8F-select)                     | ✅     | `sdpi-select`        |
+| Component                                 | Status | sdpi-component       |
+| ----------------------------------------- | ------ | -------------------- |
+| [Button](#%EF%B8%8F-button)               | ✅     | `sdpi-button`        |
+| [Checkbox](#%EF%B8%8F-checkbox)           | ✅     | `sdpi-checkbox`      |
+| [Checkbox List](#%EF%B8%8F-checkbox-list) | ✅     | `sdpi-checkbox-list` |
+| [Color](#-color)                          | ✅     | `sdpi-color`         |
+| Date                                      | ❌     |                      |
+| Date (Month)                              | ❌     |                      |
+| Date (Week)                               | ❌     |                      |
+| [File](#-file)                            | ✅     | `sdpi-file`          |
+| [Password](#-password)                    | ✅     | `sdpi-password`      |
+| [Radio](#-radio)                          | ✅     | `sdpi-radio`         |
+| Range                                     | ❌     |                      |
+| [Select](#-select)                        | ✅     | `sdpi-select`        |
+| [Textarea](#-textarea)                    | ✅     | `sdpi-textarea`      |
+| [Textfield](#-textfield)                  | ✅     | `sdpi-textfield`     |
 
 ### 🖌️ Styling
 
