@@ -24,6 +24,10 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
                     display: none;
                 }
 
+                input:disabled ~ label.value {
+                    opacity: 0.5;
+                }
+
                 label.value {
                     background-color: var(--input-bg-color);
                     color: var(--input-font-color);
@@ -63,21 +67,19 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
     render() {
         return html`
             <div class="container">
+                <input
+                    ${ref(this.focusElement)}
+                    type="file"
+                    id="file_input"
+                    .accept=${this.accept || ''}
+                    .disabled=${this.disabled}
+                    @change="${async (ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(await sanitize(ev.target.value))}"
+                />
                 <label class="value" for="file_input">
                     <span .title=${this.value || ''}>${until(getFileName(this.value || ''))}</span>
                 </label>
                 <label class="button">
-                    <sdpi-button @click=${() => this.focusElement.value?.click()}>
-                        ${this.label}
-                        <input
-                            ${ref(this.focusElement)}
-                            type="file"
-                            id="file_input"
-                            .accept=${this.accept || ''}
-                            .disabled=${this.disabled}
-                            @change="${async (ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(await sanitize(ev.target.value))}"
-                        />
-                    </sdpi-button>
+                    <sdpi-button .disabled=${this.disabled} @click=${() => this.focusElement.value?.click()}> ${this.label} </sdpi-button>
                 </label>
             </div>
         `;

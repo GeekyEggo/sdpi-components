@@ -182,6 +182,10 @@
                 input {
                     background-color: var(--input-bg-color);
                 }
+
+                input:disabled {
+                    opacity: 0.5;
+                }
             `]}render(){return M`
             <input
                 type="color"
@@ -198,6 +202,10 @@
 
                 input {
                     display: none;
+                }
+
+                input:disabled ~ label.value {
+                    opacity: 0.5;
                 }
 
                 label.value {
@@ -221,21 +229,19 @@
                 }
             `]}render(){return M`
             <div class="container">
+                <input
+                    ${$t(this.focusElement)}
+                    type="file"
+                    id="file_input"
+                    .accept=${this.accept||""}
+                    .disabled=${this.disabled}
+                    @change="${async t=>this._store.save(await async function(t){const e=decodeURIComponent(t.replace(/^C:\\fakepath\\/,""));return await qt()?e.replace(new RegExp("/","g"),"\\"):e}(t.target.value))}"
+                />
                 <label class="value" for="file_input">
                     <span .title=${this.value||""}>${Zt(async function(t){const e=await qt()?"\\":"/",i=t.split(e);return 1==i.length?t:i[i.length-1]}(this.value||""))}</span>
                 </label>
                 <label class="button">
-                    <sdpi-button @click=${()=>{var t;return null===(t=this.focusElement.value)||void 0===t?void 0:t.click()}}>
-                        ${this.label}
-                        <input
-                            ${$t(this.focusElement)}
-                            type="file"
-                            id="file_input"
-                            .accept=${this.accept||""}
-                            .disabled=${this.disabled}
-                            @change="${async t=>this._store.save(await async function(t){const e=decodeURIComponent(t.replace(/^C:\\fakepath\\/,""));return await qt()?e.replace(new RegExp("/","g"),"\\"):e}(t.target.value))}"
-                        />
-                    </sdpi-button>
+                    <sdpi-button .disabled=${this.disabled} @click=${()=>{var t;return null===(t=this.focusElement.value)||void 0===t?void 0:t.click()}}> ${this.label} </sdpi-button>
                 </label>
             </div>
         `}};Yt([st(),Wt("design:type",String)],Ft.prototype,"accept",void 0),Yt([st(),Wt("design:type",Object)],Ft.prototype,"label",void 0),Ft=Yt([et("sdpi-file")],Ft);const Vt=t=>null!=t?t:P;var Kt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let Jt=class extends(Rt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this)}static get styles(){return[...super.styles,At,n`

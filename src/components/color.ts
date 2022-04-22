@@ -17,6 +17,10 @@ export class Color extends Persisted(Focusable(Input<typeof LitElement, string>(
                 input {
                     background-color: var(--input-bg-color);
                 }
+
+                input:disabled {
+                    opacity: 0.5;
+                }
             `
         ];
     }
