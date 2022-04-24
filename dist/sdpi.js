@@ -166,38 +166,14 @@
             <button .disabled=${this.disabled} .value=${this.value||""}>
                 <slot></slot>
             </button>
-        `}};Rt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-button")],Rt);class Mt{constructor(){this.handlers=[]}dispatch(t){for(const e of this.handlers)e(t)}subscribe(t){this.handlers.push(t)}unsubscribe(t){this.handlers=this.handlers.filter((e=>e!==t))}}class Nt{constructor(){this._promise=new Promise(((t,e)=>{this.resolve=t,this.reject=e}))}get promise(){return this._promise}setResult(t){this.resolve&&this.resolve(t)}setException(t){this.reject&&this.reject(t)}}const Ot=new class{constructor(){this._connection=new Nt,this._connectionInfo=new Nt,this.didReceiveGlobalSettings=new Mt,this.didReceiveSettings=new Mt,this.message=new Mt}async connect(t,e,i,s,n){if(!this._webSocket){const o={actionInfo:n?JSON.parse(n):null,info:JSON.parse(s),propertyInspectorUUID:e,registerEvent:i};o.actionInfo&&this.didReceiveSettings.dispatch(o.actionInfo),this._connectionInfo.setResult(o),this._webSocket=new WebSocket(`ws://localhost:${t}`),this._webSocket.onopen=this.handleOpen.bind(this),this._webSocket.onmessage=this.handleMessage.bind(this)}}getGlobalSettings(){return this.get("getGlobalSettings",(t=>"didReceiveGlobalSettings"===t.event))}setGlobalSettings(t){this.send("setGlobalSettings",t)}getSettings(){return this.get("getSettings",(t=>"didReceiveSettings"===t.event))}setSettings(t){this.send("setSettings",t)}async getConnectionInfo(){return this._connectionInfo.promise}async get(t,e,i){const s=new Nt,n=t=>{e(t)&&(this.message.unsubscribe(n),s.setResult(t))};return this.message.subscribe(n),await this.send(t,i),s.promise}async send(t,e){try{const i=await this._connectionInfo.promise;(await this._connection.promise).send(JSON.stringify({event:t,context:i.propertyInspectorUUID,payload:e,action:i.actionInfo.action}))}catch(e){console.error(`Unable to send request '${t}' as there is no connection.`)}}async handleOpen(){try{const t=await this._connectionInfo.promise;this._webSocket&&(this._webSocket.send(JSON.stringify({event:t.registerEvent,uuid:t.propertyInspectorUUID})),this._connection.setResult(this._webSocket))}catch(t){this._connection.setException(t)}}handleMessage(t){const e=JSON.parse(t.data);switch(e.event){case"didReceiveGlobalSettings":this.didReceiveGlobalSettings.dispatch(e);break;case"didReceiveSettings":this.didReceiveSettings.dispatch(e)}}},jt=new class{constructor(){Ot.didReceiveGlobalSettings.subscribe((t=>this._globalSettings=t.payload.settings)),Ot.didReceiveSettings.subscribe((t=>this._settings=t.payload.settings)),Ot.getGlobalSettings()}register(t,e,i,s=250){const n=e=>{var s,n;e&&e.payload&&e.payload.settings&&i((s=t,n=e.payload.settings,(Array.isArray(s)?s:s.split(".")).reduce(((t,e)=>t&&t[e]),n)||""))};return e?Ot.didReceiveGlobalSettings.subscribe(n):Ot.didReceiveSettings.subscribe(n),s?function(i,s){let n;return(i,...o)=>{clearTimeout(n),n=setTimeout((()=>{return s=i,jt.set(t,e,s);var s}),s,o)}}(0,s):i=>jt.set(t,e,i)}set(t,e,i){e?(this._globalSettings&&rt(t,this._globalSettings,i),Ot.setGlobalSettings(this._globalSettings)):(this._settings&&rt(t,this._settings,i),Ot.setSettings(this._settings))}},It=jt.register;class Pt{constructor(t){(this._host=t).addController(this)}hostConnected(){this._host.setting&&(this._save=It(this._host.setting,this._host.isGlobal,(t=>this._host.value=t)))}save(t){this._host.value=t,this._save&&this._save(t)}}var Ut=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let Dt=class extends(kt(mt(lt(Et(X))))){constructor(){super(...arguments),this._store=new Pt(this)}render(){return this.renderCheckable("checkbox",O`<input
-                ${$t(this.focusElement)}
-                type="checkbox"
-                .checked=${this.value||!1}
-                .disabled=${this.disabled}
-                @change=${t=>this._store.save(t.target.checked)}
-            />`,this.label)}};Ut([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],Dt.prototype,"label",void 0),Dt=Ut([et("sdpi-checkbox")],Dt);class Tt{constructor(t,e){this.items=[],(this._host=t).addController(this),this._nodeNames=e,this._observer=new MutationObserver(this.handleMutation.bind(this))}hostConnected(){this._observer.observe(this._host,{childList:!0})}hostDisconnected(){this._observer.disconnect()}handleMutation(t){t.forEach((t=>{for(const e of t.addedNodes)this._nodeNames.indexOf(e.nodeName.toLowerCase())>-1&&this.items.push(e);t.removedNodes.forEach((t=>{const e=this.items.indexOf(t);-1!==e&&this.items.splice(e,1)}))})),this._host.requestUpdate()}}let zt=class extends(wt(kt(lt(Et(X))))){constructor(){super(...arguments),this._childNodes=new Tt(this,["option"]),this._store=new Pt(this)}render(){return this.renderGrid(this._childNodes.items.map((t=>this.renderCheckable("checkbox",O`<input
-                        type="checkbox"
-                        .checked=${this.value&&this.value.indexOf(t.value)>-1||!1}
-                        .disabled=${this.disabled||t.disabled}
-                        .value=${t.value}
-                        @change=${this.handleChange}
-                    />`,t.text))))}handleChange(t){const e=new Set(this.value);t.target.checked?e.add(t.target.value):e.delete(t.target.value),this._store.save(Array.from(e))}};zt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-checkbox-list")],zt);let Ht=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this)}static get styles(){return[...super.styles,n`
+        `}};Rt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-button")],Rt);const Mt=t=>null!=t?t:I;class Nt{constructor(){this.handlers=[]}dispatch(t){for(const e of this.handlers)e(t)}subscribe(t){this.handlers.push(t)}unsubscribe(t){this.handlers=this.handlers.filter((e=>e!==t))}}class Ot{constructor(){this._promise=new Promise(((t,e)=>{this.resolve=t,this.reject=e}))}get promise(){return this._promise}setResult(t){this.resolve&&this.resolve(t)}setException(t){this.reject&&this.reject(t)}}const jt=new class{constructor(){this._connection=new Ot,this._connectionInfo=new Ot,this.didReceiveGlobalSettings=new Nt,this.didReceiveSettings=new Nt,this.message=new Nt}async connect(t,e,i,s,n){if(!this._webSocket){const o={actionInfo:n?JSON.parse(n):null,info:JSON.parse(s),propertyInspectorUUID:e,registerEvent:i};o.actionInfo&&this.didReceiveSettings.dispatch(o.actionInfo),this._connectionInfo.setResult(o),this._webSocket=new WebSocket(`ws://localhost:${t}`),this._webSocket.onopen=this.handleOpen.bind(this),this._webSocket.onmessage=this.handleMessage.bind(this)}}getGlobalSettings(){return this.get("getGlobalSettings",(t=>"didReceiveGlobalSettings"===t.event))}setGlobalSettings(t){this.send("setGlobalSettings",t)}getSettings(){return this.get("getSettings",(t=>"didReceiveSettings"===t.event))}setSettings(t){this.send("setSettings",t)}async getConnectionInfo(){return this._connectionInfo.promise}async get(t,e,i){const s=new Ot,n=t=>{e(t)&&(this.message.unsubscribe(n),s.setResult(t))};return this.message.subscribe(n),await this.send(t,i),s.promise}async send(t,e){try{const i=await this._connectionInfo.promise;(await this._connection.promise).send(JSON.stringify({event:t,context:i.propertyInspectorUUID,payload:e,action:i.actionInfo.action}))}catch(e){console.error(`Unable to send request '${t}' as there is no connection.`)}}async handleOpen(){try{const t=await this._connectionInfo.promise;this._webSocket&&(this._webSocket.send(JSON.stringify({event:t.registerEvent,uuid:t.propertyInspectorUUID})),this._connection.setResult(this._webSocket))}catch(t){this._connection.setException(t)}}handleMessage(t){const e=JSON.parse(t.data);switch(e.event){case"didReceiveGlobalSettings":this.didReceiveGlobalSettings.dispatch(e);break;case"didReceiveSettings":this.didReceiveSettings.dispatch(e)}}},It=new class{constructor(){jt.didReceiveGlobalSettings.subscribe((t=>this._globalSettings=t.payload.settings)),jt.didReceiveSettings.subscribe((t=>this._settings=t.payload.settings)),jt.getGlobalSettings()}register(t,e,i,s=250){const n=e=>{var s,n;e&&e.payload&&e.payload.settings&&i((s=t,n=e.payload.settings,(Array.isArray(s)?s:s.split(".")).reduce(((t,e)=>t&&t[e]),n)||""))};return e?jt.didReceiveGlobalSettings.subscribe(n):jt.didReceiveSettings.subscribe(n),s?function(i,s){let n;return(i,...o)=>{clearTimeout(n),n=setTimeout((()=>{return s=i,It.set(t,e,s);var s}),s,o)}}(0,s):i=>It.set(t,e,i)}set(t,e,i){e?(this._globalSettings&&rt(t,this._globalSettings,i),jt.setGlobalSettings(this._globalSettings)):(this._settings&&rt(t,this._settings,i),jt.setSettings(this._settings))}},Pt=It.register;class Ut{constructor(t){(this._host=t).addController(this)}hostConnected(){this._host.setting&&(this._save=Pt(this._host.setting,this._host.isGlobal,(t=>this._host.value=t)))}save(t){this._host.value=t,this._save&&this._save(t)}}var Dt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},Tt=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let zt=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this),this.type="date"}static get styles(){return[...super.styles,n`
                 input {
                     background-color: var(--input-bg-color);
+                    padding: calc(var(--spacer) + 1px) var(--spacer);
                 }
 
-                input:disabled {
-                    opacity: 0.5;
-                }
-            `]}render(){return O`
-            <input
-                type="color"
-                ${$t(this.focusElement)}
-                .disabled=${this.disabled}
-                .defaultValue=${this.value||""}
-                @change=${t=>this._store.save(t.target.value)}
-            />
-        `}};Ht=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-color")],Ht);const Zt=t=>null!=t?t:I;var Bt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},Gt=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let Qt=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this)}static get styles(){return[...super.styles,n`
-                input {
-                    background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 3px) var(--spacer);
+                input[type='time'] {
+                    padding: calc(var(--spacer) + 2px) var(--spacer);
                 }
 
                 input:disabled {
@@ -209,7 +185,6 @@
                     display: none;
                 }
 
-                ::-webkit-clear-button,
                 ::-webkit-calendar-picker-indicator {
                     -webkit-appearance: none;
                     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='%239C9C9C'%3E%3Cpath d='M15,15 L1.77635684e-15,15 L1.77635684e-15,1 L15,1 L15,15 Z M5,7 L5,8 L6,8 L6,7 L5,7 Z M3,7 L3,8 L4,8 L4,7 L3,7 Z M7,7 L7,8 L8,8 L8,7 L7,7 Z M9,7 L9,8 L10,8 L10,7 L9,7 Z M11,7 L11,8 L12,8 L12,7 L11,7 Z M3,9 L3,10 L4,10 L4,9 L3,9 Z M5,9 L5,10 L6,10 L6,9 L5,9 Z M7,9 L7,10 L8,10 L8,9 L7,9 Z M9,9 L9,10 L10,10 L10,9 L9,9 Z M11,9 L11,10 L12,10 L12,9 L11,9 Z M3,11 L3,12 L4,12 L4,11 L3,11 Z M5,11 L5,12 L6,12 L6,11 L5,11 Z M7,11 L7,12 L8,12 L8,11 L7,11 Z M9,11 L9,12 L10,12 L10,11 L9,11 Z M11,11 L11,12 L12,12 L12,11 L11,11 Z M14,4 L14,2 L1,2 L1,4 L14,4 Z'/%3E%3Crect width='1' height='1' x='2'/%3E%3Crect width='1' height='1' x='12'/%3E%3C/g%3E%3C/svg%3E%0A")
@@ -226,14 +201,42 @@
                 }
             `]}render(){return O`<input
             ${$t(this.focusElement)}
-            type="date"
-            max=${Zt(this.max)}
-            min=${Zt(this.min)}
-            step=${Zt(this.step)}
+            type=${this.type}
+            max=${Mt(this.max)}
+            min=${Mt(this.min)}
+            step=${Mt(this.step)}
             .disabled=${this.disabled}
             .value=${this.value||""}
             @change="${t=>this._store.save(t.target.value)}"
-        />`}};Bt([st(),Gt("design:type",String)],Qt.prototype,"max",void 0),Bt([st(),Gt("design:type",String)],Qt.prototype,"min",void 0),Bt([st({type:Number}),Gt("design:type",Number)],Qt.prototype,"step",void 0),Qt=Bt([et("sdpi-date")],Qt);class qt{constructor(t){this.U=t}disconnect(){this.U=void 0}reconnect(t){this.U=t}deref(){return this.U}}class Yt{constructor(){this.Y=void 0,this.q=void 0}get(){return this.Y}pause(){var t;null!==(t=this.Y)&&void 0!==t||(this.Y=new Promise((t=>this.q=t)))}resume(){var t;null===(t=this.q)||void 0===t||t.call(this),this.Y=this.q=void 0}}const Wt=t=>{return!(e=t,null===e||"object"!=typeof e&&"function"!=typeof e||"function"!=typeof t.then);var e},Ft=ct(class extends vt{constructor(){super(...arguments),this._$Cwt=1073741823,this._$Cyt=[],this._$CG=new qt(this),this._$CK=new Yt}render(...t){var e;return null!==(e=t.find((t=>!Wt(t))))&&void 0!==e?e:j}update(t,e){const i=this._$Cyt;let s=i.length;this._$Cyt=e;const n=this._$CG,o=this._$CK;this.isConnected||this.disconnected();for(let t=0;t<e.length&&!(t>this._$Cwt);t++){const r=e[t];if(!Wt(r))return this._$Cwt=t,r;t<s&&r===i[t]||(this._$Cwt=1073741823,s=0,Promise.resolve(r).then((async t=>{for(;o.get();)await o.get();const e=n.deref();if(void 0!==e){const i=e._$Cyt.indexOf(r);i>-1&&i<e._$Cwt&&(e._$Cwt=i,e.setValue(t))}})))}return j}disconnected(){this._$CG.disconnect(),this._$CK.pause()}reconnected(){this._$CG.reconnect(this),this._$CK.resume()}});async function Vt(){return"windows"==(await Ot.getConnectionInfo()).info.application.platform}var Kt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},Jt=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let Xt=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.label="..."}static get styles(){return[...super.styles,n`
+        />`}};Dt([st(),Tt("design:type",String)],zt.prototype,"max",void 0),Dt([st(),Tt("design:type",String)],zt.prototype,"min",void 0),Dt([st({type:Number}),Tt("design:type",Number)],zt.prototype,"step",void 0),Dt([st(),Tt("design:type",String)],zt.prototype,"type",void 0),zt=Dt([et("sdpi-calendar")],zt);var Ht=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let Zt=class extends(kt(mt(lt(Et(X))))){constructor(){super(...arguments),this._store=new Ut(this)}render(){return this.renderCheckable("checkbox",O`<input
+                ${$t(this.focusElement)}
+                type="checkbox"
+                .checked=${this.value||!1}
+                .disabled=${this.disabled}
+                @change=${t=>this._store.save(t.target.checked)}
+            />`,this.label)}};Ht([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],Zt.prototype,"label",void 0),Zt=Ht([et("sdpi-checkbox")],Zt);class Bt{constructor(t,e){this.items=[],(this._host=t).addController(this),this._nodeNames=e,this._observer=new MutationObserver(this.handleMutation.bind(this))}hostConnected(){this._observer.observe(this._host,{childList:!0})}hostDisconnected(){this._observer.disconnect()}handleMutation(t){t.forEach((t=>{for(const e of t.addedNodes)this._nodeNames.indexOf(e.nodeName.toLowerCase())>-1&&this.items.push(e);t.removedNodes.forEach((t=>{const e=this.items.indexOf(t);-1!==e&&this.items.splice(e,1)}))})),this._host.requestUpdate()}}let Gt=class extends(wt(kt(lt(Et(X))))){constructor(){super(...arguments),this._childNodes=new Bt(this,["option"]),this._store=new Ut(this)}render(){return this.renderGrid(this._childNodes.items.map((t=>this.renderCheckable("checkbox",O`<input
+                        type="checkbox"
+                        .checked=${this.value&&this.value.indexOf(t.value)>-1||!1}
+                        .disabled=${this.disabled||t.disabled}
+                        .value=${t.value}
+                        @change=${this.handleChange}
+                    />`,t.text))))}handleChange(t){const e=new Set(this.value);t.target.checked?e.add(t.target.value):e.delete(t.target.value),this._store.save(Array.from(e))}};Gt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-checkbox-list")],Gt);let Qt=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this)}static get styles(){return[...super.styles,n`
+                input {
+                    background-color: var(--input-bg-color);
+                }
+
+                input:disabled {
+                    opacity: 0.5;
+                }
+            `]}render(){return O`
+            <input
+                type="color"
+                ${$t(this.focusElement)}
+                .disabled=${this.disabled}
+                .defaultValue=${this.value||""}
+                @change=${t=>this._store.save(t.target.value)}
+            />
+        `}};Qt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-color")],Qt);class qt{constructor(t){this.U=t}disconnect(){this.U=void 0}reconnect(t){this.U=t}deref(){return this.U}}class Yt{constructor(){this.Y=void 0,this.q=void 0}get(){return this.Y}pause(){var t;null!==(t=this.Y)&&void 0!==t||(this.Y=new Promise((t=>this.q=t)))}resume(){var t;null===(t=this.q)||void 0===t||t.call(this),this.Y=this.q=void 0}}const Wt=t=>{return!(e=t,null===e||"object"!=typeof e&&"function"!=typeof e||"function"!=typeof t.then);var e},Ft=ct(class extends vt{constructor(){super(...arguments),this._$Cwt=1073741823,this._$Cyt=[],this._$CG=new qt(this),this._$CK=new Yt}render(...t){var e;return null!==(e=t.find((t=>!Wt(t))))&&void 0!==e?e:j}update(t,e){const i=this._$Cyt;let s=i.length;this._$Cyt=e;const n=this._$CG,o=this._$CK;this.isConnected||this.disconnected();for(let t=0;t<e.length&&!(t>this._$Cwt);t++){const r=e[t];if(!Wt(r))return this._$Cwt=t,r;t<s&&r===i[t]||(this._$Cwt=1073741823,s=0,Promise.resolve(r).then((async t=>{for(;o.get();)await o.get();const e=n.deref();if(void 0!==e){const i=e._$Cyt.indexOf(r);i>-1&&i<e._$Cwt&&(e._$Cwt=i,e.setValue(t))}})))}return j}disconnected(){this._$CG.disconnect(),this._$CK.pause()}reconnected(){this._$CG.reconnect(this),this._$CK.resume()}});async function Vt(){return"windows"==(await jt.getConnectionInfo()).info.application.platform}var Kt=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},Jt=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let Xt=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this),this.label="..."}static get styles(){return[...super.styles,n`
                 .container {
                     align-items: stretch;
                     display: flex;
@@ -283,7 +286,7 @@
                     <sdpi-button .disabled=${this.disabled} @click=${()=>{var t;return null===(t=this.focusElement.value)||void 0===t?void 0:t.click()}}> ${this.label} </sdpi-button>
                 </label>
             </div>
-        `}};Kt([st(),Jt("design:type",String)],Xt.prototype,"accept",void 0),Kt([st(),Jt("design:type",Object)],Xt.prototype,"label",void 0),Xt=Kt([et("sdpi-file")],Xt);var te=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let ee=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this)}static get styles(){return[...super.styles,xt,n`
+        `}};Kt([st(),Jt("design:type",String)],Xt.prototype,"accept",void 0),Kt([st(),Jt("design:type",Object)],Xt.prototype,"label",void 0),Xt=Kt([et("sdpi-file")],Xt);var te=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let ee=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this)}static get styles(){return[...super.styles,xt,n`
                 input {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
@@ -296,12 +299,12 @@
             <input
                 ${$t(this.focusElement)}
                 type="password"
-                maxlength=${Zt(this.maxLength)}
+                maxlength=${Mt(this.maxLength)}
                 .disabled=${this.disabled}
                 .value=${this.value||""}
                 @input=${t=>this._store.save(t.target.value)}
             />
-        `}};te([st({attribute:"maxlength",type:Number}),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",Number)],ee.prototype,"maxLength",void 0),ee=te([et("sdpi-password")],ee);let ie=class extends(wt(kt(lt(Et(X))))){constructor(){super(...arguments),this._childNodes=new Tt(this,["option"]),this._store=new Pt(this)}render(){return this.renderGrid(this._childNodes.items.map((t=>this.renderCheckable("radio",O`<input
+        `}};te([st({attribute:"maxlength",type:Number}),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",Number)],ee.prototype,"maxLength",void 0),ee=te([et("sdpi-password")],ee);let ie=class extends(wt(kt(lt(Et(X))))){constructor(){super(...arguments),this._childNodes=new Bt(this,["option"]),this._store=new Ut(this)}render(){return this.renderGrid(this._childNodes.items.map((t=>this.renderCheckable("radio",O`<input
                         type="radio"
                         name="_"
                         .checked=${this.value===t.value}
@@ -347,7 +350,7 @@
                 justify-self: end;
                 padding-right: 11px;
             }
-        `],se([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],ne.prototype,"label",void 0),ne=se([et("sdpi-item")],ne);var oe=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let re=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._childNodes=new Tt(this,["optgroup","option"]),this._store=new Pt(this)}static get styles(){return[...super.styles,xt,n`
+        `],se([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],ne.prototype,"label",void 0),ne=se([et("sdpi-item")],ne);var oe=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let re=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._childNodes=new Bt(this,["optgroup","option"]),this._store=new Ut(this)}static get styles(){return[...super.styles,xt,n`
                 select {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 1px) 0;
@@ -366,7 +369,7 @@
                 <option value="" disabled .hidden=${!this.placeholder||void 0!==this.value}>${this.placeholder}</option>
                 ${this.renderChildNodes()}
             </select>
-        `}renderChildNodes(){if(0===this.childNodes.length)return;const t=e=>e instanceof HTMLOptGroupElement?O`<optgroup .label=${e.label}>${Array.from(e.childNodes).map(t)}</optgroup>`:e instanceof HTMLOptionElement?O`<option .disabled=${e.disabled} .value=${e.text}>${e.label}</option>`:void 0;return O`${this._childNodes.items.map(t)}`}};oe([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],re.prototype,"placeholder",void 0),re=oe([et("sdpi-select")],re);var le=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},ae=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let ce=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.rows=3,this.showLength=!1}static get styles(){return[...super.styles,xt,n`
+        `}renderChildNodes(){if(0===this.childNodes.length)return;const t=e=>e instanceof HTMLOptGroupElement?O`<optgroup .label=${e.label}>${Array.from(e.childNodes).map(t)}</optgroup>`:e instanceof HTMLOptionElement?O`<option .disabled=${e.disabled} .value=${e.text}>${e.label}</option>`:void 0;return O`${this._childNodes.items.map(t)}`}};oe([st(),function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)}("design:type",String)],re.prototype,"placeholder",void 0),re=oe([et("sdpi-select")],re);var le=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},ae=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let ce=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this),this.rows=3,this.showLength=!1}static get styles(){return[...super.styles,xt,n`
                 textarea {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
@@ -388,7 +391,7 @@
             <textarea
                 ${$t(this.focusElement)}
                 type="textarea"
-                maxlength=${Zt(this.maxLength)}
+                maxlength=${Mt(this.maxLength)}
                 .disabled=${this.disabled}
                 .id=${this.inputId}
                 .rows=${this.rows}
@@ -396,7 +399,7 @@
                 @input=${t=>this._store.save(t.target.value)}
             ></textarea>
             ${this.getLengthLabel()}
-        `}getLengthLabel(){var t;if(this.showLength||this.maxLength){const e=this.maxLength?O`/${this.maxLength}`:void 0;return O`<label class="length" for=${this.inputId}>${(null===(t=this.value)||void 0===t?void 0:t.length)||0}${e}</label>`}}};le([st({attribute:"maxlength",type:Number}),ae("design:type",Number)],ce.prototype,"maxLength",void 0),le([st({type:Number}),ae("design:type",Object)],ce.prototype,"rows",void 0),le([st({attribute:"showlength",type:Boolean}),ae("design:type",Object)],ce.prototype,"showLength",void 0),ce=le([et("sdpi-textarea")],ce);var de=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},he=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let ue=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Pt(this),this.pattern="",this.placeholder="",this.required=!1}static get styles(){return[...super.styles,xt,n`
+        `}getLengthLabel(){var t;if(this.showLength||this.maxLength){const e=this.maxLength?O`/${this.maxLength}`:void 0;return O`<label class="length" for=${this.inputId}>${(null===(t=this.value)||void 0===t?void 0:t.length)||0}${e}</label>`}}};le([st({attribute:"maxlength",type:Number}),ae("design:type",Number)],ce.prototype,"maxLength",void 0),le([st({type:Number}),ae("design:type",Object)],ce.prototype,"rows",void 0),le([st({attribute:"showlength",type:Boolean}),ae("design:type",Object)],ce.prototype,"showLength",void 0),ce=le([et("sdpi-textarea")],ce);var de=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},he=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let ue=class extends(kt(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this),this.pattern="",this.placeholder="",this.required=!1}static get styles(){return[...super.styles,xt,n`
                 input {
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 3px) var(--spacer);
@@ -422,7 +425,7 @@
             <input
                 ${$t(this.focusElement)}
                 type="text"
-                maxlength=${Zt(this.maxLength)}
+                maxlength=${Mt(this.maxLength)}
                 .disabled=${this.disabled}
                 .pattern=${this.pattern}
                 .placeholder=${this.placeholder}
@@ -430,7 +433,7 @@
                 .value=${this.value||""}
                 @input=${t=>this._store.save(t.target.value)}
             />
-        `}};de([st({attribute:"maxlength",type:Number}),he("design:type",Number)],ue.prototype,"maxLength",void 0),de([st(),he("design:type",Object)],ue.prototype,"pattern",void 0),de([st(),he("design:type",Object)],ue.prototype,"placeholder",void 0),de([st({type:Boolean}),he("design:type",Object)],ue.prototype,"required",void 0),ue=de([et("sdpi-textfield")],ue),window.streamDeckClient=Ot;const pe=window.connectElgatoStreamDeckSocket;window.connectElgatoStreamDeckSocket=function(t,e,i,s,n){pe&&pe(t,e,i,s,n),Ot.connect(t,e,i,s,n)};const fe=document.createElement("style");fe.innerHTML=n`
+        `}};de([st({attribute:"maxlength",type:Number}),he("design:type",Number)],ue.prototype,"maxLength",void 0),de([st(),he("design:type",Object)],ue.prototype,"pattern",void 0),de([st(),he("design:type",Object)],ue.prototype,"placeholder",void 0),de([st({type:Boolean}),he("design:type",Object)],ue.prototype,"required",void 0),ue=de([et("sdpi-textfield")],ue),window.streamDeckClient=jt;const pe=window.connectElgatoStreamDeckSocket;window.connectElgatoStreamDeckSocket=function(t,e,i,s,n){pe&&pe(t,e,i,s,n),jt.connect(t,e,i,s,n)};const fe=document.createElement("style");fe.innerHTML=n`
     /* Styles added by sdpi library. */
     ::-webkit-scrollbar {
         width: 5px;

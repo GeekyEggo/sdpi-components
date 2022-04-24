@@ -56,24 +56,24 @@ This library is very much a work-in-progress, with the current objective to supp
 
 ### ⚙️ Inputs
 
-| Component                                 | Status | sdpi-component       |
-| ----------------------------------------- | ------ | -------------------- |
-| [Button](#%EF%B8%8F-button)               | ✅     | `sdpi-button`        |
-| [Checkbox](#%EF%B8%8F-checkbox)           | ✅     | `sdpi-checkbox`      |
-| [Checkbox List](#%EF%B8%8F-checkbox-list) | ✅     | `sdpi-checkbox-list` |
-| [Color](#-color)                          | ✅     | `sdpi-color`         |
-| [Date](#%EF%B8%8F-date)                   | ✅     | `sdpi-date`          |
-| Date (Month)                              | ❌     |                      |
-| Date (Week)                               | ❌     |                      |
-| Datetime                                  | ❌     |                      |
-| [File](#-file)                            | ✅     | `sdpi-file`          |
-| [Password](#-password)                    | ✅     | `sdpi-password`      |
-| [Radio](#-radio)                          | ✅     | `sdpi-radio`         |
-| Range                                     | ❌     |                      |
-| [Select](#-select)                        | ✅     | `sdpi-select`        |
-| [Textarea](#-textarea)                    | ✅     | `sdpi-textarea`      |
-| [Textfield](#-textfield)                  | ✅     | `sdpi-textfield`     |
-| Time                                      | ❌     |                      |
+| Component                                 | Status | sdpi-component                          |
+| ----------------------------------------- | ------ | --------------------------------------- |
+| [Button](#%EF%B8%8F-button)               | ✅     | `sdpi-button`                           |
+| [Checkbox](#%EF%B8%8F-checkbox)           | ✅     | `sdpi-checkbox`                         |
+| [Checkbox List](#%EF%B8%8F-checkbox-list) | ✅     | `sdpi-checkbox-list`                    |
+| [Color](#-color)                          | ✅     | `sdpi-color`                            |
+| [Date](#%EF%B8%8F-calendar)               | ✅     | `sdpi-calendar`, `date` type.           |
+| [Datetime (Local)](#%EF%B8%8F-calendar)   | ✅     | `sdpi-calendar`, `datetime-local` type. |
+| [File](#-file)                            | ✅     | `sdpi-file`                             |
+| [Month](#%EF%B8%8F-calendar)              | ✅     | `sdpi-calendar`, `month` type           |
+| [Password](#-password)                    | ✅     | `sdpi-password`                         |
+| [Radio](#-radio)                          | ✅     | `sdpi-radio`                            |
+| Range                                     | ❌     |                                         |
+| [Select](#-select)                        | ✅     | `sdpi-select`                           |
+| [Textarea](#-textarea)                    | ✅     | `sdpi-textarea`                         |
+| [Textfield](#-textfield)                  | ✅     | `sdpi-textfield`                        |
+| [Time](#%EF%B8%8F-calendar)               | ✅     | `sdpi-calendar`, `time` type            |
+| [Week](#%EF%B8%8F-calendar)               | ✅     | `sdpi-calendar`, `week` type            |
 
 ### 🖌️ Styling
 
@@ -217,16 +217,68 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 
 ---
 
-### 🗓️ Date
+### 🗓️ Calendar
 
-![A date input in the Stream Deck property inspector using the sdpi-date web component](assets/sdpi-date.png?raw=true 'sdpi-date example')
+The `sdpi-calendar` component encompasses capturing the input of dates and times based on the `type` attribute and supports [`date`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date), [`datetime-local`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local), [`month`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/month), [`week`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/week), and [`time`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time).
+
+#### `date`
+
+![A date input in the Stream Deck property inspector using the sdpi-calendar web component](assets/sdpi-calendar_date.png?raw=true 'sdpi-calendar date example')
 
 <!-- prettier-ignore -->
 ```html
-<sdpi-date
+<sdpi-calendar
     setting="important_date"
-    min="2000-12-31">
-</sdpi-date>
+    type="date">
+</sdpi-calendar>
+```
+
+#### `datetime-local`
+
+![A localised date time input in the Stream Deck property inspector using the sdpi-calendar web component](assets/sdpi-calendar_datetime.png?raw=true 'sdpi-calendar date time example')
+
+<!-- prettier-ignore -->
+```html
+<sdpi-calendar
+    setting="fav_datetime"
+    type="datetime-local">
+</sdpi-calendar>
+```
+
+#### `month`
+
+![A month input in the Stream Deck property inspector using the sdpi-calendar web component](assets/sdpi-calendar_month.png?raw=true 'sdpi-calendar month example')
+
+<!-- prettier-ignore -->
+```html
+<sdpi-calendar
+    setting="suniest_month"
+    type="month">
+</sdpi-calendar>
+```
+
+#### `week`
+
+![A week input in the Stream Deck property inspector using the sdpi-calendar web component](assets/sdpi-calendar_week.png?raw=true 'sdpi-calendar week example')
+
+<!-- prettier-ignore -->
+```html
+<sdpi-calendar
+    setting="week_of_the_year"
+    type="week">
+</sdpi-calendar>
+```
+
+#### `time`
+
+![A time input in the Stream Deck property inspector using the sdpi-calendar web component](assets/sdpi-calendar_time.png?raw=true 'sdpi-calendar time example')
+
+<!-- prettier-ignore -->
+```html
+<sdpi-calendar
+    setting="time_of_day"
+    type="time">
+</sdpi-calendar>
 ```
 
 **Configuration**
@@ -239,6 +291,7 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 | `max`      | `sting`   | The latest acceptable date.                                                                                                                       |
 | `min`      | `sting`   | The earliest acceptable date.                                                                                                                     |
 | `step`     | `number`  | Specifies the granularity that the value must adhere to ([read more](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date#step)). |
+| `type`     | `string`  | Defines the type of input; valid values are `date`, `datetime-local`, `month`, `week`, or `time`.                                                 |
 | `value`    | `string`  | The value of the component, and the persisted setting.                                                                                            |
 
 ---

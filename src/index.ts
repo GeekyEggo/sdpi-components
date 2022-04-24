@@ -1,9 +1,9 @@
 /* Components */
 import './components/button';
+import './components/calendar';
 import './components/checkbox';
 import './components/checkbox-list';
 import './components/color';
-import './components/date';
 import './components/file';
 import './components/password';
 import './components/radio';

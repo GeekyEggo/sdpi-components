@@ -6,8 +6,8 @@ import { ref } from 'lit/directives/ref.js';
 import { StoreController } from '../controllers/store-controller';
 import { Focusable, Input, Persisted } from '../mixins';
 
-@customElement('sdpi-date')
-export class Date extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
+@customElement('sdpi-calendar')
+export class Calendar extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
     private _store = new StoreController(this);
 
     public static get styles() {
@@ -16,7 +16,11 @@ export class Date extends Persisted(Focusable(Input<typeof LitElement, string>(L
             css`
                 input {
                     background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 3px) var(--spacer);
+                    padding: calc(var(--spacer) + 1px) var(--spacer);
+                }
+
+                input[type='time'] {
+                    padding: calc(var(--spacer) + 2px) var(--spacer);
                 }
 
                 input:disabled {
@@ -28,7 +32,6 @@ export class Date extends Persisted(Focusable(Input<typeof LitElement, string>(L
                     display: none;
                 }
 
-                ::-webkit-clear-button,
                 ::-webkit-calendar-picker-indicator {
                     -webkit-appearance: none;
                     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='%239C9C9C'%3E%3Cpath d='M15,15 L1.77635684e-15,15 L1.77635684e-15,1 L15,1 L15,15 Z M5,7 L5,8 L6,8 L6,7 L5,7 Z M3,7 L3,8 L4,8 L4,7 L3,7 Z M7,7 L7,8 L8,8 L8,7 L7,7 Z M9,7 L9,8 L10,8 L10,7 L9,7 Z M11,7 L11,8 L12,8 L12,7 L11,7 Z M3,9 L3,10 L4,10 L4,9 L3,9 Z M5,9 L5,10 L6,10 L6,9 L5,9 Z M7,9 L7,10 L8,10 L8,9 L7,9 Z M9,9 L9,10 L10,10 L10,9 L9,9 Z M11,9 L11,10 L12,10 L12,9 L11,9 Z M3,11 L3,12 L4,12 L4,11 L3,11 Z M5,11 L5,12 L6,12 L6,11 L5,11 Z M7,11 L7,12 L8,12 L8,11 L7,11 Z M9,11 L9,12 L10,12 L10,11 L9,11 Z M11,11 L11,12 L12,12 L12,11 L11,11 Z M14,4 L14,2 L1,2 L1,4 L14,4 Z'/%3E%3Crect width='1' height='1' x='2'/%3E%3Crect width='1' height='1' x='12'/%3E%3C/g%3E%3C/svg%3E%0A")
@@ -66,11 +69,17 @@ export class Date extends Persisted(Focusable(Input<typeof LitElement, string>(L
     @property({ type: Number })
     public step?: number;
 
+    /**
+     * Defines the type of calendar input to render; possible types are 'date', 'datetime-local', 'month', 'week', or 'time'.
+     */
+    @property()
+    public type: 'date' | 'datetime-local' | 'month' | 'week' | 'time' = 'date';
+
     /** @inheritdoc */
     render() {
         return html`<input
             ${ref(this.focusElement)}
-            type="date"
+            type=${this.type}
             max=${ifDefined(this.max)}
             min=${ifDefined(this.min)}
             step=${ifDefined(this.step)}
@@ -83,6 +92,6 @@ export class Date extends Persisted(Focusable(Input<typeof LitElement, string>(L
 
 declare global {
     interface HTMLElementTagNameMap {
-        'sdpi-date': Date;
+        'sdpi-calendar': Calendar;
     }
 }
