@@ -311,7 +311,7 @@
                         .disabled=${this.disabled||t.disabled}
                         .value=${t.value}
                         @change=${t=>this._store.save(t.target.value)}
-                    />`,t.text))))}};ie=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-radio")],ie);var se=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},ne=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let oe=class extends(St(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this),this.showMinMax=!1}static get styles(){return[...super.styles,n`
+                    />`,t.text))))}};ie=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r}([et("sdpi-radio")],ie);var se=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r},ne=function(t,e){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(t,e)};let oe=class extends(St(mt(Et(X)))){constructor(){super(...arguments),this._store=new Ut(this),this.showLabels=!1}static get styles(){return[...super.styles,n`
                 input {
                     -webkit-appearance: none;
                     margin: 0;
@@ -320,7 +320,8 @@
                 }
 
                 input:disabled,
-                div[aria-disabled='true'] {
+                .container > div[aria-disabled='true'] {
+                    cursor: default;
                     opacity: 0.5;
                 }
 
@@ -363,6 +364,11 @@
                     flex: 0 1;
                 }
 
+                div[role='button'] {
+                    cursor: pointer;
+                    user-select: none;
+                }
+
                 .container > div:nth-child(2) {
                     flex: 1 1;
                     margin: 0 var(--spacer);
@@ -377,11 +383,11 @@
             .title=${(null===(t=this.value)||void 0===t?void 0:t.toString())||""}
             .value=${(null===(e=this.value)||void 0===e?void 0:e.toString())||""}
             @change=${t=>this._store.save(t.target.valueAsNumber)}
-        />`;return this.showMinMax?j`<div class="container">
-                <div aria-disabled=${this.disabled}>${this.min}</div>
+        />`;return this.showLabels?j`<div class="container">
+                <div aria-disabled=${this.disabled} role="button" @click=${()=>!this.disabled&&void 0!==this.min&&this._store.save(this.min)}>${this.min}</div>
                 <div>${i}</div>
-                <div aria-disabled=${this.disabled}>${this.max}</div>
-            </div>`:i}};se([st({type:Number}),ne("design:type",Number)],oe.prototype,"max",void 0),se([st({type:Number}),ne("design:type",Number)],oe.prototype,"min",void 0),se([st({attribute:"showminmax",type:Boolean}),ne("design:type",Object)],oe.prototype,"showMinMax",void 0),se([st({type:Number}),ne("design:type",Number)],oe.prototype,"step",void 0),oe=se([et("sdpi-range")],oe);var re=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let le=class extends X{render(){const t=this.label?j`<label>${this.label}:</label>`:void 0;return j`
+                <div aria-disabled=${this.disabled} role="button" @click=${()=>!this.disabled&&void 0!==this.max&&this._store.save(this.max)}>${this.max}</div>
+            </div>`:i}};se([st({type:Number}),ne("design:type",Number)],oe.prototype,"max",void 0),se([st({type:Number}),ne("design:type",Number)],oe.prototype,"min",void 0),se([st({attribute:"showlabels",type:Boolean}),ne("design:type",Object)],oe.prototype,"showLabels",void 0),se([st({type:Number}),ne("design:type",Number)],oe.prototype,"step",void 0),oe=se([et("sdpi-range")],oe);var re=function(t,e,i,s){var n,o=arguments.length,r=o<3?e:null===s?s=Object.getOwnPropertyDescriptor(e,i):s;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(t,e,i,s);else for(var l=t.length-1;l>=0;l--)(n=t[l])&&(r=(o<3?n(r):o>3?n(e,i,r):n(e,i))||r);return o>3&&r&&Object.defineProperty(e,i,r),r};let le=class extends X{render(){const t=this.label?j`<label>${this.label}:</label>`:void 0;return j`
             <div class="container grid">
                 <div class="label"><label @click=${this.handleLabelClick}>${t}</label></div>
                 <div class="content"><slot></slot></div>

@@ -22,7 +22,8 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
                 }
 
                 input:disabled,
-                div[aria-disabled='true'] {
+                .container > div[aria-disabled='true'] {
+                    cursor: default;
                     opacity: 0.5;
                 }
 
@@ -65,6 +66,11 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
                     flex: 0 1;
                 }
 
+                div[role='button'] {
+                    cursor: pointer;
+                    user-select: none;
+                }
+
                 .container > div:nth-child(2) {
                     flex: 1 1;
                     margin: 0 var(--spacer);
@@ -89,10 +95,10 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
      * When `true`, the `min` and `max` values are shown on either side of the input.
      */
     @property({
-        attribute: 'showminmax',
+        attribute: 'showlabels',
         type: Boolean
     })
-    public showMinMax = false;
+    public showLabels = false;
 
     /**
      * Specifies the granularity that the value must adhere to.
@@ -114,11 +120,11 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
             @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.valueAsNumber)}
         />`;
 
-        if (this.showMinMax) {
+        if (this.showLabels) {
             return html`<div class="container">
-                <div aria-disabled=${this.disabled}>${this.min}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && this._store.save(this.min)}>${this.min}</div>
                 <div>${input}</div>
-                <div aria-disabled=${this.disabled}>${this.max}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && this._store.save(this.max)}>${this.max}</div>
             </div>`;
         } else {
             return input;
