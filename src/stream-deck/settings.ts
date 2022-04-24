@@ -28,10 +28,10 @@ class Settings {
      * @param onChange The callback invoked when the setting changes.
      * @returns A delegate that allows for updating the setting value.
      */
-    public register<T>(key: string, isGlobal: boolean, onChange: (value: T) => void, timeout: number | null = 250): (value?: unknown) => void {
+    public register<T>(key: string, isGlobal: boolean, onChange: (value?: T) => void, timeout: number | null = 250): (value?: unknown) => void {
         const settingChangeHandler = (data: DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent): void => {
             if (data && data.payload && data.payload.settings) {
-                onChange(get(key, data.payload.settings) || '');
+                onChange(get(key, data.payload.settings));
             }
         };
 
