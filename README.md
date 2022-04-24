@@ -62,7 +62,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | [Checkbox](#%EF%B8%8F-checkbox)           | ✅     | `sdpi-checkbox`      |
 | [Checkbox List](#%EF%B8%8F-checkbox-list) | ✅     | `sdpi-checkbox-list` |
 | [Color](#-color)                          | ✅     | `sdpi-color`         |
-| Date                                      | ❌     |                      |
+| [Date](#%EF%B8%8F-date)                   | ✅     | `sdpi-date`          |
 | Date (Month)                              | ❌     |                      |
 | Date (Week)                               | ❌     |                      |
 | Datetime                                  | ❌     |                      |
