@@ -7,6 +7,10 @@
 </head>
 
 <body>
+    <sdpi-item label="Range">
+        <sdpi-range min="0" max="100" step="5" setting="brightness" showminmax></sdpi-range>
+    </sdpi-item>
+
     <!-- Button -->
     <sdpi-item>
         <sdpi-button onclick="javascript:alert('Hello World')">
@@ -21,7 +25,7 @@
 
     <!-- Checkbox List -->
     <sdpi-item label="Checkbox List">
-        <sdpi-checkbox-list setting="fav_numbers" columns="2">
+        <sdpi-checkbox-list setting="fav_numbers" columns="2" disabled>
             <option value="1">One</option>
             <option value="2">Two</option>
             <option value="3">Three</option>

@@ -7,6 +7,7 @@ import './components/color';
 import './components/file';
 import './components/password';
 import './components/radio';
+import './components/range';
 import './components/sdpi-item';
 import './components/select';
 import './components/textarea';

@@ -6,6 +6,10 @@ import { css } from 'lit';
 const style = document.createElement('style');
 style.innerHTML = css`
     /* Styles added by sdpi library. */
+    html,
+    body {
+        background-color: #2d2d2d;
+    }
     ::-webkit-scrollbar {
         width: 5px;
     }
