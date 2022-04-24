@@ -93,7 +93,15 @@ This library is very much a work-in-progress, with the current objective to supp
 
 ### 🖌️ Field Items
 
-The `sdpi-item` component is designed to complement inputs by providing a recognisable layout, as well as a label associated with the input. An `sdpi-item` will typically represent a single piece of information within the settings, although is not limited to.
+The `sdpi-item` component is designed to complement inputs by providing a recognisable layout, as well as a label associated with the input. An `sdpi-item` will typically represent a single piece of information within the settings, although is not limited to such.
+
+❌ Without `sdpi-item`
+
+![An input text field in the Stream Deck property inspector that is not wrapped with an sdpi-item component, the layout is inconsistent](assets/sdpi-item_without.png?raw=true 'Without sdpi-item example')
+
+✅ With `sdpi-item`
+
+![An input text field in the Stream Deck property inspector wrapped in an sdpi-item component, the results are a consistent layout](assets/sdpi-item_with.png?raw=true 'With sdpi-item example')
 
 <!-- prettier-ignore -->
 ```html
@@ -200,11 +208,38 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 
 **Configuration**
 
-| Name      | Type      | Description                                                                   |
-| --------- | --------- | ----------------------------------------------------------------------------- |
-| `setting` | `string`  | The path to the property where the value should be persisted in the settings. |
-| `global`  | `boolean` | When present, the value will be persisted to the global settings.             |
-| `value`   | `string`  | The value of the component, and the persisted setting.                        |
+| Name       | Type      | Description                                                                   |
+| ---------- | --------- | ----------------------------------------------------------------------------- |
+| `setting`  | `string`  | The path to the property where the value should be persisted in the settings. |
+| `global`   | `boolean` | When present, the value will be persisted to the global settings.             |
+| `disabled` | `boolean` | Determines whether the input is disabled.                                     |
+| `value`    | `string`  | The value of the component, and the persisted setting.                        |
+
+---
+
+### 🗓️ Date
+
+![A date input in the Stream Deck property inspector using the sdpi-date web component](assets/sdpi-date.png?raw=true 'sdpi-date example')
+
+<!-- prettier-ignore -->
+```html
+<sdpi-date
+    setting="important_date"
+    min="2000-12-31">
+</sdpi-date>
+```
+
+**Configuration**
+
+| Name       | Type      | Description                                                                                                                                       |
+| ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `setting`  | `string`  | The path to the property where the value should be persisted in the settings.                                                                     |
+| `global`   | `boolean` | When present, the value will be persisted to the global settings.                                                                                 |
+| `disabled` | `boolean` | Determines whether the input is disabled.                                                                                                         |
+| `max`      | `sting`   | The latest acceptable date.                                                                                                                       |
+| `min`      | `sting`   | The earliest acceptable date.                                                                                                                     |
+| `step`     | `number`  | Specifies the granularity that the value must adhere to ([read more](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date#step)). |
+| `value`    | `string`  | The value of the component, and the persisted setting.                                                                                            |
 
 ---
 
@@ -227,7 +262,7 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
 | `setting`  | `string`  | The path to the property where the value should be persisted in the settings.               |
 | `global`   | `boolean` | When present, the value will be persisted to the global settings.                           |
 | `accept`   | `string`  | The types of files that can be selected; directly mapped to the input's `accept` attribute. |
-| `disabled` | `boolean` | Determines whether the inputs are disabled.                                                 |
+| `disabled` | `boolean` | Determines whether the input is disabled.                                                   |
 | `label`    | `string`  | Optional label displayed in the button used to activate the file selector (default `...`).  |
 | `value`    | `string`  | The value of the component, and the persisted setting.                                      |
 

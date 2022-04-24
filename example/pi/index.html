@@ -3,10 +3,16 @@
 
 <head lang="en-gb">
     <meta charset="utf-8">
+    <script src="sdpi.js"></script>
 </head>
 
 <body>
-    <script src="sdpi.js"></script>
+    <sdpi-item label="Date">
+        <sdpi-date
+            setting="date"
+            min="2000-12-31">
+        </sdpi-date>
+    </sdpi-item>
     <sdpi-item label="Password">
         <sdpi-password setting="secret"></sdpi-password>
     </sdpi-item>
