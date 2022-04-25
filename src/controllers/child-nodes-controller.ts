@@ -1,7 +1,5 @@
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 
-type ReactiveControllerHostNode = ReactiveControllerHost & Node;
-
 /**
  * Provides a controller that observes the child nodes of the host, and exposes them via `childNodes`.
  */
@@ -11,8 +9,9 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
     /**
      * Initializes a new child node controller capable of observing the child nodes of the host, exposed via `childNodes`.
      * @param host The host node.
+     * @param nodeNames The name of the node types to observe.
      */
-    constructor(private host: ReactiveControllerHostNode, private nodeNames: K[]) {
+    constructor(private host: ReactiveControllerHost & Node, private nodeNames: K[]) {
         this.host.addController(this);
         this.observer = new MutationObserver(this.handleMutation.bind(this));
     }
@@ -31,6 +30,12 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
     public hostDisconnected?(): void {
         this.observer.disconnect();
     }
+
+    /**
+     * Invoked when an element matching the observed `nodeNames` is added or removed; occurs before `requestUpdate`.
+     * @param ev The event arguments.
+     */
+    protected mutated?(ev: { preventRequestUpdate: boolean }): void;
 
     /**
      * Invoked when a mutation occurs within the `observer`, i.e. a node was added or removed from the `host`.
@@ -58,7 +63,17 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
             });
         });
 
+        // As a node changed; trigger the mutated handler, and attempt to request an update.
         if (requestUpdate) {
+            if (this.mutated) {
+                const args = { preventRequestUpdate: false };
+                this.mutated(args);
+
+                if (args.preventRequestUpdate) {
+                    return;
+                }
+            }
+
             this.host.requestUpdate();
         }
     }

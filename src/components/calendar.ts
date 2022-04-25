@@ -3,12 +3,13 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { StoreController } from '../controllers/store-controller';
+import { DataListController, StoreController } from '../controllers';
 import { Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-calendar')
 export class Calendar extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
-    private _store = new StoreController(this);
+    private store = new StoreController(this);
+    private dataListController = new DataListController(this);
 
     public static get styles() {
         return [
@@ -77,16 +78,20 @@ export class Calendar extends Persisted(Focusable(Input<typeof LitElement, strin
 
     /** @inheritdoc */
     render() {
-        return html`<input
-            ${ref(this.focusElement)}
-            type=${this.type}
-            max=${ifDefined(this.max)}
-            min=${ifDefined(this.min)}
-            step=${ifDefined(this.step)}
-            .disabled=${this.disabled}
-            .value=${this.value || ''}
-            @change="${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.value)}"
-        />`;
+        return html`
+            <input
+                ${ref(this.focusElement)}
+                type=${this.type}
+                list=${ifDefined(this.dataListController.dataList?.id)}
+                max=${ifDefined(this.max)}
+                min=${ifDefined(this.min)}
+                step=${ifDefined(this.step)}
+                .disabled=${this.disabled}
+                .value=${this.value || ''}
+                @change="${(ev: HTMLInputEvent<HTMLInputElement>) => this.store.save(ev.target.value)}"
+            />
+            ${this.dataListController.dataList}
+        `;
     }
 }
 
