@@ -2,13 +2,10 @@ import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { StoreController } from '../controllers/store-controller';
 import { Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-color')
 export class Color extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
-    private _store = new StoreController(this);
-
     /** @inheritdoc */
     public static get styles() {
         return [
@@ -33,7 +30,7 @@ export class Color extends Persisted(Focusable(Input<typeof LitElement, string>(
                 ${ref(this.focusElement)}
                 .disabled=${this.disabled}
                 .defaultValue=${this.value || ''}
-                @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.value)}
+                @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
             />
         `;
     }

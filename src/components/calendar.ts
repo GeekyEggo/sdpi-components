@@ -3,12 +3,11 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { DataListController, StoreController } from '../controllers';
+import { DataListController } from '../controllers';
 import { Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-calendar')
 export class Calendar extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
-    private store = new StoreController(this);
     private dataListController = new DataListController(this);
 
     public static get styles() {
@@ -88,7 +87,7 @@ export class Calendar extends Persisted(Focusable(Input<typeof LitElement, strin
                 step=${ifDefined(this.step)}
                 .disabled=${this.disabled}
                 .value=${this.value || ''}
-                @change="${(ev: HTMLInputEvent<HTMLInputElement>) => this.store.save(ev.target.value)}"
+                @change="${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}"
             />
             ${this.dataListController.dataList}
         `;

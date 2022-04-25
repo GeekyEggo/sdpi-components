@@ -3,14 +3,11 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { StoreController } from '../controllers/store-controller';
 import { Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-textarea')
 export class Textarea extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
-    private _store = new StoreController(this);
-
     /** @inheritdoc */
     public static get styles() {
         return [
@@ -73,7 +70,7 @@ export class Textarea extends Persisted(Focusable(Input<typeof LitElement, strin
                 .id=${this.inputId}
                 .rows=${this.rows}
                 .value=${this.value || ''}
-                @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => this._store.save(ev.target.value)}
+                @input=${(ev: HTMLInputEvent<HTMLTextAreaElement>) => (this.value = ev.target.value)}
             ></textarea>
             ${this.getLengthLabel()}
         `;

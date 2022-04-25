@@ -58,16 +58,33 @@ class Settings {
      */
     private set(key: string, isGlobal: boolean, value?: unknown): void {
         if (isGlobal) {
-            if (this._globalSettings) {
-                set(key, this._globalSettings, value);
+            if (this.tryUpdate(key, value, this._globalSettings)) {
+                streamDeckClient.setGlobalSettings(this._globalSettings);
             }
-            streamDeckClient.setGlobalSettings(this._globalSettings);
-        } else {
-            if (this._settings) {
-                set(key, this._settings, value);
-            }
+        } else if (this.tryUpdate(key, value, this._settings)) {
             streamDeckClient.setSettings(this._settings);
         }
+    }
+
+    /**
+     * Update the `settings` when the current value for the `key` differs to the `value`.
+     * @param key The settings key.
+     * @param value The new value.
+     * @param settings The settings to update.
+     * @returns `true` when the settings were updated.
+     */
+    private tryUpdate(key: string, value?: unknown, settings?: Record<string, unknown>): boolean {
+        if (settings === undefined) {
+            return false;
+        }
+
+        const oldValue = get(key, settings);
+        if (oldValue === value) {
+            return false;
+        }
+
+        set(key, settings, value);
+        return true;
     }
 }
 

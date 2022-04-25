@@ -3,14 +3,12 @@ import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
 import { ChildNodesController } from '../controllers/child-nodes-controller';
-import { StoreController } from '../controllers/store-controller';
 import { Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
 export class Select extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
     private _childNodes = new ChildNodesController(this, ['optgroup', 'option']);
-    private _store = new StoreController(this);
 
     /** @inheritdoc */
     public static get styles() {
@@ -44,7 +42,7 @@ export class Select extends Persisted(Focusable(Input<typeof LitElement, string>
     /** @inheritdoc */
     protected render() {
         return html`
-            <select ${ref(this.focusElement)} .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => this._store.save(ev.target.value)}>
+            <select ${ref(this.focusElement)} .disabled=${this.disabled} .value=${this.value || ''} @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => (this.value = ev.target.value)}>
                 <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined}>${this.placeholder}</option>
                 ${this.renderChildNodes()}
             </select>

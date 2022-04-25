@@ -2,13 +2,11 @@ import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 import { ChildNodesController } from '../controllers/child-nodes-controller';
-import { StoreController } from '../controllers/store-controller';
 import { Checkable, Gridded, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-checkbox-list')
 export class CheckboxList extends Gridded(Persisted(Checkable(Input<typeof LitElement, string[]>(LitElement)))) {
     private _childNodes = new ChildNodesController(this, ['option']);
-    private _store = new StoreController(this);
 
     /** @inheritdoc */
     protected render() {
@@ -41,7 +39,7 @@ export class CheckboxList extends Gridded(Persisted(Checkable(Input<typeof LitEl
             values.delete(ev.target.value);
         }
 
-        this._store.save(Array.from(values));
+        this.value = Array.from(values);
     }
 }
 

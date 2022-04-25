@@ -3,14 +3,11 @@ import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 import { until } from 'lit/directives/until.js';
 
-import { StoreController } from '../controllers/store-controller';
 import { getFileName, sanitize } from '../core/file';
 import { Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-file')
 export class File extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
-    private _store = new StoreController(this);
-
     public static get styles() {
         return [
             ...super.styles,
@@ -73,7 +70,7 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
                     id="file_input"
                     .accept=${this.accept || ''}
                     .disabled=${this.disabled}
-                    @change="${async (ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(await sanitize(ev.target.value))}"
+                    @change="${async (ev: HTMLInputEvent<HTMLInputElement>) => (this.value = await sanitize(ev.target.value))}"
                 />
                 <label class="value" for="file_input">
                     <span .title=${this.value || ''}>${until(getFileName(this.value || ''))}</span>

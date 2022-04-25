@@ -3,13 +3,10 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { StoreController } from '../controllers/store-controller';
 import { Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-range')
 export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(LitElement))) {
-    private _store = new StoreController(this);
-
     public static get styles() {
         return [
             ...super.styles,
@@ -108,23 +105,25 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
 
     /** @inheritdoc */
     protected render() {
-        const input = html`<input
-            ${ref(this.focusElement)}
-            type="range"
-            max=${ifDefined(this.max)}
-            min=${ifDefined(this.min)}
-            step=${ifDefined(this.step)}
-            .disabled=${this.disabled}
-            .title=${this.value?.toString() || ''}
-            .value=${this.value?.toString() || ''}
-            @change=${(ev: HTMLInputEvent<HTMLInputElement>) => this._store.save(ev.target.valueAsNumber)}
-        />`;
+        const input = html`
+            <input
+                ${ref(this.focusElement)}
+                type="range"
+                max=${ifDefined(this.max)}
+                min=${ifDefined(this.min)}
+                step=${ifDefined(this.step)}
+                .disabled=${this.disabled}
+                .title=${this.value?.toString() || ''}
+                .value=${this.value?.toString() || ''}
+                @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.valueAsNumber)}
+            />
+        `;
 
         if (this.showLabels) {
             return html`<div class="container">
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && this._store.save(this.min)}>${this.min}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}>${this.min}</div>
                 <div>${input}</div>
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && this._store.save(this.max)}>${this.max}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}>${this.max}</div>
             </div>`;
         } else {
             return input;
