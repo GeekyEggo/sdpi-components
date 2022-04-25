@@ -6,19 +6,15 @@ type ReactiveControllerHostNode = ReactiveControllerHost & Node;
  * Provides a controller that observes the child nodes of the host, and exposes them via `childNodes`.
  */
 export class ChildNodesController<K extends keyof HTMLElementTagNameMap> implements ReactiveController {
-    private _host: ReactiveControllerHostNode;
-    private _observer: MutationObserver;
-    private _nodeNames: string[];
+    private observer: MutationObserver;
 
     /**
      * Initializes a new child node controller capable of observing the child nodes of the host, exposed via `childNodes`.
      * @param host The host node.
      */
-    constructor(host: ReactiveControllerHostNode, nodeNames: K[]) {
-        (this._host = host).addController(this);
-
-        this._nodeNames = nodeNames;
-        this._observer = new MutationObserver(this.handleMutation.bind(this));
+    constructor(private host: ReactiveControllerHostNode, private nodeNames: K[]) {
+        this.host.addController(this);
+        this.observer = new MutationObserver(this.handleMutation.bind(this));
     }
 
     /**
@@ -28,16 +24,16 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
 
     /** @inheritdoc */
     public hostConnected(): void {
-        this._observer.observe(this._host, { childList: true });
+        this.observer.observe(this.host, { childList: true });
     }
 
     /** @inheritdoc */
     public hostDisconnected?(): void {
-        this._observer.disconnect();
+        this.observer.disconnect();
     }
 
     /**
-     * Invoked when a mutation occurs within the `_observer`, i.e. a node was added or removed from the `_host`.
+     * Invoked when a mutation occurs within the `observer`, i.e. a node was added or removed from the `host`.
      * @param mutations The mutations that occurred.
      */
     private handleMutation(mutations: MutationRecord[]): void {
@@ -46,7 +42,7 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
         mutations.forEach((mutation) => {
             // Add new nodes.
             for (const added of mutation.addedNodes) {
-                if (this._nodeNames.indexOf(added.nodeName.toLowerCase()) > -1) {
+                if (this.nodeNames.indexOf(<K>added.nodeName.toLowerCase()) > -1) {
                     requestUpdate = true;
                     this.items.push(added as HTMLElementTagNameMap[K]);
                 }
@@ -63,7 +59,7 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
         });
 
         if (requestUpdate) {
-            this._host.requestUpdate();
+            this.host.requestUpdate();
         }
     }
 }
