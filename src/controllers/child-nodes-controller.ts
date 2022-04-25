@@ -41,10 +41,13 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
      * @param mutations The mutations that occurred.
      */
     private handleMutation(mutations: MutationRecord[]): void {
+        let requestUpdate = false;
+
         mutations.forEach((mutation) => {
             // Add new nodes.
             for (const added of mutation.addedNodes) {
                 if (this._nodeNames.indexOf(added.nodeName.toLowerCase()) > -1) {
+                    requestUpdate = true;
                     this.items.push(added as HTMLElementTagNameMap[K]);
                 }
             }
@@ -53,11 +56,14 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
             mutation.removedNodes.forEach((node) => {
                 const index = this.items.indexOf(node as HTMLElementTagNameMap[K]);
                 if (index !== -1) {
+                    requestUpdate = true;
                     this.items.splice(index, 1);
                 }
             });
         });
 
-        this._host.requestUpdate();
+        if (requestUpdate) {
+            this._host.requestUpdate();
+        }
     }
 }
