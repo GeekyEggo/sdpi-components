@@ -63,11 +63,11 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
          * Renders the current items associated with the data source.
          * @param renderItem The delegate responsible for rending an item.
          * @param renderGroup The delegate responsible for rendering an item group.
-         * @returns The HTML template that represents the items.
+         * @returns The HTML template that represents each items.
          */
-        protected renderDataSource(renderItem: (item: Item) => unknown, renderGroup?: (group: ItemGroup, children: unknown) => unknown): unknown {
+        protected renderDataSource(renderItem: (item: Item) => unknown, renderGroup?: (group: ItemGroup, children: unknown) => unknown): unknown[] {
             if (this.items.value === undefined || this.items.value.length === 0) {
-                return undefined;
+                return [undefined];
             }
 
             const map = (item: ItemGroup | Item): unknown => {

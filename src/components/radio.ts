@@ -1,31 +1,46 @@
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import { ChildNodesController } from '../controllers/child-nodes-controller';
-import { Checkable, Gridded, Input, Persisted } from '../mixins';
+import { Checkable, DataSourced, Gridded, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-radio')
-export class Radio extends Gridded(Persisted(Checkable(Input<typeof LitElement, string>(LitElement)))) {
-    private _childNodes = new ChildNodesController(this, ['option']);
+export class Radio extends Gridded(Persisted(Checkable(DataSourced(Input<typeof LitElement, string>(LitElement))))) {
+    /** @inheritdoc */
+    static get styles() {
+        return [
+            ...super.styles,
+            css`
+                .loading {
+                    margin: 0;
+                    padding: calc(var(--spacer) * 1.5) 0;
+                    user-select: none;
+                }
+            `
+        ];
+    }
 
     /** @inheritdoc */
     protected render() {
-        return this.renderGrid(
-            this._childNodes.items.map((option) =>
-                this.renderCheckable(
-                    'radio',
-                    html`<input
-                        type="radio"
-                        name="_"
-                        .checked=${this.value === option.value}
-                        .disabled=${this.disabled || option.disabled}
-                        .value=${option.value}
-                        @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
-                    />`,
-                    option.text
+        return this.items.render({
+            pending: () => html`<p class="loading">Loading...</p>`,
+            complete: () =>
+                this.renderGrid(
+                    this.renderDataSource((item) =>
+                        this.renderCheckable(
+                            'radio',
+                            html`<input
+                                type="radio"
+                                name="_"
+                                .checked=${this.value === item.value}
+                                .disabled=${this.disabled || item.disabled || false}
+                                .value=${item.value}
+                                @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
+                            />`,
+                            item.label
+                        )
+                    )
                 )
-            )
-        );
+        });
     }
 }
 
