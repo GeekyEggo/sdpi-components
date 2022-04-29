@@ -101,7 +101,7 @@ export class StreamDeckClient {
      * @param {unknown} payload The optional payload.
      * @returns {AsEvent<TReceived>} The first event received that fulfilled the `isComplete` delegate.
      */
-    private async get<TSent extends EventSent['event'], TReceived extends EventReceived['event']>(
+    public async get<TSent extends EventSent['event'], TReceived extends EventReceived['event']>(
         send: TSent,
         isComplete: (ev: EventReceived) => boolean,
         payload?: unknown
@@ -183,6 +183,8 @@ export class StreamDeckClient {
                 this.didReceiveSettings.dispatch(<DidReceiveSettingsEvent>data);
                 break;
         }
+
+        this.message.dispatch(data);
     }
 }
 

@@ -1,2 +1,2 @@
-export { ChildNodesController } from './child-nodes-controller';
-export { DataListController } from './data-list-controller';
+export * from './child-nodes-controller';
+export * from './data-list-controller';

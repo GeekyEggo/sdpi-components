@@ -7,6 +7,23 @@
 </head>
 
 <body>
+    <!-- Select -->
+    <sdpi-item label="Select">
+        <sdpi-select setting="color" placeholder="Please choose a color" datasource="getColors"></sdpi-select>
+    </sdpi-item>
+    
+    <sdpi-item label="Select">
+        <sdpi-select setting="color_2" placeholder="Please choose a color">
+            <optgroup label="Primary Colors">
+                <option value="#ff0000">Red</option>
+                <option value="#00ff00">Green</option>
+                <option value="#0000ff">Blue</option>
+            </optgroup>
+            <option value="#000000">Black</option>
+            <option value="#ffffff">White</option>
+        </sdpi-select>
+    </sdpi-item>
+
     <!-- Range -->
     <sdpi-item label="Range">
         <sdpi-range min="0" max="100" step="5" setting="brightness" showlabels></sdpi-range>
@@ -92,18 +109,7 @@
         </sdpi-radio>
     </sdpi-item>
 
-    <!-- Select -->
-    <sdpi-item label="Select">
-        <sdpi-select setting="color" placeholder="Please choose a color">
-            <optgroup label="Primary Colors">
-                <option value="#ff0000">Red</option>
-                <option value="#00ff00">Green</option>
-                <option value="#0000ff">Blue</option>
-            </optgroup>
-            <option value="#000000">Black</option>
-            <option value="#ffffff">White</option>
-        </sdpi-select>
-    </sdpi-item>
+
 
     <!-- Textarea -->
     <sdpi-item label="Textarea">

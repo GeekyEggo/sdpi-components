@@ -32,7 +32,9 @@ export const Persisted = <TBase extends Constructor<LitElement>, TValue>(superCl
         public value?: TValue;
 
         /** @inheritdoc */
-        protected firstUpdated(): void {
+        protected firstUpdated(_changedProperties: Map<PropertyKey, unknown>): void {
+            super.firstUpdated(_changedProperties);
+
             if (this.setting) {
                 this.save = useSettings<TValue>(this.setting, this.isGlobal, (value) => (this.value = value));
             }

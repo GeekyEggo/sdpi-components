@@ -8,6 +8,26 @@
 
 <body>
     <script>
+        const colors = [{
+            label: 'Primary Colors',
+            children: [{
+                label: 'Red',
+                value: '#ff0000'
+            }, {
+                label: 'Green',
+                value: '#00ff00'
+            }, {
+                label: 'Blue',
+                value: '#0000ff'
+            }]
+        }, {
+            label: 'Black',
+            value: '#000000'
+        }, {
+            label: 'White',
+            value: '#ffffff'
+        }];
+
         function connectElgatoStreamDeckSocket(inPort, inPluginUUID, inRegisterEvent, inInfo) {
             console.log('Initializing plug-in.');
             let count = 0;
@@ -29,6 +49,23 @@
                                 }
                             })
                         );
+
+                        break;
+
+                    case 'sendToPlugin':
+                        if (msg.payload?.event === 'getColors') {
+                            webSocket.send(
+                                JSON.stringify({
+                                    action,
+                                    event: 'sendToPropertyInspector',
+                                    context,
+                                    payload: {
+                                        event: msg.payload.event,
+                                        items: colors
+                                    }
+                                })
+                            );
+                        }
 
                         break;
                 }
