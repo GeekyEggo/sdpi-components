@@ -28,14 +28,16 @@ export class Radio extends Gridded(Persisted(Checkable(DataSourced(Input<typeof 
                     this.renderDataSource((item) =>
                         this.renderCheckable(
                             'radio',
-                            html`<input
-                                type="radio"
-                                name="_"
-                                .checked=${this.value === item.value}
-                                .disabled=${this.disabled || item.disabled || false}
-                                .value=${item.value}
-                                @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
-                            />`,
+                            html`
+                                <input
+                                    type="radio"
+                                    name="_"
+                                    .checked=${this.value === item.value}
+                                    .disabled=${this.disabled || item.disabled || false}
+                                    .value=${item.value}
+                                    @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
+                                />
+                            `,
                             item.label
                         )
                     )

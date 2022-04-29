@@ -3,14 +3,11 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { ChildNodesController } from '../controllers/child-nodes-controller';
 import { DataSourced, Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
 export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElement, string>(LitElement)))) {
-    private _childNodes = new ChildNodesController(this, ['optgroup', 'option']);
-
     /** @inheritdoc */
     public static get styles() {
         return [

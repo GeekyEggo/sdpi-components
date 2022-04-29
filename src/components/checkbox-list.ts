@@ -28,13 +28,15 @@ export class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(Input<
                     this.renderDataSource((item) =>
                         this.renderCheckable(
                             'checkbox',
-                            html`<input
-                                type="checkbox"
-                                .checked=${(this.value && this.value.indexOf(item.value) > -1) || false}
-                                .disabled=${this.disabled || item.disabled || false}
-                                .value=${item.value}
-                                @change=${this.handleChange}
-                            />`,
+                            html`
+                                <input
+                                    type="checkbox"
+                                    .checked=${(this.value && this.value.indexOf(item.value) > -1) || false}
+                                    .disabled=${this.disabled || item.disabled || false}
+                                    .value=${item.value}
+                                    @change=${this.handleChange}
+                                />
+                            `,
                             item.label
                         )
                     )
