@@ -68,7 +68,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | [Month](#%EF%B8%8F-calendar)              | ✅     | `sdpi-calendar`, `month` type           |
 | [Password](#-password)                    | ✅     | `sdpi-password`                         |
 | [Radio](#-radio)                          | ✅     | `sdpi-radio`                            |
-| Range                                     | ❌     |                                         |
+| [Range](#-range)                          | ✅     | `sdpi-range`                            |
 | [Select](#-select)                        | ✅     | `sdpi-select`                           |
 | [Textarea](#-textarea)                    | ✅     | `sdpi-textarea`                         |
 | [Textfield](#-textfield)                  | ✅     | `sdpi-textfield`                        |
@@ -363,6 +363,36 @@ The `sdpi-calendar` component encompasses capturing the input of dates and times
 | `columns`  | `number`  | The number of columns to render the inputs in; valid values are 1-6.          |
 | `disabled` | `boolean` | Determines whether the inputs are disabled.                                   |
 | `value`    | `string`  | The value of the component, and the persisted setting.                        |
+
+---
+
+### 🎚️ Range
+
+![A range input in the Stream Deck property inspector using the sdpi-range web component](assets/sdpi-range.png?raw=true 'sdpi-range example')
+
+<!-- prettier-ignore -->
+```html
+<sdpi-range
+    setting="brightness"
+    min="0"
+    max="100"
+    step="5"
+    showlabels>
+</sdpi-range>
+```
+
+**Configuration**
+
+| Name         | Type      | Description                                                                   |
+| ------------ | --------- | ----------------------------------------------------------------------------- |
+| `setting`    | `string`  | The path to the property where the value should be persisted in the settings. |
+| `global`     | `boolean` | When present, the value will be persisted to the global settings.             |
+| `disabled`   | `boolean` | Determines whether the inputs are disabled.                                   |
+| `max`        | `number`  | Mmaximum possible value.                                                      |
+| `min`        | `number`  | Minimum possible value.                                                       |
+| `showlabels` | `boolean` | When specified, the minimum and maximum labels are shown.                     |
+| `step`       | `number`  | Specifies the granularity that the value must adhere to.                      |
+| `value`      | `string`  | The value of the component, and the persisted setting.                        |
 
 ---
 
