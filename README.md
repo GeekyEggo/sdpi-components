@@ -68,7 +68,7 @@ This library is very much a work-in-progress, with the current objective to supp
 | [Month](#%EF%B8%8F-calendar)              | ✅     | `sdpi-calendar`, `month` type           |
 | [Password](#-password)                    | ✅     | `sdpi-password`                         |
 | [Radio](#-radio)                          | ✅     | `sdpi-radio`                            |
-| [Range](#-range)                          | ✅     | `sdpi-range`                            |
+| [Range](#%EF%B8%8F-range)                 | ✅     | `sdpi-range`                            |
 | [Select](#-select)                        | ✅     | `sdpi-select`                           |
 | [Textarea](#-textarea)                    | ✅     | `sdpi-textarea`                         |
 | [Textfield](#-textfield)                  | ✅     | `sdpi-textfield`                        |
