@@ -1,7 +1,7 @@
 import { css, CSSResultGroup, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import { asArray } from '../core/utils';
+import { asArray } from '../core';
 
 /**
  * Provides a mixin that contains helper methods for creating elements that should be rendered in a grid using columns.

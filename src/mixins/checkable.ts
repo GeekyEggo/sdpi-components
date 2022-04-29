@@ -1,6 +1,6 @@
 import { css, CSSResultGroup, html, LitElement } from 'lit';
 
-import { asArray } from '../core/utils';
+import { asArray } from '../core';
 
 /**
  * Provides a mixin that contains functionality for rendering inputs that can be checked, i.e. radio buttons and checkboxes, and renders their check state using more user-friendly representations.

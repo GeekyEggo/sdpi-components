@@ -2,7 +2,7 @@ import { Task } from '@lit-labs/task';
 import { LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import ChildNodesObserver from '../core/child-nodes-observer';
+import { ChildNodesObserver } from '../core';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 declare type ItemGroup = {

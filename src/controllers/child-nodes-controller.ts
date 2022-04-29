@@ -1,6 +1,6 @@
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 
-import ChildNodesObserver from '../core/child-nodes-observer';
+import { ChildNodesObserver } from '../core';
 
 /**
  * Provides a controller that observes the child nodes of the host, and exposes them via `childNodes`.

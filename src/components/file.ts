@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 import { until } from 'lit/directives/until.js';
 
-import { getFileName, sanitize } from '../core/file';
+import { getFileName, sanitize } from '../core';
 import { Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-file')

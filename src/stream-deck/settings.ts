@@ -1,7 +1,6 @@
 import { DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent } from 'stream-deck';
 
-import { delay } from '../core/timeout';
-import { get, set } from '../core/utils';
+import { delay, get, set } from '../core';
 import streamDeckClient from './stream-deck-client';
 
 /**

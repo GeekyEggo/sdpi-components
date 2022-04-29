@@ -1,7 +1,7 @@
 /**
  * Provides a wrapper around a mutation observers that monitors for specific node types.
  */
-export default class ChildNodesObserver<K extends keyof HTMLElementTagNameMap> {
+export class ChildNodesObserver<K extends keyof HTMLElementTagNameMap> {
     private observer = new MutationObserver(this.handleMutation.bind(this));
 
     /**

@@ -1,7 +1,6 @@
 import { ActionInfo, AsEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, RegistrationInfo } from 'stream-deck';
 
-import { EventManager } from '../core/events';
-import { PromiseCompletionSource } from '../core/promises';
+import { EventManager, PromiseCompletionSource } from '../core';
 
 export interface IConnectionInfo {
     actionInfo: ActionInfo;

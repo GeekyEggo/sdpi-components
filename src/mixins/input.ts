@@ -1,7 +1,7 @@
 import { css, CSSResultGroup, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import { asArray, getUUID } from '../core/utils';
+import { asArray, getUUID } from '../core';
 import { hostStyle } from '../styles/host';
 
 /**

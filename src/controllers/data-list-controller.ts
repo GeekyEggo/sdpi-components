@@ -1,6 +1,6 @@
 import { ReactiveControllerHost } from 'lit';
 
-import { getUUID } from '../core/utils';
+import { getUUID } from '../core';
 import { ChildNodesController } from './child-nodes-controller';
 
 /**
