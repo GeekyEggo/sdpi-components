@@ -22,7 +22,7 @@ export class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(Input<
     /** @inheritdoc */
     protected render() {
         return this.items.render({
-            pending: () => html`<p class="loading">Loading...</p>`,
+            pending: () => html`<p class="loading">${this.loadingText}</p>`,
             complete: () =>
                 this.renderGrid(
                     this.renderDataSource((item) =>

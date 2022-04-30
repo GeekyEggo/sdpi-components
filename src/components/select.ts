@@ -47,7 +47,7 @@ export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElem
                 @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => (this.value = ev.target.value)}
             >
                 ${this.items.render({
-                    pending: () => html`<option value="" disabled selected>Loading...</option>`,
+                    pending: () => html`<option value="" disabled selected>${this.loadingText}</option>`,
                     complete: () => html`
                         <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined} .selected=${this.value === undefined}>${this.placeholder}</option>
                         ${this.renderDataSource(

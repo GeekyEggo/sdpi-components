@@ -5,6 +5,7 @@ Stream Deck Property Inspector Components (or sdpi-components for short) is a co
 -   [✏️ Getting Started](#%EF%B8%8F-getting-started)
 -   [🚧 Components](#-components)
 -   [📖 Documentation](#-documentation)
+-   [⚡ Extensions](#-extensions)
 
 ## ✏️ Getting Started
 
@@ -180,13 +181,15 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 
 **Configuration**
 
-| Name       | Type       | Description                                                                   |
-| ---------- | ---------- | ----------------------------------------------------------------------------- |
-| `setting`  | `string`   | The path to the property where the value should be persisted in the settings. |
-| `global`   | `boolean`  | When present, the value will be persisted to the global settings.             |
-| `columns`  | `number`   | The number of columns to render the inputs in; valid values are 1-6.          |
-| `disabled` | `boolean`  | Determines whether the inputs are disabled.                                   |
-| `value`    | `string[]` | The value of the component, and the persisted setting.                        |
+| Name         | Type       | Description                                                                       |
+| ------------ | ---------- | --------------------------------------------------------------------------------- |
+| `setting`    | `string`   | The path to the property where the value should be persisted in the settings.     |
+| `global`     | `boolean`  | When present, the value will be persisted to the global settings.                 |
+| `columns`    | `number`   | The number of columns to render the inputs in; valid values are 1-6.              |
+| `datasource` | `string`   | The optional remote data source ([read more](#🔃-data-source)).                   |
+| `disabled`   | `boolean`  | Determines whether the input is disabled.                                         |
+| `loading`    | `string`   | When a `datasource` is specified, this text is shown whilst the items are loaded. |
+| `value`      | `string[]` | The value of the component, and the persisted setting.                            |
 
 NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is `Set<string>` for the checked options. e.g.
 
@@ -195,25 +198,6 @@ NB. Unlike `sdpi-checkbox`, the persisted setting of the `sdpi-checkbox-list` is
     "fav_numbers": ["1"]
 }
 ```
-
----
-
-### 🎨 Color
-
-![A color picker input in the Stream Deck property inspector using the sdpi-color web component](assets/sdpi-color.png?raw=true 'sdpi-color example')
-
-```html
-<sdpi-color setting="selected_color"></sdpi-color>
-```
-
-**Configuration**
-
-| Name       | Type      | Description                                                                   |
-| ---------- | --------- | ----------------------------------------------------------------------------- |
-| `setting`  | `string`  | The path to the property where the value should be persisted in the settings. |
-| `global`   | `boolean` | When present, the value will be persisted to the global settings.             |
-| `disabled` | `boolean` | Determines whether the input is disabled.                                     |
-| `value`    | `string`  | The value of the component, and the persisted setting.                        |
 
 ---
 
@@ -296,6 +280,25 @@ The `sdpi-calendar` component encompasses capturing the input of dates and times
 
 ---
 
+### 🎨 Color
+
+![A color picker input in the Stream Deck property inspector using the sdpi-color web component](assets/sdpi-color.png?raw=true 'sdpi-color example')
+
+```html
+<sdpi-color setting="selected_color"></sdpi-color>
+```
+
+**Configuration**
+
+| Name       | Type      | Description                                                                   |
+| ---------- | --------- | ----------------------------------------------------------------------------- |
+| `setting`  | `string`  | The path to the property where the value should be persisted in the settings. |
+| `global`   | `boolean` | When present, the value will be persisted to the global settings.             |
+| `disabled` | `boolean` | Determines whether the input is disabled.                                     |
+| `value`    | `string`  | The value of the component, and the persisted setting.                        |
+
+---
+
 ### 💾 File
 
 ![A file input in the Stream Deck property inspector using the sdpi-file web component](assets/sdpi-file.png?raw=true 'sdpi-file example')
@@ -356,13 +359,15 @@ The `sdpi-calendar` component encompasses capturing the input of dates and times
 
 **Configuration**
 
-| Name       | Type      | Description                                                                   |
-| ---------- | --------- | ----------------------------------------------------------------------------- |
-| `setting`  | `string`  | The path to the property where the value should be persisted in the settings. |
-| `global`   | `boolean` | When present, the value will be persisted to the global settings.             |
-| `columns`  | `number`  | The number of columns to render the inputs in; valid values are 1-6.          |
-| `disabled` | `boolean` | Determines whether the inputs are disabled.                                   |
-| `value`    | `string`  | The value of the component, and the persisted setting.                        |
+| Name         | Type      | Description                                                                       |
+| ------------ | --------- | --------------------------------------------------------------------------------- |
+| `setting`    | `string`  | The path to the property where the value should be persisted in the settings.     |
+| `global`     | `boolean` | When present, the value will be persisted to the global settings.                 |
+| `columns`    | `number`  | The number of columns to render the inputs in; valid values are 1-6.              |
+| `datasource` | `string`  | The optional remote data source ([read more](#🔃-data-source)).                   |
+| `disabled`   | `boolean` | Determines whether the input is disabled.                                         |
+| `loading`    | `string`  | When a `datasource` is specified, this text is shown whilst the items are loaded. |
+| `value`      | `string`  | The value of the component, and the persisted setting.                            |
 
 ---
 
@@ -414,13 +419,15 @@ The `sdpi-calendar` component encompasses capturing the input of dates and times
 
 **Configuration**
 
-| Name          | Type      | Description                                                                   |
-| ------------- | --------- | ----------------------------------------------------------------------------- |
-| `setting`     | `string`  | The path to the property where the value should be persisted in the settings. |
-| `global`      | `boolean` | When present, the value will be persisted to the global settings.             |
-| `disabled`    | `boolean` | Determines whether the input is disabled.                                     |
-| `placeholder` | `string`  | Optional placeholder text shown in the input.                                 |
-| `value`       | `string`  | The value of the component, and the persisted setting.                        |
+| Name          | Type      | Description                                                                       |
+| ------------- | --------- | --------------------------------------------------------------------------------- |
+| `setting`     | `string`  | The path to the property where the value should be persisted in the settings.     |
+| `global`      | `boolean` | When present, the value will be persisted to the global settings.                 |
+| `datasource`  | `string`  | The optional remote data source ([read more](#🔃-data-source)).                   |
+| `disabled`    | `boolean` | Determines whether the input is disabled.                                         |
+| `loading`     | `string`  | When a `datasource` is specified, this text is shown whilst the items are loaded. |
+| `placeholder` | `string`  | Optional placeholder text shown in the input.                                     |
+| `value`       | `string`  | The value of the component, and the persisted setting.                            |
 
 ---
 
@@ -478,3 +485,91 @@ The `sdpi-calendar` component encompasses capturing the input of dates and times
 | `placeholder` | `string`  | Optional placeholder text shown in the input.                                 |
 | `required`    | `boolean` | When present, an icon is shown in the input if the value is empty.            |
 | `value`       | `string`  | The value of the component, and the persisted setting.                        |
+
+---
+
+## ⚡ Extensions
+
+### 🔃 Data Source
+
+_Relates to `sdpi-checkbox-list`, `sdpi-radio`, `sdpi-select`._
+
+Sometimes it's necessary to load options for an input dynamically, e.g. a drop down that displays the computers audio devices, or OBS scenes. Thankfully this can easily be achieved through the use of the `datasource` attribute, e.g.
+
+<!-- prettier-ignore -->
+```html
+<sdpi-select
+    setting="color"
+    datasource="getColors"
+    loading="Fetching colors...">
+</sdpi-select>
+```
+
+When a `datasource` attribute is specified, the following occurs:
+
+```mermaid
+sequenceDiagram
+    participant i as Input Component
+    participant pi as Property Inspector
+    participant p as Plugin
+    i ->> pi: Component with datasource attribute
+    pi ->> p: `sendToPlugin` requests data source
+    note over  p: { ..., payload: { event: <datasource> } }
+    p ->> pi: `sendToPropertyInspector` returns data source
+    note over pi: { ..., payload: { event: <datasource>, items: <items> } }
+    pi ->> i: Data source rendered as options
+```
+
+⚠️ NB. The data source `items` must match the required schema.
+
+```typescript
+declare type DataSourceResult = DataSourceResultItem[];
+declare type DataSourceResultItem = Item | ItemGroup;
+
+declare type Item = {
+    disabled?: boolean;
+    label?: string;
+    value: string;
+};
+
+declare type ItemGroup = {
+    label?: string;
+    children: Item[];
+};
+```
+
+#### Example
+
+To generate an `sdpi-select` like the image below, you would use the following JSON payload.
+
+![An sdpi-select component demonstrating the use of the datasource attribute](assets/datasource-example.png?raw=true 'datasource example')
+
+```js
+{
+    action: "com.geekyeggo.sdpi.action",
+    event: "sendToPropertyInspector",
+    context: uniqueValue,
+    payload: {
+        event: "getColors",
+        items: [{
+            label: 'Primary Colors',
+            children: [{
+                label: 'Red',
+                value: '#ff0000'
+            }, {
+                label: 'Green',
+                value: '#00ff00'
+            }, {
+                label: 'Blue',
+                value: '#0000ff'
+            }]
+        }, {
+            label: 'Black',
+            value: '#000000'
+        }, {
+            label: 'White',
+            value: '#ffffff'
+        }]
+    }
+}
+```

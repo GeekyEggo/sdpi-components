@@ -5,15 +5,18 @@ import { property, state } from 'lit/decorators.js';
 import { FilteredMutationObserver } from '../core';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
-declare type ItemGroup = {
-    label?: string;
-    children: Item[];
-};
+declare type DataSourceResult = DataSourceResultItem[];
+declare type DataSourceResultItem = Item | ItemGroup;
 
 declare type Item = {
     disabled?: boolean;
     label?: string;
     value: string;
+};
+
+declare type ItemGroup = {
+    label?: string;
+    children: Item[];
 };
 
 /**
@@ -45,9 +48,17 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
         public dataSource?: string;
 
         /**
+         * The text to display when the data source task is pending.
+         */
+        @property({
+            attribute: 'loading'
+        })
+        public loadingText = 'Loading...';
+
+        /**
          * Gets the items within the data source as a task; these are either loaded from the child nodes, or the Stream Deck, based on the existence of `dataSource`.
          */
-        public items = new Task<[string | undefined, boolean], (ItemGroup | Item)[]>(
+        public items = new Task<[string | undefined, boolean], DataSourceResult>(
             this,
             async ([dataSource]) => {
                 if (dataSource === undefined) {
@@ -71,7 +82,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
                 return [undefined];
             }
 
-            const map = (item: ItemGroup | Item): unknown => {
+            const map = (item: DataSourceResultItem): unknown => {
                 if (this.isItemGroup(item)) {
                     return renderGroup ? renderGroup(item, item.children.map(map)) : undefined;
                 } else if (this.isItem(item)) {
@@ -88,8 +99,8 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
          * Maps the mutation observer's child nodes to a data source result.
          * @returns The items, as reduced from the child nodes within the mutation observer.
          */
-        private getItemsFromChildNodes(): (ItemGroup | Item)[] {
-            const reducer = (items: (ItemGroup | Item)[], node: Node): (ItemGroup | Item)[] => {
+        private getItemsFromChildNodes(): DataSourceResult {
+            const reducer = (items: DataSourceResult, node: Node): DataSourceResult => {
                 if (node instanceof HTMLOptGroupElement) {
                     items.push(<ItemGroup>{
                         label: node.label,
@@ -113,7 +124,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
          * @param object The object to check.
          * @returns `true` when the object structure matches.
          */
-        private isItem(object: ItemGroup | Item): object is Item {
+        private isItem(object: DataSourceResultItem): object is Item {
             return object && (<Item>object).value !== undefined;
         }
 
@@ -122,7 +133,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
          * @param object The object to check.
          * @returns `true` when the object structure matches.
          */
-        private isItemGroup(object: ItemGroup | Item): object is ItemGroup {
+        private isItemGroup(object: DataSourceResultItem): object is ItemGroup {
             return object && (<ItemGroup>object).children !== undefined && Array.isArray((<ItemGroup>object).children);
         }
     }
