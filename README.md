@@ -186,7 +186,7 @@ The `sdpi-item` component is designed to complement inputs by providing a recogn
 | `setting`    | `string`   | The path to the property where the value should be persisted in the settings.     |
 | `global`     | `boolean`  | When present, the value will be persisted to the global settings.                 |
 | `columns`    | `number`   | The number of columns to render the inputs in; valid values are 1-6.              |
-| `datasource` | `string`   | The optional remote data source ([read more](#🔃-data-source)).                   |
+| `datasource` | `string`   | The optional remote data source ([read more](#-data-source)).                     |
 | `disabled`   | `boolean`  | Determines whether the input is disabled.                                         |
 | `loading`    | `string`   | When a `datasource` is specified, this text is shown whilst the items are loaded. |
 | `value`      | `string[]` | The value of the component, and the persisted setting.                            |
@@ -364,7 +364,7 @@ The `sdpi-calendar` component encompasses capturing the input of dates and times
 | `setting`    | `string`  | The path to the property where the value should be persisted in the settings.     |
 | `global`     | `boolean` | When present, the value will be persisted to the global settings.                 |
 | `columns`    | `number`  | The number of columns to render the inputs in; valid values are 1-6.              |
-| `datasource` | `string`  | The optional remote data source ([read more](#🔃-data-source)).                   |
+| `datasource` | `string`  | The optional remote data source ([read more](#-data-source)).                     |
 | `disabled`   | `boolean` | Determines whether the input is disabled.                                         |
 | `loading`    | `string`  | When a `datasource` is specified, this text is shown whilst the items are loaded. |
 | `value`      | `string`  | The value of the component, and the persisted setting.                            |
@@ -423,7 +423,7 @@ The `sdpi-calendar` component encompasses capturing the input of dates and times
 | ------------- | --------- | --------------------------------------------------------------------------------- |
 | `setting`     | `string`  | The path to the property where the value should be persisted in the settings.     |
 | `global`      | `boolean` | When present, the value will be persisted to the global settings.                 |
-| `datasource`  | `string`  | The optional remote data source ([read more](#🔃-data-source)).                   |
+| `datasource`  | `string`  | The optional remote data source ([read more](#-data-source)).                     |
 | `disabled`    | `boolean` | Determines whether the input is disabled.                                         |
 | `loading`     | `string`  | When a `datasource` is specified, this text is shown whilst the items are loaded. |
 | `placeholder` | `string`  | Optional placeholder text shown in the input.                                     |
