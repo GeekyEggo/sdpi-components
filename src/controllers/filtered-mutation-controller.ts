@@ -1,12 +1,12 @@
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 
-import { ChildNodesObserver } from '../core';
+import { FilteredMutationObserver } from '../core';
 
 /**
  * Provides a controller that observes the child nodes of the host, and exposes them via `childNodes`.
  */
-export class ChildNodesController<K extends keyof HTMLElementTagNameMap> implements ReactiveController {
-    private observer: ChildNodesObserver<K>;
+export class FilteredMutationController<K extends keyof HTMLElementTagNameMap> implements ReactiveController {
+    private observer: FilteredMutationObserver<K>;
 
     /**
      * Initializes a new child node controller capable of observing the child nodes of the host, exposed via `childNodes`.
@@ -15,14 +15,14 @@ export class ChildNodesController<K extends keyof HTMLElementTagNameMap> impleme
      */
     constructor(private host: ReactiveControllerHost & Node, nodeNames: K[]) {
         this.host.addController(this);
-        this.observer = new ChildNodesObserver(nodeNames, this.handleMutation.bind(this));
+        this.observer = new FilteredMutationObserver(nodeNames, this.handleMutation.bind(this));
     }
 
     /**
      * Gets the child nodes associated with the host.
      */
     public get items(): HTMLElementTagNameMap[K][] {
-        return this.observer.nodes;
+        return this.observer.items;
     }
 
     /** @inheritdoc */

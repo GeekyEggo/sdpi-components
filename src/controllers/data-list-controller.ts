@@ -1,12 +1,12 @@
 import { ReactiveControllerHost } from 'lit';
 
 import { getUUID } from '../core';
-import { ChildNodesController } from './child-nodes-controller';
+import { FilteredMutationController } from './filtered-mutation-controller';
 
 /**
  * Provides a controller that observes the child nodes of the host for a HTMLDataListElement, and caches a clone of the instance for rendering.
  */
-export class DataListController extends ChildNodesController<'datalist'> {
+export class DataListController extends FilteredMutationController<'datalist'> {
     /**
      * Gets the current data list.
      */

@@ -1,8 +1,8 @@
 import { Task } from '@lit-labs/task';
 import { LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
 
-import { ChildNodesObserver } from '../core';
+import { FilteredMutationObserver } from '../core';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 declare type ItemGroup = {
@@ -23,8 +23,9 @@ declare type Item = {
  */
 export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) => {
     class DataSourced extends superClass {
+        @state()
         private _itemsDirtyFlag = false;
-        private _mutationObserver = new ChildNodesObserver(['optgroup', 'option'], () => (this._itemsDirtyFlag = !this._itemsDirtyFlag));
+        private _mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => (this._itemsDirtyFlag = !this._itemsDirtyFlag));
 
         /**
          * Initializes a new instance of the data source mixin.
@@ -105,7 +106,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
                 return items;
             };
 
-            return this._mutationObserver.nodes.reduce(reducer, []);
+            return this._mutationObserver.items.reduce(reducer, []);
         }
         /**
          * Determines whether the specified object has the form of an `Item`.

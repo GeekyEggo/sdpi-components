@@ -1,20 +1,20 @@
 /**
  * Provides a wrapper around a mutation observers that monitors for specific node types.
  */
-export class ChildNodesObserver<K extends keyof HTMLElementTagNameMap> {
+export class FilteredMutationObserver<K extends keyof HTMLElementTagNameMap> {
     private observer = new MutationObserver(this.handleMutation.bind(this));
 
     /**
-     * Initializes a mutation observer wrapper.
+     * Initializes a filtered mutation observer that is capable of monitoring mutations of specific elements for a target.
      * @param nodeNames The name of the node types to observe.
      * @param callback The function invoked when a node matching the node name is added or removed.
      */
-    constructor(private nodeNames: K[], private callback: (nodes: HTMLElementTagNameMap[K][]) => void) {}
+    constructor(private nodeNames: K[], private callback: (items: HTMLElementTagNameMap[K][]) => void) {}
 
     /**
      * Gets the child nodes associated with the target node.
      */
-    public nodes: HTMLElementTagNameMap[K][] = [];
+    public items: HTMLElementTagNameMap[K][] = [];
 
     /**
      * Observes mutations to the targets child nodes within the DOM.
@@ -43,23 +43,23 @@ export class ChildNodesObserver<K extends keyof HTMLElementTagNameMap> {
             for (const added of mutation.addedNodes) {
                 if (this.nodeNames.indexOf(<K>added.nodeName.toLowerCase()) > -1) {
                     changed = true;
-                    this.nodes.push(added as HTMLElementTagNameMap[K]);
+                    this.items.push(added as HTMLElementTagNameMap[K]);
                 }
             }
 
             // Nodes removed.
             mutation.removedNodes.forEach((node) => {
-                const index = this.nodes.indexOf(node as HTMLElementTagNameMap[K]);
+                const index = this.items.indexOf(node as HTMLElementTagNameMap[K]);
                 if (index !== -1) {
                     changed = true;
-                    this.nodes.splice(index, 1);
+                    this.items.splice(index, 1);
                 }
             });
         });
 
         // As a node changed; trigger the mutated handler.
         if (changed) {
-            this.callback(this.nodes);
+            this.callback(this.items);
         }
     }
 }
