@@ -492,9 +492,11 @@ The `sdpi-calendar` component encompasses capturing the input of dates and times
 
 ### 🔃 Data Source
 
-_Relates to `sdpi-checkbox-list`, `sdpi-radio`, `sdpi-select`._
+Relates to: [`Checkbox List`](#%EF%B8%8F-checkbox-list), [`Radio`](#-radio), [`Select`](#-select)
 
 Sometimes it's necessary to load options for an input dynamically, e.g. a drop down that displays the computers audio devices, or OBS scenes. Thankfully this can easily be achieved through the use of the `datasource` attribute, e.g.
+
+![An sdpi-select component demonstrating the use of the datasource attribute](assets/datasource-example.png?raw=true 'datasource example')
 
 <!-- prettier-ignore -->
 ```html
@@ -505,44 +507,11 @@ Sometimes it's necessary to load options for an input dynamically, e.g. a drop d
 </sdpi-select>
 ```
 
-When a `datasource` attribute is specified, the following occurs:
+Can be achieved by:
 
-```mermaid
-sequenceDiagram
-    participant i as Input Component
-    participant pi as Property Inspector
-    participant p as Plugin
-    i ->> pi: Component with datasource attribute
-    pi ->> p: `sendToPlugin` requests data source
-    note over  p: { ..., payload: { event: <datasource> } }
-    p ->> pi: `sendToPropertyInspector` returns data source
-    note over pi: { ..., payload: { event: <datasource>, items: <items> } }
-    pi ->> i: Data source rendered as options
-```
-
-⚠️ NB. The data source `items` must match the required schema.
-
-```typescript
-declare type DataSourceResult = DataSourceResultItem[];
-declare type DataSourceResultItem = Item | ItemGroup;
-
-declare type Item = {
-    disabled?: boolean;
-    label?: string;
-    value: string;
-};
-
-declare type ItemGroup = {
-    label?: string;
-    children: Item[];
-};
-```
-
-#### Example
-
-To generate an `sdpi-select` like the image below, you would use the following JSON payload.
-
-![An sdpi-select component demonstrating the use of the datasource attribute](assets/datasource-example.png?raw=true 'datasource example')
+1. Setting the `datasource` attribute on the component, e.g. `getColors`.
+1. Updating your plugin to accept `sendToPlugin` events, and monitoring `payload.event`.
+1. When the `payload.event` equals `getColors`, respond with the items using `sendToPropertyInspector`, e.g.
 
 ```js
 {
@@ -572,4 +541,22 @@ To generate an `sdpi-select` like the image below, you would use the following J
         }]
     }
 }
+```
+
+⚠️ N.B. The response payload must contain an `event` property equal to the data source name, and the `items` should match the required schema.
+
+```typescript
+declare type DataSourceResult = DataSourceResultItem[];
+declare type DataSourceResultItem = Item | ItemGroup;
+
+declare type Item = {
+    disabled?: boolean;
+    label?: string;
+    value: string;
+};
+
+declare type ItemGroup = {
+    label?: string;
+    children: Item[];
+};
 ```
