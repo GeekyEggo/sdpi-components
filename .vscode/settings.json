@@ -4,7 +4,8 @@
         "node_modules": true,
         "**/.vs/": true
     },
-    "editor.formatOnSave": true,
     "importSorter.generalConfiguration.sortOnBeforeSave": true,
-    "html.format.wrapLineLength": 250
+    "html.format.wrapLineLength": 250,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
 }
