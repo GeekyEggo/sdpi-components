@@ -117,3 +117,4 @@ obj
 # TypeScript
 src/**/*.js*
 .gitignore
+dist/**/*.txt

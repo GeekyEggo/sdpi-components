@@ -1,19 +1,19 @@
 {
-    "name": "sdpi",
+    "name": "sdpi-components",
     "version": "1.0.0",
     "description": "Stream Deck Property Inspector web components",
     "main": "src/index.ts",
     "scripts": {
-        "build": "webpack",
-        "watch": "webpack -w --env local & npm run watch:example",
+        "dist": "webpack",
         "format": "prettier --config .prettierrc './src/**/*.ts' --write",
-        "lint": "eslint . --ext .ts",
         "install:example": "node ./scripts/install-example.js",
+        "lint": "eslint . --ext .ts",
+        "watch": "webpack -w --env local & npm run watch:example",
         "watch:example": "onchange './example/**/*.*' -- npm run install:example"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/GeekyEggo/sdpi.git"
+        "url": "git+https://github.com/GeekyEggo/sdpi-components.git"
     },
     "keywords": [
         "stream-deck",
@@ -24,9 +24,9 @@
     "author": "GeekyEggo",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/GeekyEggo/sdpi/issues"
+        "url": "https://github.com/GeekyEggo/sdpi-components/issues"
     },
-    "homepage": "https://github.com/GeekyEggo/sdpi#readme",
+    "homepage": "https://sdpi-components.dev",
     "devDependencies": {
         "@lit-labs/task": "^1.1.1",
         "@trivago/prettier-plugin-sort-imports": "^3.2.0",

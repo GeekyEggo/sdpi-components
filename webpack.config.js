@@ -1,17 +1,14 @@
 const path = require('path');
 
-module.exports = env => {
+module.exports = (env) => {
     const isLocal = env && env.local;
-
-    const outputPath = isLocal
-        ? path.resolve(__dirname, 'example/pi')
-        : path.resolve(__dirname, 'dist');
+    const outputPath = isLocal ? path.resolve(__dirname, 'example/pi') : path.resolve(__dirname, 'dist');
 
     return {
         entry: './src/index.ts',
         output: {
-            filename: 'sdpi.js',
-            path: outputPath,
+            filename: 'sdpi-components.js',
+            path: outputPath
         },
         mode: isLocal ? 'development' : 'production',
         devtool: isLocal ? 'inline-source-map' : 'hidden-source-map',
@@ -23,9 +20,9 @@ module.exports = env => {
                 {
                     test: /\.ts$/,
                     use: 'ts-loader',
-                    exclude: /node_modules/,
+                    exclude: /node_modules/
                 }
             ]
         }
-    }
+    };
 };
