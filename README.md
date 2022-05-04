@@ -7,13 +7,9 @@
 
 Designed to complement Stream Deck plugins; sdpi-components provides a collection of web components that focuses on the plugin's property inspector, and makes persisting settings consistent, user-friendly, and hassle-free.
 
----
-
 -   [✏️ Getting Started](#%EF%B8%8F-getting-started)
 -   [📦 Example](#-example)
 -   [📖 Documentation](https://sdpi-components.dev)
-
----
 
 ## ✏️ Getting Started
 
@@ -23,11 +19,11 @@ Getting started is easy; simply reference the following JavaScript file in your 
 <script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components/dist/sdpi-components.js"></script>
 ```
 
----
-
 ## 📦 Example
 
 The example below highlights some of the components available; alternatively you can check out the [property inspector in this repositorie's example plugin](./example/pi/index.html).
+
+![The property inspector, in the Elgato Stream Deck software, with components from sdpi-components](./assets/example.png 'Example of sdpi-components in the property inspector')
 
 ```html
 <!DOCTYPE html>
@@ -64,10 +60,6 @@ The example below highlights some of the components available; alternatively you
     </body>
 </html>
 ```
-
-![The property inspector, in the Elgato Stream Deck software, with components from sdpi-components](./assets/example.png 'Example of sdpi-components in the property inspector')
-
----
 
 _For a full list of components, check out the [documentation](https://sdpi-components.dev)._
 
