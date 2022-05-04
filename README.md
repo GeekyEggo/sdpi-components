@@ -9,11 +9,11 @@ Designed to complement Stream Deck plugins; sdpi-components provides a collectio
 
 -   [✏️ Getting Started](#%EF%B8%8F-getting-started)
 -   [📦 Example](#-example)
--   [📖 Documentation](https://sdpi-components.dev)
+-   [🪶 Components](#-components)
 
 ## ✏️ Getting Started
 
-Getting started is easy; simply reference the following JavaScript file in your property inspector, and then you're ready to [start adding components](https://sdpi-components.dev/docs/components).
+Getting started is easy; simply reference the following JavaScript file in your property inspector, and you're ready to start adding [components](https://sdpi-components.dev/docs/components).
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components/dist/sdpi-components.js"></script>
@@ -21,7 +21,7 @@ Getting started is easy; simply reference the following JavaScript file in your 
 
 ## 📦 Example
 
-The example below highlights some of the components available; alternatively you can check out the [property inspector in this repositorie's example plugin](./example/pi/index.html).
+The example below highlights some of the components available; alternatively you can check out the [property inspector](./example/pi/index.html) in this repositories example plugin.
 
 ![The property inspector, in the Elgato Stream Deck software, with components from sdpi-components](./assets/example.png 'Example of sdpi-components in the property inspector')
 
@@ -61,7 +61,11 @@ The example below highlights some of the components available; alternatively you
 </html>
 ```
 
-_For a full list of components, check out the [documentation](https://sdpi-components.dev)._
+## 🪶 Components
+
+To discover all of the components available, check out the [documentation](https://sdpi-components.dev).
+
+![](./assets/all-components.png)
 
 [twitter-shield]: https://img.shields.io/static/v1?style=flat-square&message=GeekyEggo&logo=Twitter&label=&color=blue&logoColor=white&labelColor=grey
 [docs-shield]: https://img.shields.io/static/v1?style=flat-square&message=Documentation&logo=readthedocs&label=&color=orange&logoColor=white&labelColor=grey
