@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="sdpi-components Logo"/>
+  <a href="https://sdpi-components.dev" title="sdpi-components"><img src="assets/logo.png" alt="sdpi-components Logo"/></a>
 </p>
 <h1 align="center">sdpi-components</h1>
 
