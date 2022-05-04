@@ -63,9 +63,9 @@ The example below highlights some of the components available; alternatively you
 
 ## 🪶 Components
 
-To discover all of the components available, check out the [documentation](https://sdpi-components.dev).
+To discover all of the components available, check out the [documentation](https://sdpi-components.dev/docs/components).
 
-![](./assets/all-components.png)
+[![The property inspector with all of the components found in the sdpi-components library](./assets/all-components.png 'Some of the components in sdpi-components')](https://sdpi-components.dev/docs/components)
 
 [twitter-shield]: https://img.shields.io/static/v1?style=flat-square&message=GeekyEggo&logo=Twitter&label=&color=blue&logoColor=white&labelColor=grey
 [docs-shield]: https://img.shields.io/static/v1?style=flat-square&message=Documentation&logo=readthedocs&label=&color=orange&logoColor=white&labelColor=grey
