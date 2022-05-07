@@ -1,7 +1,7 @@
+import SDPIComponents from '../typings/sdpi-components';
 import streamDeckClient from './stream-deck-client';
 
-/* The Stream Deck client */
-window.streamDeckClient = streamDeckClient;
+window.SDPIComponents = SDPIComponents;
 
 const existing = window.connectElgatoStreamDeckSocket;
 

@@ -21,7 +21,7 @@ class Settings<TEventArgs extends DidReceiveGlobalSettingsEvent | DidReceiveSett
     /**
      * Registers the given key as a setting to be persisted in the Stream Deck; when the settings change, the callback is invoked.
      * @param key The key.
-     * @param changeCallback Optional callback invoked when the settings change.
+     * @param changeCallback Optional callback invoked when the settings change from the Stream Deck.
      * @param timeout Optional delay awaited before applying a save; this can be useful if a value can change frequently, i.e. if it is being typed.
      * @returns The getter and setter, capable of retrieving and persisting the setting.
      */

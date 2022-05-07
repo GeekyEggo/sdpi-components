@@ -538,7 +538,7 @@
                 .value=${this.value||""}
                 @input=${t=>this.value=t.target.value}
             />
-        `}};_e([st({attribute:"maxlength",type:Number}),xe("design:type",Number)],Le.prototype,"maxLength",void 0),_e([st(),xe("design:type",Object)],Le.prototype,"pattern",void 0),_e([st(),xe("design:type",Object)],Le.prototype,"placeholder",void 0),_e([st({type:Boolean}),xe("design:type",Object)],Le.prototype,"required",void 0),Le=_e([et("sdpi-textfield")],Le),window.streamDeckClient=at;const Ae=window.connectElgatoStreamDeckSocket;window.connectElgatoStreamDeckSocket=function(t,e,i,s,n){Ae&&Ae(t,e,i,s,n),at.connect(t,e,i,s,n)};const ke=document.createElement("style");ke.innerHTML=n`
+        `}};var Ae;_e([st({attribute:"maxlength",type:Number}),xe("design:type",Number)],Le.prototype,"maxLength",void 0),_e([st(),xe("design:type",Object)],Le.prototype,"pattern",void 0),_e([st(),xe("design:type",Object)],Le.prototype,"placeholder",void 0),_e([st({type:Boolean}),xe("design:type",Object)],Le.prototype,"required",void 0),Le=_e([et("sdpi-textfield")],Le),function(t){t.streamDeckClient=at,t.useGlobalSettings=Zt,t.useSettings=zt}(Ae||(Ae={}));const ke=Ae;window.SDPIComponents=ke;const Ce=window.connectElgatoStreamDeckSocket;window.connectElgatoStreamDeckSocket=function(t,e,i,s,n){Ce&&Ce(t,e,i,s,n),at.connect(t,e,i,s,n)};const Ee=document.createElement("style");Ee.innerHTML=n`
     /* Styles added by sdpi library. */
     html,
     body {
@@ -556,4 +556,4 @@
         border-radius: 5px;
         outline: 1px solid slategrey;
     }
-`.cssText,document.head.appendChild(ke)})();
+`.cssText,document.head.appendChild(Ee)})();
