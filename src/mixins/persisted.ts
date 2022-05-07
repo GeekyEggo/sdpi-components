@@ -1,7 +1,7 @@
 import { LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import { useSettings } from '../stream-deck/settings';
+import { useGlobalSettings, useSettings } from '../stream-deck/settings';
 
 /**
  * Provides a mixin that contains information relating to persisting data within the Stream Deck settings.
@@ -36,7 +36,11 @@ export const Persisted = <TBase extends Constructor<LitElement>, TValue>(superCl
             super.firstUpdated(_changedProperties);
 
             if (this.setting) {
-                this.save = useSettings<TValue>(this.setting, this.isGlobal, (value) => (this.value = value));
+                if (this.isGlobal) {
+                    [, this.save] = useGlobalSettings<TValue>(this.setting, (value) => (this.value = value));
+                } else {
+                    [, this.save] = useSettings<TValue>(this.setting, (value) => (this.value = value));
+                }
             }
         }
 

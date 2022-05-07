@@ -1,91 +1,72 @@
 import { DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent } from 'stream-deck';
 
-import { delay, get, set } from '../core';
+import { delay, get, IEventSubscriber, PromiseCompletionSource, set } from '../core';
 import streamDeckClient from './stream-deck-client';
 
 /**
- * Provides a store for managing settings stored within the Stream Deck.
+ * Provides a wrapper around loading, managing, and persisting settings within the Stream Deck.
  */
-class Settings {
-    private _globalSettings?: Record<string, unknown>;
-    private _settings?: Record<string, unknown>;
+class Settings<TEventArgs extends DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent> {
+    private _settings = new PromiseCompletionSource<Record<string, unknown>>();
 
     /**
-     * Initializes a new instance of the settings used to persist data.
+     * Initializes a new instance of the settings.
+     * @param didReceive The event invoked when the settings are received from the Stream Deck.
+     * @param save The delegate responsible for persisting the settings in the Stream Deck.
      */
-    constructor() {
-        streamDeckClient.didReceiveGlobalSettings.subscribe((data: DidReceiveGlobalSettingsEvent) => (this._globalSettings = data.payload.settings));
-        streamDeckClient.didReceiveSettings.subscribe((data: DidReceiveSettingsEvent) => (this._settings = data.payload.settings));
-
-        streamDeckClient.getGlobalSettings();
+    constructor(private didReceive: IEventSubscriber<TEventArgs>, private save: (settings: unknown) => void) {
+        didReceive.subscribe(async (data: TEventArgs) => this._settings?.setResult(data.payload.settings));
     }
 
     /**
-     * Registers the the given key as a setting to be persisted in the Stream Deck; when the settings change, the callback is invoked. This returns a function capable of persisting the value against the key.
-     * @param key The settings key.
-     * @param isGlobal Determines whether the setting is a global setting.
-     * @param onChange The callback invoked when the setting changes.
-     * @returns A delegate that allows for updating the setting value.
+     * Registers the given key as a setting to be persisted in the Stream Deck; when the settings change, the callback is invoked.
+     * @param key The key.
+     * @param changeCallback Optional callback invoked when the settings change.
+     * @param timeout Optional delay awaited before applying a save; this can be useful if a value can change frequently, i.e. if it is being typed.
+     * @returns The getter and setter, capable of retrieving and persisting the setting.
      */
-    public register<T>(key: string, isGlobal: boolean, onChange: (value?: T) => void, timeout: number | null = 250): (value?: unknown) => void {
-        const settingChangeHandler = (data: DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent): void => {
-            if (data && data.payload && data.payload.settings) {
-                onChange(get(key, data.payload.settings));
-            }
-        };
-
-        // Subscribe to changes.
-        if (isGlobal) {
-            streamDeckClient.didReceiveGlobalSettings.subscribe(settingChangeHandler);
-        } else {
-            streamDeckClient.didReceiveSettings.subscribe(settingChangeHandler);
+    public use<T>(key: string, changeCallback?: (value?: T) => void, timeout: number | null = 250): [() => Promise<T>, (value?: T) => void] {
+        // Register the change callback.
+        if (changeCallback) {
+            this.didReceive.subscribe((data: TEventArgs) => {
+                if (data?.payload?.settings !== undefined) {
+                    changeCallback(get(key, data.payload.settings));
+                }
+            });
         }
 
-        // Return the setter that allows for the value to be saved to the store.
-        if (timeout) {
-            return delay((value) => settings.set(key, isGlobal, value), timeout);
-        } else {
-            return (value?: unknown) => settings.set(key, isGlobal, value);
-        }
+        // Construct getter and setter.
+        const getter = async (): Promise<T> => get(key, await this._settings.promise);
+        const setter = timeout ? delay((value) => this.set(key, value), timeout) : (value?: unknown) => this.set(key, value);
+
+        return [getter, setter];
     }
 
     /**
      * Sets the value, for the specified key, to the persistent settings.
-     * @param key The settings key.
-     * @param isGlobal Determines whether the setting is a global setting.
-     * @param value The settings value.
+     * @param key The key.
+     * @param value The value.
      */
-    private set(key: string, isGlobal: boolean, value?: unknown): void {
-        if (isGlobal) {
-            if (this.tryUpdate(key, value, this._globalSettings)) {
-                streamDeckClient.setGlobalSettings(this._globalSettings);
-            }
-        } else if (this.tryUpdate(key, value, this._settings)) {
-            streamDeckClient.setSettings(this._settings);
-        }
-    }
+    private async set(key: string, value?: unknown): Promise<void> {
+        const _settings = await this._settings.promise;
 
-    /**
-     * Update the `settings` when the current value for the `key` differs to the `value`.
-     * @param key The settings key.
-     * @param value The new value.
-     * @param settings The settings to update.
-     * @returns `true` when the settings were updated.
-     */
-    private tryUpdate(key: string, value?: unknown, settings?: Record<string, unknown>): boolean {
-        if (settings === undefined) {
-            return false;
-        }
-
-        const oldValue = get(key, settings);
+        const oldValue = get(key, _settings);
         if (oldValue === value) {
-            return false;
+            return;
         }
 
-        set(key, settings, value);
-        return true;
+        set(key, _settings, value);
+        this.save(_settings);
     }
 }
 
-const settings = new Settings();
-export const useSettings = settings.register;
+// Action instance specific settings.
+const settings = new Settings(streamDeckClient.didReceiveSettings, (value) => streamDeckClient.setSettings(value));
+
+export const useSettings = settings.use.bind(settings);
+
+// Global plugin settings.
+const globalSettings = new Settings(streamDeckClient.didReceiveGlobalSettings, (value) => streamDeckClient.setGlobalSettings(value));
+streamDeckClient.getGlobalSettings();
+
+export const useGlobalSettings = globalSettings.use.bind(globalSettings);

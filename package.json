@@ -6,10 +6,10 @@
     "scripts": {
         "dist": "webpack",
         "format": "prettier --config .prettierrc './src/**/*.ts' --write",
-        "install:example": "node ./scripts/install-example.js",
         "lint": "eslint . --ext .ts",
-        "watch": "webpack -w --env local & npm run watch:example",
-        "watch:example": "onchange './example/**/*.*' -- npm run install:example"
+        "postinstall": "node ./scripts/install-example.js",
+        "start": "webpack -w --env local & npm run start:example",
+        "start:example": "onchange './example/**/*.*' -- npm run postinstall"
     },
     "repository": {
         "type": "git",
