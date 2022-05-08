@@ -188,7 +188,7 @@ declare module 'stream-deck' {
             column: number;
             row: number;
         };
-        isInMultiAction: boolean;
+        isInMultiAction?: boolean; // Stream Deck does not currently provide this as part of the inActionInfo parameter, possibly a bug?
     } & SettingsPayload;
 
     /**

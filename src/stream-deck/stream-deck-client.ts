@@ -18,11 +18,11 @@ export class StreamDeckClient {
 
     /**
      * Connects to the Stream Deck.
-     * @param {string} port The port that should be used to create the WebSocket.
-     * @param {string} propertyInspectorUUID A unique identifier string to register Property Inspector with Stream Deck software.
-     * @param {string} registerEvent The event type that should be used to register the plugin once the WebSocket is opened. For Property Inspector this is "registerPropertyInspector".
-     * @param {string} info A JSON object containing information about the application.
-     * @param {string} actionInfo A JSON object containing information about the action.
+     * @param port The port that should be used to create the WebSocket.
+     * @param propertyInspectorUUID A unique identifier string to register Property Inspector with Stream Deck software.
+     * @param registerEvent The event type that should be used to register the plugin once the WebSocket is opened. For Property Inspector this is "registerPropertyInspector".
+     * @param info A JSON object containing information about the application.
+     * @param actionInfo A JSON object containing information about the action.
      */
     public async connect(port: string, propertyInspectorUUID: string, registerEvent: string, info: string, actionInfo?: string | undefined): Promise<void> {
         if (!this._isInitialized) {
@@ -71,7 +71,7 @@ export class StreamDeckClient {
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings}
      * @param value The global settings.
      */
-    public setGlobalSettings(value?: unknown): void {
+    public setGlobalSettings(value: unknown): void {
         this.send('setGlobalSettings', value);
     }
 
@@ -91,7 +91,7 @@ export class StreamDeckClient {
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setsettings}
      * @param value The settings.
      */
-    public setSettings(value?: unknown): void {
+    public setSettings(value: unknown): void {
         this.send('setSettings', value);
     }
 
@@ -139,7 +139,7 @@ export class StreamDeckClient {
     }
 
     /**
-     * Sends a request to the Stream Deck.
+     * Sends a message to the Stream Deck.
      * @param {string} event The event name.
      * @param {unknown} payload The optional payload.
      */
