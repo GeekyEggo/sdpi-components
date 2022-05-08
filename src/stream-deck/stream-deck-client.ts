@@ -1,25 +1,20 @@
-import { ActionInfo, AsEvent, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, RegistrationInfo } from 'stream-deck';
+import { ActionSettingsPayload, AsEvent, ConnectionInfo, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, SendToPropertyInspectorEvent } from 'stream-deck';
 
 import { EventManager, PromiseCompletionSource } from '../core';
-
-export interface IConnectionInfo {
-    actionInfo: ActionInfo;
-    info: RegistrationInfo;
-    propertyInspectorUUID: string;
-    registerEvent: string;
-}
 
 /**
  * Provides a Stream Deck client wrapper for the connection.
  */
 export class StreamDeckClient {
     private readonly _connection = new PromiseCompletionSource<WebSocket>();
-    private readonly _connectionInfo = new PromiseCompletionSource<IConnectionInfo>();
-    private _webSocket?: WebSocket;
+    private readonly _connectionInfo = new PromiseCompletionSource<ConnectionInfo>();
+    private _isInitialized = false;
+
+    public readonly message = new EventManager<EventReceived>();
 
     public readonly didReceiveGlobalSettings = new EventManager<DidReceiveGlobalSettingsEvent>();
     public readonly didReceiveSettings = new EventManager<DidReceiveSettingsEvent>();
-    public readonly message = new EventManager<EventReceived>();
+    public readonly sendToPropertyInspector = new EventManager<SendToPropertyInspectorEvent>();
 
     /**
      * Connects to the Stream Deck.
@@ -30,7 +25,7 @@ export class StreamDeckClient {
      * @param {string} actionInfo A JSON object containing information about the action.
      */
     public async connect(port: string, propertyInspectorUUID: string, registerEvent: string, info: string, actionInfo?: string | undefined): Promise<void> {
-        if (!this._webSocket) {
+        if (!this._isInitialized) {
             const connectionInfo = {
                 actionInfo: actionInfo ? JSON.parse(actionInfo) : null,
                 info: JSON.parse(info),
@@ -45,9 +40,20 @@ export class StreamDeckClient {
             this._connectionInfo.setResult(connectionInfo);
 
             // Register the web socket.
-            this._webSocket = new WebSocket(`ws://localhost:${port}`);
-            this._webSocket.onopen = this.handleOpen.bind(this);
-            this._webSocket.onmessage = this.handleMessage.bind(this);
+            const webSocket = new WebSocket(`ws://localhost:${port}`);
+            webSocket.onmessage = this.handleMessage.bind(this);
+            webSocket.onopen = () => {
+                webSocket.send(
+                    JSON.stringify({
+                        event: connectionInfo.registerEvent,
+                        uuid: connectionInfo.propertyInspectorUUID
+                    })
+                );
+
+                this._connection.setResult(webSocket);
+            };
+
+            this._isInitialized = true;
         }
     }
 
@@ -55,8 +61,9 @@ export class StreamDeckClient {
      * Request the global persistent data.
      * @returns The global settings as a promise.
      */
-    public getGlobalSettings(): Promise<DidReceiveGlobalSettingsEvent> {
-        return this.get('getGlobalSettings', (ev) => ev.event === 'didReceiveGlobalSettings');
+    public async getGlobalSettings(): Promise<Record<string, unknown>> {
+        const response = await this.get('getGlobalSettings', 'didReceiveGlobalSettings');
+        return response.payload.settings;
     }
 
     /**
@@ -72,8 +79,11 @@ export class StreamDeckClient {
      * Gets the settings.
      * @returns The settings as a promise.
      */
-    public getSettings(): Promise<DidReceiveSettingsEvent> {
-        return this.get('getSettings', (ev) => ev.event === 'didReceiveSettings');
+    public async getSettings(): Promise<ActionSettingsPayload> {
+        const { actionInfo } = await this.getConnectionInfo();
+        const response = await this.get('getSettings', 'didReceiveSettings', (msg) => msg.action == actionInfo.action && msg.context == actionInfo.context && msg.device == actionInfo.device);
+
+        return response.payload;
     }
 
     /**
@@ -89,29 +99,35 @@ export class StreamDeckClient {
      * Gets the connection information used to connect to the Stream Deck.
      * @returns The connection information as a promise.
      */
-    public async getConnectionInfo(): Promise<IConnectionInfo> {
+    public async getConnectionInfo(): Promise<ConnectionInfo> {
         return this._connectionInfo.promise;
     }
 
     /**
-     * Sends the given `send` event along with the `payload` to the Stream Deck, and continually awaits a response message that matches the `isComplete` delegate.
-     * @param {string} send The event to send.
-     * @param {Function} isComplete The delegate invokes upon receiving a message from the Stream Deck; when `true`, this promise is fulfilled.
-     * @param {unknown} payload The optional payload.
-     * @returns {AsEvent<TReceived>} The first event received that fulfilled the `isComplete` delegate.
+     * Sends the given `send` event along with the `payload` to the Stream Deck, and continually awaits a response message that matches the `receive` event, and the optional `isComplete` delegate.
+     * @param send The event to send.
+     * @param receive The event to receive.
+     * @param isComplete The delegate invokes upon receiving a message from the Stream Deck; when `true`, this promise is fulfilled.
+     * @param payload The optional payload.
+     * @returns The first matching event that fulfilled the `receive` and optional `isComplete` delegate.
      */
     public async get<TSent extends EventSent['event'], TReceived extends EventReceived['event']>(
         send: TSent,
-        isComplete: (ev: EventReceived) => boolean,
+        receive: TReceived,
+        isComplete?: (ev: AsEvent<TReceived>) => boolean,
         payload?: unknown
     ): Promise<AsEvent<TReceived>> {
         const resolver = new PromiseCompletionSource<AsEvent<TReceived>>();
 
         // Construct the temporary listener that is removed when the callback can be fulilled.
-        const listener = (args: EventReceived) => {
-            if (isComplete(args)) {
-                this.message.unsubscribe(listener);
-                resolver.setResult(<AsEvent<TReceived>>args);
+        const listener = (ev: EventReceived) => {
+            if (ev.event === receive) {
+                const msg = <AsEvent<TReceived>>ev;
+
+                if (isComplete === undefined || isComplete(msg)) {
+                    this.message.unsubscribe(listener);
+                    resolver.setResult(msg);
+                }
             }
         };
 
@@ -127,7 +143,7 @@ export class StreamDeckClient {
      * @param {string} event The event name.
      * @param {unknown} payload The optional payload.
      */
-    private async send<T extends EventSent['event']>(event: T, payload?: unknown): Promise<void> {
+    public async send<T extends EventSent['event']>(event: T, payload?: unknown): Promise<void> {
         try {
             const connectionInfo = await this._connectionInfo.promise;
             const connection = await this._connection.promise;
@@ -146,27 +162,6 @@ export class StreamDeckClient {
     }
 
     /**
-     * Handles the underlying web socket connection being established with the Stream Deck.
-     */
-    private async handleOpen(): Promise<void> {
-        try {
-            const connectionInfo = await this._connectionInfo.promise;
-            if (this._webSocket) {
-                this._webSocket.send(
-                    JSON.stringify({
-                        event: connectionInfo.registerEvent,
-                        uuid: connectionInfo.propertyInspectorUUID
-                    })
-                );
-
-                this._connection.setResult(this._webSocket);
-            }
-        } catch (ex) {
-            this._connection.setException(ex);
-        }
-    }
-
-    /**
      * Handles receiving a message from the Stream Deck.
      * @param ev The message event that contains the data received.
      */
@@ -180,6 +175,10 @@ export class StreamDeckClient {
 
             case 'didReceiveSettings':
                 this.didReceiveSettings.dispatch(<DidReceiveSettingsEvent>data);
+                break;
+
+            case 'sendToPropertyInspector':
+                this.sendToPropertyInspector.dispatch(<SendToPropertyInspectorEvent>data);
                 break;
         }
 

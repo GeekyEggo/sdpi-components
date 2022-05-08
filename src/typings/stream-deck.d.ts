@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare module 'stream-deck' {
     /**
      * Defines possible device types.
@@ -9,6 +10,16 @@ declare module 'stream-deck' {
         StreamDeckMobile = 3,
         CorsairGKeys = 4
     }
+
+    /**
+     * The connection information supplied to the property inspector when initializing.
+     */
+    export type ConnectionInfo = {
+        actionInfo: ActionInfo;
+        info: RegistrationInfo;
+        propertyInspectorUUID: string;
+        registerEvent: string;
+    };
 
     /**
      * Defines information about devices, the operating system, and the plugin, that is provided to the Stream Deck property inspector as a JSON object.
@@ -53,14 +64,7 @@ declare module 'stream-deck' {
         action: string;
         context: string;
         device: string;
-        payload: {
-            coordinates?: {
-                column: number;
-                row: number;
-            };
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            settings?: Record<string, any>;
-        };
+        payload: ActionSettingsPayload;
     };
 
     /**
@@ -150,16 +154,20 @@ declare module 'stream-deck' {
      */
     export type DidReceiveGlobalSettingsEvent = {
         event: 'didReceiveGlobalSettings';
-        action: string;
-    } & AnyPayload;
+        payload: SettingsPayload;
+    };
 
     /**
      * Defines the message structure of the `didReceiveSettings` received from the Stream Deck.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received/#didreceiveglobalsettings}
      */
     export type DidReceiveSettingsEvent = {
+        action: string;
+        context: string;
+        device: string;
         event: 'didReceiveSettings';
-    } & AnyPayload;
+        payload: ActionSettingsPayload;
+    };
 
     /**
      * Defines the message structure of the `sendToPropertyInspector` received from the Stream Deck.
@@ -169,14 +177,25 @@ declare module 'stream-deck' {
         action?: string;
         event: 'sendToPropertyInspector';
         context?: string;
-    } & AnyPayload;
+        payload: any;
+    };
 
     /**
-     * Defines the type of events that are handled at runtime, and therefore require the `any` keyword.
+     * Defines the payload relating to an action instance.
      */
-    type AnyPayload = {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        payload: any;
+    export type ActionSettingsPayload = {
+        coordinates?: {
+            column: number;
+            row: number;
+        };
+        isInMultiAction: boolean;
+    } & SettingsPayload;
+
+    /**
+     * Defines the structure of settings.
+     */
+    export type SettingsPayload = {
+        settings: Record<string, unknown>;
     };
 
     /**

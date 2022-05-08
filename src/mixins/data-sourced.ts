@@ -65,7 +65,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
                     return this.getItemsFromChildNodes();
                 }
 
-                const result = await streamDeckClient.get('sendToPlugin', (ev) => ev.event === 'sendToPropertyInspector' && ev.payload?.event === this.dataSource, { event: this.dataSource });
+                const result = await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => msg.payload?.event === this.dataSource, { event: this.dataSource });
                 return result.payload.items;
             },
             () => [this.dataSource, this._itemsDirtyFlag]

@@ -1,8 +1,7 @@
 {
     "name": "sdpi-components",
-    "version": "1.0.0",
-    "description": "Stream Deck Property Inspector web components",
-    "main": "src/index.ts",
+    "description": "Web components for your Stream Deck plugin",
+    "main": "./dist/sdpi-components.js",
     "scripts": {
         "dist": "webpack",
         "format": "prettier --config .prettierrc './src/**/*.ts' --write",
