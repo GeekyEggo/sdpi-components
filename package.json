@@ -4,11 +4,13 @@
     "main": "./dist/sdpi-components.js",
     "scripts": {
         "build": "rollup -c",
+        "build:dev": "rollup -c --dev",
         "format": "prettier --config .prettierrc './src/**/*.ts' --write",
+        "install:example": "node ./scripts/install-example.js",
         "lint": "eslint . --ext .ts",
-        "postinstall": "node ./scripts/install-example.js",
-        "start": "rollup -c -w --dev & npm run start:example",
-        "start:example": "onchange './example/**/*.*' -- npm run postinstall"
+        "postinstall": "npm run build:dev && npm run install:example",
+        "start": "rollup -c -w & npm run start:example",
+        "start:example": "onchange './example/**/*.*' -- npm run install:example"
     },
     "repository": {
         "type": "git",

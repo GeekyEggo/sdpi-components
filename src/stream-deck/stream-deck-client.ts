@@ -1,6 +1,7 @@
 import { ActionSettingsPayload, AsEvent, ConnectionInfo, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, SendToPropertyInspectorEvent } from 'stream-deck';
 
-import { EventManager, PromiseCompletionSource } from '../core';
+import { EventManager } from '../core/events';
+import { PromiseCompletionSource } from '../core/promises';
 
 /**
  * Provides a Stream Deck client wrapper for the connection.
