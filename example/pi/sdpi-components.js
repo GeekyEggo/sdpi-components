@@ -494,8 +494,6 @@
                 return this.focusElement.value !== undefined;
             }
             focus() {
-                var _a;
-                console.log((_a = this.focusElement.value) === null || _a === void 0 ? void 0 : _a.type);
                 if (this.focusElement.value) {
                     switch (this.focusElement.value.type) {
                         case 'checkbox': {

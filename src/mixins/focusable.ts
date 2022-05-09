@@ -2,9 +2,9 @@ import { LitElement } from 'lit';
 import { createRef, Ref } from 'lit/directives/ref.js';
 
 /**
- * Provides a mixin that contains an element that is focusable.
+ * Provides a mixin that contains an element that is focusable thus allowing for improved accessibility of components that consume the shadow DOM.
  */
-export declare interface IFocusable {
+export interface IFocusable {
     /**
      * Determines whether the element can gain focus.
      */
@@ -38,7 +38,6 @@ export const Focusable = <T extends Constructor<LitElement>>(superClass: T) => {
 
         /** @inheritdoc */
         public focus(): void {
-            console.log(this.focusElement.value?.type);
             if (this.focusElement.value) {
                 switch (this.focusElement.value.type) {
                     case 'checkbox': {

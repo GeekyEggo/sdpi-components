@@ -5,16 +5,16 @@ import { property, state } from 'lit/decorators.js';
 import { FilteredMutationObserver } from '../core';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
-declare type DataSourceResult = DataSourceResultItem[];
-declare type DataSourceResultItem = Item | ItemGroup;
+export type DataSourceResult = DataSourceResultItem[];
+export type DataSourceResultItem = Item | ItemGroup;
 
-declare type Item = {
+export type Item = {
     disabled?: boolean;
     label?: string;
     value: string;
 };
 
-declare type ItemGroup = {
+export type ItemGroup = {
     label?: string;
     children: Item[];
 };
