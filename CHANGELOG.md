@@ -11,13 +11,19 @@
 
 # Change Log
 
-## vNext
+## v2.0.0
+
+### 🐞 Fixed
+
+-   Fix jsDelivr cache.
+
+## v1.4.0
 
 ### ♻️ Updated
 
 -   Remove debug logging from `Focusable` mixin.
 
-## v1.3
+## v1.3.0
 
 ### ✨ Added
 
@@ -32,7 +38,7 @@
 
 -   Update package builder from webpack to rollup.
 
-## v1.2
+## v1.2.0
 
 ### ✨ Added
 
@@ -47,7 +53,7 @@
 
 -   Fix type definitions for Stream Deck payloads. ([ref](https://github.com/GeekyEggo/sdpi-components/blob/v1.2/src/typings/stream-deck.d.ts))
 
-## v1.1
+## v1.1.0
 
 ### ✨ Added
 
@@ -55,7 +61,7 @@
 -   Add `useGlobalSettings` hook to public namespace
 -   Add `useSettings` hook to public namespace.
 
-## v1.0
+## v1.0.0
 
 Initial release. 🥳
 
