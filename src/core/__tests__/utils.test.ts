@@ -85,7 +85,7 @@ describe('set', () => {
 /**
  * getUUID
  */
-describe('get niversally unique identifier', () => {
+describe('getUUID', () => {
     test('should be acceptable format', () => {
         // given, when.
         const uuidPattern = new RegExp(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
@@ -99,7 +99,7 @@ describe('get niversally unique identifier', () => {
 /**
  * asArray
  */
-describe('as array', () => {
+describe('asArray', () => {
     test('should return an empty array when nothing is specified', () => {
         // given, when, then.
         expect(asArray()).toStrictEqual([]);

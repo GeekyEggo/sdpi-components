@@ -1,6 +1,6 @@
 import { PromiseCompletionSource } from '../promises';
 
-describe('promise completion source', () => {
+describe('PromiseCompletionSource<T>', () => {
     test('should not be resolved upon initialization', () => {
         // given, when, then.
         const pcs = new PromiseCompletionSource<string>();

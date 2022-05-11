@@ -4,9 +4,8 @@
  */
 
 export default {
-    // A map from regular expressions to paths to transformers
+    testEnvironment: 'jsdom',
     transform: {
         '^.+\\.ts?$': 'ts-jest'
     }
 };
-

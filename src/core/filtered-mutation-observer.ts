@@ -29,6 +29,7 @@ export class FilteredMutationObserver<K extends keyof HTMLElementTagNameMap> {
      */
     public disconnect(): void {
         this.observer.disconnect();
+        this.callback((this.items = []));
     }
 
     /**

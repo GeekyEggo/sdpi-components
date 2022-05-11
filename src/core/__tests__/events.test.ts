@@ -1,6 +1,6 @@
 import { EventManager } from '../events';
 
-describe('event manager', () => {
+describe('EventManager<T>', () => {
     test('should dispatch all subscriptions in order', () => {
         // given.
         const evManager = new EventManager<string>();
