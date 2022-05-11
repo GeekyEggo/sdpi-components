@@ -25,7 +25,7 @@ class Settings<TEventArgs extends DidReceiveGlobalSettingsEvent | DidReceiveSett
      * @param timeout Optional delay awaited before applying a save; this can be useful if a value can change frequently, i.e. if it is being typed.
      * @returns The getter and setter, capable of retrieving and persisting the setting.
      */
-    public use<T>(key: string, changeCallback?: (value?: T) => void, timeout: number | null = 250): [() => Promise<T>, (value?: T) => void] {
+    public use<T>(key: string, changeCallback?: (value?: T) => void, timeout: number | null = 250): [() => Promise<T>, (value?: T) => Promise<void>] {
         // Register the change callback.
         if (changeCallback) {
             this.didReceive.subscribe((data: TEventArgs) => {
