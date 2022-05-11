@@ -11,7 +11,9 @@
         "lint": "eslint . --ext .ts",
         "postinstall": "npm run build:dev && npm run install:example",
         "start": "rollup -c -w & npm run start:example",
-        "start:example": "onchange './example/**/*.*' -- npm run install:example"
+        "start:example": "onchange './example/**/*.*' -- npm run install:example",
+        "test": "jest",
+        "test:watch": "jest --watch"
     },
     "repository": {
         "type": "git",
@@ -53,6 +55,8 @@
         "rollup-plugin-minify-html-literals": "^1.2.6",
         "rollup-plugin-terser": "^7.0.2",
         "ts-jest": "^28.0.2",
+        "ts-node": "^10.7.0",
         "typescript": "^4.6.4"
     }
 }
+

@@ -1,4 +1,4 @@
-import { get, set } from '../../src/core/utils';
+import { get, set } from '../utils';
 
 const TEST_OBJ: TestObject = {
     hello: 'world',
