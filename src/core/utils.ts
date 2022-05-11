@@ -34,7 +34,7 @@ export function getUUID(): string {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function get(path: string, source: any): any {
-    const props: string[] = Array.isArray(path) ? path : path.split('.');
+    const props: string[] = path.split('.');
     return props.reduce((obj, prop) => obj && obj[prop], source);
 }
 
@@ -46,8 +46,8 @@ export function get(path: string, source: any): any {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function set(path: string, target: any, value: unknown): void {
-    const parts = path.split('.');
-    parts.reduce((obj, prop, i) => {
-        return i === parts.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
+    const props = path.split('.');
+    props.reduce((obj, prop, i) => {
+        return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
     }, target);
 }
