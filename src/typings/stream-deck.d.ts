@@ -60,12 +60,7 @@ declare module 'stream-deck' {
      * Defines information about the action provided to the Stream Deck property inspector as a JSON object.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#inactioninfo-parameter}
      */
-    export type ActionInfo = {
-        action: string;
-        context: string;
-        device: string;
-        payload: ActionSettingsPayload;
-    };
+    export type ActionInfo = DidReceiveSettingsEvent;
 
     /**
      * Defines the types of messages that can be sent to the Stream Deck.
