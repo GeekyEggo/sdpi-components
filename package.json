@@ -12,8 +12,8 @@
         "postinstall": "npm run build:dev && npm run install:example",
         "start": "rollup -c -w & npm run start:example",
         "start:example": "onchange './example/**/*.*' -- npm run install:example",
-        "test": "jest",
-        "test:watch": "jest --watch"
+        "test": "jest --verbose",
+        "test:watch": "jest --watch --verbose"
     },
     "repository": {
         "type": "git",
