@@ -275,9 +275,15 @@
 
     function delay(callback, timeout) {
         let handle;
+        let pcs;
         return (data, ...args) => {
             clearTimeout(handle);
-            handle = setTimeout(() => callback(data), timeout, args);
+            pcs = new PromiseCompletionSource();
+            handle = setTimeout(() => {
+                pcs.setResult();
+                callback(data);
+            }, timeout, args);
+            return pcs.promise;
         };
     }
 
@@ -295,13 +301,13 @@
         return chr4() + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + chr4() + chr4();
     }
     function get(path, source) {
-        const props = Array.isArray(path) ? path : path.split('.');
+        const props = path.split('.');
         return props.reduce((obj, prop) => obj && obj[prop], source);
     }
     function set(path, target, value) {
-        const parts = path.split('.');
-        parts.reduce((obj, prop, i) => {
-            return i === parts.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
+        const props = path.split('.');
+        props.reduce((obj, prop, i) => {
+            return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
         }, target);
     }
 
