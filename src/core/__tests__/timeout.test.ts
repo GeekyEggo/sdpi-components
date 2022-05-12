@@ -30,4 +30,18 @@ describe('timeout', () => {
         // then.
         expect(Math.round(elapsed)).toBeGreaterThanOrEqual(100);
     });
+
+    it('should reset the promise after each callback', async () => {
+        // given.
+        let callCount = 0;
+        const fn = delay(() => callCount++, 1);
+
+        // when, then.
+        await fn();
+        expect(callCount).toBe(1);
+
+        // when, then.
+        await fn();
+        expect(callCount).toBe(2);
+    });
 });
