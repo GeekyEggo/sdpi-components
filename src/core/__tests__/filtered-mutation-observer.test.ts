@@ -2,7 +2,7 @@ import { FilteredMutationObserver } from '../filtered-mutation-observer';
 import { PromiseCompletionSource } from '../promises';
 
 describe('FilteredMutationObserver', () => {
-    test('should observe nodes of single type', async () => {
+    it('should observe nodes of single type', async () => {
         // given.
         const nodesAwaiter = new PromiseCompletionSource<HTMLAnchorElement[]>();
         const [parent] = elems('div');
@@ -19,7 +19,7 @@ describe('FilteredMutationObserver', () => {
         expect(nodes).toStrictEqual(observer.items);
     });
 
-    test('should observe nodes of multiple types', async () => {
+    it('should observe nodes of multiple types', async () => {
         // given.
         const nodesAwaiter = new PromiseCompletionSource<(HTMLAnchorElement | HTMLSpanElement)[]>();
         const [parent] = elems('div');
@@ -36,7 +36,7 @@ describe('FilteredMutationObserver', () => {
         expect(actual).toStrictEqual(observer.items);
     });
 
-    test('should append to items when nodes added', async () => {
+    it('should append to items when nodes added', async () => {
         // given.
         let index = 0;
         const awaiters = [new PromiseCompletionSource<void>(), new PromiseCompletionSource<void>()];
@@ -56,7 +56,7 @@ describe('FilteredMutationObserver', () => {
         expect(observer.items.length).toBe(4);
     });
 
-    test('should remove items when nodes removed', async () => {
+    it('should remove items when nodes removed', async () => {
         // given.
         let index = 0;
         const awaiters = [new PromiseCompletionSource<void>(), new PromiseCompletionSource<void>()];
@@ -77,7 +77,7 @@ describe('FilteredMutationObserver', () => {
         expect(observer.items.length).toBe(1);
     });
 
-    test('should remove items on disconnect', async () => {
+    it('should remove items on disconnect', async () => {
         // given.
         const awaiter = new PromiseCompletionSource<void>();
         const [parent] = elems('div');

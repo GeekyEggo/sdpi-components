@@ -1,13 +1,13 @@
 import { PromiseCompletionSource } from '../promises';
 
 describe('PromiseCompletionSource<T>', () => {
-    test('should not be resolved upon initialization', () => {
+    it('should not be resolved upon initialization', () => {
         // given, when, then.
         const pcs = new PromiseCompletionSource<string>();
         expect(getPromiseState(pcs.promise)).resolves.toBe('pending');
     });
 
-    test('should complete after setting result', () => {
+    it('should complete after setting result', () => {
         // given, when.
         const pcs = new PromiseCompletionSource<string>();
         pcs.setResult('foo');
@@ -16,7 +16,7 @@ describe('PromiseCompletionSource<T>', () => {
         expect(getPromiseState(pcs.promise)).resolves.toBe('complete');
     });
 
-    test('should resolve with value', async () => {
+    it('should resolve with value', async () => {
         // given, when.
         const pcs = new PromiseCompletionSource<string>();
         pcs.setResult('foo');
@@ -25,7 +25,7 @@ describe('PromiseCompletionSource<T>', () => {
         expect(await pcs.promise).toBe('foo');
     });
 
-    test('should complete after failing', () => {
+    it('should complete after failing', () => {
         // given, when.
         const pcs = new PromiseCompletionSource<string>();
         pcs.setException();
@@ -34,7 +34,7 @@ describe('PromiseCompletionSource<T>', () => {
         expect(getPromiseState(pcs.promise)).resolves.toBe('error');
     });
 
-    test('should error after failing', () => {
+    it('should error after failing', () => {
         // given, when.
         const pcs = new PromiseCompletionSource<string>();
         pcs.setException('Mock error');

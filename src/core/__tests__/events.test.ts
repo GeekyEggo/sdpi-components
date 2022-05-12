@@ -1,7 +1,7 @@
 import { EventManager } from '../events';
 
 describe('EventManager<T>', () => {
-    test('should dispatch all subscriptions in order', () => {
+    it('should dispatch all subscriptions in order', () => {
         // given.
         const evManager = new EventManager<string>();
         const dispatches: string[] = [];
@@ -18,7 +18,7 @@ describe('EventManager<T>', () => {
         expect(dispatches[1]).toBe('Two: Foo');
     });
 
-    test('should allow unsubscriping', () => {
+    it('should allow unsubscriping', () => {
         // given.
         const evManager = new EventManager<string>();
         const dispatches: string[] = [];

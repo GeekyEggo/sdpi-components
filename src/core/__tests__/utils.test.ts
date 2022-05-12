@@ -14,25 +14,25 @@ const TEST_OBJ: TestObject = {
  * get
  */
 describe('get', () => {
-    test('should retrieve value of simple path', () => {
+    it('should retrieve value of simple path', () => {
         // given, when, then.
         const __testObj = { ...TEST_OBJ };
         expect(get('hello', __testObj)).toBe(TEST_OBJ.hello);
     });
 
-    test('should retrieve value of nested path', () => {
+    it('should retrieve value of nested path', () => {
         // given, when, then.
         const __testObj = { ...TEST_OBJ };
         expect(get('nested.prop', __testObj)).toBe(13);
     });
 
-    test('should retrieve value of path that returns falsy', () => {
+    it('should retrieve value of path that returns falsy', () => {
         // given, when, then.
         const __testObj = { ...TEST_OBJ };
         expect(get('negative', __testObj)).toBe(false);
     });
 
-    test('should retrieve undefined when the property does not exist', () => {
+    it('should retrieve undefined when the property does not exist', () => {
         // given, when, then.
         const __testObj = { ...TEST_OBJ };
         expect(get('__unknown.__prop', __testObj)).toBe(undefined);
@@ -43,7 +43,7 @@ describe('get', () => {
  * set
  */
 describe('set', () => {
-    test('should set value of simple path', () => {
+    it('should set value of simple path', () => {
         // given, when.
         const __testObj = { ...TEST_OBJ };
         set('hello', __testObj, 'good bye');
@@ -52,7 +52,7 @@ describe('set', () => {
         expect(__testObj.hello).toBe('good bye');
     });
 
-    test('should set value of nested path', () => {
+    it('should set value of nested path', () => {
         // given, when.
         const __testObj = { ...TEST_OBJ };
         set('nested.prop', __testObj, 101);
@@ -61,7 +61,7 @@ describe('set', () => {
         expect(__testObj.nested.prop).toBe(101);
     });
 
-    test('should add value of simple path', () => {
+    it('should add value of simple path', () => {
         // given, when.
         const __testObj = { ...TEST_OBJ };
         expect(__testObj.foo).toBe(undefined);
@@ -71,7 +71,7 @@ describe('set', () => {
         expect(__testObj.foo).toBe('bar');
     });
 
-    test('should add value of nested path', () => {
+    it('should add value of nested path', () => {
         // given, when.
         const __testObj = { ...TEST_OBJ };
         expect(__testObj.bar?.prop).toBe(undefined);
@@ -86,7 +86,7 @@ describe('set', () => {
  * getUUID
  */
 describe('getUUID', () => {
-    test('should be acceptable format', () => {
+    it('should be acceptable format', () => {
         // given, when.
         const uuidPattern = new RegExp(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
         const uuid = getUUID();
@@ -100,18 +100,18 @@ describe('getUUID', () => {
  * asArray
  */
 describe('asArray', () => {
-    test('should return an empty array when nothing is specified', () => {
+    it('should return an empty array when nothing is specified', () => {
         // given, when, then.
         expect(asArray()).toStrictEqual([]);
     });
 
-    test('should return array when array specified', () => {
+    it('should return array when array specified', () => {
         // given, when, then.
         const arr: CSSResultArray = [getCssItem()];
         expect(asArray(arr)).toStrictEqual([arr[0]]);
     });
 
-    test('should return array when array specified', () => {
+    it('should return array when array specified', () => {
         // given, when, then.
         const item = getCssItem();
         expect(asArray(item)).toStrictEqual([item]);
