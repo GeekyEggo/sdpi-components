@@ -4,6 +4,12 @@
  */
 
 export default {
+    globals: {
+        'ts-jest': {
+            isolatedModules: true
+        }
+    },
+    maxWorkers: 1,
     testEnvironment: 'jsdom',
     transform: {
         '^.+\\.ts?$': 'ts-jest'
