@@ -18,7 +18,7 @@ describe('EventManager<T>', () => {
         expect(dispatches[1]).toBe('Two: Foo');
     });
 
-    it('should allow unsubscriping', () => {
+    it('should allow unsubscribing', () => {
         // given.
         const evManager = new EventManager<string>();
         const dispatches: string[] = [];

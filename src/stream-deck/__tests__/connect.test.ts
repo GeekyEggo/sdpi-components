@@ -39,7 +39,7 @@ describe('connectElgatoStreamDeckSocket', () => {
         window.connectElgatoStreamDeckSocket = existing;
 
         // when.
-        require('../connect');
+        require('../connect'); // this mimics referencing the sdpi-components library after assigning connectElgatoStreamDeckSocket.
         window.connectElgatoStreamDeckSocket(args.port, args.propertyInspectorUUID, args.registerEvent, args.info, args.actionInfo);
 
         // then.

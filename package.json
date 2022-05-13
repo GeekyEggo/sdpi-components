@@ -48,6 +48,7 @@
         "fs-extra": "^10.0.1",
         "jest": "^28.1.0",
         "jest-environment-jsdom": "^28.1.0",
+        "jest-websocket-mock": "^2.3.0",
         "onchange": "^7.1.0",
         "prettier": "^2.6.1",
         "rollup": "^2.72.1",
