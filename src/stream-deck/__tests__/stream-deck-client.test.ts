@@ -1,6 +1,6 @@
 import { WS as WebSocketServer } from 'jest-websocket-mock';
 import { Client } from 'mock-socket';
-import { EventSent, SendToPropertyInspectorEvent } from 'stream-deck';
+import { EventSent, SendToPropertyInspectorEvent, SetGlobalSettingsEvent, SetSettingsEvent } from 'stream-deck';
 
 import actionInfo from '../__mocks__/action-info';
 import didReceiveGlobalSettingsEvent from '../__mocks__/did-receive-global-settings-event';
@@ -12,6 +12,10 @@ import { StreamDeckClient } from '../stream-deck-client';
  * With an unconnected Stream Deck client.
  */
 describe('streamDeckClient', () => {
+    const port = '13';
+    const propertyInspectorUUID = 'ABC123';
+    const registerEvent = 'registerPropertyInspector';
+
     let streamDeckClient: StreamDeckClient;
     let server: WebSocketServer;
 
@@ -20,7 +24,7 @@ describe('streamDeckClient', () => {
         streamDeckClient = (await import('../stream-deck-client')).default;
         jest.resetModules();
 
-        server = new WebSocketServer('ws://localhost:13', { jsonProtocol: true });
+        server = new WebSocketServer(`ws://localhost:${port}`, { jsonProtocol: true });
     });
 
     // after each; clean-up the websocket server.
@@ -30,25 +34,25 @@ describe('streamDeckClient', () => {
 
     it('should connect and register with the event and uuid', async () => {
         // given, when.
-        streamDeckClient.connect('13', 'ABC123', 'registerPropertyInspector', registrationInfo, actionInfo);
+        streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, registrationInfo, actionInfo);
 
         // then.
         await server.connected;
         await expect(server).toReceiveMessage({
-            event: 'registerPropertyInspector',
-            uuid: 'ABC123'
+            event: registerEvent,
+            uuid: propertyInspectorUUID
         });
     });
 
     it('should save the connection settings after connecting', async () => {
         // given, when.
-        streamDeckClient.connect('13', 'ABC123', 'registerPropertyInspector', registrationInfo, actionInfo);
+        streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, registrationInfo, actionInfo);
         const connectionInfo = await streamDeckClient.getConnectionInfo();
         await server.connected;
 
         // then.
-        expect(connectionInfo.propertyInspectorUUID).toBe('ABC123');
-        expect(connectionInfo.registerEvent).toBe('registerPropertyInspector');
+        expect(connectionInfo.propertyInspectorUUID).toBe(propertyInspectorUUID);
+        expect(connectionInfo.registerEvent).toBe(registerEvent);
         expect(connectionInfo.info).toStrictEqual(registrationInfo);
         expect(connectionInfo.actionInfo).toStrictEqual(actionInfo);
     });
@@ -57,12 +61,14 @@ describe('streamDeckClient', () => {
      * Whilst the client is connected.
      */
     describe('whilst connected', () => {
-        let client: Client;
+        let connection: Client;
 
         beforeEach(async () => {
-            server.on('connection', (socket) => (client = socket));
-            streamDeckClient.connect('13', 'ABC123', 'registerPropertyInspector', registrationInfo, actionInfo);
+            server.on('connection', (socket) => (connection = socket));
+            streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, registrationInfo, actionInfo);
+
             await server.connected;
+            await server.nextMessage;
         });
 
         it('should dispatch didReceiveGlobalSettings', () => {
@@ -117,7 +123,7 @@ describe('streamDeckClient', () => {
             const msg: SendToPropertyInspectorEvent = {
                 event: 'sendToPropertyInspector',
                 action: 'com.sdpi.plugin.action',
-                context: 'ABC123',
+                context: propertyInspectorUUID,
                 payload: {
                     foo: 'bar'
                 }
@@ -132,7 +138,7 @@ describe('streamDeckClient', () => {
 
         it('should get global settings and wait for them', async () => {
             // given.
-            client.on('message', (msg) => {
+            connection.on('message', (msg) => {
                 const data: EventSent = JSON.parse(msg.toString());
                 if (data.event === 'getGlobalSettings') {
                     server.send(didReceiveGlobalSettingsEvent);
@@ -148,7 +154,7 @@ describe('streamDeckClient', () => {
 
         it('should get settings and wait for them', async () => {
             // given.
-            client.on('message', (msg) => {
+            connection.on('message', (msg) => {
                 const data: EventSent = JSON.parse(msg.toString());
                 if (data.event === 'getSettings') {
                     server.send(didReceiveSettingsEvent);
@@ -162,6 +168,47 @@ describe('streamDeckClient', () => {
             expect(settings.coordinates).toStrictEqual(didReceiveSettingsEvent.payload.coordinates);
             expect(settings.isInMultiAction).toStrictEqual(didReceiveSettingsEvent.payload.isInMultiAction);
             expect(settings.settings).toStrictEqual(didReceiveSettingsEvent.payload.settings);
+        });
+
+        it('should set global settings', async () => {
+            // given.
+            const settings = {
+                hello: 'world',
+                foo: {
+                    bar: true
+                }
+            };
+
+            // when.
+            await streamDeckClient.setGlobalSettings(settings);
+
+            // then.
+            expect(server).toReceiveMessage(<SetGlobalSettingsEvent>{
+                action: actionInfo.action,
+                context: propertyInspectorUUID,
+                event: 'setGlobalSettings',
+                payload: settings
+            });
+        });
+
+        it('should set settings', async () => {
+            // given.
+            const settings = {
+                hello: 'world',
+                foo: {
+                    bar: true
+                }
+            };
+
+            // when.
+            await streamDeckClient.setSettings(settings);
+
+            // then.
+            expect(server).toReceiveMessage(<SetSettingsEvent>{
+                event: 'setSettings',
+                context: propertyInspectorUUID,
+                payload: settings
+            });
         });
     });
 });

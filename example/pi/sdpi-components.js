@@ -162,7 +162,7 @@
             return response.payload.settings;
         }
         setGlobalSettings(value) {
-            this.send('setGlobalSettings', value);
+            return this.send('setGlobalSettings', value);
         }
         async getSettings() {
             const { actionInfo } = await this.getConnectionInfo();
@@ -170,7 +170,7 @@
             return response.payload;
         }
         setSettings(value) {
-            this.send('setSettings', value);
+            return this.send('setSettings', value);
         }
         async getConnectionInfo() {
             return this._connectionInfo.promise;
@@ -191,19 +191,14 @@
             return resolver.promise;
         }
         async send(event, payload) {
-            try {
-                const connectionInfo = await this._connectionInfo.promise;
-                const connection = await this._connection.promise;
-                connection.send(JSON.stringify({
-                    event: event,
-                    context: connectionInfo.propertyInspectorUUID,
-                    payload: payload,
-                    action: connectionInfo.actionInfo.action
-                }));
-            }
-            catch (_a) {
-                console.error(`Unable to send request '${event}' as there is no connection.`);
-            }
+            const connectionInfo = await this._connectionInfo.promise;
+            const connection = await this._connection.promise;
+            connection.send(JSON.stringify({
+                event: event,
+                context: connectionInfo.propertyInspectorUUID,
+                payload: payload,
+                action: connectionInfo.actionInfo.action
+            }));
         }
         handleMessage(ev) {
             const data = JSON.parse(ev.data);

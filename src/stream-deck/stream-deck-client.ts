@@ -82,9 +82,10 @@ export class StreamDeckClient {
      * Save data securely and globally for the plugin.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings}
      * @param value The global settings.
+     * @returns The promise of sending the message that will set the global settings.
      */
-    public setGlobalSettings(value: unknown): void {
-        this.send('setGlobalSettings', value);
+    public setGlobalSettings(value: unknown): Promise<void> {
+        return this.send('setGlobalSettings', value);
     }
 
     /**
@@ -102,9 +103,10 @@ export class StreamDeckClient {
      * Save data persistently for the action's instance.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setsettings}
      * @param value The settings.
+     * @returns The promise of sending the message that will set the action settings.
      */
-    public setSettings(value: unknown): void {
-        this.send('setSettings', value);
+    public setSettings(value: unknown): Promise<void> {
+        return this.send('setSettings', value);
     }
 
     /**
@@ -156,21 +158,17 @@ export class StreamDeckClient {
      * @param {unknown} payload The optional payload.
      */
     public async send<T extends EventSent['event']>(event: T, payload?: unknown): Promise<void> {
-        try {
-            const connectionInfo = await this._connectionInfo.promise;
-            const connection = await this._connection.promise;
+        const connectionInfo = await this._connectionInfo.promise;
+        const connection = await this._connection.promise;
 
-            connection.send(
-                JSON.stringify({
-                    event: event,
-                    context: connectionInfo.propertyInspectorUUID,
-                    payload: payload,
-                    action: connectionInfo.actionInfo.action
-                })
-            );
-        } catch {
-            console.error(`Unable to send request '${event}' as there is no connection.`);
-        }
+        connection.send(
+            JSON.stringify({
+                event: event,
+                context: connectionInfo.propertyInspectorUUID,
+                payload: payload,
+                action: connectionInfo.actionInfo.action
+            })
+        );
     }
 
     /**
