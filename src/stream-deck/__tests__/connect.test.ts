@@ -34,6 +34,8 @@ describe('connectElgatoStreamDeckSocket', () => {
     });
 
     it('should wrap an existing connectElgatoStreamDeckSocket', () => {
+        jest.resetModules(); // we reset modules to ensure that we can re-require the connect module.
+
         // given.
         const existing = jest.fn();
         window.connectElgatoStreamDeckSocket = existing;
