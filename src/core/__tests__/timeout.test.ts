@@ -20,15 +20,15 @@ describe('timeout', () => {
         const fn = delay(() => awaiter.setResult(), 100);
 
         // when.
-        const start = performance.now();
+        const start = Math.floor(performance.now());
 
         await fn();
         await awaiter.promise;
 
-        const elapsed = performance.now() - start;
+        const elapsed = Math.ceil(performance.now()) - start;
 
         // then.
-        expect(Math.round(elapsed)).toBeGreaterThanOrEqual(100);
+        expect(elapsed).toBeGreaterThanOrEqual(100);
     });
 
     it('should reset the promise after each callback', async () => {
