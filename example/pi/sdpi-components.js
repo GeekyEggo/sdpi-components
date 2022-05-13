@@ -136,10 +136,10 @@
         async connect(port, propertyInspectorUUID, registerEvent, info, actionInfo) {
             if (!this._isInitialized) {
                 const connectionInfo = {
-                    actionInfo: actionInfo ? JSON.parse(actionInfo) : null,
-                    info: JSON.parse(info),
-                    propertyInspectorUUID: propertyInspectorUUID,
-                    registerEvent: registerEvent
+                    actionInfo,
+                    info,
+                    propertyInspectorUUID,
+                    registerEvent
                 };
                 if (connectionInfo.actionInfo) {
                     this.didReceiveSettings.dispatch(connectionInfo.actionInfo);
@@ -249,6 +249,7 @@
         }
         disconnect() {
             this.observer.disconnect();
+            this.callback((this.items = []));
         }
         handleMutation(mutations) {
             let changed = false;
@@ -278,9 +279,12 @@
         let pcs;
         return (data, ...args) => {
             clearTimeout(handle);
-            pcs = new PromiseCompletionSource();
+            if (pcs === undefined) {
+                pcs = new PromiseCompletionSource();
+            }
             handle = setTimeout(() => {
-                pcs.setResult();
+                pcs === null || pcs === void 0 ? void 0 : pcs.setResult();
+                pcs = undefined;
                 callback(data);
             }, timeout, args);
             return pcs.promise;
@@ -1559,22 +1563,21 @@
         n$4('sdpi-textfield')
     ], Textfield);
 
+    const existing = window.connectElgatoStreamDeckSocket;
+    window.connectElgatoStreamDeckSocket = (port, propertyInspectorUUID, registerEvent, info, actionInfo) => {
+        if (existing) {
+            existing(port, propertyInspectorUUID, registerEvent, info, actionInfo);
+        }
+        streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, JSON.parse(info), JSON.parse(actionInfo));
+    };
+
     var SDPIComponents;
     (function (SDPIComponents) {
         SDPIComponents.streamDeckClient = streamDeckClient;
         SDPIComponents.useGlobalSettings = useGlobalSettings;
         SDPIComponents.useSettings = useSettings;
     })(SDPIComponents || (SDPIComponents = {}));
-    var SDPIComponents$1 = SDPIComponents;
-
-    window.SDPIComponents = SDPIComponents$1;
-    const existing = window.connectElgatoStreamDeckSocket;
-    window.connectElgatoStreamDeckSocket = function (inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo) {
-        if (existing) {
-            existing(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
-        }
-        streamDeckClient.connect(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo);
-    };
+    window.SDPIComponents = SDPIComponents;
 
     const style = document.createElement('style');
     style.innerHTML = r$4 `

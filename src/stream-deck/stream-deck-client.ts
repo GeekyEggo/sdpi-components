@@ -1,10 +1,10 @@
 import {
     ActionInfo,
-    ActionSettingsPayload,
     AsEvent,
     ConnectionInfo,
     DidReceiveGlobalSettingsEvent,
     DidReceiveSettingsEvent,
+    DidReceiveSettingsPayload,
     EventReceived,
     EventSent,
     RegistrationInfo,
@@ -25,7 +25,7 @@ export class StreamDeckClient {
     public readonly message = new EventManager<EventReceived>();
 
     public readonly didReceiveGlobalSettings = new EventManager<DidReceiveGlobalSettingsEvent>();
-    public readonly didReceiveSettings = new EventManager<DidReceiveSettingsEvent>();
+    public readonly didReceiveSettings = new EventManager<ActionInfo | DidReceiveSettingsEvent>();
     public readonly sendToPropertyInspector = new EventManager<SendToPropertyInspectorEvent>();
 
     /**
@@ -91,7 +91,7 @@ export class StreamDeckClient {
      * Gets the settings.
      * @returns The settings as a promise.
      */
-    public async getSettings(): Promise<ActionSettingsPayload> {
+    public async getSettings(): Promise<DidReceiveSettingsPayload> {
         const { actionInfo } = await this.getConnectionInfo();
         const response = await this.get('getSettings', 'didReceiveSettings', (msg) => msg.action == actionInfo.action && msg.context == actionInfo.context && msg.device == actionInfo.device);
 

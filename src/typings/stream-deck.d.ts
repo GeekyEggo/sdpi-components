@@ -33,23 +33,26 @@ declare module 'stream-deck' {
             platformVersion: string;
             version: string;
         };
-        color: {
-            buttonMouseOverBackgroundColor: string;
+        colors: {
             buttonPressedBackgroundColor: string;
             buttonPressedBorderColor: string;
             buttonPressedTextColor: string;
+            disabledColor: string;
             highlightColor: string;
+            mouseDownColor: string;
         };
         devicePixelRatio: number;
-        devices: {
-            id: string;
-            name: string;
-            size: {
-                columns: number;
-                rows: number;
-            };
-            type: DeviceType;
-        };
+        devices: [
+            {
+                id: string;
+                name: string;
+                size: {
+                    columns: number;
+                    rows: number;
+                };
+                type: DeviceType;
+            }
+        ];
         plugin: {
             uuid: string;
             version: string;
@@ -60,9 +63,21 @@ declare module 'stream-deck' {
      * Defines information about the action provided to the Stream Deck property inspector as a JSON object.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#inactioninfo-parameter}
      */
-    export type ActionInfo = DidReceiveSettingsEvent & {
-        payload: {
-            isInMultiAction: boolean;
+    export type ActionInfo = {
+        action: string;
+        context: string;
+        device: string;
+        payload: ActionInfoPayload;
+    };
+
+    /**
+     * The payload of the `inAction` JSON supplied to the property inspector.
+     */
+    export type ActionInfoPayload = {
+        settings: Record<string, unknown>;
+        coordinates: {
+            column: number;
+            row: number;
         };
     };
 
@@ -153,19 +168,25 @@ declare module 'stream-deck' {
      */
     export type DidReceiveGlobalSettingsEvent = {
         event: 'didReceiveGlobalSettings';
-        payload: SettingsPayload;
+        payload: {
+            settings: Record<string, unknown>;
+        };
     };
 
     /**
      * Defines the message structure of the `didReceiveSettings` received from the Stream Deck.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received/#didreceiveglobalsettings}
      */
-    export type DidReceiveSettingsEvent = {
-        action: string;
-        context: string;
-        device: string;
+    export type DidReceiveSettingsEvent = ActionInfo & {
         event: 'didReceiveSettings';
-        payload: ActionSettingsPayload;
+        payload: DidReceiveSettingsPayload;
+    };
+
+    /**
+     * The payload of `didReceiveSettings`.
+     */
+    export type DidReceiveSettingsPayload = ActionInfoPayload & {
+        isInMultiAction: boolean;
     };
 
     /**
@@ -177,23 +198,6 @@ declare module 'stream-deck' {
         event: 'sendToPropertyInspector';
         context?: string;
         payload: any;
-    };
-
-    /**
-     * Defines the payload relating to an action instance.
-     */
-    export type ActionSettingsPayload = {
-        coordinates?: {
-            column: number;
-            row: number;
-        };
-    } & SettingsPayload;
-
-    /**
-     * Defines the structure of settings.
-     */
-    export type SettingsPayload = {
-        settings: Record<string, unknown>;
     };
 
     /**

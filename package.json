@@ -4,8 +4,7 @@
     "description": "Web components for your Stream Deck plugin; take the hassle out of the property inspector.",
     "main": "./dist/sdpi-components.js",
     "scripts": {
-        "build": "rollup -c",
-        "build:dev": "rollup -c --dev",
+        "build": "rollup -c && rollup -c --dev",
         "format": "prettier --config .prettierrc './src/**/*.ts' --write",
         "install:example": "node ./scripts/install-example.js",
         "lint": "eslint . --ext .ts",

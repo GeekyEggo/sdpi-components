@@ -1,4 +1,4 @@
-import { DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent } from 'stream-deck';
+import { ActionInfo, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent } from 'stream-deck';
 
 import { delay, get, IEventSubscriber, PromiseCompletionSource, set } from '../core';
 import streamDeckClient from './stream-deck-client';
@@ -6,7 +6,7 @@ import streamDeckClient from './stream-deck-client';
 /**
  * Provides a wrapper around loading, managing, and persisting settings within the Stream Deck.
  */
-class Settings<TEventArgs extends DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent> {
+class Settings<TEventArgs extends ActionInfo | DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent> {
     private _settings = new PromiseCompletionSource<Record<string, unknown>>();
 
     /**
