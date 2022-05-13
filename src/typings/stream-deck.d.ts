@@ -60,7 +60,11 @@ declare module 'stream-deck' {
      * Defines information about the action provided to the Stream Deck property inspector as a JSON object.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#inactioninfo-parameter}
      */
-    export type ActionInfo = DidReceiveSettingsEvent;
+    export type ActionInfo = DidReceiveSettingsEvent & {
+        payload: {
+            isInMultiAction: boolean;
+        };
+    };
 
     /**
      * Defines the types of messages that can be sent to the Stream Deck.
@@ -183,7 +187,6 @@ declare module 'stream-deck' {
             column: number;
             row: number;
         };
-        isInMultiAction?: boolean; // Stream Deck does not currently provide this as part of the inActionInfo parameter, possibly a bug?
     } & SettingsPayload;
 
     /**

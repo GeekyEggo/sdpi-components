@@ -1,4 +1,15 @@
-import { ActionSettingsPayload, AsEvent, ConnectionInfo, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, SendToPropertyInspectorEvent } from 'stream-deck';
+import {
+    ActionInfo,
+    ActionSettingsPayload,
+    AsEvent,
+    ConnectionInfo,
+    DidReceiveGlobalSettingsEvent,
+    DidReceiveSettingsEvent,
+    EventReceived,
+    EventSent,
+    RegistrationInfo,
+    SendToPropertyInspectorEvent
+} from 'stream-deck';
 
 import { EventManager } from '../core/events';
 import { PromiseCompletionSource } from '../core/promises';
@@ -22,16 +33,16 @@ export class StreamDeckClient {
      * @param port The port that should be used to create the WebSocket.
      * @param propertyInspectorUUID A unique identifier string to register Property Inspector with Stream Deck software.
      * @param registerEvent The event type that should be used to register the plugin once the WebSocket is opened. For Property Inspector this is "registerPropertyInspector".
-     * @param info A JSON object containing information about the application.
-     * @param actionInfo A JSON object containing information about the action.
+     * @param info The application information.
+     * @param actionInfo The action information.
      */
-    public async connect(port: string, propertyInspectorUUID: string, registerEvent: string, info: string, actionInfo?: string | undefined): Promise<void> {
+    public async connect(port: string, propertyInspectorUUID: string, registerEvent: string, info: RegistrationInfo, actionInfo: ActionInfo): Promise<void> {
         if (!this._isInitialized) {
             const connectionInfo = {
-                actionInfo: actionInfo ? JSON.parse(actionInfo) : null,
-                info: JSON.parse(info),
-                propertyInspectorUUID: propertyInspectorUUID,
-                registerEvent: registerEvent
+                actionInfo,
+                info,
+                propertyInspectorUUID,
+                registerEvent
             };
 
             if (connectionInfo.actionInfo) {
