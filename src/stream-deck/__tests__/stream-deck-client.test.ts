@@ -9,7 +9,7 @@ import registrationInfo from '../__mocks__/registration-info';
 import { StreamDeckClient } from '../stream-deck-client';
 
 /**
- * With an unconnected Stream Deck client.
+ * With a Stream Deck client.
  */
 describe('streamDeckClient', () => {
     const port = '13';
@@ -58,7 +58,7 @@ describe('streamDeckClient', () => {
     });
 
     /**
-     * Whilst the client is connected.
+     * With a connected Stream Deck client.
      */
     describe('whilst connected', () => {
         let connection: Client;
