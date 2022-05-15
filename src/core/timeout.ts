@@ -12,16 +12,15 @@ export function delay(callback: ((data?: unknown | undefined) => Promise<void>) 
 
     return (data: unknown | undefined, ...args: unknown[]): Promise<void> => {
         clearTimeout(handle);
-        if (pcs === undefined) {
-            pcs = new PromiseCompletionSource();
-        }
 
+        pcs = pcs || new PromiseCompletionSource();
         handle = setTimeout(
             async () => {
-                await callback(data);
-                pcs?.setResult();
-
+                const innerPcs = pcs;
                 pcs = undefined;
+
+                await callback(data);
+                innerPcs?.setResult();
             },
             timeout,
             args
