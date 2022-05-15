@@ -63,21 +63,15 @@ declare module 'stream-deck' {
      * Defines information about the action provided to the Stream Deck property inspector as a JSON object.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/registration-procedure/#inactioninfo-parameter}
      */
-    export type ActionInfo = {
+    export type ActionInfo<TSettings = DefaultSettings> = EventWithPayloadSettings<TSettings> & {
         action: string;
         context: string;
         device: string;
-        payload: ActionInfoPayload;
-    };
-
-    /**
-     * The payload of the `inAction` JSON supplied to the property inspector.
-     */
-    export type ActionInfoPayload = {
-        settings: Record<string, unknown>;
-        coordinates: {
-            column: number;
-            row: number;
+        payload: {
+            coordinates: {
+                column: number;
+                row: number;
+            };
         };
     };
 
@@ -166,27 +160,19 @@ declare module 'stream-deck' {
      * Defines the message structure of the `didReceiveSettings` received from the Stream Deck.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received/#didreceivesettings}
      */
-    export type DidReceiveGlobalSettingsEvent = {
+    export type DidReceiveGlobalSettingsEvent<TSettings = DefaultSettings> = EventWithPayloadSettings<TSettings> & {
         event: 'didReceiveGlobalSettings';
-        payload: {
-            settings: Record<string, unknown>;
-        };
     };
 
     /**
      * Defines the message structure of the `didReceiveSettings` received from the Stream Deck.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-received/#didreceiveglobalsettings}
      */
-    export type DidReceiveSettingsEvent = ActionInfo & {
+    export type DidReceiveSettingsEvent<TSettings = DefaultSettings> = ActionInfo<TSettings> & {
         event: 'didReceiveSettings';
-        payload: DidReceiveSettingsPayload;
-    };
-
-    /**
-     * The payload of `didReceiveSettings`.
-     */
-    export type DidReceiveSettingsPayload = ActionInfoPayload & {
-        isInMultiAction: boolean;
+        payload: {
+            isInMultiAction: boolean;
+        };
     };
 
     /**
@@ -198,6 +184,20 @@ declare module 'stream-deck' {
         event: 'sendToPropertyInspector';
         context?: string;
         payload: any;
+    };
+
+    /**
+     * The default fallback type for settings within a payload.
+     */
+    type DefaultSettings = Record<string, unknown>;
+
+    /**
+     * Defines an event with a payload that includes settings.
+     */
+    type EventWithPayloadSettings<T = DefaultSettings> = {
+        payload: {
+            settings: T;
+        };
     };
 
     /**
