@@ -1,28 +1,12 @@
+import streamDeckClient from '../../stream-deck/__mocks__/stream-deck-client';
 import { getFileName, sanitize } from '../file';
 
-// eslint-disable-next-line no-var
-var getConnectionInfo: jest.Mock; // hoist the variable; this allows us to set it before initialization... but feels very hacky.
-jest.mock('../../stream-deck/stream-deck-client', () => {
-    getConnectionInfo = jest.fn();
-    return {
-        getConnectionInfo: getConnectionInfo
-    };
-});
+jest.mock('../../stream-deck/stream-deck-client');
 
 const rawPath = 'C:\\fakepath\\C%3A%2FHello%2FWorld%2FFoo.txt';
 
 describe('mac', () => {
-    beforeAll(() => {
-        getConnectionInfo?.mockImplementation(() => {
-            return Promise.resolve({
-                info: {
-                    application: {
-                        platform: 'mac'
-                    }
-                }
-            });
-        });
-    });
+    beforeAll(() => (streamDeckClient.__connectionInfo.info.application.platform = 'mac'));
 
     /**
      * getFileName
@@ -54,17 +38,7 @@ describe('mac', () => {
 });
 
 describe('windows', () => {
-    beforeAll(() => {
-        getConnectionInfo?.mockImplementation(() => {
-            return Promise.resolve({
-                info: {
-                    application: {
-                        platform: 'windows'
-                    }
-                }
-            });
-        });
-    });
+    beforeAll(() => (streamDeckClient.__connectionInfo.info.application.platform = 'windows'));
 
     /**
      * getFileName
