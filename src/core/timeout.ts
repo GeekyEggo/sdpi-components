@@ -6,7 +6,7 @@ import { PromiseCompletionSource } from './promises';
  * @param timeout The timeout duration.
  * @returns A function that allows for the timeout to be re-set.
  */
-export function delay(callback: (data?: unknown | undefined) => void, timeout: number): (data?: unknown | undefined) => Promise<void> {
+export function delay(callback: ((data?: unknown | undefined) => Promise<void>) | ((data?: unknown | undefined) => void), timeout: number): (data?: unknown | undefined) => Promise<void> {
     let handle: number | undefined;
     let pcs: PromiseCompletionSource<void> | undefined;
 
@@ -17,11 +17,11 @@ export function delay(callback: (data?: unknown | undefined) => void, timeout: n
         }
 
         handle = setTimeout(
-            () => {
+            async () => {
+                await callback(data);
                 pcs?.setResult();
-                pcs = undefined;
 
-                callback(data);
+                pcs = undefined;
             },
             timeout,
             args

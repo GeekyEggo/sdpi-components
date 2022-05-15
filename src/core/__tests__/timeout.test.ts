@@ -44,4 +44,16 @@ describe('timeout', () => {
         await fn();
         expect(callCount).toBe(2);
     });
+
+    it('should invoke callback before setting promise completion source', async () => {
+        // given.
+        let callbackTime!: number;
+
+        // when.
+        const fn = delay(() => (callbackTime = performance.now()), 100);
+        await fn();
+
+        // then.
+        expect(performance.now()).toBeGreaterThan(callbackTime);
+    });
 });
