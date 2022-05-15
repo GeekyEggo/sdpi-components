@@ -1,10 +1,9 @@
-import { IMockStreamDeckClient } from '../../stream-deck/__mocks__/stream-deck-client';
+import { MockStreamDeckClient } from '../../stream-deck/__mocks__/stream-deck-client';
+import * as __streamDeckClient from '../../stream-deck/stream-deck-client';
 import { getFileName, sanitize } from '../file';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const streamDeckClient: IMockStreamDeckClient = require('../../stream-deck/stream-deck-client').default;
-
 jest.mock('../../stream-deck/stream-deck-client');
+const streamDeckClient = __streamDeckClient.default as MockStreamDeckClient;
 
 const rawPath = 'C:\\fakepath\\C%3A%2FHello%2FWorld%2FFoo.txt';
 

@@ -3,11 +3,11 @@ import { ConnectionInfo } from 'stream-deck';
 import { StreamDeckClient } from '../stream-deck-client';
 import { actionInfo, info } from './registration';
 
-export interface IMockStreamDeckClient extends StreamDeckClient {
+export type MockStreamDeckClient = StreamDeckClient & {
     __connectionInfo: ConnectionInfo;
-}
+};
 
-const streamDeckClient: IMockStreamDeckClient = jest.createMockFromModule('../stream-deck-client');
+const streamDeckClient: MockStreamDeckClient = jest.createMockFromModule('../stream-deck-client');
 
 streamDeckClient.__connectionInfo = {
     actionInfo,
