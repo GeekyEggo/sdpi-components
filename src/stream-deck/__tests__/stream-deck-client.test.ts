@@ -2,10 +2,8 @@ import { WS as WebSocketServer } from 'jest-websocket-mock';
 import { Client } from 'mock-socket';
 import { EventSent, SendToPropertyInspectorEvent, SetGlobalSettingsEvent, SetSettingsEvent } from 'stream-deck';
 
-import actionInfo from '../__mocks__/action-info';
-import didReceiveGlobalSettingsEvent from '../__mocks__/did-receive-global-settings-event';
-import didReceiveSettingsEvent from '../__mocks__/did-receive-settings-event';
-import registrationInfo from '../__mocks__/registration-info';
+import { didReceiveGlobalSettings, didReceiveSettings } from '../__mocks__/events';
+import { actionInfo, info } from '../__mocks__/registration';
 import { StreamDeckClient } from '../stream-deck-client';
 
 /**
@@ -34,7 +32,7 @@ describe('streamDeckClient', () => {
 
     it('should connect and register with the event and uuid', async () => {
         // given, when.
-        streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, registrationInfo, actionInfo);
+        streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, info, actionInfo);
 
         // then.
         await server.connected;
@@ -46,14 +44,14 @@ describe('streamDeckClient', () => {
 
     it('should save the connection settings after connecting', async () => {
         // given, when.
-        streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, registrationInfo, actionInfo);
+        streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, info, actionInfo);
         const connectionInfo = await streamDeckClient.getConnectionInfo();
         await server.connected;
 
         // then.
         expect(connectionInfo.propertyInspectorUUID).toBe(propertyInspectorUUID);
         expect(connectionInfo.registerEvent).toBe(registerEvent);
-        expect(connectionInfo.info).toStrictEqual(registrationInfo);
+        expect(connectionInfo.info).toStrictEqual(info);
         expect(connectionInfo.actionInfo).toStrictEqual(actionInfo);
     });
 
@@ -65,7 +63,7 @@ describe('streamDeckClient', () => {
 
         beforeEach(async () => {
             server.on('connection', (socket) => (connection = socket));
-            streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, registrationInfo, actionInfo);
+            streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, info, actionInfo);
 
             await server.connected;
             await server.nextMessage;
@@ -77,11 +75,11 @@ describe('streamDeckClient', () => {
             streamDeckClient.didReceiveGlobalSettings.subscribe(handler);
 
             // when.
-            server.send(didReceiveGlobalSettingsEvent);
+            server.send(didReceiveGlobalSettings);
 
             // then.
             expect(handler).toHaveBeenCalledTimes(1);
-            expect(handler).toHaveBeenCalledWith(didReceiveGlobalSettingsEvent);
+            expect(handler).toHaveBeenCalledWith(didReceiveGlobalSettings);
         });
 
         it('should dispatch didReceiveSettings', () => {
@@ -90,11 +88,11 @@ describe('streamDeckClient', () => {
             streamDeckClient.didReceiveSettings.subscribe(handler);
 
             // when.
-            server.send(didReceiveSettingsEvent);
+            server.send(didReceiveSettings);
 
             // then.
             expect(handler).toHaveBeenCalledTimes(1);
-            expect(handler).toHaveBeenCalledWith(didReceiveSettingsEvent);
+            expect(handler).toHaveBeenCalledWith(didReceiveSettings);
         });
 
         it('should dispatch message', () => {
@@ -141,7 +139,7 @@ describe('streamDeckClient', () => {
             connection.on('message', (msg) => {
                 const data: EventSent = JSON.parse(msg.toString());
                 if (data.event === 'getGlobalSettings') {
-                    server.send(didReceiveGlobalSettingsEvent);
+                    server.send(didReceiveGlobalSettings);
                 }
             });
 
@@ -149,7 +147,7 @@ describe('streamDeckClient', () => {
             const globalSettings = await streamDeckClient.getGlobalSettings();
 
             // then.
-            expect(globalSettings).toStrictEqual(didReceiveGlobalSettingsEvent.payload.settings);
+            expect(globalSettings).toStrictEqual(didReceiveGlobalSettings.payload.settings);
         });
 
         it('should get settings and wait for them', async () => {
@@ -157,7 +155,7 @@ describe('streamDeckClient', () => {
             connection.on('message', (msg) => {
                 const data: EventSent = JSON.parse(msg.toString());
                 if (data.event === 'getSettings') {
-                    server.send(didReceiveSettingsEvent);
+                    server.send(didReceiveSettings);
                 }
             });
 
@@ -165,9 +163,9 @@ describe('streamDeckClient', () => {
             const settings = await streamDeckClient.getSettings();
 
             // then.
-            expect(settings.coordinates).toStrictEqual(didReceiveSettingsEvent.payload.coordinates);
-            expect(settings.isInMultiAction).toStrictEqual(didReceiveSettingsEvent.payload.isInMultiAction);
-            expect(settings.settings).toStrictEqual(didReceiveSettingsEvent.payload.settings);
+            expect(settings.coordinates).toStrictEqual(didReceiveSettings.payload.coordinates);
+            expect(settings.isInMultiAction).toStrictEqual(didReceiveSettings.payload.isInMultiAction);
+            expect(settings.settings).toStrictEqual(didReceiveSettings.payload.settings);
         });
 
         it('should set global settings', async () => {

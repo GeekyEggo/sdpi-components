@@ -1,6 +1,6 @@
 import { ActionInfo } from 'stream-deck';
 
-const data: ActionInfo = {
+export const actionInfo: ActionInfo = {
     action: 'com.sdpi.test.action',
     context: '534DFGJLKAOIU56UIO2398SDF8902HJK',
     device: '55F16B35884A859CCE4FFA1FC8D3DE5B',
@@ -18,5 +18,3 @@ const data: ActionInfo = {
         }
     }
 };
-
-export default data;

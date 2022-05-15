@@ -1,6 +1,6 @@
 import { DidReceiveGlobalSettingsEvent } from 'stream-deck';
 
-const data: DidReceiveGlobalSettingsEvent = {
+export const didReceiveGlobalSettings: DidReceiveGlobalSettingsEvent = {
     event: 'didReceiveGlobalSettings',
     payload: {
         settings: {
@@ -8,5 +8,3 @@ const data: DidReceiveGlobalSettingsEvent = {
         }
     }
 };
-
-export default data;

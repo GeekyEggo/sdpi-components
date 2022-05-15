@@ -1,8 +1,8 @@
 import { DidReceiveSettingsEvent } from 'stream-deck';
 
-import actionInfo from './action-info';
+import { actionInfo } from '../registration/action-info';
 
-const data: DidReceiveSettingsEvent = {
+export const didReceiveSettings: DidReceiveSettingsEvent = {
     event: 'didReceiveSettings',
     action: actionInfo.action,
     context: actionInfo.context,
@@ -18,5 +18,3 @@ const data: DidReceiveSettingsEvent = {
         isInMultiAction: false
     }
 };
-
-export default data;

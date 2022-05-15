@@ -1,6 +1,6 @@
 import { RegistrationInfo } from 'stream-deck';
 
-const data: RegistrationInfo = {
+export const info: RegistrationInfo = {
     application: {
         font: 'Arial',
         language: 'en',
@@ -33,5 +33,3 @@ const data: RegistrationInfo = {
         }
     ]
 };
-
-export default data;
