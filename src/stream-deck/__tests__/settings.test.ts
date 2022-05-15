@@ -7,7 +7,7 @@ import { ActionInfoSettings, info } from '../__mocks__/registration';
 import { Settings } from '../settings';
 
 describe('useSettings', () => {
-    let actionInfo: ActionInfo;
+    let actionInfo: ActionInfo<ActionInfoSettings>;
     let server: WebSocketServer;
     let streamDeckClient: StreamDeckClient;
     let useSettings: Settings<ActionInfo | DidReceiveGlobalSettingsEvent>['use'];
@@ -57,31 +57,84 @@ describe('useSettings', () => {
         expect(changeCallbackValue).toBe(didReceiveSettings.payload.settings.folder.file);
     });
 
-    describe('setter', () => {
-        it('should update a setting, without a timeout', async () => {
-            // given, when.
-            const [, setValue] = useSettings<string>('foo', null, null);
-            await setValue('Hello world, this is a test');
+    describe('getter', () => {
+        it('should return undefined for non-existent paths', async () => {
+            // given, when, then.
+            const [getValue] = useSettings('__none');
+            expect(getValue()).resolves.toBe(undefined);
+        });
 
-            // then.
-            expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(1);
-            expect(streamDeckClient.setSettings).toHaveBeenCalledWith(<ActionInfoSettings>{
-                foo: 'Hello world, this is a test',
-                folder: actionInfo.payload.settings.folder,
-                isMock: actionInfo.payload.settings.isMock
+        it('should return values of simple paths', async () => {
+            // given, when, then.
+            const [getValue] = useSettings<string>('foo');
+            expect(getValue()).resolves.toBe(actionInfo.payload.settings.foo);
+        });
+
+        it('should return values of complex paths', async () => {
+            // given, when, then.
+            const [getValue] = useSettings<string>('folder.file');
+            expect(getValue()).resolves.toBe(actionInfo.payload.settings.folder.file);
+        });
+    });
+
+    describe('setter', () => {
+        describe('without timeout', () => {
+            it('should add a setting', async () => {
+                // given, when.
+                const [, setValue] = useSettings<number>('__new', null, null);
+                await setValue(13);
+
+                // then.
+                expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(1);
+                expect(streamDeckClient.setSettings).toHaveBeenCalledWith(<ActionInfoSettings & { __new: number }>{
+                    __new: 13,
+                    ...actionInfo.payload.settings
+                });
+            });
+
+            it('should update a setting', async () => {
+                // given, when.
+                const [, setValue] = useSettings<string>('foo', null, null);
+                await setValue('Hello world, this is a test');
+
+                // then.
+                expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(1);
+                expect(streamDeckClient.setSettings).toHaveBeenCalledWith(<ActionInfoSettings>{
+                    foo: 'Hello world, this is a test',
+                    folder: actionInfo.payload.settings.folder,
+                    isMock: actionInfo.payload.settings.isMock
+                });
             });
         });
 
-        it('should update a setting, without a timeout', async () => {
-            // given, when.
-            const [, setValue] = useSettings<number>('__new', null, null);
-            await setValue(13);
+        describe('with timeout', () => {
+            it('should add a setting', async () => {
+                // given, when.
+                const [, setValue] = useSettings<number>('__new', null, 100);
+                await setValue(13);
 
-            // then.
-            expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(1);
-            expect(streamDeckClient.setSettings).toHaveBeenCalledWith(<ActionInfoSettings & { __new: number }>{
-                __new: 13,
-                ...actionInfo.payload.settings
+                // then.
+                expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(1);
+                expect(streamDeckClient.setSettings).toHaveBeenCalledWith(<ActionInfoSettings & { __new: number }>{
+                    __new: 13,
+                    ...actionInfo.payload.settings
+                });
+            });
+
+            it('should update a setting', async () => {
+                // given, when.
+                const [, setValue] = useSettings<string>('folder.file', null, 100);
+                await setValue('Document.pdf');
+
+                // then.
+                expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(1);
+                expect(streamDeckClient.setSettings).toHaveBeenCalledWith(<ActionInfoSettings & { __new: number }>{
+                    foo: actionInfo.payload.settings.foo,
+                    folder: {
+                        file: 'Document.pdf'
+                    },
+                    isMock: actionInfo.payload.settings.isMock
+                });
             });
         });
     });
