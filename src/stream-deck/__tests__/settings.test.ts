@@ -79,6 +79,15 @@ describe('useSettings', () => {
 
     describe('setter', () => {
         describe('without timeout', () => {
+            it('should not call save when the value has not changed', async () => {
+                // given, when.
+                const [, setValue] = useSettings<string>('foo', null, null);
+                await setValue(actionInfo.payload.settings.foo);
+
+                // then.
+                expect(streamDeckClient.setSettings).not.toHaveBeenCalled();
+            });
+
             it('should add a setting', async () => {
                 // given, when.
                 const [, setValue] = useSettings<number>('__new', null, null);
@@ -108,6 +117,15 @@ describe('useSettings', () => {
         });
 
         describe('with timeout', () => {
+            it('should not call save when the value has not changed', async () => {
+                // given, when.
+                const [, setValue] = useSettings<string>('foo', null, null);
+                await setValue(actionInfo.payload.settings.foo);
+
+                // then.
+                expect(streamDeckClient.setSettings).not.toHaveBeenCalled();
+            });
+
             it('should add a setting', async () => {
                 // given, when.
                 const [, setValue] = useSettings<number>('__new', null, 100);
