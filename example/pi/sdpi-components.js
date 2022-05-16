@@ -274,13 +274,12 @@
         let pcs;
         return (data, ...args) => {
             clearTimeout(handle);
-            if (pcs === undefined) {
-                pcs = new PromiseCompletionSource();
-            }
-            handle = setTimeout(() => {
-                pcs === null || pcs === void 0 ? void 0 : pcs.setResult();
+            pcs = pcs || new PromiseCompletionSource();
+            handle = setTimeout(async () => {
+                const innerPcs = pcs;
                 pcs = undefined;
-                callback(data);
+                await callback(data);
+                innerPcs === null || innerPcs === void 0 ? void 0 : innerPcs.setResult();
             }, timeout, args);
             return pcs.promise;
         };
@@ -686,7 +685,7 @@
                 return;
             }
             set(key, _settings, value);
-            this.save(_settings);
+            await this.save(_settings);
         }
     }
     const settings = new Settings(streamDeckClient.didReceiveSettings, (value) => streamDeckClient.setSettings(value));

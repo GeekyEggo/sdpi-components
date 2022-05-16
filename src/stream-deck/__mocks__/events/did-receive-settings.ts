@@ -1,8 +1,8 @@
 import { DidReceiveSettingsEvent } from 'stream-deck';
 
-import { actionInfo, ActionInfoSettings } from '../registration/action-info';
+import { actionInfo } from '../registration/action-info';
 
-export const didReceiveSettings: DidReceiveSettingsEvent<ActionInfoSettings> = {
+export const didReceiveSettings: DidReceiveSettingsEvent = {
     event: 'didReceiveSettings',
     action: actionInfo.action,
     context: actionInfo.context,
