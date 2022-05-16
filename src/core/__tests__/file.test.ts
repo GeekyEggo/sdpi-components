@@ -8,7 +8,15 @@ const streamDeckClient = __streamDeckClient.default as MockStreamDeckClient;
 const rawPath = 'C:\\fakepath\\C%3A%2FHello%2FWorld%2FFoo.txt';
 
 describe('mac', () => {
-    beforeAll(() => (streamDeckClient.__connectionInfo.info.application.platform = 'mac'));
+    beforeAll(() => {
+        streamDeckClient.__connect({
+            info: {
+                application: {
+                    platform: 'mac'
+                }
+            }
+        });
+    });
 
     /**
      * getFileName
@@ -40,7 +48,15 @@ describe('mac', () => {
 });
 
 describe('windows', () => {
-    beforeAll(() => (streamDeckClient.__connectionInfo.info.application.platform = 'windows'));
+    beforeAll(() => {
+        streamDeckClient.__connect({
+            info: {
+                application: {
+                    platform: 'windows'
+                }
+            }
+        });
+    });
 
     /**
      * getFileName

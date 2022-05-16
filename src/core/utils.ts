@@ -51,3 +51,42 @@ export function set(path: string, target: any, value: unknown): void {
         return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
     }, target);
 }
+
+/**
+ * Determines whether the specified item is an object.
+ * @param item The item to check
+ * @returns `true` when the item is an object; otherwise `false`.
+ */
+export const isObject = (item: unknown): boolean => {
+    return item && typeof item === 'object' && !Array.isArray(item) ? true : false;
+};
+
+/**
+ * Merges all sources into the target object.
+ * @param target The target object.
+ * @param sources The source objects; these are used to update the target object.
+ * @returns The target object, with the sources merged.
+ * {@link https://stackoverflow.com/a/34749873/259656}
+ */
+export const merge = <T>(target: T, ...sources: DeepPartial<T>[]): T => {
+    if (!sources.length) {
+        return target;
+    }
+
+    const source = sources.shift();
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!(<Record<string, unknown>>target)[key]) {
+                    Object.assign(target, { [key]: {} });
+                }
+
+                merge((<Record<string, unknown>>target)[key], source[key]);
+            } else {
+                Object.assign(target, { [key]: source[key] });
+            }
+        }
+    }
+
+    return merge(target, ...sources);
+};

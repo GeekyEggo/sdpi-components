@@ -1,15 +1,4 @@
-import {
-    ActionInfo,
-    AsEvent,
-    ConnectionInfo,
-    DidReceiveGlobalSettingsEvent,
-    DidReceiveSettingsEvent,
-    DidReceiveSettingsPayload,
-    EventReceived,
-    EventSent,
-    RegistrationInfo,
-    SendToPropertyInspectorEvent
-} from 'stream-deck';
+import { ActionInfo, AsEvent, ConnectionInfo, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, RegistrationInfo, SendToPropertyInspectorEvent } from 'stream-deck';
 
 import { EventManager } from '../core/events';
 import { PromiseCompletionSource } from '../core/promises';
@@ -92,7 +81,7 @@ export class StreamDeckClient {
      * Gets the settings.
      * @returns The settings as a promise.
      */
-    public async getSettings(): Promise<DidReceiveSettingsPayload> {
+    public async getSettings(): Promise<DidReceiveSettingsEvent['payload']> {
         const { actionInfo } = await this.getConnectionInfo();
         const response = await this.get('getSettings', 'didReceiveSettings', (msg) => msg.action == actionInfo.action && msg.context == actionInfo.context && msg.device == actionInfo.device);
 

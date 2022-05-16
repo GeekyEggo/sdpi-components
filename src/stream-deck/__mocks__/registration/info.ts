@@ -26,10 +26,10 @@ export const info: RegistrationInfo = {
             id: '55F16B35884A859CCE4FFA1FC8D3DE5B',
             name: 'Main Device',
             size: {
-                columns: 5,
-                rows: 3
+                columns: 8,
+                rows: 4
             },
-            type: 0
+            type: 2
         }
     ]
 };

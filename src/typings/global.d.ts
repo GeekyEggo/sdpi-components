@@ -27,3 +27,12 @@ interface Window {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     SDPIComponents: any;
 }
+
+/**
+ * Provides a deep representation of a partial object.
+ */
+type DeepPartial<T> = T extends object
+    ? {
+          [P in keyof T]?: DeepPartial<T[P]>;
+      }
+    : T;
