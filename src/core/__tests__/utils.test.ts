@@ -1,14 +1,6 @@
 import { CSSResult, CSSResultArray } from 'lit';
 
-import { asArray, get, getUUID, set } from '../utils';
-
-const TEST_OBJ: TestObject = {
-    hello: 'world',
-    negative: false,
-    nested: {
-        prop: 13
-    }
-};
+import { asArray, get, getUUID, merge, set } from '../utils';
 
 /**
  * get
@@ -16,26 +8,26 @@ const TEST_OBJ: TestObject = {
 describe('get', () => {
     it('should retrieve value of simple path', () => {
         // given, when, then.
-        const __testObj = { ...TEST_OBJ };
-        expect(get('hello', __testObj)).toBe(TEST_OBJ.hello);
+        const obj = { foo: 'bar' };
+        expect(get('foo', obj)).toBe('bar');
     });
 
     it('should retrieve value of nested path', () => {
         // given, when, then.
-        const __testObj = { ...TEST_OBJ };
-        expect(get('nested.prop', __testObj)).toBe(13);
+        const obj = { nested: { number: 13 } };
+        expect(get('nested.number', obj)).toBe(13);
     });
 
     it('should retrieve value of path that returns falsy', () => {
         // given, when, then.
-        const __testObj = { ...TEST_OBJ };
-        expect(get('negative', __testObj)).toBe(false);
+        const obj = { falsy: false };
+        expect(get('falsy', obj)).toBe(false);
     });
 
     it('should retrieve undefined when the property does not exist', () => {
         // given, when, then.
-        const __testObj = { ...TEST_OBJ };
-        expect(get('__unknown.__prop', __testObj)).toBe(undefined);
+        const obj = {};
+        expect(get('__unknown.__prop', obj)).toBe(undefined);
     });
 });
 
@@ -45,40 +37,38 @@ describe('get', () => {
 describe('set', () => {
     it('should set value of simple path', () => {
         // given, when.
-        const __testObj = { ...TEST_OBJ };
-        set('hello', __testObj, 'good bye');
+        const obj = { foo: 'Hello' };
+        set('foo', obj, 'Good bye');
 
         // then.
-        expect(__testObj.hello).toBe('good bye');
+        expect(obj.foo).toBe('Good bye');
     });
 
     it('should set value of nested path', () => {
         // given, when.
-        const __testObj = { ...TEST_OBJ };
-        set('nested.prop', __testObj, 101);
+        const obj = { nested: { number: 13 } };
+        set('nested.number', obj, 101);
 
         // then.
-        expect(__testObj.nested.prop).toBe(101);
+        expect(obj.nested.number).toBe(101);
     });
 
     it('should add value of simple path', () => {
         // given, when.
-        const __testObj = { ...TEST_OBJ };
-        expect(__testObj.foo).toBe(undefined);
-        set('foo', __testObj, 'bar');
+        const obj: Record<string, unknown> = {};
+        set('foo', obj, 'bar');
 
         // then.
-        expect(__testObj.foo).toBe('bar');
+        expect(obj.foo).toBe('bar');
     });
 
     it('should add value of nested path', () => {
         // given, when.
-        const __testObj = { ...TEST_OBJ };
-        expect(__testObj.bar?.prop).toBe(undefined);
-        set('bar.prop', __testObj, 13);
+        const obj: Record<string, Record<string, unknown>> = { nested: {} };
+        set('nested.number', obj, 13);
 
         // then.
-        expect(__testObj.bar?.prop).toBe(13);
+        expect(obj.nested.number).toBe(13);
     });
 });
 
@@ -126,14 +116,98 @@ describe('asArray', () => {
     };
 });
 
-type TestObject = {
-    hello: string;
-    negative: boolean;
-    nested: {
-        prop: number;
-    };
-    foo?: string;
-    bar?: {
-        prop: number;
-    };
-};
+/**
+ * merge
+ */
+describe('merge', () => {
+    type MergeTestObject = DeepPartial<{
+        foo: string;
+        other: boolean;
+        nested: {
+            item: number;
+            other: boolean;
+        };
+    }>;
+
+    it('should add top-level properties', () => {
+        // given.
+        const target: MergeTestObject = {
+            foo: 'bar',
+            nested: {
+                item: 13
+            }
+        };
+
+        // when.
+        merge(target, { other: true });
+
+        // then.
+        expect(target.foo).toBe('bar');
+        expect(target.other).toBe(true);
+        expect(target.nested?.item).toBe(13);
+    });
+
+    it('should update top-level properties', () => {
+        // given.
+        const target: MergeTestObject = {
+            foo: 'bar',
+            other: false,
+            nested: {
+                item: 13
+            }
+        };
+
+        // when.
+        merge(target, {
+            foo: 'Hello world',
+            other: true
+        });
+
+        // then.
+        expect(target.foo).toBe('Hello world');
+        expect(target.other).toBe(true);
+        expect(target.nested?.item).toBe(13);
+    });
+
+    it('should add nested properties', () => {
+        // given.
+        const target: MergeTestObject = {
+            foo: 'bar'
+        };
+
+        // when.
+        merge(target, {
+            nested: {
+                other: false
+            }
+        });
+
+        // then.
+        expect(target.foo).toBe('bar');
+        expect(target.nested?.other).toBe(false);
+    });
+
+    it('should update nested properties', () => {
+        // given.
+        const target: MergeTestObject = {
+            foo: 'bar',
+            other: false,
+            nested: {
+                item: 13,
+                other: true
+            }
+        };
+
+        // when.
+        merge(target, {
+            nested: {
+                other: false
+            }
+        });
+
+        // then.
+        expect(target.foo).toBe('bar');
+        expect(target.nested?.item).toBe(13);
+        expect(target.nested?.other).toBe(false);
+    });
+});
