@@ -690,9 +690,15 @@
     }
     const settings = new Settings(streamDeckClient.didReceiveSettings, (value) => streamDeckClient.setSettings(value));
     const useSettings = settings.use.bind(settings);
+    let didRequestGlobalSettings = false;
     const globalSettings = new Settings(streamDeckClient.didReceiveGlobalSettings, (value) => streamDeckClient.setGlobalSettings(value));
-    streamDeckClient.getGlobalSettings();
-    const useGlobalSettings = globalSettings.use.bind(globalSettings);
+    const useGlobalSettings = (key, changeCallback, timeout = 250) => {
+        if (!didRequestGlobalSettings) {
+            streamDeckClient.getGlobalSettings();
+            didRequestGlobalSettings = true;
+        }
+        return globalSettings.use(key, changeCallback, timeout);
+    };
 
     const Persisted = (superClass) => {
         class Persisted extends superClass {
