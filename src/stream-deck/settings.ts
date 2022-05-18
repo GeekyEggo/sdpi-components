@@ -1,13 +1,17 @@
-import { ActionInfo, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent } from 'stream-deck';
-
 import { delay, get, IEventSubscriber, PromiseCompletionSource, set } from '../core';
 import streamDeckClient from './stream-deck-client';
+
+export type SettingsEventArgs = {
+    payload: {
+        settings: unknown;
+    };
+};
 
 /**
  * Provides a wrapper around loading, managing, and persisting settings within the Stream Deck.
  */
-export class Settings<TEventArgs extends ActionInfo | DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent> {
-    private _settings = new PromiseCompletionSource<Record<string, unknown>>();
+export class Settings<TEventArgs extends SettingsEventArgs> {
+    private _settings = new PromiseCompletionSource<unknown>();
 
     /**
      * Initializes a new instance of the settings.
@@ -62,11 +66,17 @@ export class Settings<TEventArgs extends ActionInfo | DidReceiveGlobalSettingsEv
 
 // Action instance specific settings.
 const settings = new Settings(streamDeckClient.didReceiveSettings, (value) => streamDeckClient.setSettings(value));
-
 export const useSettings = settings.use.bind(settings);
 
 // Global plugin settings.
+let didRequestGlobalSettings = false;
 const globalSettings = new Settings(streamDeckClient.didReceiveGlobalSettings, (value) => streamDeckClient.setGlobalSettings(value));
-streamDeckClient.getGlobalSettings();
 
-export const useGlobalSettings = globalSettings.use.bind(globalSettings);
+export const useGlobalSettings = <T>(key: string, changeCallback?: ((value?: T) => void) | null, timeout: number | null = 250): [() => Promise<T>, (value?: T) => Promise<void>] => {
+    if (!didRequestGlobalSettings) {
+        streamDeckClient.getGlobalSettings();
+        didRequestGlobalSettings = true;
+    }
+
+    return globalSettings.use(key, changeCallback, timeout);
+};

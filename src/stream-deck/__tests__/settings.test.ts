@@ -1,188 +1,326 @@
 import { ActionInfo, DidReceiveGlobalSettingsEvent } from 'stream-deck';
 
+import { EventManager } from '../../core';
 import { MockStreamDeckClient } from '../__mocks__/stream-deck-client';
-import { Settings } from '../settings';
+import { Settings, SettingsEventArgs } from '../settings';
 
 jest.mock('../../stream-deck/stream-deck-client');
 
-describe('useSettings', () => {
-    let streamDeckClient: MockStreamDeckClient;
-    let useSettings: Settings<ActionInfo | DidReceiveGlobalSettingsEvent>['use'];
+describe('Settings', () => {
+    let evManager: EventManager<SettingsEventArgs>;
+    let settings: Settings<SettingsEventArgs>;
 
-    const defaultActionInfo: DeepPartial<ActionInfo> = {
-        payload: {
-            settings: {
-                foo: 'bar',
-                folder: {
-                    file: 'Document.pdf'
-                }
-            }
-        }
-    };
+    beforeEach(() => (evManager = new EventManager<SettingsEventArgs>()));
 
-    // Ensure we have fresh module instance before each and every test.
-    beforeEach(async () => {
-        useSettings = (await import('../settings')).useSettings;
-        streamDeckClient = (await import('../../stream-deck/stream-deck-client')).default as MockStreamDeckClient;
-
-        jest.resetModules();
-    });
-
-    /**
-     * The changeCallback argument of useSettings.
-     */
     describe('changeCallback', () => {
-        type ChangeCallbackTestCase = {
-            name: string;
-            key: string;
-            value: unknown;
-        };
+        beforeEach(() => (settings = new Settings(evManager, () => Promise.resolve())));
 
-        const changeCallbackTestCases: ChangeCallbackTestCase[] = [
+        const testCases = [
             {
-                name: 'should trigger for simple path',
+                name: 'should callback for simple paths',
                 key: 'foo',
-                value: 'bar'
+                calledTimes: 1,
+                calledWith: 'bar'
             },
             {
-                name: 'should trigger for complex path',
-                key: 'folder.file',
-                value: 'Document.pdf'
+                name: 'should callback for nested paths',
+                key: 'nested.item',
+                calledTimes: 1,
+                calledWith: 13
+            },
+            {
+                name: 'should callback for paths that do not exist',
+                key: '__none',
+                calledTimes: 1,
+                calledWith: undefined
             }
         ];
 
-        changeCallbackTestCases.map((testCase) => {
-            it(testCase.name, () => {
+        testCases.map((testCase) => {
+            it(testCase.name, async () => {
                 // given.
-                let changeCallbackValue: unknown;
-                const [,] = useSettings(testCase.key, (value) => (changeCallbackValue = value));
+                const changeCallback = jest.fn();
+                settings.use(testCase.key, changeCallback);
 
                 // when.
-                streamDeckClient.didReceiveSettings.dispatch({
-                    action: '',
-                    context: '',
-                    device: '',
-                    event: 'didReceiveSettings',
+                evManager.dispatch({
                     payload: {
-                        coordinates: {
-                            column: 1,
-                            row: 1
-                        },
-                        isInMultiAction: false,
                         settings: {
                             foo: 'bar',
-                            folder: {
-                                file: 'Document.pdf'
-                            }
+                            nested: { item: 13 }
                         }
                     }
                 });
 
                 // then.
-                expect(changeCallbackValue).toBe(testCase.value);
+                expect(changeCallback).toHaveBeenCalledTimes(testCase.calledTimes);
+                expect(changeCallback).toHaveBeenCalledWith(testCase.calledWith);
             });
         });
     });
 
     /**
-     * The getter of useSettings.
+     * [getter, ] = use(...)
      */
     describe('getter', () => {
-        // Connect with the default action info before each test.
-        beforeEach(async () => {
-            streamDeckClient.__connect({ actionInfo: defaultActionInfo });
+        beforeEach(() => {
+            settings = new Settings(evManager, () => Promise.resolve());
+            evManager.dispatch({
+                payload: {
+                    settings: {
+                        foo: 'bar',
+                        nested: {
+                            item: 13
+                        }
+                    }
+                }
+            });
         });
 
-        it('should return undefined for non-existent paths', async () => {
-            // given, when, then.
-            const [getValue] = useSettings('__none');
-            expect(getValue()).resolves.toBe(undefined);
-        });
+        const testCases = [
+            {
+                name: 'should return undefined for non-existent paths',
+                key: '__none',
+                value: undefined
+            },
+            {
+                name: 'should return values of simple paths',
+                key: 'foo',
+                value: 'bar'
+            },
+            {
+                name: 'should return values of nested paths',
+                key: 'nested.item',
+                value: 13
+            }
+        ];
 
-        it('should return values of simple paths', async () => {
-            // given, when, then.
-            const [getValue] = useSettings<string>('foo');
-            expect(await getValue()).toBe('bar');
-        });
-
-        it('should return values of complex paths', async () => {
-            // given, when, then.
-            const [getValue] = useSettings<string>('folder.file');
-            expect(await getValue()).toBe('Document.pdf');
+        testCases.map((testCase) => {
+            it(testCase.name, async () => {
+                // given, when, then.
+                const [getValue] = settings.use(testCase.key);
+                expect(await getValue()).toBe(testCase.value);
+            });
         });
     });
 
     /**
-     * The setter of useSettings.
+     * [, setter] = use(...)
      */
     describe('setter', () => {
-        type SetterTestCase = {
-            name: string;
-            key: string;
-            value: unknown;
-            called: number;
-            calledWith?: unknown;
-        };
+        let mockSave: (settings: unknown) => Promise<void>;
 
-        // Partial test cases for setter; this is doubled, one for with a timeout, and one for without.
-        const setterTestCases: SetterTestCase[] = [
+        beforeEach(() => {
+            mockSave = jest.fn().mockReturnValue(Promise.resolve());
+
+            settings = new Settings(evManager, mockSave);
+            evManager.dispatch({
+                payload: {
+                    settings: {
+                        nested: {
+                            item: 13
+                        }
+                    }
+                }
+            });
+        });
+
+        const testCases = [
             {
                 name: 'should add a setting',
                 key: '__new',
                 value: 'Hello world',
-                called: 1,
+                calledTimes: 1,
                 calledWith: {
                     __new: 'Hello world',
-                    foo: 'bar',
-                    folder: {
-                        file: 'Document.pdf'
+                    nested: {
+                        item: 13
                     }
                 }
             },
             {
                 name: 'should update a setting',
-                key: 'folder.file',
-                value: 'Other.pdf',
-                called: 1,
+                key: 'nested.item',
+                value: 100,
+                calledTimes: 1,
                 calledWith: {
-                    foo: 'bar',
-                    folder: {
-                        file: 'Other.pdf'
+                    nested: {
+                        item: 100
                     }
                 }
             },
             {
                 name: 'should not save when unchanged',
-                key: 'foo',
-                value: 'bar',
-                called: 0
+                key: 'nested.item',
+                value: 13,
+                calledTimes: 0,
+                calledWith: undefined
             }
         ];
 
-        // Connect with the default action info before each test.
-        beforeEach(async () => {
-            streamDeckClient.setSettings = jest.fn().mockResolvedValue(Promise.resolve());
-            streamDeckClient.__connect({ actionInfo: defaultActionInfo });
-        });
-
-        // Describe the test cases.
-        setterTestCases.map((testCase) => {
-            async function setterTest(timeout: number | null): Promise<void> {
-                // given.
-                const [, setValue] = useSettings(testCase.key, null, timeout);
-
-                // when.
+        testCases.map((testCase) => {
+            const test = async (timeout: number | null): Promise<void> => {
+                // given, when.
+                const [, setValue] = settings.use(testCase.key, null, timeout);
                 await setValue(testCase.value);
 
                 // then.
-                expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(testCase.called);
-                if (testCase.calledWith) {
-                    expect(streamDeckClient.setSettings).toHaveBeenCalledWith(testCase.calledWith);
+                expect(mockSave).toHaveBeenCalledTimes(testCase.calledTimes);
+                if (testCase.calledWith !== undefined) {
+                    expect(mockSave).toHaveBeenCalledWith(testCase.calledWith);
+                }
+            };
+
+            it(`${testCase.name} (with timeout)`, () => test(10));
+            it(`${testCase.name} (without timeout)`, () => test(null));
+        });
+    });
+});
+
+describe('useSettings', () => {
+    let streamDeckClient: MockStreamDeckClient;
+    let useSettings: Settings<ActionInfo | DidReceiveGlobalSettingsEvent>['use'];
+
+    // Ensure we have fresh module instance before each and every test.
+    beforeEach(async () => {
+        jest.resetModules();
+        streamDeckClient = (await import('../../stream-deck/stream-deck-client')).default as MockStreamDeckClient;
+        useSettings = (await import('../settings')).useSettings;
+    });
+
+    it('should subscribe to didReceiveSettings', () => {
+        // given.
+        const changeCallback = jest.fn();
+        useSettings('foo', changeCallback);
+
+        // when.
+        streamDeckClient.didReceiveSettings.dispatch({
+            action: 'com.sdpi.plugin.action',
+            context: '<uniqueValue>',
+            device: '<uniqueValue>',
+            event: 'didReceiveSettings',
+            payload: {
+                coordinates: {
+                    column: 1,
+                    row: 1
+                },
+                isInMultiAction: false,
+                settings: {
+                    foo: 'bar'
                 }
             }
+        });
 
-            it(`${testCase.name} (with timeout)`, () => setterTest(null));
-            it(`${testCase.name} (without timeout)`, () => setterTest(null));
+        // then.
+        expect(changeCallback).toHaveBeenCalledTimes(1);
+        expect(changeCallback).toHaveBeenCalledWith('bar');
+    });
+
+    it('should call setSettings when saving', async () => {
+        // given.
+        streamDeckClient.setSettings = jest.fn().mockResolvedValue(Promise.resolve());
+        const [, setValue] = useSettings('foo');
+
+        streamDeckClient.didReceiveSettings.dispatch({
+            action: 'com.sdpi.plugin.action',
+            context: '<uniqueValue>',
+            device: '<uniqueValue>',
+            event: 'didReceiveSettings',
+            payload: {
+                coordinates: {
+                    column: 1,
+                    row: 1
+                },
+                isInMultiAction: false,
+                settings: {}
+            }
+        });
+
+        // when.
+        await setValue('Hello world');
+
+        // then.
+        expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(1);
+        expect(streamDeckClient.setSettings).toHaveBeenCalledWith({
+            foo: 'Hello world'
+        });
+    });
+});
+
+describe('useGlobalSettings', () => {
+    let streamDeckClient: MockStreamDeckClient;
+    let useGlobalSettings: Settings<DidReceiveGlobalSettingsEvent>['use'];
+
+    // Ensure we have fresh module instance before each and every test.
+    beforeEach(async () => {
+        jest.resetModules();
+        streamDeckClient = (await import('../../stream-deck/stream-deck-client')).default as MockStreamDeckClient;
+        useGlobalSettings = (await import('../settings')).useGlobalSettings;
+    });
+
+    it('should request global settings', () => {
+        // given, when.
+        streamDeckClient.getGlobalSettings = jest.fn();
+        useGlobalSettings('foo');
+
+        // then.
+        expect(streamDeckClient.getGlobalSettings).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not request global settings without being used', async () => {
+        // given.
+        jest.resetModules();
+        streamDeckClient = (await import('../../stream-deck/stream-deck-client')).default as MockStreamDeckClient;
+        streamDeckClient.getGlobalSettings = jest.fn();
+
+        // when
+        useGlobalSettings = (await import('../settings')).useGlobalSettings;
+
+        // then
+        expect(streamDeckClient.getGlobalSettings).not.toHaveBeenCalled();
+    });
+
+    it('should subscribe to didReceiveGlobalSettings', () => {
+        // given.
+        const changeCallback = jest.fn();
+        useGlobalSettings('foo', changeCallback);
+
+        // when.
+        streamDeckClient.didReceiveGlobalSettings.dispatch({
+            event: 'didReceiveGlobalSettings',
+            payload: {
+                settings: {
+                    foo: 'bar'
+                }
+            }
+        });
+
+        // then.
+        expect(changeCallback).toHaveBeenCalledTimes(1);
+        expect(changeCallback).toHaveBeenCalledWith('bar');
+    });
+
+    it('should call setGlobalSettings when saving', async () => {
+        // given.
+        streamDeckClient.setGlobalSettings = jest.fn().mockResolvedValue(Promise.resolve());
+        const [, setValue] = useGlobalSettings('foo');
+
+        streamDeckClient.didReceiveGlobalSettings.dispatch({
+            event: 'didReceiveGlobalSettings',
+            payload: {
+                settings: {
+                    foo: 'bar'
+                }
+            }
+        });
+
+        // when.
+        await setValue('Hello world');
+
+        // then.
+        expect(streamDeckClient.setGlobalSettings).toHaveBeenCalledTimes(1);
+        expect(streamDeckClient.setGlobalSettings).toHaveBeenCalledWith({
+            foo: 'Hello world'
         });
     });
 });

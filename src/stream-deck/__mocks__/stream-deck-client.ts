@@ -9,7 +9,7 @@ const streamDeckClient: MockStreamDeckClient = jest.requireActual('../stream-dec
 const server = new WebSocketServer('ws://localhost:13', { jsonProtocol: true });
 
 export type MockStreamDeckClient = StreamDeckClient & {
-    __connect(options: DeepPartial<ConnectionInfo>): Promise<WebSocketServer>;
+    __connect(options?: DeepPartial<ConnectionInfo>): Promise<WebSocketServer>;
 };
 
 /**
