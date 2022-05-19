@@ -70,10 +70,10 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
                     id="file_input"
                     .accept=${this.accept || ''}
                     .disabled=${this.disabled}
-                    @change="${async (ev: HTMLInputEvent<HTMLInputElement>) => (this.value = await sanitize(ev.target.value))}"
+                    @change="${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = sanitize(ev.target.value))}"
                 />
                 <label class="value" for="file_input">
-                    <span .title=${this.value || ''}>${until(getFileName(this.value || ''))}</span>
+                    <span .title=${this.value || ''}>${getFileName(this.value || '')}</span>
                 </label>
                 <label class="button">
                     <sdpi-button .disabled=${this.disabled} @click=${() => this.focusElement.value?.click()}> ${this.label} </sdpi-button>

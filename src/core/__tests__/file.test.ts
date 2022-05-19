@@ -1,88 +1,94 @@
-import { MockStreamDeckClient } from '../../stream-deck/__mocks__/stream-deck-client';
-import * as __streamDeckClient from '../../stream-deck/stream-deck-client';
 import { getFileName, sanitize } from '../file';
 
-jest.mock('../../stream-deck/stream-deck-client');
-const streamDeckClient = __streamDeckClient.default as MockStreamDeckClient;
+const testCases = [
+    {
+        name: 'should handle Unix-based paths',
+        path: '/home/folder/Unix.pdf',
+        filename: 'Unix.pdf',
+        sanitized: '/home/folder/Unix.pdf'
+    },
+    {
+        name: 'should handle Unix-based paths with fakepath',
+        path: 'C:\\fakepath\\/home/folder/Unix.pdf',
+        filename: 'Unix.pdf',
+        sanitized: '/home/folder/Unix.pdf'
+    },
+    {
+        name: 'should handle encoded Unix-based paths',
+        path: '%2Fhome%2Ffolder%2FUnix.pdf',
+        filename: 'Unix.pdf',
+        sanitized: '/home/folder/Unix.pdf'
+    },
+    {
+        name: 'should handle encoded Unix-based paths with fakepath',
+        path: 'C:\\fakepath\\%2Fhome%2Ffolder%2FUnix.pdf',
+        filename: 'Unix.pdf',
+        sanitized: '/home/folder/Unix.pdf'
+    },
+    {
+        name: 'should handle Windows-based paths',
+        path: 'C:\\home\\folder\\Windows.pdf',
+        filename: 'Windows.pdf',
+        sanitized: 'C:\\home\\folder\\Windows.pdf'
+    },
+    {
+        name: 'should handle Windows-based paths with fakepath',
+        path: 'C:\\fakepath\\C:\\home\\folder\\Windows.pdf',
+        filename: 'Windows.pdf',
+        sanitized: 'C:\\home\\folder\\Windows.pdf'
+    },
+    {
+        name: 'should handle encoded Windows-based paths',
+        path: 'C%3A%5Chome%5Cfolder%5CWindows.pdf',
+        filename: 'Windows.pdf',
+        sanitized: 'C:\\home\\folder\\Windows.pdf'
+    },
+    {
+        name: 'should handle encoded Windows-based paths with fakepath',
+        path: 'C:\\fakepath\\C%3A%5Chome%5Cfolder%5CWindows.pdf',
+        filename: 'Windows.pdf',
+        sanitized: 'C:\\home\\folder\\Windows.pdf'
+    },
+    {
+        name: 'should handle only file names',
+        path: 'Document.pdf',
+        filename: 'Document.pdf',
+        sanitized: 'Document.pdf'
+    },
+    {
+        name: 'should handle only file names with fakepath',
+        path: 'Document.pdf',
+        filename: 'Document.pdf',
+        sanitized: 'Document.pdf'
+    },
+    {
+        name: 'should handle encoded file names',
+        path: 'Hello%20world.pdf',
+        filename: 'Hello world.pdf',
+        sanitized: 'Hello world.pdf'
+    },
+    {
+        name: 'should handle encoded file names with fakepath',
+        path: 'C:\\fakepath\\Hello%20world.pdf',
+        filename: 'Hello world.pdf',
+        sanitized: 'Hello world.pdf'
+    }
+];
 
-const rawPath = 'C:\\fakepath\\C%3A%2FHello%2FWorld%2FFoo.txt';
-
-describe('mac', () => {
-    beforeAll(() => {
-        streamDeckClient.__connect({
-            info: {
-                application: {
-                    platform: 'mac'
-                }
-            }
-        });
-    });
-
-    /**
-     * getFileName
-     */
-    describe('getFileName', () => {
-        it('should return the file name of a sanitized path with forward slash dividers', async () => {
+describe('getFileName', () => {
+    testCases.map((testCase) => {
+        it(testCase.name, () => {
             // given, when, then.
-            const fileName = await getFileName('home/Foo/Bar/Hello world.txt');
-            expect(fileName).toBe('Hello world.txt');
-        });
-
-        it('should return the path when there are no dividers', async () => {
-            // given, when, then.
-            const fileName = await getFileName('Hello world.txt');
-            expect(fileName).toBe(fileName);
-        });
-    });
-
-    /**
-     * sanitize
-     */
-    describe('sanitize', () => {
-        it('should decode and format the path with forward slashes', async () => {
-            // given, when, then.
-            const path = await sanitize(rawPath);
-            expect(path).toBe('C:/Hello/World/Foo.txt');
+            expect(getFileName(testCase.path)).toBe(testCase.filename);
         });
     });
 });
 
-describe('windows', () => {
-    beforeAll(() => {
-        streamDeckClient.__connect({
-            info: {
-                application: {
-                    platform: 'windows'
-                }
-            }
-        });
-    });
-
-    /**
-     * getFileName
-     */
-    describe('getFileName', () => {
-        it('should get the file name of a sanitized path with bash slash dividers', async () => {
+describe('sanitize', () => {
+    testCases.map((testCase) => {
+        it(testCase.name, () => {
             // given, when, then.
-            const fileName = await getFileName('C:\\Foo\\Bar\\Hello world.txt');
-            expect(fileName).toBe('Hello world.txt');
-        });
-
-        it('should return the path when there are no dividers', async () => {
-            // given, when, then.
-            const fileName = await getFileName('Hello world.txt');
-            expect(fileName).toBe(fileName);
-        });
-    });
-
-    /**
-     * sanitize
-     */
-    describe('sanitize', () => {
-        it('should decode and format the path with back slashes', async () => {
-            // given, when, then.
-            const path = await sanitize(rawPath);
-            expect(path).toBe('C:\\Hello\\World\\Foo.txt');
+            expect(sanitize(testCase.path)).toBe(testCase.sanitized);
         });
     });
 });
