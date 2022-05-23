@@ -1,4 +1,4 @@
-import { ActionSettingsPayload, AsEvent, ConnectionInfo, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, SendToPropertyInspectorEvent } from 'stream-deck';
+import { ActionInfo, AsEvent, ConnectionInfo, DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent, EventReceived, EventSent, RegistrationInfo, SendToPropertyInspectorEvent } from 'stream-deck';
 
 import { EventManager } from '../core/events';
 import { PromiseCompletionSource } from '../core/promises';
@@ -14,7 +14,7 @@ export class StreamDeckClient {
     public readonly message = new EventManager<EventReceived>();
 
     public readonly didReceiveGlobalSettings = new EventManager<DidReceiveGlobalSettingsEvent>();
-    public readonly didReceiveSettings = new EventManager<DidReceiveSettingsEvent>();
+    public readonly didReceiveSettings = new EventManager<ActionInfo | DidReceiveSettingsEvent>();
     public readonly sendToPropertyInspector = new EventManager<SendToPropertyInspectorEvent>();
 
     /**
@@ -22,16 +22,16 @@ export class StreamDeckClient {
      * @param port The port that should be used to create the WebSocket.
      * @param propertyInspectorUUID A unique identifier string to register Property Inspector with Stream Deck software.
      * @param registerEvent The event type that should be used to register the plugin once the WebSocket is opened. For Property Inspector this is "registerPropertyInspector".
-     * @param info A JSON object containing information about the application.
-     * @param actionInfo A JSON object containing information about the action.
+     * @param info The application information.
+     * @param actionInfo The action information.
      */
-    public async connect(port: string, propertyInspectorUUID: string, registerEvent: string, info: string, actionInfo?: string | undefined): Promise<void> {
+    public async connect(port: string, propertyInspectorUUID: string, registerEvent: string, info: RegistrationInfo, actionInfo: ActionInfo): Promise<void> {
         if (!this._isInitialized) {
             const connectionInfo = {
-                actionInfo: actionInfo ? JSON.parse(actionInfo) : null,
-                info: JSON.parse(info),
-                propertyInspectorUUID: propertyInspectorUUID,
-                registerEvent: registerEvent
+                actionInfo,
+                info,
+                propertyInspectorUUID,
+                registerEvent
             };
 
             if (connectionInfo.actionInfo) {
@@ -71,16 +71,17 @@ export class StreamDeckClient {
      * Save data securely and globally for the plugin.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setglobalsettings}
      * @param value The global settings.
+     * @returns The promise of sending the message that will set the global settings.
      */
-    public setGlobalSettings(value: unknown): void {
-        this.send('setGlobalSettings', value);
+    public setGlobalSettings(value: unknown): Promise<void> {
+        return this.send('setGlobalSettings', value);
     }
 
     /**
      * Gets the settings.
      * @returns The settings as a promise.
      */
-    public async getSettings(): Promise<ActionSettingsPayload> {
+    public async getSettings(): Promise<DidReceiveSettingsEvent['payload']> {
         const { actionInfo } = await this.getConnectionInfo();
         const response = await this.get('getSettings', 'didReceiveSettings', (msg) => msg.action == actionInfo.action && msg.context == actionInfo.context && msg.device == actionInfo.device);
 
@@ -91,9 +92,10 @@ export class StreamDeckClient {
      * Save data persistently for the action's instance.
      * {@link https://developer.elgato.com/documentation/stream-deck/sdk/events-sent/#setsettings}
      * @param value The settings.
+     * @returns The promise of sending the message that will set the action settings.
      */
-    public setSettings(value: unknown): void {
-        this.send('setSettings', value);
+    public setSettings(value: unknown): Promise<void> {
+        return this.send('setSettings', value);
     }
 
     /**
@@ -145,21 +147,17 @@ export class StreamDeckClient {
      * @param {unknown} payload The optional payload.
      */
     public async send<T extends EventSent['event']>(event: T, payload?: unknown): Promise<void> {
-        try {
-            const connectionInfo = await this._connectionInfo.promise;
-            const connection = await this._connection.promise;
+        const connectionInfo = await this._connectionInfo.promise;
+        const connection = await this._connection.promise;
 
-            connection.send(
-                JSON.stringify({
-                    event: event,
-                    context: connectionInfo.propertyInspectorUUID,
-                    payload: payload,
-                    action: connectionInfo.actionInfo.action
-                })
-            );
-        } catch {
-            console.error(`Unable to send request '${event}' as there is no connection.`);
-        }
+        connection.send(
+            JSON.stringify({
+                event: event,
+                context: connectionInfo.propertyInspectorUUID,
+                payload: payload,
+                action: connectionInfo.actionInfo.action
+            })
+        );
     }
 
     /**

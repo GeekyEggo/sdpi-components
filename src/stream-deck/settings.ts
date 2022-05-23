@@ -1,20 +1,24 @@
-import { DidReceiveGlobalSettingsEvent, DidReceiveSettingsEvent } from 'stream-deck';
-
 import { delay, get, IEventSubscriber, PromiseCompletionSource, set } from '../core';
 import streamDeckClient from './stream-deck-client';
+
+export type SettingsEventArgs = {
+    payload: {
+        settings: unknown;
+    };
+};
 
 /**
  * Provides a wrapper around loading, managing, and persisting settings within the Stream Deck.
  */
-class Settings<TEventArgs extends DidReceiveGlobalSettingsEvent | DidReceiveSettingsEvent> {
-    private _settings = new PromiseCompletionSource<Record<string, unknown>>();
+export class Settings<TEventArgs extends SettingsEventArgs> {
+    private _settings = new PromiseCompletionSource<unknown>();
 
     /**
      * Initializes a new instance of the settings.
      * @param didReceive The event invoked when the settings are received from the Stream Deck.
      * @param save The delegate responsible for persisting the settings in the Stream Deck.
      */
-    constructor(private didReceive: IEventSubscriber<TEventArgs>, private save: (settings: unknown) => void) {
+    constructor(private didReceive: IEventSubscriber<TEventArgs>, private save: (settings: unknown) => Promise<void>) {
         didReceive.subscribe(async (data: TEventArgs) => this._settings?.setResult(data.payload.settings));
     }
 
@@ -25,7 +29,7 @@ class Settings<TEventArgs extends DidReceiveGlobalSettingsEvent | DidReceiveSett
      * @param timeout Optional delay awaited before applying a save; this can be useful if a value can change frequently, i.e. if it is being typed.
      * @returns The getter and setter, capable of retrieving and persisting the setting.
      */
-    public use<T>(key: string, changeCallback?: (value?: T) => void, timeout: number | null = 250): [() => Promise<T>, (value?: T) => void] {
+    public use<T>(key: string, changeCallback?: ((value?: T) => void) | null, timeout: number | null = 250): [() => Promise<T>, (value?: T) => Promise<void>] {
         // Register the change callback.
         if (changeCallback) {
             this.didReceive.subscribe((data: TEventArgs) => {
@@ -56,17 +60,23 @@ class Settings<TEventArgs extends DidReceiveGlobalSettingsEvent | DidReceiveSett
         }
 
         set(key, _settings, value);
-        this.save(_settings);
+        await this.save(_settings);
     }
 }
 
 // Action instance specific settings.
 const settings = new Settings(streamDeckClient.didReceiveSettings, (value) => streamDeckClient.setSettings(value));
-
 export const useSettings = settings.use.bind(settings);
 
 // Global plugin settings.
+let didRequestGlobalSettings = false;
 const globalSettings = new Settings(streamDeckClient.didReceiveGlobalSettings, (value) => streamDeckClient.setGlobalSettings(value));
-streamDeckClient.getGlobalSettings();
 
-export const useGlobalSettings = globalSettings.use.bind(globalSettings);
+export const useGlobalSettings = <T>(key: string, changeCallback?: ((value?: T) => void) | null, timeout: number | null = 250): [() => Promise<T>, (value?: T) => Promise<void>] => {
+    if (!didRequestGlobalSettings) {
+        streamDeckClient.getGlobalSettings();
+        didRequestGlobalSettings = true;
+    }
+
+    return globalSettings.use(key, changeCallback, timeout);
+};

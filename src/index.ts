@@ -13,4 +13,5 @@ import './components/select';
 import './components/textarea';
 import './components/textfield';
 import './stream-deck/connect';
+import './stream-deck/sdpi-components';
 import './styles/document';
