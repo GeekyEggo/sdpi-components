@@ -14,7 +14,7 @@ defaults:
     shell: bash
 
 jobs:
-  CI:
+  Build:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,6 +33,3 @@ jobs:
 
       - name: '🧪 Test'
         run: npm run test
-
-      - name: '📦 Build'
-        run: npm run build

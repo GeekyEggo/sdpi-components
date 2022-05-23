@@ -12,9 +12,11 @@
         "prettier"
     ],
     "ignorePatterns": [
-        "dist",
-        "example",
-        "node_modules",
+        ".git/",
+        ".github/",
+        "dist/",
+        "example/",
+        "node_modules/",
         "**/*.js"
     ]
 }
