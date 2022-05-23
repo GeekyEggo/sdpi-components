@@ -30,6 +30,7 @@ jobs:
           eslint: true
           eslint_extensions: ts
           prettier: true
+          prettier_extensions: ts
 
       - name: '🧪 Test'
         run: npm run test
