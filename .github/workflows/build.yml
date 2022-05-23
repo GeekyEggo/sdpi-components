@@ -1,0 +1,27 @@
+on:
+  push:
+    paths-ignore:
+      - '**/*.md'
+    tags-ignore:
+      - *
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+  steps:
+    - name: '📥 Checkout'
+      uses: actions/checkout@v3
+
+    - name: '📐 Setup'
+      run: npm i
+
+    - name: '🎨 Lint'
+      run: npm run lint
+
+    - name: '🧪 Test'
+      run: npm run test

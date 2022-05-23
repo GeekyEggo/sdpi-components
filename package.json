@@ -4,15 +4,13 @@
     "description": "Web components for your Stream Deck plugin; take the hassle out of the property inspector.",
     "main": "./dist/sdpi-components.js",
     "scripts": {
-        "build": "rollup -c && rollup -c --dev",
+        "build": "rollup -c && rollup -c --dev && npm run install:example",
         "format": "prettier --config .prettierrc './src/**/*.ts' --write",
         "install:example": "node ./scripts/install-example.js",
         "lint": "eslint . --ext .ts",
-        "postinstall": "npm run build && npm run install:example",
         "start": "rollup -c -w & npm run start:example",
         "start:example": "onchange './example/**/*.*' -- npm run install:example",
-        "test": "jest --verbose",
-        "test:watch": "jest --watch --verbose"
+        "test": "jest --verbose"
     },
     "repository": {
         "type": "git",
