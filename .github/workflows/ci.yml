@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - workflow
+  pull_request:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '📥 Checkout'
+        uses: actions/checkout@v3
+
+      - name: '📐 Setup'
+        run: npm i
+
+      - name: '🖌️ Lint'
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          prettier: true
+
+      - name: '🧪 Test'
+        run: npm run test
+
+      - name: '📦 Build'
+        run: npm run build
