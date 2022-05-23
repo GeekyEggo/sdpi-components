@@ -30,6 +30,7 @@ jobs:
           eslint: true
           eslint_extensions: ts
           prettier: true
+          prettier_args: '--config .prettierrc'
           prettier_extensions: ts
 
       - name: '🧪 Test'
