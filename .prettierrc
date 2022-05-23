@@ -3,8 +3,14 @@
   "trailingComma": "none",
   "singleQuote": true,
   "printWidth": 200,
-  "importOrder": ["<THIRD_PARTY_MODULES>", "^[./]"],
-  "importOrderParserPlugins": ["typescript", "[\"decorators\", { \"decoratorsBeforeExport\": true }]"],
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^[./]"
+  ],
+  "importOrderParserPlugins": [
+    "typescript",
+    "[\"decorators\", { \"decoratorsBeforeExport\": true }]"
+  ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "importOrderCaseInsensitive": true

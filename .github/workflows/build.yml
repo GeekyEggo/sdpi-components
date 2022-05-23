@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: '📥 Checkout'
+        uses: actions/checkout@v3
+
+      - name: '🗃️ Setup Node'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: '📐 Install dependencies'
+        run: npm i
+
+      - name: '🖌️ Lint'
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          eslint_extensions: ts
+          prettier: true
+          prettier_dir: src/
+          prettier_extensions: ts
+
+      - name: '🧪 Test'
+        run: npm run test:ci
+      
+      - name: '📤 Commit coverage badge'
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'Update test coverage badge'
+          file_pattern: assets/coverage.svg

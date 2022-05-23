@@ -1,9 +1,11 @@
+import type { Config } from '@jest/types';
+
 /*
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
  */
-
-export default {
+const config: Config.InitialOptions = {
+    coverageReporters: ['json-summary', 'text'],
     globals: {
         'ts-jest': {
             isolatedModules: true
@@ -15,3 +17,5 @@ export default {
         '^.+\\.ts?$': 'ts-jest'
     }
 };
+
+export default config;
