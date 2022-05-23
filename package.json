@@ -10,7 +10,8 @@
         "lint": "eslint . --ext .ts",
         "start": "rollup -c -w & npm run start:example",
         "start:example": "onchange './example/**/*.*' -- npm run install:example",
-        "test": "jest --verbose"
+        "test": "jest --verbose",
+        "test:ci": "jest --verbose --coverage && node ./scripts/coverage-badge.js"
     },
     "repository": {
         "type": "git",

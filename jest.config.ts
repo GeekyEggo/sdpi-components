@@ -5,6 +5,7 @@ import type { Config } from '@jest/types';
  * https://jestjs.io/docs/configuration
  */
 const config: Config.InitialOptions = {
+    coverageReporters: ['json-summary', 'text'],
     globals: {
         'ts-jest': {
             isolatedModules: true
