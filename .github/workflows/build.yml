@@ -1,4 +1,4 @@
-name: CI
+name: Build
 
 on:
   push:
@@ -28,6 +28,7 @@ jobs:
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
+          eslint_extensions: ts
           prettier: true
 
       - name: '🧪 Test'
