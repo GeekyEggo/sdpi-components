@@ -30,7 +30,8 @@ jobs:
           eslint: true
           eslint_extensions: ts
           prettier: true
-          prettier_args: '--config .prettierrc "./src/**/*.ts"'
+          prettier_dir: src/
+          prettier__extensions: ts
 
       - name: '🧪 Test'
         run: npm run test
