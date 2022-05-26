@@ -1,4 +1,4 @@
-import { ComplexAttributeConverter } from 'lit';
+import { PropertyDeclaration } from 'lit';
 
 import { get, merge } from './utils';
 
@@ -51,7 +51,7 @@ export class Internationalization {
      * Initializes internationalization, defining the fallback language, and any available translations.
      * @param settings The internationalization settings.
      */
-    public async init(settings: DeepPartial<i18nSettings>): Promise<void> {
+    public init(settings: DeepPartial<i18nSettings>) {
         if (this._isInitialized) {
             throw 'Cannot initialize i18n settings after they have been initialized';
         }
@@ -88,17 +88,33 @@ export class Internationalization {
 }
 
 /**
- * Provides a coverter for Lit properties that enables the conversion to/from attributes.
+ * Provides the options for a property that represents a LocalizedString.
  */
-export const localizedStringConverter: ComplexAttributeConverter<LocalizedString | undefined> = {
+export const localizedStringPropertyOptions: PropertyDeclaration<LocalizedString | undefined> = {
     /** @inheritdoc */
-    fromAttribute(value: string | null): LocalizedString | undefined {
-        return value !== null ? i18n.translate(value) : undefined;
-    },
+    hasChanged(value: LocalizedString | undefined, oldValue: LocalizedString | undefined): boolean {
+        // Both are undefined or null, no change.
+        if (!value && !oldValue) {
+            return false;
+        }
 
-    /** @inheritdoc */
-    toAttribute(value: LocalizedString | undefined): unknown {
-        return value?.key;
+        // One is undefined or null, change.
+        if (!value || !oldValue) {
+            return true;
+        }
+
+        return oldValue.language !== value.language || oldValue.key !== value.key;
+    },
+    converter: {
+        /** @inheritdoc */
+        fromAttribute(value: string | null): LocalizedString | undefined {
+            return value !== null ? i18n.translate(value) : undefined;
+        },
+
+        /** @inheritdoc */
+        toAttribute(value: LocalizedString | undefined): unknown {
+            return value?.key;
+        }
     }
 };
 

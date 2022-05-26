@@ -1308,12 +1308,73 @@
         n$3('sdpi-range')
     ], Range);
 
+    class LocalizedString {
+        constructor(language, key, value) {
+            this.language = language;
+            this.key = key;
+            this.value = value;
+        }
+        toString() {
+            return this.value || '';
+        }
+    }
+    class Internationalization {
+        constructor() {
+            this._isInitialized = false;
+            this.settings = {
+                language: window.navigator.language ? window.navigator.language.split('-')[0] : 'en',
+                fallbackLanguage: 'en'
+            };
+        }
+        init(settings) {
+            if (this._isInitialized) {
+                throw 'Cannot initialize i18n settings after they have been initialized';
+            }
+            this.settings = merge(this.settings, settings);
+            this._isInitialized = true;
+        }
+        translate(key) {
+            if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
+                return new LocalizedString(undefined, key, key);
+            }
+            const propertyKey = key.substring(2, key.length - 2);
+            const localize = (lang) => {
+                var _a;
+                const translation = get(`${lang}.translations.${propertyKey}`, (_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales);
+                return translation ? new LocalizedString(lang, key, translation) : undefined;
+            };
+            if (this.settings.language === this.settings.fallbackLanguage) {
+                return localize(this.settings.language) || new LocalizedString(undefined, key, key);
+            }
+            return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(undefined, key, key);
+        }
+    }
+    const localizedStringPropertyOptions = {
+        hasChanged(value, oldValue) {
+            if (!value && !oldValue) {
+                return false;
+            }
+            if (!value || !oldValue) {
+                return true;
+            }
+            return oldValue.language !== value.language || oldValue.key !== value.key;
+        },
+        converter: {
+            fromAttribute(value) {
+                return value !== null ? i18n.translate(value) : undefined;
+            },
+            toAttribute(value) {
+                return value === null || value === void 0 ? void 0 : value.key;
+            }
+        }
+    };
+    const i18n = new Internationalization();
+
     let SdpiItem = class SdpiItem extends s$1 {
         render() {
-            const label = this.label ? $ `<label>${this.label}:</label>` : undefined;
             return $ `
             <div class="container grid">
-                <div class="label"><label @click=${this.handleLabelClick}>${label}</label></div>
+                <div class="label"><label @click=${this.handleLabelClick}>${this.label}</label></div>
                 <div class="content"><slot></slot></div>
             </div>
         `;
@@ -1367,8 +1428,8 @@
         `
     ];
     __decorate([
-        e$3(),
-        __metadata("design:type", String)
+        e$3(localizedStringPropertyOptions),
+        __metadata("design:type", LocalizedString)
     ], SdpiItem.prototype, "label", void 0);
     SdpiItem = __decorate([
         n$3('sdpi-item')
@@ -1582,49 +1643,6 @@
         }
         streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, JSON.parse(info), JSON.parse(actionInfo));
     };
-
-    class LocalizedString {
-        constructor(language, key, value) {
-            this.language = language;
-            this.key = key;
-            this.value = value;
-        }
-        toString() {
-            return this.value || '';
-        }
-    }
-    class Internationalization {
-        constructor() {
-            this._isInitialized = false;
-            this.settings = {
-                language: window.navigator.language ? window.navigator.language.split('-')[0] : 'en',
-                fallbackLanguage: 'en'
-            };
-        }
-        async init(settings) {
-            if (this._isInitialized) {
-                throw 'Cannot initialize i18n settings after they have been initialized';
-            }
-            this.settings = merge(this.settings, settings);
-            this._isInitialized = true;
-        }
-        translate(key) {
-            if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
-                return new LocalizedString(undefined, key, key);
-            }
-            const propertyKey = key.substring(2, key.length - 2);
-            const localize = (lang) => {
-                var _a;
-                const translation = get(`${lang}.translations.${propertyKey}`, (_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales);
-                return translation ? new LocalizedString(lang, key, translation) : undefined;
-            };
-            if (this.settings.language === this.settings.fallbackLanguage) {
-                return localize(this.settings.language) || new LocalizedString(undefined, key, key);
-            }
-            return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(undefined, key, key);
-        }
-    }
-    const i18n = new Internationalization();
 
     var SDPIComponents;
     (function (SDPIComponents) {
