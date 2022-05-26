@@ -215,6 +215,29 @@
             return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
         }, target);
     }
+    const isObject = (item) => {
+        return item && typeof item === 'object' && !Array.isArray(item) ? true : false;
+    };
+    const merge = (target, ...sources) => {
+        if (!sources.length) {
+            return target;
+        }
+        const source = sources.shift();
+        if (isObject(target) && isObject(source)) {
+            for (const key in source) {
+                if (isObject(source[key])) {
+                    if (!target[key]) {
+                        Object.assign(target, { [key]: {} });
+                    }
+                    merge(target[key], source[key]);
+                }
+                else {
+                    Object.assign(target, { [key]: source[key] });
+                }
+            }
+        }
+        return merge(target, ...sources);
+    };
 
     const Checkable = (superClass) => {
         class Checkable extends superClass {
@@ -1560,11 +1583,55 @@
         streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, JSON.parse(info), JSON.parse(actionInfo));
     };
 
+    class LocalizedString {
+        constructor(language, key, value) {
+            this.language = language;
+            this.key = key;
+            this.value = value;
+        }
+        toString() {
+            return this.value || '';
+        }
+    }
+    class Internationalization {
+        constructor() {
+            this._isInitialized = false;
+            this.settings = {
+                language: window.navigator.language ? window.navigator.language.split('-')[0] : 'en',
+                fallbackLanguage: 'en'
+            };
+        }
+        async init(settings) {
+            if (this._isInitialized) {
+                throw 'Cannot initialize i18n settings after they have been initialized';
+            }
+            this.settings = merge(this.settings, settings);
+            this._isInitialized = true;
+        }
+        translate(key) {
+            if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
+                return new LocalizedString(undefined, key, key);
+            }
+            const propertyKey = key.substring(2, key.length - 2);
+            const localize = (lang) => {
+                var _a;
+                const translation = get(`${lang}.translations.${propertyKey}`, (_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales);
+                return translation ? new LocalizedString(lang, key, translation) : undefined;
+            };
+            if (this.settings.language === this.settings.fallbackLanguage) {
+                return localize(this.settings.language) || new LocalizedString(undefined, key, key);
+            }
+            return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(undefined, key, key);
+        }
+    }
+    const i18n = new Internationalization();
+
     var SDPIComponents;
     (function (SDPIComponents) {
         SDPIComponents.streamDeckClient = streamDeckClient;
         SDPIComponents.useGlobalSettings = useGlobalSettings;
         SDPIComponents.useSettings = useSettings;
+        SDPIComponents.i18n = i18n;
     })(SDPIComponents || (SDPIComponents = {}));
     window.SDPIComponents = SDPIComponents;
 
