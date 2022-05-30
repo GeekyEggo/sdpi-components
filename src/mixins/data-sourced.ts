@@ -69,6 +69,10 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
                 }
 
                 const result = await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => msg.payload?.event === this.dataSource, { event: this.dataSource });
+                if (i18n.isInitialized) {
+                    this.localize(result.payload.items);
+                }
+
                 return result.payload.items;
             },
             () => [this.dataSource, this._itemsDirtyFlag]
@@ -121,6 +125,22 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
             };
 
             return this._mutationObserver.items.reduce(reducer, []);
+        }
+
+        /**
+         * Localizes all labels of the specified items, and their children.
+         * @param items The items to localize.
+         */
+        private localize(items: DataSourceResultItem[]) {
+            for (const item of items) {
+                if (item.label) {
+                    item.label = i18n.translate(item.label.toString());
+                }
+
+                if ((<ItemGroup>item).children) {
+                    this.localize((<ItemGroup>item).children);
+                }
+            }
         }
 
         /**

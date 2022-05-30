@@ -341,6 +341,10 @@
                 fallbackLanguage: 'en'
             };
         }
+        get isInitialized() {
+            var _a;
+            return this._isInitialized && ((_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales) !== undefined;
+        }
         init(settings) {
             if (this._isInitialized) {
                 throw 'Cannot initialize i18n settings after they have been initialized';
@@ -349,7 +353,7 @@
             this._isInitialized = true;
         }
         translate(key) {
-            if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
+            if (!this.isInitialized || !key || !key.startsWith('__') || !key.endsWith('__')) {
                 return new LocalizedString(key);
             }
             const propertyKey = key.substring(2, key.length - 2);
@@ -492,6 +496,9 @@
                         return this.getItemsFromChildNodes();
                     }
                     const result = await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => { var _a; return ((_a = msg.payload) === null || _a === void 0 ? void 0 : _a.event) === this.dataSource; }, { event: this.dataSource });
+                    if (i18n.isInitialized) {
+                        this.localize(result.payload.items);
+                    }
                     return result.payload.items;
                 }, () => [this.dataSource, this._itemsDirtyFlag]);
                 this._mutationObserver.observe(this);
@@ -531,6 +538,16 @@
                     return items;
                 };
                 return this._mutationObserver.items.reduce(reducer, []);
+            }
+            localize(items) {
+                for (const item of items) {
+                    if (item.label) {
+                        item.label = i18n.translate(item.label.toString());
+                    }
+                    if (item.children) {
+                        this.localize(item.children);
+                    }
+                }
             }
             isItem(object) {
                 return object && object.value !== undefined;

@@ -50,6 +50,13 @@ export class Internationalization {
     }
 
     /**
+     * Determines whether the internationalization has been initialized, and has locales.
+     */
+    public get isInitialized(): boolean {
+        return this._isInitialized && this.settings?.locales !== undefined;
+    }
+
+    /**
      * Initializes internationalization, defining the fallback language, and any available translations.
      * @param settings The internationalization settings.
      */
@@ -69,7 +76,7 @@ export class Internationalization {
      */
     public translate(key: string | undefined): LocalizedString {
         // Determine if we can translate.
-        if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
+        if (!this.isInitialized || !key || !key.startsWith('__') || !key.endsWith('__')) {
             return new LocalizedString(key);
         }
 
