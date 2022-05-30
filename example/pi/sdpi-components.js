@@ -308,7 +308,7 @@
                 <label class="checkable-container">
                     ${input}
                     <span class="checkable-symbol" role=${type}></span>
-                    ${label ? $ `<span class="checkable-text">${label}</span>` : undefined}
+                    ${label && label.value ? $ `<span class="checkable-text">${label}</span>` : undefined}
                 </label>
             `;
             }
@@ -321,6 +321,68 @@
      * Copyright 2017 Google LLC
      * SPDX-License-Identifier: BSD-3-Clause
      */const i$1={INITIAL:0,PENDING:1,COMPLETE:2,ERROR:3},s=Symbol();class h$2{constructor(t,i,s){this.t=0,this.status=0,this.autoRun=!0,this.i=t,this.i.addController(this);const h="object"==typeof i?i:{task:i,args:s};this.h=h.task,this.o=h.args,void 0!==h.autoRun&&(this.autoRun=h.autoRun),this.taskComplete=new Promise(((t,i)=>{this.l=t,this.u=i;}));}hostUpdated(){this.performTask();}async performTask(){var t;const i=null===(t=this.o)||void 0===t?void 0:t.call(this);this.shouldRun(i)&&this.run(i);}shouldRun(t){return this.autoRun&&this.v(t)}async run(t){var i;let h,r;null!=t||(t=null===(i=this.o)||void 0===i?void 0:i.call(this)),2!==this.status&&3!==this.status||(this.taskComplete=new Promise(((t,i)=>{this.l=t,this.u=i;}))),this.status=1,this.m=void 0,this.p=void 0,this.i.requestUpdate();const o=++this.t;try{h=await this.h(t);}catch(t){r=t;}this.t===o&&(h===s?this.status=0:(void 0===r?(this.status=2,this.l(h)):(this.status=3,this.u(r)),this.p=h,this.m=r),this.i.requestUpdate());}get value(){return this.p}get error(){return this.m}render(t){var i,s,h,r;switch(this.status){case 0:return null===(i=t.initial)||void 0===i?void 0:i.call(t);case 1:return null===(s=t.pending)||void 0===s?void 0:s.call(t);case 2:return null===(h=t.complete)||void 0===h?void 0:h.call(t,this.value);case 3:return null===(r=t.error)||void 0===r?void 0:r.call(t,this.error);default:this.status;}}v(i){const s=this.g;return this.g=i,Array.isArray(i)&&Array.isArray(s)?i.length===s.length&&i.some(((i,h)=>n$6(i,s[h]))):i!==s}}
+
+    class LocalizedString {
+        constructor(language, key, value) {
+            this.language = language;
+            this.key = key;
+            this.value = value;
+        }
+        toString() {
+            return this.value || '';
+        }
+    }
+    class Internationalization {
+        constructor() {
+            this._isInitialized = false;
+            this.settings = {
+                language: window.navigator.language ? window.navigator.language.split('-')[0] : 'en',
+                fallbackLanguage: 'en'
+            };
+        }
+        init(settings) {
+            if (this._isInitialized) {
+                throw 'Cannot initialize i18n settings after they have been initialized';
+            }
+            this.settings = merge(this.settings, settings);
+            this._isInitialized = true;
+        }
+        translate(key) {
+            if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
+                return new LocalizedString(undefined, key, key);
+            }
+            const propertyKey = key.substring(2, key.length - 2);
+            const localize = (lang) => {
+                var _a;
+                const translation = get(`${lang}.translations.${propertyKey}`, (_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales);
+                return translation ? new LocalizedString(lang, key, translation) : undefined;
+            };
+            if (this.settings.language === this.settings.fallbackLanguage) {
+                return localize(this.settings.language) || new LocalizedString(undefined, key, key);
+            }
+            return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(undefined, key, key);
+        }
+    }
+    const localizedStringPropertyOptions = {
+        hasChanged(value, oldValue) {
+            if (!value && !oldValue) {
+                return false;
+            }
+            if (!value || !oldValue) {
+                return true;
+            }
+            return oldValue.language !== value.language || oldValue.key !== value.key;
+        },
+        converter: {
+            fromAttribute(value) {
+                return value !== null ? i18n.translate(value) : undefined;
+            },
+            toAttribute(value) {
+                return value === null || value === void 0 ? void 0 : value.key;
+            }
+        }
+    };
+    const i18n = new Internationalization();
 
     class StreamDeckClient {
         constructor() {
@@ -454,14 +516,14 @@
                 const reducer = (items, node) => {
                     if (node instanceof HTMLOptGroupElement) {
                         items.push({
-                            label: node.label,
+                            label: i18n.translate(node.label),
                             children: Array.from(node.childNodes).reduce(reducer, [])
                         });
                     }
                     else if (node instanceof HTMLOptionElement) {
                         items.push({
                             disabled: node.disabled,
-                            label: node.text,
+                            label: i18n.translate(node.text),
                             value: node.value
                         });
                     }
@@ -954,8 +1016,8 @@
         }
     };
     __decorate([
-        e$3(),
-        __metadata("design:type", String)
+        e$3(localizedStringPropertyOptions),
+        __metadata("design:type", LocalizedString)
     ], Checkbox.prototype, "label", void 0);
     Checkbox = __decorate([
         n$3('sdpi-checkbox')
@@ -1307,68 +1369,6 @@
     Range = __decorate([
         n$3('sdpi-range')
     ], Range);
-
-    class LocalizedString {
-        constructor(language, key, value) {
-            this.language = language;
-            this.key = key;
-            this.value = value;
-        }
-        toString() {
-            return this.value || '';
-        }
-    }
-    class Internationalization {
-        constructor() {
-            this._isInitialized = false;
-            this.settings = {
-                language: window.navigator.language ? window.navigator.language.split('-')[0] : 'en',
-                fallbackLanguage: 'en'
-            };
-        }
-        init(settings) {
-            if (this._isInitialized) {
-                throw 'Cannot initialize i18n settings after they have been initialized';
-            }
-            this.settings = merge(this.settings, settings);
-            this._isInitialized = true;
-        }
-        translate(key) {
-            if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
-                return new LocalizedString(undefined, key, key);
-            }
-            const propertyKey = key.substring(2, key.length - 2);
-            const localize = (lang) => {
-                var _a;
-                const translation = get(`${lang}.translations.${propertyKey}`, (_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales);
-                return translation ? new LocalizedString(lang, key, translation) : undefined;
-            };
-            if (this.settings.language === this.settings.fallbackLanguage) {
-                return localize(this.settings.language) || new LocalizedString(undefined, key, key);
-            }
-            return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(undefined, key, key);
-        }
-    }
-    const localizedStringPropertyOptions = {
-        hasChanged(value, oldValue) {
-            if (!value && !oldValue) {
-                return false;
-            }
-            if (!value || !oldValue) {
-                return true;
-            }
-            return oldValue.language !== value.language || oldValue.key !== value.key;
-        },
-        converter: {
-            fromAttribute(value) {
-                return value !== null ? i18n.translate(value) : undefined;
-            },
-            toAttribute(value) {
-                return value === null || value === void 0 ? void 0 : value.key;
-            }
-        }
-    };
-    const i18n = new Internationalization();
 
     let SdpiItem = class SdpiItem extends s$1 {
         render() {

@@ -3,6 +3,7 @@ import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
 import { FilteredMutationObserver } from '../core';
+import i18n, { LocalizedString } from '../core/i18n';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 export type DataSourceResult = DataSourceResultItem[];
@@ -10,12 +11,12 @@ export type DataSourceResultItem = Item | ItemGroup;
 
 export type Item = {
     disabled?: boolean;
-    label?: string;
+    label?: LocalizedString | string;
     value: string;
 };
 
 export type ItemGroup = {
-    label?: string;
+    label?: LocalizedString | string;
     children: Item[];
 };
 
@@ -103,13 +104,13 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
             const reducer = (items: DataSourceResult, node: Node): DataSourceResult => {
                 if (node instanceof HTMLOptGroupElement) {
                     items.push(<ItemGroup>{
-                        label: node.label,
+                        label: i18n.translate(node.label),
                         children: Array.from(node.childNodes).reduce(reducer, [])
                     });
                 } else if (node instanceof HTMLOptionElement) {
                     items.push(<Item>{
                         disabled: node.disabled,
-                        label: node.text,
+                        label: i18n.translate(node.text),
                         value: node.value
                     });
                 }
@@ -119,6 +120,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
 
             return this._mutationObserver.items.reduce(reducer, []);
         }
+
         /**
          * Determines whether the specified object has the form of an `Item`.
          * @param object The object to check.
