@@ -1469,7 +1469,7 @@
             pending: () => $ `<option value="" disabled selected>${this.loadingText}</option>`,
             complete: () => $ `
                         <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined} .selected=${this.value === undefined}>${this.placeholder}</option>
-                        ${this.renderDataSource((item) => $ `<option .disabled=${item.disabled || false} .value=${item.value} .selected=${item.value === this.value}>${item.label}</option>`, (group, children) => $ `<optgroup .label=${group.label || ''}>${children}</optgroup>`)}
+                        ${this.renderDataSource((item) => $ `<option .disabled=${item.disabled || false} .value=${item.value} .selected=${item.value === this.value}>${item.label}</option>`, (group, children) => { var _a; return $ `<optgroup .label=${((_a = group.label) === null || _a === void 0 ? void 0 : _a.toString()) || ''}>${children}</optgroup>`; })}
                     `
         })}
             </select>
@@ -1477,8 +1477,8 @@
         }
     };
     __decorate([
-        e$3(),
-        __metadata("design:type", String)
+        e$3(localizedStringPropertyOptions),
+        __metadata("design:type", LocalizedString)
     ], Select.prototype, "placeholder", void 0);
     Select = __decorate([
         n$3('sdpi-select')

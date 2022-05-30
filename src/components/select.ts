@@ -3,6 +3,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
+import { LocalizedString, localizedStringPropertyOptions } from '../core/i18n';
 import { DataSourced, Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
@@ -34,8 +35,8 @@ export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElem
     /**
      * The optional placeholder text; added as the first item within the select, as a disable option, and selected by default.
      */
-    @property()
-    public placeholder?: string;
+    @property(localizedStringPropertyOptions)
+    public placeholder?: LocalizedString;
 
     /** @inheritdoc */
     protected render() {
@@ -52,7 +53,7 @@ export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElem
                         <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined} .selected=${this.value === undefined}>${this.placeholder}</option>
                         ${this.renderDataSource(
                             (item) => html`<option .disabled=${item.disabled || false} .value=${item.value} .selected=${item.value === this.value}>${item.label}</option>`,
-                            (group, children) => html`<optgroup .label=${group.label || ''}>${children}</optgroup>`
+                            (group, children) => html`<optgroup .label=${group.label?.toString() || ''}>${children}</optgroup>`
                         )}
                     `
                 })}
