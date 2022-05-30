@@ -1565,7 +1565,6 @@
         constructor() {
             super(...arguments);
             this.pattern = '';
-            this.placeholder = '';
             this.required = false;
         }
         static get styles() {
@@ -1598,6 +1597,7 @@
             ];
         }
         render() {
+            var _a;
             return $ `
             <input
                 ${n(this.focusElement)}
@@ -1605,7 +1605,7 @@
                 maxlength=${l(this.maxLength)}
                 .disabled=${this.disabled}
                 .pattern=${this.pattern}
-                .placeholder=${this.placeholder}
+                .placeholder=${((_a = this.placeholder) === null || _a === void 0 ? void 0 : _a.toString()) || ''}
                 .required=${this.required}
                 .value=${this.value || ''}
                 @input=${(ev) => (this.value = ev.target.value)}
@@ -1625,8 +1625,8 @@
         __metadata("design:type", Object)
     ], Textfield.prototype, "pattern", void 0);
     __decorate([
-        e$3(),
-        __metadata("design:type", Object)
+        e$3(localizedStringPropertyOptions),
+        __metadata("design:type", LocalizedString)
     ], Textfield.prototype, "placeholder", void 0);
     __decorate([
         e$3({ type: Boolean }),

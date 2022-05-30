@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
+import { LocalizedString, localizedStringPropertyOptions } from '../core/i18n';
 import { Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
@@ -57,8 +58,8 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
     /**
      * The optional placeholder text to be shown within the input.
      */
-    @property()
-    public placeholder = '';
+    @property(localizedStringPropertyOptions)
+    public placeholder?: LocalizedString;
 
     /**
      * Determines whether the setting is required.
@@ -75,7 +76,7 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
                 maxlength=${ifDefined(this.maxLength)}
                 .disabled=${this.disabled}
                 .pattern=${this.pattern}
-                .placeholder=${this.placeholder}
+                .placeholder=${this.placeholder?.toString() || ''}
                 .required=${this.required}
                 .value=${this.value || ''}
                 @input=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
