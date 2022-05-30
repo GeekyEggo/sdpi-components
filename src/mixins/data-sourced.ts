@@ -3,7 +3,7 @@ import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
 import { FilteredMutationObserver } from '../core';
-import i18n, { LocalizedString } from '../core/i18n';
+import i18n, { LocalizedString, localizedStringPropertyOptions } from '../core/i18n';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 export type DataSourceResult = DataSourceResultItem[];
@@ -52,9 +52,11 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
          * The text to display when the data source task is pending.
          */
         @property({
-            attribute: 'loading'
+            attribute: 'loading',
+            hasChanged: localizedStringPropertyOptions.hasChanged,
+            converter: localizedStringPropertyOptions.converter
         })
-        public loadingText = 'Loading...';
+        public loadingText = new LocalizedString('Loading...');
 
         /**
          * Gets the items within the data source as a task; these are either loaded from the child nodes, or the Stream Deck, based on the existence of `dataSource`.

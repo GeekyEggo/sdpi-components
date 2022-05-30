@@ -323,10 +323,11 @@
      */const i$1={INITIAL:0,PENDING:1,COMPLETE:2,ERROR:3},s=Symbol();class h$2{constructor(t,i,s){this.t=0,this.status=0,this.autoRun=!0,this.i=t,this.i.addController(this);const h="object"==typeof i?i:{task:i,args:s};this.h=h.task,this.o=h.args,void 0!==h.autoRun&&(this.autoRun=h.autoRun),this.taskComplete=new Promise(((t,i)=>{this.l=t,this.u=i;}));}hostUpdated(){this.performTask();}async performTask(){var t;const i=null===(t=this.o)||void 0===t?void 0:t.call(this);this.shouldRun(i)&&this.run(i);}shouldRun(t){return this.autoRun&&this.v(t)}async run(t){var i;let h,r;null!=t||(t=null===(i=this.o)||void 0===i?void 0:i.call(this)),2!==this.status&&3!==this.status||(this.taskComplete=new Promise(((t,i)=>{this.l=t,this.u=i;}))),this.status=1,this.m=void 0,this.p=void 0,this.i.requestUpdate();const o=++this.t;try{h=await this.h(t);}catch(t){r=t;}this.t===o&&(h===s?this.status=0:(void 0===r?(this.status=2,this.l(h)):(this.status=3,this.u(r)),this.p=h,this.m=r),this.i.requestUpdate());}get value(){return this.p}get error(){return this.m}render(t){var i,s,h,r;switch(this.status){case 0:return null===(i=t.initial)||void 0===i?void 0:i.call(t);case 1:return null===(s=t.pending)||void 0===s?void 0:s.call(t);case 2:return null===(h=t.complete)||void 0===h?void 0:h.call(t,this.value);case 3:return null===(r=t.error)||void 0===r?void 0:r.call(t,this.error);default:this.status;}}v(i){const s=this.g;return this.g=i,Array.isArray(i)&&Array.isArray(s)?i.length===s.length&&i.some(((i,h)=>n$6(i,s[h]))):i!==s}}
 
     class LocalizedString {
-        constructor(language, key, value) {
-            this.language = language;
-            this.key = key;
+        constructor(value, key, language) {
             this.value = value;
+            this.key = key;
+            this.language = language;
+            this.key = this.key || this.value;
         }
         toString() {
             return this.value || '';
@@ -349,18 +350,18 @@
         }
         translate(key) {
             if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
-                return new LocalizedString(undefined, key, key);
+                return new LocalizedString(key);
             }
             const propertyKey = key.substring(2, key.length - 2);
             const localize = (lang) => {
                 var _a;
                 const translation = get(`${lang}.translations.${propertyKey}`, (_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales);
-                return translation ? new LocalizedString(lang, key, translation) : undefined;
+                return translation ? new LocalizedString(translation, key, lang) : undefined;
             };
             if (this.settings.language === this.settings.fallbackLanguage) {
-                return localize(this.settings.language) || new LocalizedString(undefined, key, key);
+                return localize(this.settings.language) || new LocalizedString(key);
             }
-            return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(undefined, key, key);
+            return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(key);
         }
     }
     const localizedStringPropertyOptions = {
@@ -485,7 +486,7 @@
                 super(args);
                 this._itemsDirtyFlag = false;
                 this._mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => (this._itemsDirtyFlag = !this._itemsDirtyFlag));
-                this.loadingText = 'Loading...';
+                this.loadingText = new LocalizedString('Loading...');
                 this.items = new h$2(this, async ([dataSource]) => {
                     if (dataSource === undefined) {
                         return this.getItemsFromChildNodes();
@@ -548,7 +549,9 @@
         ], DataSourced.prototype, "dataSource", void 0);
         __decorate([
             e$3({
-                attribute: 'loading'
+                attribute: 'loading',
+                hasChanged: localizedStringPropertyOptions.hasChanged,
+                converter: localizedStringPropertyOptions.converter
             }),
             __metadata("design:type", Object)
         ], DataSourced.prototype, "loadingText", void 0);

@@ -18,11 +18,13 @@ export type i18nSettings = {
 export class LocalizedString {
     /**
      * Initializes a new localized string.
-     * @param language The language.
-     * @param key The key of the translation.
      * @param value The translated value.
+     * @param key The key of the translation.
+     * @param language The language.
      */
-    constructor(public language?: string, public key?: string, public value?: string) {}
+    constructor(public value?: string, public key?: string, public language?: string) {
+        this.key = this.key || this.value;
+    }
 
     /** @inheritdoc */
     public toString(): string {
@@ -68,22 +70,22 @@ export class Internationalization {
     public translate(key: string | undefined): LocalizedString {
         // Determine if we can translate.
         if (!this._isInitialized || !this.settings.locales || !key || !key.startsWith('__') || !key.endsWith('__')) {
-            return new LocalizedString(undefined, key, key);
+            return new LocalizedString(key);
         }
 
         // Determine the property name, and localize helper.
         const propertyKey = key.substring(2, key.length - 2);
         const localize = (lang: string): LocalizedString | undefined => {
             const translation = get(`${lang}.translations.${propertyKey}`, this.settings?.locales);
-            return translation ? new LocalizedString(lang, key, translation) : undefined;
+            return translation ? new LocalizedString(translation, key, lang) : undefined;
         };
 
         // When the language and fallback are the same, only check the language.
         if (this.settings.language === this.settings.fallbackLanguage) {
-            return localize(this.settings.language) || new LocalizedString(undefined, key, key);
+            return localize(this.settings.language) || new LocalizedString(key);
         }
 
-        return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(undefined, key, key);
+        return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(key);
     }
 }
 
