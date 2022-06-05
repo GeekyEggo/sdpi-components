@@ -23,9 +23,14 @@ export class LocalizedString {
     /**
      * Gets the localized string associated with the `messageName`.
      * @param messageName The message name; this should follow the format `__MSG_messageName__`.
+     * @param options The optional options; this allows for formatting the message name if it does not follow the expected format.
      * @returns The localized string.
      */
-    public static getMessage(messageName: string): string {
+    public static getMessage(messageName: string, options: { allowPartialMessageName: boolean } = { allowPartialMessageName: false }): string {
+        if (options.allowPartialMessageName && !LocalizedString.tryParseMessageName(messageName).success) {
+            messageName = `__MSG_${messageName}__`;
+        }
+
         return new LocalizedString(messageName).toString();
     }
 

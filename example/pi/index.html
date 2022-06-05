@@ -14,7 +14,8 @@
                 green: 'Green',
                 blue: 'Blue',
                 black: 'Black',
-                white: 'White'
+                white: 'White',
+                click_me: 'Click me'
             }
         };
     </script>
@@ -23,7 +24,9 @@
 <body>
     <!-- Button -->
     <sdpi-item>
-        <sdpi-button onclick="javascript:alert('Hello World')">Click me</sdpi-button>
+        <sdpi-button onclick="javascript:alert('Hello World')">
+            <sdpi-i18n key="click_me"></sdpi-i18n>
+        </sdpi-button>
     </sdpi-item>
 
     <!-- Checkbox -->

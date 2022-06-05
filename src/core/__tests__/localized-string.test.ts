@@ -93,6 +93,18 @@ describe('LocalizedString', () => {
             const value = LocalizedString.getMessage('__MSG_greeting__');
             expect(value).toBe('Hello world');
         });
+
+        it('should not change partial names by default', () => {
+            // given, when, then.
+            const value = LocalizedString.getMessage('greeting');
+            expect(value).toBe('greeting');
+        });
+
+        it('should format a partial name when the options allow', () => {
+            // given, when, then.
+            const value = LocalizedString.getMessage('greeting', { allowPartialMessageName: true });
+            expect(value).toBe('Hello world');
+        });
     });
 });
 

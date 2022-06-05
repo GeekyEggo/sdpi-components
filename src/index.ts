@@ -5,6 +5,7 @@ import './components/checkbox';
 import './components/checkbox-list';
 import './components/color';
 import './components/file';
+import './components/i18n';
 import './components/password';
 import './components/radio';
 import './components/range';

@@ -227,7 +227,10 @@
             const parse = LocalizedString.tryParseMessageName(messageName);
             this.value = (parse.success ? i18n.getMessage(parse.messageName) : messageName) || messageName;
         }
-        static getMessage(messageName) {
+        static getMessage(messageName, options = { allowPartialMessageName: false }) {
+            if (options.allowPartialMessageName && !LocalizedString.tryParseMessageName(messageName).success) {
+                messageName = `__MSG_${messageName}__`;
+            }
             return new LocalizedString(messageName).toString();
         }
         static tryParseMessageName(value) {
@@ -1169,6 +1172,19 @@
     File = __decorate([
         n$3('sdpi-file')
     ], File);
+
+    let i18nElement = class i18nElement extends s$1 {
+        render() {
+            return this.key ? $ `${LocalizedString.getMessage(this.key, { allowPartialMessageName: true })}` : undefined;
+        }
+    };
+    __decorate([
+        e$3(),
+        __metadata("design:type", String)
+    ], i18nElement.prototype, "key", void 0);
+    i18nElement = __decorate([
+        n$3('sdpi-i18n')
+    ], i18nElement);
 
     let Password = class Password extends Persisted(Focusable(Input(s$1))) {
         static get styles() {
