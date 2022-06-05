@@ -1,6 +1,6 @@
 /**!
  * @license
- * sdpi-components v2.0.1, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+ * sdpi-components v3.0.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
  * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
  */
 (function () {
@@ -176,22 +176,6 @@
         }
     }
 
-    function delay(callback, timeout) {
-        let handle;
-        let pcs;
-        return (data, ...args) => {
-            clearTimeout(handle);
-            pcs = pcs || new PromiseCompletionSource();
-            handle = setTimeout(async () => {
-                const innerPcs = pcs;
-                pcs = undefined;
-                await callback(data);
-                innerPcs === null || innerPcs === void 0 ? void 0 : innerPcs.setResult();
-            }, timeout, args);
-            return pcs.promise;
-        };
-    }
-
     function asArray(styles) {
         if (styles === undefined) {
             return [];
@@ -215,29 +199,89 @@
             return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
         }, target);
     }
-    const isObject = (item) => {
-        return item && typeof item === 'object' && !Array.isArray(item) ? true : false;
-    };
-    const merge = (target, ...sources) => {
-        if (!sources.length) {
-            return target;
+
+    class Internationalization {
+        constructor() {
+            this.language = this.getUILanguage();
+            this.fallbackLanguage = 'en';
         }
-        const source = sources.shift();
-        if (isObject(target) && isObject(source)) {
-            for (const key in source) {
-                if (isObject(source[key])) {
-                    if (!target[key]) {
-                        Object.assign(target, { [key]: {} });
-                    }
-                    merge(target[key], source[key]);
+        getMessage(messageName) {
+            if (!this.locales || messageName === undefined) {
+                return '';
+            }
+            const localize = (lang) => get(`${lang}.${messageName}`, this.locales);
+            if (this.language === this.fallbackLanguage) {
+                return localize(this.language) || '';
+            }
+            return localize(this.language) || localize(this.fallbackLanguage) || '';
+        }
+        getUILanguage() {
+            return window.navigator.language ? window.navigator.language.split('-')[0] : 'en';
+        }
+    }
+    const i18n = new Internationalization();
+
+    class LocalizedString {
+        constructor(messageName) {
+            this.messageName = messageName;
+            const parse = LocalizedString.tryParseMessageName(messageName);
+            this.value = (parse.success ? i18n.getMessage(parse.messageName) : messageName) || messageName;
+        }
+        static getMessage(messageName) {
+            return new LocalizedString(messageName).toString();
+        }
+        static tryParseMessageName(value) {
+            return value && value.startsWith('__MSG_') && value.endsWith('__')
+                ? {
+                    success: true,
+                    messageName: value.substring(6, value.length - 2)
                 }
-                else {
-                    Object.assign(target, { [key]: source[key] });
-                }
+                : {
+                    success: false
+                };
+        }
+        equals(other) {
+            return this.messageName == (other === null || other === void 0 ? void 0 : other.messageName) && this.value == (other === null || other === void 0 ? void 0 : other.value);
+        }
+        toString() {
+            return this.value || '';
+        }
+    }
+    const localizedStringPropertyOptions = {
+        hasChanged(value, oldValue) {
+            if (!value && !oldValue) {
+                return false;
+            }
+            if (!value || !oldValue) {
+                return true;
+            }
+            return value.equals(oldValue);
+        },
+        converter: {
+            fromAttribute(value) {
+                return value === null ? undefined : new LocalizedString(value);
+            },
+            toAttribute(value) {
+                return value === null || value === void 0 ? void 0 : value.messageName;
             }
         }
-        return merge(target, ...sources);
     };
+
+    function delay(callback, timeout) {
+        let handle;
+        let pcs;
+        return (data, ...args) => {
+            clearTimeout(handle);
+            pcs = pcs || new PromiseCompletionSource();
+            handle = setTimeout(async () => {
+                const innerPcs = pcs;
+                pcs = undefined;
+                await callback(data);
+                innerPcs === null || innerPcs === void 0 ? void 0 : innerPcs.setResult();
+            }, timeout, args);
+            return pcs.promise;
+        };
+    }
 
     const Checkable = (superClass) => {
         class Checkable extends superClass {
@@ -308,7 +352,7 @@
                 <label class="checkable-container">
                     ${input}
                     <span class="checkable-symbol" role=${type}></span>
-                    ${label && label.value ? $ `<span class="checkable-text">${label}</span>` : undefined}
+                    ${label && label ? $ `<span class="checkable-text">${label}</span>` : undefined}
                 </label>
             `;
             }
@@ -321,73 +365,6 @@
      * Copyright 2017 Google LLC
      * SPDX-License-Identifier: BSD-3-Clause
      */const i$1={INITIAL:0,PENDING:1,COMPLETE:2,ERROR:3},s=Symbol();class h$2{constructor(t,i,s){this.t=0,this.status=0,this.autoRun=!0,this.i=t,this.i.addController(this);const h="object"==typeof i?i:{task:i,args:s};this.h=h.task,this.o=h.args,void 0!==h.autoRun&&(this.autoRun=h.autoRun),this.taskComplete=new Promise(((t,i)=>{this.l=t,this.u=i;}));}hostUpdated(){this.performTask();}async performTask(){var t;const i=null===(t=this.o)||void 0===t?void 0:t.call(this);this.shouldRun(i)&&this.run(i);}shouldRun(t){return this.autoRun&&this.v(t)}async run(t){var i;let h,r;null!=t||(t=null===(i=this.o)||void 0===i?void 0:i.call(this)),2!==this.status&&3!==this.status||(this.taskComplete=new Promise(((t,i)=>{this.l=t,this.u=i;}))),this.status=1,this.m=void 0,this.p=void 0,this.i.requestUpdate();const o=++this.t;try{h=await this.h(t);}catch(t){r=t;}this.t===o&&(h===s?this.status=0:(void 0===r?(this.status=2,this.l(h)):(this.status=3,this.u(r)),this.p=h,this.m=r),this.i.requestUpdate());}get value(){return this.p}get error(){return this.m}render(t){var i,s,h,r;switch(this.status){case 0:return null===(i=t.initial)||void 0===i?void 0:i.call(t);case 1:return null===(s=t.pending)||void 0===s?void 0:s.call(t);case 2:return null===(h=t.complete)||void 0===h?void 0:h.call(t,this.value);case 3:return null===(r=t.error)||void 0===r?void 0:r.call(t,this.error);default:this.status;}}v(i){const s=this.g;return this.g=i,Array.isArray(i)&&Array.isArray(s)?i.length===s.length&&i.some(((i,h)=>n$6(i,s[h]))):i!==s}}
-
-    class LocalizedString {
-        constructor(value, key, language) {
-            this.value = value;
-            this.key = key;
-            this.language = language;
-            this.key = this.key || this.value;
-        }
-        toString() {
-            return this.value || '';
-        }
-    }
-    class Internationalization {
-        constructor() {
-            this._isInitialized = false;
-            this.settings = {
-                language: window.navigator.language ? window.navigator.language.split('-')[0] : 'en',
-                fallbackLanguage: 'en'
-            };
-        }
-        get isInitialized() {
-            var _a;
-            return this._isInitialized && ((_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales) !== undefined;
-        }
-        init(settings) {
-            if (this._isInitialized) {
-                throw 'Cannot initialize i18n settings after they have been initialized';
-            }
-            this.settings = merge(this.settings, settings);
-            this._isInitialized = true;
-        }
-        translate(key) {
-            if (!this.isInitialized || !key || !key.startsWith('__') || !key.endsWith('__')) {
-                return new LocalizedString(key);
-            }
-            const propertyKey = key.substring(2, key.length - 2);
-            const localize = (lang) => {
-                var _a;
-                const translation = get(`${lang}.translations.${propertyKey}`, (_a = this.settings) === null || _a === void 0 ? void 0 : _a.locales);
-                return translation ? new LocalizedString(translation, key, lang) : undefined;
-            };
-            if (this.settings.language === this.settings.fallbackLanguage) {
-                return localize(this.settings.language) || new LocalizedString(key);
-            }
-            return localize(this.settings.language) || localize(this.settings.fallbackLanguage) || new LocalizedString(key);
-        }
-    }
-    const localizedStringPropertyOptions = {
-        hasChanged(value, oldValue) {
-            if (!value && !oldValue) {
-                return false;
-            }
-            if (!value || !oldValue) {
-                return true;
-            }
-            return oldValue.language !== value.language || oldValue.key !== value.key;
-        },
-        converter: {
-            fromAttribute(value) {
-                return value !== null ? i18n.translate(value) : undefined;
-            },
-            toAttribute(value) {
-                return value === null || value === void 0 ? void 0 : value.key;
-            }
-        }
-    };
-    const i18n = new Internationalization();
 
     class StreamDeckClient {
         constructor() {
@@ -496,7 +473,7 @@
                         return this.getItemsFromChildNodes();
                     }
                     const result = await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => { var _a; return ((_a = msg.payload) === null || _a === void 0 ? void 0 : _a.event) === this.dataSource; }, { event: this.dataSource });
-                    if (i18n.isInitialized) {
+                    if (i18n.locales) {
                         this.localize(result.payload.items);
                     }
                     return result.payload.items;
@@ -524,14 +501,14 @@
                 const reducer = (items, node) => {
                     if (node instanceof HTMLOptGroupElement) {
                         items.push({
-                            label: i18n.translate(node.label),
+                            label: LocalizedString.getMessage(node.label),
                             children: Array.from(node.childNodes).reduce(reducer, [])
                         });
                     }
                     else if (node instanceof HTMLOptionElement) {
                         items.push({
                             disabled: node.disabled,
-                            label: i18n.translate(node.text),
+                            label: LocalizedString.getMessage(node.text),
                             value: node.value
                         });
                     }
@@ -542,7 +519,7 @@
             localize(items) {
                 for (const item of items) {
                     if (item.label) {
-                        item.label = i18n.translate(item.label.toString());
+                        item.label = LocalizedString.getMessage(item.label.toString());
                     }
                     if (item.children) {
                         this.localize(item.children);

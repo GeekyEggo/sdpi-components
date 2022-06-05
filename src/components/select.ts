@@ -3,7 +3,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { LocalizedString, localizedStringPropertyOptions } from '../core/i18n';
+import { LocalizedString, localizedStringPropertyOptions } from '../core';
 import { DataSourced, Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 

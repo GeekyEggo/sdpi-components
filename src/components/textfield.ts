@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { LocalizedString, localizedStringPropertyOptions } from '../core/i18n';
+import { LocalizedString, localizedStringPropertyOptions } from '../core';
 import { Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 

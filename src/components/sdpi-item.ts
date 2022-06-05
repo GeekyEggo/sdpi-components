@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { LocalizedString, localizedStringPropertyOptions } from '../core/i18n';
+import { LocalizedString, localizedStringPropertyOptions } from '../core';
 import { IFocusable } from '../mixins';
 import { hostStyle } from '../styles/host';
 

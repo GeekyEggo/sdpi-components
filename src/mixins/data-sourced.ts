@@ -2,8 +2,7 @@ import { Task } from '@lit-labs/task';
 import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
-import { FilteredMutationObserver } from '../core';
-import i18n, { LocalizedString, localizedStringPropertyOptions } from '../core/i18n';
+import { FilteredMutationObserver, i18n, LocalizedString, localizedStringPropertyOptions } from '../core';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 export type DataSourceResult = DataSourceResultItem[];
@@ -69,7 +68,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
                 }
 
                 const result = await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => msg.payload?.event === this.dataSource, { event: this.dataSource });
-                if (i18n.isInitialized) {
+                if (i18n.locales) {
                     this.localize(result.payload.items);
                 }
 
@@ -110,13 +109,13 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
             const reducer = (items: DataSourceResult, node: Node): DataSourceResult => {
                 if (node instanceof HTMLOptGroupElement) {
                     items.push(<ItemGroup>{
-                        label: i18n.translate(node.label),
+                        label: LocalizedString.getMessage(node.label),
                         children: Array.from(node.childNodes).reduce(reducer, [])
                     });
                 } else if (node instanceof HTMLOptionElement) {
                     items.push(<Item>{
                         disabled: node.disabled,
-                        label: i18n.translate(node.text),
+                        label: LocalizedString.getMessage(node.text),
                         value: node.value
                     });
                 }
@@ -134,7 +133,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
         private localize(items: DataSourceResultItem[]) {
             for (const item of items) {
                 if (item.label) {
-                    item.label = i18n.translate(item.label.toString());
+                    item.label = LocalizedString.getMessage(item.label.toString());
                 }
 
                 if ((<ItemGroup>item).children) {
