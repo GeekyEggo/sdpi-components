@@ -51,7 +51,7 @@ export class LocalizedMessage {
      * @returns `true` when this instance is considered the same as the other localized message.
      */
     public equals(other?: LocalizedMessage): boolean {
-        return this.key == other?.key && this.value == other?.value;
+        return other !== undefined && this.key == other.key && this.value == other.value;
     }
 
     /** @inheritdoc */

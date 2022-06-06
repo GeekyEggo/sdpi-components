@@ -44,7 +44,7 @@ describe('i18n', () => {
         });
     });
 
-    describe('translate', () => {
+    describe('getMessage', () => {
         beforeEach(() => {
             i18n.locales = {
                 en: {
@@ -107,7 +107,7 @@ describe('i18n', () => {
         it('should return empty string, when language not found', () => {
             // given.
             i18n.language = 'de';
-            i18n.fallbackLanguage = 'de';
+            i18n.fallbackLanguage = 'kr';
 
             // when, then.
             const translation = i18n.getMessage('farewell');

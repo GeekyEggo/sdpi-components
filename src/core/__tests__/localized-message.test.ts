@@ -12,20 +12,20 @@ describe('LocalizedMessage', () => {
 
     it('should handle valid keys', () => {
         // given, when.
-        const localization = new LocalizedMessage('__MSG_greeting__');
+        const msg = new LocalizedMessage('__MSG_greeting__');
 
         // then.
-        expect(localization.key).toBe('__MSG_greeting__');
-        expect(localization.value).toBe('Hello world');
+        expect(msg.key).toBe('__MSG_greeting__');
+        expect(msg.value).toBe('Hello world');
     });
 
     it('should handle invalid keys', () => {
         // given, when.
-        const localization = new LocalizedMessage('other');
+        const msg = new LocalizedMessage('other');
 
         // then.
-        expect(localization.key).toBe('other');
-        expect(localization.value).toBe('other');
+        expect(msg.key).toBe('other');
+        expect(msg.value).toBe('other');
     });
 
     describe('toString', () => {
@@ -50,9 +50,18 @@ describe('LocalizedMessage', () => {
         testCases.map((testCase) => {
             it(testCase.name, () => {
                 // given, when, then.
-                const localization = new LocalizedMessage(testCase.key);
-                expect(localization.toString()).toBe(testCase.expect);
+                const msg = new LocalizedMessage(testCase.key);
+                expect(msg.toString()).toBe(testCase.expect);
             });
+        });
+
+        it('should return emnpty string when undefined', () => {
+            // given, when.
+            const msg = new LocalizedMessage('foo');
+            msg.value = undefined;
+
+            // then.
+            expect(msg.toString()).toBe('');
         });
     });
 
@@ -84,6 +93,12 @@ describe('LocalizedMessage', () => {
             // when, then.
             y.value = 'Another value';
             expect(x.equals(y)).toStrictEqual(false);
+        });
+
+        it('should return false when other is undefined', () => {
+            // given, when, then.
+            const x = new LocalizedMessage('__MSG_greeting__');
+            expect(x.equals(undefined)).toStrictEqual(false);
         });
     });
 
