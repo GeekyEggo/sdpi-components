@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { LocalizedString } from '../core';
+import { i18n } from '../core';
 
 @customElement('sdpi-i18n')
 export class i18nElement extends LitElement {
@@ -10,7 +10,7 @@ export class i18nElement extends LitElement {
 
     /** @inheritdoc */
     render() {
-        return this.key ? html`${LocalizedString.getMessage(this.key, { allowPartialMessageName: true })}` : undefined;
+        return this.key ? html`${i18n.getMessage(this.key)}` : undefined;
     }
 }
 

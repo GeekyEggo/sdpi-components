@@ -2,7 +2,7 @@ import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { LocalizedString, localizedStringPropertyOptions } from '../core/';
+import { LocalizedMessage, localizedMessagePropertyOptions } from '../core/';
 import { Checkable, Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-checkbox')
@@ -10,8 +10,8 @@ export class Checkbox extends Persisted(Focusable(Checkable(Input<typeof LitElem
     /**
      * Gets the optional label to be shown next to the check-box.
      */
-    @property(localizedStringPropertyOptions)
-    public label?: LocalizedString;
+    @property(localizedMessagePropertyOptions)
+    public label?: LocalizedMessage;
 
     /** @inheritdoc */
     render() {

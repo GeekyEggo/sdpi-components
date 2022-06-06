@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { LocalizedString, localizedStringPropertyOptions } from '../core';
+import { LocalizedMessage, localizedMessagePropertyOptions } from '../core';
 import { IFocusable } from '../mixins';
 import { hostStyle } from '../styles/host';
 
@@ -50,8 +50,8 @@ export class SdpiItem extends LitElement {
     /**
      * Gets or sets the label.
      */
-    @property(localizedStringPropertyOptions)
-    public label?: LocalizedString;
+    @property(localizedMessagePropertyOptions)
+    public label?: LocalizedMessage;
 
     /** @inheritdoc */
     render() {

@@ -3,7 +3,7 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { LocalizedString, localizedStringPropertyOptions } from '../core';
+import { LocalizedMessage, localizedMessagePropertyOptions } from '../core';
 import { DataSourced, Focusable, Input, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
@@ -35,8 +35,8 @@ export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElem
     /**
      * The optional placeholder text; added as the first item within the select, as a disable option, and selected by default.
      */
-    @property(localizedStringPropertyOptions)
-    public placeholder?: LocalizedString;
+    @property(localizedMessagePropertyOptions)
+    public placeholder?: LocalizedMessage;
 
     /** @inheritdoc */
     protected render() {

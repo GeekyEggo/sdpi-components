@@ -1,9 +1,9 @@
 import { ComplexAttributeConverter } from 'lit';
 
 import i18n from '../i18n';
-import { LocalizedString, localizedStringPropertyOptions } from '../localized-string';
+import { LocalizedMessage, localizedMessagePropertyOptions } from '../localized-message';
 
-describe('LocalizedString', () => {
+describe('LocalizedMessage', () => {
     i18n.locales = {
         en: {
             greeting: 'Hello world'
@@ -12,19 +12,19 @@ describe('LocalizedString', () => {
 
     it('should handle valid keys', () => {
         // given, when.
-        const localization = new LocalizedString('__MSG_greeting__');
+        const localization = new LocalizedMessage('__MSG_greeting__');
 
         // then.
-        expect(localization.messageName).toBe('__MSG_greeting__');
+        expect(localization.key).toBe('__MSG_greeting__');
         expect(localization.value).toBe('Hello world');
     });
 
     it('should handle invalid keys', () => {
         // given, when.
-        const localization = new LocalizedString('other');
+        const localization = new LocalizedMessage('other');
 
         // then.
-        expect(localization.messageName).toBe('other');
+        expect(localization.key).toBe('other');
         expect(localization.value).toBe('other');
     });
 
@@ -50,7 +50,7 @@ describe('LocalizedString', () => {
         testCases.map((testCase) => {
             it(testCase.name, () => {
                 // given, when, then.
-                const localization = new LocalizedString(testCase.key);
+                const localization = new LocalizedMessage(testCase.key);
                 expect(localization.toString()).toBe(testCase.expect);
             });
         });
@@ -59,8 +59,8 @@ describe('LocalizedString', () => {
     describe('equals', () => {
         it('should return true when key/value are equal to other', () => {
             // given.
-            const x = new LocalizedString('__MSG_greeting__');
-            const y = new LocalizedString('__MSG_greeting__');
+            const x = new LocalizedMessage('__MSG_greeting__');
+            const y = new LocalizedMessage('__MSG_greeting__');
 
             // when, then.
             expect(x.equals(y)).toStrictEqual(true);
@@ -68,8 +68,8 @@ describe('LocalizedString', () => {
 
         it('should return false when key differs', () => {
             // given.
-            const x = new LocalizedString('__MSG_greeting__');
-            const y = new LocalizedString('__MSG_farewell__');
+            const x = new LocalizedMessage('__MSG_greeting__');
+            const y = new LocalizedMessage('__MSG_farewell__');
 
             // when, then.
             y.value = x.value;
@@ -78,8 +78,8 @@ describe('LocalizedString', () => {
 
         it('should return false when value differs', () => {
             // given.
-            const x = new LocalizedString('__MSG_greeting__');
-            const y = new LocalizedString('__MSG_greeting__');
+            const x = new LocalizedMessage('__MSG_greeting__');
+            const y = new LocalizedMessage('__MSG_greeting__');
 
             // when, then.
             y.value = 'Another value';
@@ -90,25 +90,19 @@ describe('LocalizedString', () => {
     describe('getMessage', () => {
         it('should return the value', () => {
             // given, when, then.
-            const value = LocalizedString.getMessage('__MSG_greeting__');
+            const value = LocalizedMessage.getMessage('__MSG_greeting__');
             expect(value).toBe('Hello world');
         });
 
         it('should not change partial names by default', () => {
             // given, when, then.
-            const value = LocalizedString.getMessage('greeting');
+            const value = LocalizedMessage.getMessage('greeting');
             expect(value).toBe('greeting');
-        });
-
-        it('should format a partial name when the options allow', () => {
-            // given, when, then.
-            const value = LocalizedString.getMessage('greeting', { allowPartialMessageName: true });
-            expect(value).toBe('Hello world');
         });
     });
 });
 
-describe('localizedStringPropertyOptions', () => {
+describe('localizedMessagePropertyOptions', () => {
     beforeEach(async () => {
         i18n.locales = {
             en: {
@@ -118,8 +112,8 @@ describe('localizedStringPropertyOptions', () => {
     });
 
     describe('converter', () => {
-        let converter: ComplexAttributeConverter<LocalizedString | undefined>;
-        beforeEach(() => (converter = <ComplexAttributeConverter<LocalizedString | undefined>>localizedStringPropertyOptions.converter));
+        let converter: ComplexAttributeConverter<LocalizedMessage | undefined>;
+        beforeEach(() => (converter = <ComplexAttributeConverter<LocalizedMessage | undefined>>localizedMessagePropertyOptions.converter));
 
         describe('toAttribute', () => {
             it('should convert when undefined', () => {
@@ -134,7 +128,7 @@ describe('localizedStringPropertyOptions', () => {
             it('should convert', () => {
                 // given.
                 validateNotUndefined(converter.toAttribute);
-                const value = new LocalizedString('greeting');
+                const value = new LocalizedMessage('greeting');
 
                 // when, then.
                 const attr = converter.toAttribute(value);
@@ -155,11 +149,11 @@ describe('localizedStringPropertyOptions', () => {
             it('should convert', () => {
                 // given, when.
                 validateNotUndefined(converter.fromAttribute);
-                const value = converter.fromAttribute('__MSG_greeting__');
+                const msg = converter.fromAttribute('__MSG_greeting__');
 
                 // then.
-                expect(value?.messageName).toBe('__MSG_greeting__');
-                expect(value?.value).toBe('Hello world');
+                expect(msg?.key).toBe('__MSG_greeting__');
+                expect(msg?.value).toBe('Hello world');
             });
         });
 
@@ -173,32 +167,32 @@ describe('localizedStringPropertyOptions', () => {
     describe('hasChanged', () => {
         it('should return false when both undefined', () => {
             // given, when, then.
-            assertNonNullish(localizedStringPropertyOptions.hasChanged, 'hasChanged cannot be nullish');
-            localizedStringPropertyOptions.hasChanged(undefined, undefined);
+            assertNonNullish(localizedMessagePropertyOptions.hasChanged, 'hasChanged cannot be nullish');
+            localizedMessagePropertyOptions.hasChanged(undefined, undefined);
         });
 
         it('should return true when only value is defined', () => {
             // given, when, then.
-            assertNonNullish(localizedStringPropertyOptions.hasChanged, 'hasChanged cannot be nullish');
-            localizedStringPropertyOptions.hasChanged(new LocalizedString('__MSG_greeting__'), undefined);
+            assertNonNullish(localizedMessagePropertyOptions.hasChanged, 'hasChanged cannot be nullish');
+            localizedMessagePropertyOptions.hasChanged(new LocalizedMessage('__MSG_greeting__'), undefined);
         });
 
         it('should return true when only oldValue is defined', () => {
             // given, when, then.
-            assertNonNullish(localizedStringPropertyOptions.hasChanged, 'hasChanged cannot be nullish');
-            localizedStringPropertyOptions.hasChanged(undefined, new LocalizedString('__MSG_greeting__'));
+            assertNonNullish(localizedMessagePropertyOptions.hasChanged, 'hasChanged cannot be nullish');
+            localizedMessagePropertyOptions.hasChanged(undefined, new LocalizedMessage('__MSG_greeting__'));
         });
 
-        it('should use LocalizedString.equals to compare', () => {
+        it('should use equals function to compare', () => {
             // given.
-            assertNonNullish(localizedStringPropertyOptions.hasChanged, 'hasChanged cannot be nullish');
+            assertNonNullish(localizedMessagePropertyOptions.hasChanged, 'hasChanged cannot be nullish');
 
-            const value = new LocalizedString('__MSG_greeting');
-            const oldValue = new LocalizedString('__MSG_greeting');
+            const value = new LocalizedMessage('__MSG_greeting');
+            const oldValue = new LocalizedMessage('__MSG_greeting');
             value.equals = jest.fn();
 
             // when.
-            localizedStringPropertyOptions.hasChanged(value, oldValue);
+            localizedMessagePropertyOptions.hasChanged(value, oldValue);
 
             // then.
             expect(value.equals).toHaveBeenCalledTimes(1);

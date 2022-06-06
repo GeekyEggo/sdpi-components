@@ -2,7 +2,7 @@ import { Task } from '@lit-labs/task';
 import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
-import { FilteredMutationObserver, i18n, LocalizedString, localizedStringPropertyOptions } from '../core';
+import { FilteredMutationObserver, i18n, LocalizedMessage, localizedMessagePropertyOptions } from '../core';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 export type DataSourceResult = DataSourceResultItem[];
@@ -10,12 +10,12 @@ export type DataSourceResultItem = Item | ItemGroup;
 
 export type Item = {
     disabled?: boolean;
-    label?: LocalizedString | string;
+    label?: LocalizedMessage | string;
     value: string;
 };
 
 export type ItemGroup = {
-    label?: LocalizedString | string;
+    label?: LocalizedMessage | string;
     children: Item[];
 };
 
@@ -52,10 +52,10 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
          */
         @property({
             attribute: 'loading',
-            hasChanged: localizedStringPropertyOptions.hasChanged,
-            converter: localizedStringPropertyOptions.converter
+            hasChanged: localizedMessagePropertyOptions.hasChanged,
+            converter: localizedMessagePropertyOptions.converter
         })
-        public loadingText = new LocalizedString('Loading...');
+        public loadingText = new LocalizedMessage('Loading...');
 
         /**
          * Gets the items within the data source as a task; these are either loaded from the child nodes, or the Stream Deck, based on the existence of `dataSource`.
@@ -109,13 +109,13 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
             const reducer = (items: DataSourceResult, node: Node): DataSourceResult => {
                 if (node instanceof HTMLOptGroupElement) {
                     items.push(<ItemGroup>{
-                        label: LocalizedString.getMessage(node.label),
+                        label: LocalizedMessage.getMessage(node.label),
                         children: Array.from(node.childNodes).reduce(reducer, [])
                     });
                 } else if (node instanceof HTMLOptionElement) {
                     items.push(<Item>{
                         disabled: node.disabled,
-                        label: LocalizedString.getMessage(node.text),
+                        label: LocalizedMessage.getMessage(node.text),
                         value: node.value
                     });
                 }
@@ -133,11 +133,11 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
         private localize(items: DataSourceResultItem[]) {
             for (const item of items) {
                 if (item.label) {
-                    item.label = LocalizedString.getMessage(item.label.toString());
+                    item.label = LocalizedMessage.getMessage(item.label.toString());
                 }
 
-                if ((<ItemGroup>item).children) {
-                    this.localize((<ItemGroup>item).children);
+                if (this.isItemGroup(item)) {
+                    this.localize(item.children);
                 }
             }
         }
