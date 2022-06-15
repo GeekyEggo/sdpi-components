@@ -1,6 +1,6 @@
 /**!
  * @license
- * sdpi-components v3.0.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+ * sdpi-components v2.0.1, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
  * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
  */
 (function () {
@@ -221,17 +221,14 @@
     }
     const i18n = new Internationalization();
 
-    class LocalizedString {
-        constructor(messageName) {
-            this.messageName = messageName;
-            const parse = LocalizedString.tryParseMessageName(messageName);
-            this.value = (parse.success ? i18n.getMessage(parse.messageName) : messageName) || messageName;
+    class LocalizedMessage {
+        constructor(key) {
+            this.key = key;
+            const parsed = LocalizedMessage.tryParseMessageName(key);
+            this.value = (parsed.success ? i18n.getMessage(parsed.messageName) : key) || key;
         }
-        static getMessage(messageName, options = { allowPartialMessageName: false }) {
-            if (options.allowPartialMessageName && !LocalizedString.tryParseMessageName(messageName).success) {
-                messageName = `__MSG_${messageName}__`;
-            }
-            return new LocalizedString(messageName).toString();
+        static getMessage(key) {
+            return new LocalizedMessage(key).toString();
         }
         static tryParseMessageName(value) {
             return value && value.startsWith('__MSG_') && value.endsWith('__')
@@ -244,13 +241,13 @@
                 };
         }
         equals(other) {
-            return this.messageName == (other === null || other === void 0 ? void 0 : other.messageName) && this.value == (other === null || other === void 0 ? void 0 : other.value);
+            return other !== undefined && this.key == other.key && this.value == other.value;
         }
         toString() {
             return this.value || '';
         }
     }
-    const localizedStringPropertyOptions = {
+    const localizedMessagePropertyOptions = {
         hasChanged(value, oldValue) {
             if (!value && !oldValue) {
                 return false;
@@ -262,10 +259,10 @@
         },
         converter: {
             fromAttribute(value) {
-                return value === null ? undefined : new LocalizedString(value);
+                return value === null ? undefined : new LocalizedMessage(value);
             },
             toAttribute(value) {
-                return value === null || value === void 0 ? void 0 : value.messageName;
+                return value === null || value === void 0 ? void 0 : value.key;
             }
         }
     };
@@ -470,7 +467,7 @@
                 super(args);
                 this._itemsDirtyFlag = false;
                 this._mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => (this._itemsDirtyFlag = !this._itemsDirtyFlag));
-                this.loadingText = new LocalizedString('Loading...');
+                this.loadingText = new LocalizedMessage('Loading...');
                 this.items = new h$2(this, async ([dataSource]) => {
                     if (dataSource === undefined) {
                         return this.getItemsFromChildNodes();
@@ -504,14 +501,14 @@
                 const reducer = (items, node) => {
                     if (node instanceof HTMLOptGroupElement) {
                         items.push({
-                            label: LocalizedString.getMessage(node.label),
+                            label: LocalizedMessage.getMessage(node.label),
                             children: Array.from(node.childNodes).reduce(reducer, [])
                         });
                     }
                     else if (node instanceof HTMLOptionElement) {
                         items.push({
                             disabled: node.disabled,
-                            label: LocalizedString.getMessage(node.text),
+                            label: LocalizedMessage.getMessage(node.text),
                             value: node.value
                         });
                     }
@@ -522,9 +519,9 @@
             localize(items) {
                 for (const item of items) {
                     if (item.label) {
-                        item.label = LocalizedString.getMessage(item.label.toString());
+                        item.label = LocalizedMessage.getMessage(item.label.toString());
                     }
-                    if (item.children) {
+                    if (this.isItemGroup(item)) {
                         this.localize(item.children);
                     }
                 }
@@ -547,8 +544,8 @@
         __decorate([
             e$3({
                 attribute: 'loading',
-                hasChanged: localizedStringPropertyOptions.hasChanged,
-                converter: localizedStringPropertyOptions.converter
+                hasChanged: localizedMessagePropertyOptions.hasChanged,
+                converter: localizedMessagePropertyOptions.converter
             }),
             __metadata("design:type", Object)
         ], DataSourced.prototype, "loadingText", void 0);
@@ -1016,8 +1013,8 @@
         }
     };
     __decorate([
-        e$3(localizedStringPropertyOptions),
-        __metadata("design:type", LocalizedString)
+        e$3(localizedMessagePropertyOptions),
+        __metadata("design:type", LocalizedMessage)
     ], Checkbox.prototype, "label", void 0);
     Checkbox = __decorate([
         n$3('sdpi-checkbox')
@@ -1175,7 +1172,7 @@
 
     let i18nElement = class i18nElement extends s$1 {
         render() {
-            return this.key ? $ `${LocalizedString.getMessage(this.key, { allowPartialMessageName: true })}` : undefined;
+            return this.key ? $ `${i18n.getMessage(this.key)}` : undefined;
         }
     };
     __decorate([
@@ -1387,7 +1384,7 @@
         render() {
             return $ `
             <div class="container grid">
-                <div class="label"><label @click=${this.handleLabelClick}>${this.label}</label></div>
+                <div class="label"><label @click=${this.handleLabelClick}>${this.label ? this.label.toString() + ':' : undefined}</label></div>
                 <div class="content"><slot></slot></div>
             </div>
         `;
@@ -1441,8 +1438,8 @@
         `
     ];
     __decorate([
-        e$3(localizedStringPropertyOptions),
-        __metadata("design:type", LocalizedString)
+        e$3(localizedMessagePropertyOptions),
+        __metadata("design:type", LocalizedMessage)
     ], SdpiItem.prototype, "label", void 0);
     SdpiItem = __decorate([
         n$3('sdpi-item')
@@ -1490,8 +1487,8 @@
         }
     };
     __decorate([
-        e$3(localizedStringPropertyOptions),
-        __metadata("design:type", LocalizedString)
+        e$3(localizedMessagePropertyOptions),
+        __metadata("design:type", LocalizedMessage)
     ], Select.prototype, "placeholder", void 0);
     Select = __decorate([
         n$3('sdpi-select')
@@ -1638,8 +1635,8 @@
         __metadata("design:type", Object)
     ], Textfield.prototype, "pattern", void 0);
     __decorate([
-        e$3(localizedStringPropertyOptions),
-        __metadata("design:type", LocalizedString)
+        e$3(localizedMessagePropertyOptions),
+        __metadata("design:type", LocalizedMessage)
     ], Textfield.prototype, "placeholder", void 0);
     __decorate([
         e$3({ type: Boolean }),

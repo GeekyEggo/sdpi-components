@@ -13,7 +13,7 @@
         "test": "jest --verbose",
         "test:ci": "jest --verbose --coverage && node ./scripts/coverage-badge.js",
         "preversion": "jest",
-        "version": "rollup -c && git add -A dist package*"
+        "version": "rollup -c && git add -A dist package* example/pi"
     },
     "repository": {
         "type": "git",

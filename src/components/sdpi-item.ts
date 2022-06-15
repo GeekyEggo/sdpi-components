@@ -57,7 +57,7 @@ export class SdpiItem extends LitElement {
     render() {
         return html`
             <div class="container grid">
-                <div class="label"><label @click=${this.handleLabelClick}>${this.label}</label></div>
+                <div class="label"><label @click=${this.handleLabelClick}>${this.label ? this.label.toString() + ':' : undefined}</label></div>
                 <div class="content"><slot></slot></div>
             </div>
         `;
