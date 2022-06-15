@@ -13,12 +13,10 @@
 
 ## vNext
 
--   🚨 Stream Deck client `connect` parameters changed to objects (previously JSON string).
--   ✨ Add tests.
+-   ✨ Add support for localizations.
 -   🐞 Fix Stream Deck typings.
--   ♻️ Update `getFileName` and `sanitize` to be synchronous.
 -   ♻️ Update `useSettings` and `useGlobalSettings` to be asynchronous.
--   ♻️ Remove unnecessary call to get global settings even if `useGlobalSettings` was not used.
+-   ♻️ Remove unnecessary extra call to get global settings even if `useGlobalSettings` was not used.
 
 ## v2.0.1
 
