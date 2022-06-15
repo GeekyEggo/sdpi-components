@@ -11,7 +11,7 @@
 
 # Change Log
 
-## vNext
+## v2.1.0
 
 -   ✨ Add support for localizations.
 -   🐞 Fix Stream Deck typings.
