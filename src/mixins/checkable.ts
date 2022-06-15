@@ -1,6 +1,7 @@
 import { css, CSSResultGroup, html, LitElement } from 'lit';
 
 import { asArray } from '../core';
+import { LocalizedMessage } from '../core';
 
 /**
  * Provides a mixin that contains functionality for rendering inputs that can be checked, i.e. radio buttons and checkboxes, and renders their check state using more user-friendly representations.
@@ -80,12 +81,12 @@ export const Checkable = <TBase extends Constructor<LitElement> & { styles?: CSS
          * @param label Optional label to be displayed next to the input.
          * @returns The HTML template that contains the checkable input.
          */
-        protected renderCheckable(type: 'checkbox' | 'radio', input: unknown, label?: string): unknown {
+        protected renderCheckable(type: 'checkbox' | 'radio', input: unknown, label?: LocalizedMessage | string): unknown {
             return html`
                 <label class="checkable-container">
                     ${input}
                     <span class="checkable-symbol" role=${type}></span>
-                    ${label ? html`<span class="checkable-text">${label}</span>` : undefined}
+                    ${label && label ? html`<span class="checkable-text">${label}</span>` : undefined}
                 </label>
             `;
         }

@@ -18,6 +18,23 @@ export function asArray(styles?: CSSResultGroup): (CSSResultOrNative | CSSResult
 }
 
 /**
+ * Formats the given string with the specified arguments.
+ * @param format The format.
+ * @param args The arguments used to format the string.
+ * @returns The formatted string.
+ */
+export function format(format: string, ...args: unknown[]) {
+    if (!args.length) {
+        return format;
+    }
+
+    const type = typeof args[0];
+    const formatArgs = type === 'string' || type === 'number' ? Array.prototype.slice.call(args) : args[0];
+
+    return format.replace(/{([A-z0-9-_#@\\.]+)}/g, (match, path) => get(path, formatArgs) || match);
+}
+
+/**
  * Generates a 'unique' identifier.
  * @returns The unique identifier.
  */

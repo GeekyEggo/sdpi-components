@@ -9,22 +9,22 @@
 <body>
     <script>
         const colors = [{
-            label: 'Primary Colors',
+            label: '__MSG_primary__',
             children: [{
-                label: 'Red',
+                label: '__MSG_red__',
                 value: '#ff0000'
             }, {
-                label: 'Green',
+                label: '__MSG_green__',
                 value: '#00ff00'
             }, {
-                label: 'Blue',
+                label: '__MSG_blue__',
                 value: '#0000ff'
             }]
         }, {
-            label: 'Black',
+            label: '__MSG_black__',
             value: '#000000'
         }, {
-            label: 'White',
+            label: '__MSG_white__',
             value: '#ffffff'
         }];
 
@@ -76,9 +76,9 @@
                     case 'sendToPlugin':
                         const items = msg.payload?.event === 'getColors' ? colors
                             : msg.payload?.event === 'getNumbers' ? numbers
-                            : undefined;
+                                : undefined;
 
-                        if (items) {   
+                        if (items) {
                             webSocket.send(
                                 JSON.stringify({
                                     action,

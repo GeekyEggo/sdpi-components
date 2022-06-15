@@ -1,6 +1,6 @@
 /**!
  * @license
- * sdpi-components v2.0.1, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+ * sdpi-components v3.0.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
  * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
  */
 (function () {
@@ -176,22 +176,6 @@
         }
     }
 
-    function delay(callback, timeout) {
-        let handle;
-        let pcs;
-        return (data, ...args) => {
-            clearTimeout(handle);
-            pcs = pcs || new PromiseCompletionSource();
-            handle = setTimeout(async () => {
-                const innerPcs = pcs;
-                pcs = undefined;
-                await callback(data);
-                innerPcs === null || innerPcs === void 0 ? void 0 : innerPcs.setResult();
-            }, timeout, args);
-            return pcs.promise;
-        };
-    }
-
     function asArray(styles) {
         if (styles === undefined) {
             return [];
@@ -214,6 +198,92 @@
         props.reduce((obj, prop, i) => {
             return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
         }, target);
+    }
+
+    class Internationalization {
+        constructor() {
+            this.language = this.getUILanguage();
+            this.fallbackLanguage = 'en';
+        }
+        getMessage(messageName) {
+            if (!this.locales || messageName === undefined) {
+                return '';
+            }
+            const localize = (lang) => get(`${lang}.${messageName}`, this.locales);
+            if (this.language === this.fallbackLanguage) {
+                return localize(this.language) || '';
+            }
+            return localize(this.language) || localize(this.fallbackLanguage) || '';
+        }
+        getUILanguage() {
+            return window.navigator.language ? window.navigator.language.split('-')[0] : 'en';
+        }
+    }
+    const i18n = new Internationalization();
+
+    class LocalizedString {
+        constructor(messageName) {
+            this.messageName = messageName;
+            const parse = LocalizedString.tryParseMessageName(messageName);
+            this.value = (parse.success ? i18n.getMessage(parse.messageName) : messageName) || messageName;
+        }
+        static getMessage(messageName, options = { allowPartialMessageName: false }) {
+            if (options.allowPartialMessageName && !LocalizedString.tryParseMessageName(messageName).success) {
+                messageName = `__MSG_${messageName}__`;
+            }
+            return new LocalizedString(messageName).toString();
+        }
+        static tryParseMessageName(value) {
+            return value && value.startsWith('__MSG_') && value.endsWith('__')
+                ? {
+                    success: true,
+                    messageName: value.substring(6, value.length - 2)
+                }
+                : {
+                    success: false
+                };
+        }
+        equals(other) {
+            return this.messageName == (other === null || other === void 0 ? void 0 : other.messageName) && this.value == (other === null || other === void 0 ? void 0 : other.value);
+        }
+        toString() {
+            return this.value || '';
+        }
+    }
+    const localizedStringPropertyOptions = {
+        hasChanged(value, oldValue) {
+            if (!value && !oldValue) {
+                return false;
+            }
+            if (!value || !oldValue) {
+                return true;
+            }
+            return value.equals(oldValue);
+        },
+        converter: {
+            fromAttribute(value) {
+                return value === null ? undefined : new LocalizedString(value);
+            },
+            toAttribute(value) {
+                return value === null || value === void 0 ? void 0 : value.messageName;
+            }
+        }
+    };
+
+    function delay(callback, timeout) {
+        let handle;
+        let pcs;
+        return (data, ...args) => {
+            clearTimeout(handle);
+            pcs = pcs || new PromiseCompletionSource();
+            handle = setTimeout(async () => {
+                const innerPcs = pcs;
+                pcs = undefined;
+                await callback(data);
+                innerPcs === null || innerPcs === void 0 ? void 0 : innerPcs.setResult();
+            }, timeout, args);
+            return pcs.promise;
+        };
     }
 
     const Checkable = (superClass) => {
@@ -285,7 +355,7 @@
                 <label class="checkable-container">
                     ${input}
                     <span class="checkable-symbol" role=${type}></span>
-                    ${label ? $ `<span class="checkable-text">${label}</span>` : undefined}
+                    ${label && label ? $ `<span class="checkable-text">${label}</span>` : undefined}
                 </label>
             `;
             }
@@ -400,12 +470,15 @@
                 super(args);
                 this._itemsDirtyFlag = false;
                 this._mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => (this._itemsDirtyFlag = !this._itemsDirtyFlag));
-                this.loadingText = 'Loading...';
+                this.loadingText = new LocalizedString('Loading...');
                 this.items = new h$2(this, async ([dataSource]) => {
                     if (dataSource === undefined) {
                         return this.getItemsFromChildNodes();
                     }
                     const result = await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => { var _a; return ((_a = msg.payload) === null || _a === void 0 ? void 0 : _a.event) === this.dataSource; }, { event: this.dataSource });
+                    if (i18n.locales) {
+                        this.localize(result.payload.items);
+                    }
                     return result.payload.items;
                 }, () => [this.dataSource, this._itemsDirtyFlag]);
                 this._mutationObserver.observe(this);
@@ -431,20 +504,30 @@
                 const reducer = (items, node) => {
                     if (node instanceof HTMLOptGroupElement) {
                         items.push({
-                            label: node.label,
+                            label: LocalizedString.getMessage(node.label),
                             children: Array.from(node.childNodes).reduce(reducer, [])
                         });
                     }
                     else if (node instanceof HTMLOptionElement) {
                         items.push({
                             disabled: node.disabled,
-                            label: node.text,
+                            label: LocalizedString.getMessage(node.text),
                             value: node.value
                         });
                     }
                     return items;
                 };
                 return this._mutationObserver.items.reduce(reducer, []);
+            }
+            localize(items) {
+                for (const item of items) {
+                    if (item.label) {
+                        item.label = LocalizedString.getMessage(item.label.toString());
+                    }
+                    if (item.children) {
+                        this.localize(item.children);
+                    }
+                }
             }
             isItem(object) {
                 return object && object.value !== undefined;
@@ -463,7 +546,9 @@
         ], DataSourced.prototype, "dataSource", void 0);
         __decorate([
             e$3({
-                attribute: 'loading'
+                attribute: 'loading',
+                hasChanged: localizedStringPropertyOptions.hasChanged,
+                converter: localizedStringPropertyOptions.converter
             }),
             __metadata("design:type", Object)
         ], DataSourced.prototype, "loadingText", void 0);
@@ -931,8 +1016,8 @@
         }
     };
     __decorate([
-        e$3(),
-        __metadata("design:type", String)
+        e$3(localizedStringPropertyOptions),
+        __metadata("design:type", LocalizedString)
     ], Checkbox.prototype, "label", void 0);
     Checkbox = __decorate([
         n$3('sdpi-checkbox')
@@ -1087,6 +1172,19 @@
     File = __decorate([
         n$3('sdpi-file')
     ], File);
+
+    let i18nElement = class i18nElement extends s$1 {
+        render() {
+            return this.key ? $ `${LocalizedString.getMessage(this.key, { allowPartialMessageName: true })}` : undefined;
+        }
+    };
+    __decorate([
+        e$3(),
+        __metadata("design:type", String)
+    ], i18nElement.prototype, "key", void 0);
+    i18nElement = __decorate([
+        n$3('sdpi-i18n')
+    ], i18nElement);
 
     let Password = class Password extends Persisted(Focusable(Input(s$1))) {
         static get styles() {
@@ -1287,10 +1385,9 @@
 
     let SdpiItem = class SdpiItem extends s$1 {
         render() {
-            const label = this.label ? $ `<label>${this.label}:</label>` : undefined;
             return $ `
             <div class="container grid">
-                <div class="label"><label @click=${this.handleLabelClick}>${label}</label></div>
+                <div class="label"><label @click=${this.handleLabelClick}>${this.label}</label></div>
                 <div class="content"><slot></slot></div>
             </div>
         `;
@@ -1344,8 +1441,8 @@
         `
     ];
     __decorate([
-        e$3(),
-        __metadata("design:type", String)
+        e$3(localizedStringPropertyOptions),
+        __metadata("design:type", LocalizedString)
     ], SdpiItem.prototype, "label", void 0);
     SdpiItem = __decorate([
         n$3('sdpi-item')
@@ -1385,7 +1482,7 @@
             pending: () => $ `<option value="" disabled selected>${this.loadingText}</option>`,
             complete: () => $ `
                         <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined} .selected=${this.value === undefined}>${this.placeholder}</option>
-                        ${this.renderDataSource((item) => $ `<option .disabled=${item.disabled || false} .value=${item.value} .selected=${item.value === this.value}>${item.label}</option>`, (group, children) => $ `<optgroup .label=${group.label || ''}>${children}</optgroup>`)}
+                        ${this.renderDataSource((item) => $ `<option .disabled=${item.disabled || false} .value=${item.value} .selected=${item.value === this.value}>${item.label}</option>`, (group, children) => { var _a; return $ `<optgroup .label=${((_a = group.label) === null || _a === void 0 ? void 0 : _a.toString()) || ''}>${children}</optgroup>`; })}
                     `
         })}
             </select>
@@ -1393,8 +1490,8 @@
         }
     };
     __decorate([
-        e$3(),
-        __metadata("design:type", String)
+        e$3(localizedStringPropertyOptions),
+        __metadata("design:type", LocalizedString)
     ], Select.prototype, "placeholder", void 0);
     Select = __decorate([
         n$3('sdpi-select')
@@ -1481,7 +1578,6 @@
         constructor() {
             super(...arguments);
             this.pattern = '';
-            this.placeholder = '';
             this.required = false;
         }
         static get styles() {
@@ -1514,6 +1610,7 @@
             ];
         }
         render() {
+            var _a;
             return $ `
             <input
                 ${n(this.focusElement)}
@@ -1521,7 +1618,7 @@
                 maxlength=${l(this.maxLength)}
                 .disabled=${this.disabled}
                 .pattern=${this.pattern}
-                .placeholder=${this.placeholder}
+                .placeholder=${((_a = this.placeholder) === null || _a === void 0 ? void 0 : _a.toString()) || ''}
                 .required=${this.required}
                 .value=${this.value || ''}
                 @input=${(ev) => (this.value = ev.target.value)}
@@ -1541,8 +1638,8 @@
         __metadata("design:type", Object)
     ], Textfield.prototype, "pattern", void 0);
     __decorate([
-        e$3(),
-        __metadata("design:type", Object)
+        e$3(localizedStringPropertyOptions),
+        __metadata("design:type", LocalizedString)
     ], Textfield.prototype, "placeholder", void 0);
     __decorate([
         e$3({ type: Boolean }),
@@ -1565,6 +1662,7 @@
         SDPIComponents.streamDeckClient = streamDeckClient;
         SDPIComponents.useGlobalSettings = useGlobalSettings;
         SDPIComponents.useSettings = useSettings;
+        SDPIComponents.i18n = i18n;
     })(SDPIComponents || (SDPIComponents = {}));
     window.SDPIComponents = SDPIComponents;
 

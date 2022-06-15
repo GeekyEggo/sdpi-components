@@ -1,6 +1,6 @@
 import { ActionInfo, DidReceiveGlobalSettingsEvent } from 'stream-deck';
 
-import { EventManager } from '../../core';
+import { EventManager } from '../../core/events';
 import { MockStreamDeckClient } from '../__mocks__/stream-deck-client';
 import { Settings, SettingsEventArgs } from '../settings';
 

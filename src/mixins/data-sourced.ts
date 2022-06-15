@@ -2,7 +2,7 @@ import { Task } from '@lit-labs/task';
 import { LitElement } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
-import { FilteredMutationObserver } from '../core';
+import { FilteredMutationObserver, i18n, LocalizedMessage, localizedMessagePropertyOptions } from '../core';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 export type DataSourceResult = DataSourceResultItem[];
@@ -10,12 +10,12 @@ export type DataSourceResultItem = Item | ItemGroup;
 
 export type Item = {
     disabled?: boolean;
-    label?: string;
+    label?: LocalizedMessage | string;
     value: string;
 };
 
 export type ItemGroup = {
-    label?: string;
+    label?: LocalizedMessage | string;
     children: Item[];
 };
 
@@ -51,9 +51,11 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
          * The text to display when the data source task is pending.
          */
         @property({
-            attribute: 'loading'
+            attribute: 'loading',
+            hasChanged: localizedMessagePropertyOptions.hasChanged,
+            converter: localizedMessagePropertyOptions.converter
         })
-        public loadingText = 'Loading...';
+        public loadingText = new LocalizedMessage('Loading...');
 
         /**
          * Gets the items within the data source as a task; these are either loaded from the child nodes, or the Stream Deck, based on the existence of `dataSource`.
@@ -66,6 +68,10 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
                 }
 
                 const result = await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => msg.payload?.event === this.dataSource, { event: this.dataSource });
+                if (i18n.locales) {
+                    this.localize(result.payload.items);
+                }
+
                 return result.payload.items;
             },
             () => [this.dataSource, this._itemsDirtyFlag]
@@ -103,13 +109,13 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
             const reducer = (items: DataSourceResult, node: Node): DataSourceResult => {
                 if (node instanceof HTMLOptGroupElement) {
                     items.push(<ItemGroup>{
-                        label: node.label,
+                        label: LocalizedMessage.getMessage(node.label),
                         children: Array.from(node.childNodes).reduce(reducer, [])
                     });
                 } else if (node instanceof HTMLOptionElement) {
                     items.push(<Item>{
                         disabled: node.disabled,
-                        label: node.text,
+                        label: LocalizedMessage.getMessage(node.text),
                         value: node.value
                     });
                 }
@@ -119,6 +125,23 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
 
             return this._mutationObserver.items.reduce(reducer, []);
         }
+
+        /**
+         * Localizes all labels of the specified items, and their children.
+         * @param items The items to localize.
+         */
+        private localize(items: DataSourceResultItem[]) {
+            for (const item of items) {
+                if (item.label) {
+                    item.label = LocalizedMessage.getMessage(item.label.toString());
+                }
+
+                if (this.isItemGroup(item)) {
+                    this.localize(item.children);
+                }
+            }
+        }
+
         /**
          * Determines whether the specified object has the form of an `Item`.
          * @param object The object to check.

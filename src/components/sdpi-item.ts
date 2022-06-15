@@ -1,6 +1,7 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+import { LocalizedMessage, localizedMessagePropertyOptions } from '../core';
 import { IFocusable } from '../mixins';
 import { hostStyle } from '../styles/host';
 
@@ -49,16 +50,14 @@ export class SdpiItem extends LitElement {
     /**
      * Gets or sets the label.
      */
-    @property()
-    public label?: string;
+    @property(localizedMessagePropertyOptions)
+    public label?: LocalizedMessage;
 
     /** @inheritdoc */
     render() {
-        const label = this.label ? html`<label>${this.label}:</label>` : undefined;
-
         return html`
             <div class="container grid">
-                <div class="label"><label @click=${this.handleLabelClick}>${label}</label></div>
+                <div class="label"><label @click=${this.handleLabelClick}>${this.label}</label></div>
                 <div class="content"><slot></slot></div>
             </div>
         `;

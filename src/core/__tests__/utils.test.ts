@@ -1,6 +1,46 @@
 import { CSSResult, CSSResultArray } from 'lit';
 
-import { asArray, get, getUUID, merge, set } from '../utils';
+import { asArray, format, get, getUUID, merge, set } from '../utils';
+
+/**
+ * format
+ */
+describe('format', () => {
+    it('should not format without args', () => {
+        // given, when, then.
+        const value = format('Hello {target}, the purpose of this test is "{test.purpose}".');
+        expect(value).toBe('Hello {target}, the purpose of this test is "{test.purpose}".');
+    });
+
+    it('should format with object', () => {
+        // given.
+        const args = {
+            target: 'everyone',
+            test: {
+                purpose: 'formatting with objects'
+            }
+        };
+
+        // when, then.
+        const value = format('Hello {target}, the purpose of this test is "{test.purpose}".', args);
+        expect(value).toBe('Hello everyone, the purpose of this test is "formatting with objects".');
+    });
+
+    it('should format with array', () => {
+        // given.
+        const args = ['everyone', 'formatting with objects'];
+
+        // when, then.
+        const value = format('Hello {0}, the purpose of this test is "{1}".', args);
+        expect(value).toBe('Hello everyone, the purpose of this test is "formatting with objects".');
+    });
+
+    it('should format with strings as arguments', () => {
+        // given, when, then.
+        const value = format('Hello {0}, the purpose of this test is "{1}".', 'everyone', 'formatting with objects');
+        expect(value).toBe('Hello everyone, the purpose of this test is "formatting with objects".');
+    });
+});
 
 /**
  * get

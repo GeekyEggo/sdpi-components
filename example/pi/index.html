@@ -3,13 +3,30 @@
 
 <head lang="en-gb">
     <meta charset="utf-8" />
-    <script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components@v2/dist/sdpi-components.js"></script>
+    <script src="sdpi-components.js"></script>
+    <script type="text/javascript">
+        SDPIComponents.i18n.locales = {
+            en: {
+                loading_colors: 'Loading colors...',
+                please_choose_a_color: 'Please choose a color',
+                primary: 'Primary Colors',
+                red: 'Red',
+                green: 'Green',
+                blue: 'Blue',
+                black: 'Black',
+                white: 'White',
+                click_me: 'Click me'
+            }
+        };
+    </script>
 </head>
 
 <body>
     <!-- Button -->
     <sdpi-item>
-        <sdpi-button onclick="javascript:alert('Hello World')">Click me</sdpi-button>
+        <sdpi-button onclick="javascript:alert('Hello World')">
+            <sdpi-i18n key="click_me"></sdpi-i18n>
+        </sdpi-button>
     </sdpi-item>
 
     <!-- Checkbox -->
@@ -92,7 +109,7 @@
 
     <!-- Select -->
     <sdpi-item label="Select">
-        <sdpi-select setting="color" placeholder="Please choose a color" datasource="getColors"></sdpi-select>
+        <sdpi-select setting="color" placeholder="__MSG_please_choose_a_color__" datasource="getColors" loading="__MSG_loading_colors__"></sdpi-select>
     </sdpi-item>
 
     <!-- Textarea -->
