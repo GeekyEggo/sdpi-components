@@ -11,6 +11,10 @@
 
 # Change Log
 
+## v2.1.1
+
+-   ✨ Add `refresh()` to all data-sourced inputs.
+
 ## v2.1.0
 
 -   ✨ Add support for localizations.
