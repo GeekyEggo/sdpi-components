@@ -11,7 +11,7 @@
 
 # Change Log
 
-## v2.1.1
+## v2.2.0
 
 -   ✨ Add `refresh()` to all data-sourced inputs.
 
