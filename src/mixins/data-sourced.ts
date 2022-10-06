@@ -28,7 +28,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
     class DataSourced extends superClass {
         @state()
         private _itemsDirtyFlag = false;
-        private _mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => (this._itemsDirtyFlag = !this._itemsDirtyFlag));
+        private _mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => this.refresh());
 
         /**
          * Initializes a new instance of the data source mixin.
@@ -76,6 +76,13 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
             },
             () => [this.dataSource, this._itemsDirtyFlag]
         );
+
+        /**
+         * Refreshes the data source.
+         */
+        public refresh(): void {
+            this._itemsDirtyFlag = !this._itemsDirtyFlag;
+        }
 
         /**
          * Renders the current items associated with the data source.

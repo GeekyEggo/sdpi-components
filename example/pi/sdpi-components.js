@@ -1,6 +1,6 @@
 /**!
  * @license
- * sdpi-components v2.0.1, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+ * sdpi-components v2.1.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
  * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
  */
 (function () {
@@ -466,7 +466,7 @@
             constructor(...args) {
                 super(args);
                 this._itemsDirtyFlag = false;
-                this._mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => (this._itemsDirtyFlag = !this._itemsDirtyFlag));
+                this._mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => this.refresh());
                 this.loadingText = new LocalizedMessage('Loading...');
                 this.items = new h$2(this, async ([dataSource]) => {
                     if (dataSource === undefined) {
@@ -479,6 +479,9 @@
                     return result.payload.items;
                 }, () => [this.dataSource, this._itemsDirtyFlag]);
                 this._mutationObserver.observe(this);
+            }
+            refresh() {
+                this._itemsDirtyFlag = !this._itemsDirtyFlag;
             }
             renderDataSource(renderItem, renderGroup) {
                 if (this.items.value === undefined || this.items.value.length === 0) {
