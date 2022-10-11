@@ -1,6 +1,7 @@
 import { Task } from '@lit-labs/task';
 import { LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { SendToPropertyInspectorEvent } from 'stream-deck';
 
 import { FilteredMutationObserver, i18n, LocalizedMessage, localizedMessagePropertyOptions } from '../core';
 import streamDeckClient from '../stream-deck/stream-deck-client';
@@ -26,8 +27,8 @@ export type ItemGroup = {
  */
 export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) => {
     class DataSourced extends superClass {
-        @state()
-        private _itemsDirtyFlag = false;
+        private _dataSourceInitialized = false;
+        private _itemsDataSource?: SendToPropertyInspectorEvent;
         private _mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => this.refresh());
 
         /**
@@ -48,6 +49,15 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
         public dataSource?: string;
 
         /**
+         * When true, and the items are data sourced from the plugin, events are continually monitored enabling the plugin to hot-reload the data source.
+         */
+        @property({
+            attribute: 'hot-reload',
+            type: Boolean
+        })
+        public hotReload = false;
+
+        /**
          * The text to display when the data source task is pending.
          */
         @property({
@@ -60,28 +70,48 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
         /**
          * Gets the items within the data source as a task; these are either loaded from the child nodes, or the Stream Deck, based on the existence of `dataSource`.
          */
-        public items = new Task<[string | undefined, boolean], DataSourceResult>(
+        public items = new Task<[string | undefined], DataSourceResult>(
             this,
             async ([dataSource]) => {
                 if (dataSource === undefined) {
                     return this.getItemsFromChildNodes();
                 }
 
-                const result = await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => msg.payload?.event === this.dataSource, { event: this.dataSource });
+                const result =
+                    this._itemsDataSource ?? (await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => msg.payload?.event === this.dataSource, { event: this.dataSource }));
+
+                this._dataSourceInitialized = true;
+                this._itemsDataSource = undefined;
+
                 if (i18n.locales) {
                     this.localize(result.payload.items);
                 }
 
                 return result.payload.items;
             },
-            () => [this.dataSource, this._itemsDirtyFlag]
+            () => [this.dataSource]
         );
 
         /**
          * Refreshes the data source.
          */
         public refresh(): void {
-            this._itemsDirtyFlag = !this._itemsDirtyFlag;
+            this.items.run();
+        }
+
+        /** @inheritdoc */
+        public connectedCallback(): void {
+            super.connectedCallback();
+
+            // Subscribe to hot-reloading if applicable.
+            if (this.dataSource !== undefined && this.hotReload !== undefined) {
+                streamDeckClient.sendToPropertyInspector.subscribe((args) => {
+                    if (this._dataSourceInitialized && args.payload?.event === this.dataSource) {
+                        this._itemsDataSource = args;
+                        this.items.run();
+                    }
+                });
+            }
         }
 
         /**

@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
 import { LocalizedMessage, localizedMessagePropertyOptions } from '../core';
-import { DataSourced, Focusable, Input, Persisted } from '../mixins';
+import { DataSourced, DataSourceResult, Focusable, Input, Item, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
@@ -40,19 +40,21 @@ export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElem
 
     /** @inheritdoc */
     protected render() {
+        const selectedValue = (<Item>this.items.value?.find((i) => (<Item>i).value == this.value))?.value || undefined;
+
         return html`
             <select
                 ${ref(this.focusElement)}
                 .disabled=${this.disabled || this.items.status !== TaskStatus.COMPLETE}
-                .value=${this.items.status === TaskStatus.COMPLETE ? this.value || '' : ''}
+                .value=${selectedValue || ''}
                 @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => (this.value = ev.target.value)}
             >
                 ${this.items.render({
                     pending: () => html`<option value="" disabled selected>${this.loadingText}</option>`,
                     complete: () => html`
-                        <option value="" disabled .hidden=${!this.placeholder || this.value !== undefined} .selected=${this.value === undefined}>${this.placeholder}</option>
+                        <option value="" disabled .hidden=${!this.placeholder || selectedValue === undefined} .selected=${selectedValue === undefined}>${this.placeholder}</option>
                         ${this.renderDataSource(
-                            (item) => html`<option .disabled=${item.disabled || false} .value=${item.value} .selected=${item.value === this.value}>${item.label}</option>`,
+                            (item) => html`<option .disabled=${item.disabled || false} .value=${item.value} .selected=${item.value === selectedValue}>${item.label}</option>`,
                             (group, children) => html`<optgroup .label=${group.label?.toString() || ''}>${children}</optgroup>`
                         )}
                     `
