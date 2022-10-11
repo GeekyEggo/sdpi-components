@@ -18,6 +18,40 @@ export function asArray(styles?: CSSResultGroup): (CSSResultOrNative | CSSResult
 }
 
 /**
+ * Parses the `value` as a `number`.
+ * @param value The value to parse.
+ * @returns The parsed value; otherwise undefined.
+ */
+export function parseNumber(value: boolean | number | string): number | undefined {
+    switch (typeof value) {
+        case 'boolean':
+            return value ? 1 : 0;
+        case 'number':
+            return value;
+        default:
+            return parseFloat(value);
+    }
+}
+
+/**
+ * Parsses the `value` as a `boolean`.
+ * @param value The value to parse.
+ * @returns The parsed value.
+ */
+export function parseBoolean(value: boolean | number | string): boolean {
+    switch (typeof value) {
+        case 'boolean':
+            return value;
+        case 'number':
+            return value !== 0;
+        default: {
+            const str = value.toString().toLowerCase();
+            return str !== 'false' && str !== '0';
+        }
+    }
+}
+
+/**
  * Formats the given string with the specified arguments.
  * @param format The format.
  * @param args The arguments used to format the string.

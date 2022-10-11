@@ -179,6 +179,28 @@
         }
         return [styles];
     }
+    function parseNumber(value) {
+        switch (typeof value) {
+            case 'boolean':
+                return value ? 1 : 0;
+            case 'number':
+                return value;
+            default:
+                return parseFloat(value);
+        }
+    }
+    function parseBoolean(value) {
+        switch (typeof value) {
+            case 'boolean':
+                return value;
+            case 'number':
+                return value !== 0;
+            default: {
+                const str = value.toString().toLowerCase();
+                return str !== 'false' && str !== '0';
+            }
+        }
+    }
     function getUUID() {
         const chr4 = () => Math.random().toString(16).slice(-4);
         return chr4() + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + chr4() + chr4();
@@ -822,6 +844,18 @@
                     this.save(this.value);
                 }
             }
+            parseValue(value) {
+                switch (this.valueType) {
+                    case 'boolean':
+                        return parseBoolean(value);
+                    case 'number':
+                        return parseNumber(value);
+                    case 'string':
+                        return value.toString();
+                    default:
+                        return value;
+                }
+            }
         }
         __decorate([
             e$3({
@@ -834,6 +868,10 @@
             e$3(),
             __metadata("design:type", String)
         ], Persisted.prototype, "setting", void 0);
+        __decorate([
+            e$3({ attribute: 'value-type' }),
+            __metadata("design:type", Object)
+        ], Persisted.prototype, "valueType", void 0);
         __decorate([
             e$3({ attribute: false }),
             __metadata("design:type", Object)
@@ -1055,7 +1093,7 @@
                 complete: () => this.renderGrid(this.renderDataSource((item) => this.renderCheckable('checkbox', $ `
                                 <input
                                     type="checkbox"
-                                    .checked=${(this.value && this.value.indexOf(item.value) > -1) || false}
+                                    .checked=${(this.value && this.value.findIndex((v) => v == item.value) > -1) || false}
                                     .disabled=${this.disabled || item.disabled || false}
                                     .value=${item.value}
                                     @change=${this.handleChange}
@@ -1064,12 +1102,16 @@
             });
         }
         handleChange(ev) {
+            const value = this.parseValue(ev.target.value);
+            if (value === undefined) {
+                return;
+            }
             const values = new Set(this.value);
             if (ev.target.checked) {
-                values.add(ev.target.value);
+                values.add(value);
             }
             else {
-                values.delete(ev.target.value);
+                values.delete(value);
             }
             this.value = Array.from(values);
         }
@@ -1260,10 +1302,10 @@
                                 <input
                                     type="radio"
                                     name="_"
-                                    .checked=${this.value === item.value}
+                                    .checked=${this.value == item.value}
                                     .disabled=${this.disabled || item.disabled || false}
                                     .value=${item.value}
-                                    @change=${(ev) => (this.value = ev.target.value)}
+                                    @change=${(ev) => (this.value = this.parseValue(ev.target.value))}
                                 />
                             `, item.label)))
             });
@@ -1491,7 +1533,7 @@
                 ${n(this.focusElement)}
                 .disabled=${this.disabled || this.items.status !== i$1.COMPLETE}
                 .value=${selectedValue || ''}
-                @change=${(ev) => (this.value = ev.target.value)}
+                @change=${(ev) => (this.value = this.parseValue(ev.target.value))}
             >
                 ${this.items.render({
             pending: () => $ `<option value="" disabled selected>${this.loadingText}</option>`,

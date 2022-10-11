@@ -4,7 +4,7 @@ import { customElement } from 'lit/decorators.js';
 import { Checkable, DataSourced, Gridded, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-checkbox-list')
-export class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(Input<typeof LitElement, string[]>(LitElement))))) {
+export class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(Input<typeof LitElement, Array<boolean | number | string>>(LitElement))))) {
     /** @inheritdoc */
     public static get styles() {
         return [
@@ -31,7 +31,7 @@ export class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(Input<
                             html`
                                 <input
                                     type="checkbox"
-                                    .checked=${(this.value && this.value.indexOf(item.value) > -1) || false}
+                                    .checked=${(this.value && this.value.findIndex((v) => v == item.value) > -1) || false}
                                     .disabled=${this.disabled || item.disabled || false}
                                     .value=${item.value}
                                     @change=${this.handleChange}
@@ -49,11 +49,16 @@ export class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(Input<
      * @param ev The event data.
      */
     private handleChange(ev: HTMLInputEvent<HTMLInputElement>): void {
+        const value = this.parseValue(ev.target.value);
+        if (value === undefined) {
+            return;
+        }
+
         const values = new Set(this.value);
         if (ev.target.checked) {
-            values.add(ev.target.value);
+            values.add(value);
         } else {
-            values.delete(ev.target.value);
+            values.delete(value);
         }
 
         this.value = Array.from(values);

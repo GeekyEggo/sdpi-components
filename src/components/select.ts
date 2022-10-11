@@ -8,7 +8,7 @@ import { DataSourced, Focusable, Input, Item, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
-export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElement, string>(LitElement)))) {
+export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElement, boolean | number | string>(LitElement)))) {
     /** @inheritdoc */
     public static get styles() {
         return [
@@ -47,7 +47,7 @@ export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElem
                 ${ref(this.focusElement)}
                 .disabled=${this.disabled || this.items.status !== TaskStatus.COMPLETE}
                 .value=${selectedValue || ''}
-                @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => (this.value = ev.target.value)}
+                @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => (this.value = this.parseValue(ev.target.value))}
             >
                 ${this.items.render({
                     pending: () => html`<option value="" disabled selected>${this.loadingText}</option>`,

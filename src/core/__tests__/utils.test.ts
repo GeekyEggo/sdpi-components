@@ -1,6 +1,6 @@
 import { CSSResult, CSSResultArray } from 'lit';
 
-import { asArray, format, get, getUUID, merge, set } from '../utils';
+import { asArray, format, get, getUUID, merge, parseBoolean, parseNumber, set } from '../utils';
 
 /**
  * format
@@ -250,4 +250,32 @@ describe('merge', () => {
         expect(target.nested?.item).toBe(13);
         expect(target.nested?.other).toBe(false);
     });
+});
+
+/*
+ * parseBoolean
+ */
+describe('parseBoolean', () => {
+    it('should parse true', () => expect(parseBoolean(true)).toBe(true));
+    it('should parse false', () => expect(parseBoolean(false)).toBe(false));
+    it('should parse 1', () => expect(parseBoolean(1)).toBe(true));
+    it('should parse 0', () => expect(parseBoolean(0)).toBe(false));
+    it('should parse "true"', () => expect(parseBoolean('true')).toBe(true));
+    it('should parse "foo"', () => expect(parseBoolean('foo')).toBe(true));
+    it('should parse "FALSE"', () => expect(parseBoolean('FALSE')).toBe(false));
+    it('should parse "false"', () => expect(parseBoolean('false')).toBe(false));
+    it('should parse "0"', () => expect(parseBoolean('0')).toBe(false));
+});
+
+/*
+ * parseNumber
+ */
+describe('parseNumber', () => {
+    it('should parse true', () => expect(parseNumber(true)).toBe(1));
+    it('should parse false', () => expect(parseNumber(false)).toBe(0));
+    it('should parse 1', () => expect(parseNumber(1)).toBe(1));
+    it('should parse 0', () => expect(parseNumber(0)).toBe(0));
+    it('should parse "13"', () => expect(parseNumber('13')).toBe(13));
+    it('should parse "1.3"', () => expect(parseNumber('1.3')).toBe(1.3));
+    it('should parse "0"', () => expect(parseNumber('0')).toBe(0));
 });

@@ -4,7 +4,7 @@ import { customElement } from 'lit/decorators.js';
 import { Checkable, DataSourced, Gridded, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-radio')
-export class Radio extends Gridded(Persisted(Checkable(DataSourced(Input<typeof LitElement, string>(LitElement))))) {
+export class Radio extends Gridded(Persisted(Checkable(DataSourced(Input<typeof LitElement, boolean | number | string>(LitElement))))) {
     /** @inheritdoc */
     static get styles() {
         return [
@@ -32,10 +32,10 @@ export class Radio extends Gridded(Persisted(Checkable(DataSourced(Input<typeof 
                                 <input
                                     type="radio"
                                     name="_"
-                                    .checked=${this.value === item.value}
+                                    .checked=${this.value == item.value}
                                     .disabled=${this.disabled || item.disabled || false}
                                     .value=${item.value}
-                                    @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
+                                    @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = this.parseValue(ev.target.value))}
                                 />
                             `,
                             item.label
