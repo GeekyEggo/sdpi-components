@@ -11,6 +11,10 @@
 
 # Change Log
 
+## v2.x.x
+
+-   ✨ Add `hot-reload` to all data-sourced inputs.
+
 ## v2.2.0
 
 -   ✨ Add `refresh()` to all data-sourced inputs.

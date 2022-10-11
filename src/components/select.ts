@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
 import { LocalizedMessage, localizedMessagePropertyOptions } from '../core';
-import { DataSourced, DataSourceResult, Focusable, Input, Item, Persisted } from '../mixins';
+import { DataSourced, Focusable, Input, Item, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
