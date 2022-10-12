@@ -119,7 +119,8 @@ export const isObject = (item: unknown): boolean => {
  * @returns The target object, with the sources merged.
  * {@link https://stackoverflow.com/a/34749873/259656}
  */
-export const merge = <T>(target: T, ...sources: DeepPartial<T>[]): T => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const merge = <T extends {}>(target: T, ...sources: DeepPartial<T>[]): T => {
     if (!sources.length) {
         return target;
     }
@@ -132,7 +133,7 @@ export const merge = <T>(target: T, ...sources: DeepPartial<T>[]): T => {
                     Object.assign(target, { [key]: {} });
                 }
 
-                merge((<Record<string, unknown>>target)[key], source[key]);
+                merge((<Record<string, object>>target)[key], <Record<string, object>>source[key]);
             } else {
                 Object.assign(target, { [key]: source[key] });
             }

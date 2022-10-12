@@ -6,15 +6,15 @@ import type { Config } from '@jest/types';
  */
 const config: Config.InitialOptions = {
     coverageReporters: ['json-summary', 'text'],
-    globals: {
-        'ts-jest': {
-            isolatedModules: true
-        }
-    },
     maxWorkers: 1,
     testEnvironment: 'jsdom',
     transform: {
-        '^.+\\.ts?$': 'ts-jest'
+        '^.+\\.ts?$': [
+            'ts-jest',
+            {
+                isolatedModules: true
+            }
+        ]
     }
 };
 

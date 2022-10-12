@@ -149,9 +149,9 @@ describe('asArray', () => {
 
     const getCssItem = (): CSSResult => {
         return {
-            ['_$cssResult$']: false,
             cssText: '',
-            styleSheet: undefined
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ...({} as any)
         };
     };
 });
