@@ -11,7 +11,7 @@
 
 # Change Log
 
-## v2.x.x
+## v2.3.0
 
 -   ✨ Add hot reload to Checkbox List, Radio, and Select data sources (see [`hot-reload`](https://sdpi-components.dev/docs/helpers/data-source)).
 -   ✨ Add value casting to Checkbox List, Radio, and Select values (see `value-type`).
