@@ -4,11 +4,11 @@ import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
 import { LocalizedMessage, localizedMessagePropertyOptions } from '../core';
-import { DataSourced, Focusable, Input, Item, Persisted } from '../mixins';
+import { DataSourced, DynamicValueType, Focusable, Input, Item, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
-export class Select extends Persisted(Focusable(DataSourced(Input<typeof LitElement, boolean | number | string>(LitElement)))) {
+export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Input<typeof LitElement, boolean | number | string>(LitElement))))) {
     /** @inheritdoc */
     public static get styles() {
         return [

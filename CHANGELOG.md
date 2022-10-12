@@ -13,11 +13,12 @@
 
 ## v2.x.x
 
--   ✨ Add `hot-reload` to all data-sourced inputs.
+-   ✨ Add hot reload to Checkbox List, Radio, and Select data sources (see [`hot-reload`](https://sdpi-components.dev/docs/helpers/data-source)).
+-   ✨ Add value casting to Checkbox List, Radio, and Select values (see `value-type`).
 
 ## v2.2.0
 
--   ✨ Add `refresh()` to all data-sourced inputs.
+-   ✨ Add ability to refresh datasource of Checkbox List, Radio, and Select (see [`refresh()`](https://sdpi-components.dev/docs/helpers/data-source)).
 
 ## v2.1.0
 

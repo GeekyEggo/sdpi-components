@@ -590,6 +590,28 @@
         return DataSourced;
     };
 
+    const DynamicValueType = (superClass) => {
+        class DynamicValueType extends superClass {
+            parseValue(value) {
+                switch (this.valueType) {
+                    case 'boolean':
+                        return parseBoolean(value);
+                    case 'number':
+                        return parseNumber(value);
+                    case 'string':
+                        return value.toString();
+                    default:
+                        return value;
+                }
+            }
+        }
+        __decorate([
+            e$3({ attribute: 'value-type' }),
+            __metadata("design:type", Object)
+        ], DynamicValueType.prototype, "valueType", void 0);
+        return DynamicValueType;
+    };
+
     /**
      * @license
      * Copyright 2020 Google LLC
@@ -844,18 +866,6 @@
                     this.save(this.value);
                 }
             }
-            parseValue(value) {
-                switch (this.valueType) {
-                    case 'boolean':
-                        return parseBoolean(value);
-                    case 'number':
-                        return parseNumber(value);
-                    case 'string':
-                        return value.toString();
-                    default:
-                        return value;
-                }
-            }
         }
         __decorate([
             e$3({
@@ -868,10 +878,6 @@
             e$3(),
             __metadata("design:type", String)
         ], Persisted.prototype, "setting", void 0);
-        __decorate([
-            e$3({ attribute: 'value-type' }),
-            __metadata("design:type", Object)
-        ], Persisted.prototype, "valueType", void 0);
         __decorate([
             e$3({ attribute: false }),
             __metadata("design:type", Object)
@@ -1074,7 +1080,7 @@
         n$3('sdpi-checkbox')
     ], Checkbox);
 
-    let CheckboxList = class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(Input(s$1))))) {
+    let CheckboxList = class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(DynamicValueType(Input(s$1)))))) {
         static get styles() {
             return [
                 ...super.styles,
@@ -1282,7 +1288,7 @@
         n$3('sdpi-password')
     ], Password);
 
-    let Radio = class Radio extends Gridded(Persisted(Checkable(DataSourced(Input(s$1))))) {
+    let Radio = class Radio extends Gridded(Persisted(Checkable(DataSourced(DynamicValueType(Input(s$1)))))) {
         static get styles() {
             return [
                 ...super.styles,
@@ -1503,7 +1509,7 @@
         n$3('sdpi-item')
     ], SdpiItem);
 
-    let Select = class Select extends Persisted(Focusable(DataSourced(Input(s$1)))) {
+    let Select = class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Input(s$1))))) {
         static get styles() {
             return [
                 ...super.styles,

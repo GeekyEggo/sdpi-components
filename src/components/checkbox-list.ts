@@ -1,10 +1,10 @@
 import { css, html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import { Checkable, DataSourced, Gridded, Input, Persisted } from '../mixins';
+import { Checkable, DataSourced, DynamicValueType, Gridded, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-checkbox-list')
-export class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(Input<typeof LitElement, Array<boolean | number | string>>(LitElement))))) {
+export class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(DynamicValueType(Input<typeof LitElement, Array<boolean | number | string>>(LitElement)))))) {
     /** @inheritdoc */
     public static get styles() {
         return [
