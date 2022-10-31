@@ -25,7 +25,7 @@
         "sourceMap": true,
 
         /* typings */
-        "typeRoots": ["node_modules/@types", "src/typings"]
+        "typeRoots": ["node_modules/@jest", "node_modules/@types", "src/typings"]
     },
     "exclude": ["node_modules"]
 }

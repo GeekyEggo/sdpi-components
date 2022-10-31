@@ -10,6 +10,8 @@ import { useGlobalSettings, useSettings } from '../stream-deck/settings';
  */
 export const Persisted = <TBase extends Constructor<LitElement>, TValue>(superClass: TBase) => {
     class Persisted extends superClass {
+        private _value?: TValue;
+
         /**
          * When true, the setting will be persisted against the global settings.
          */
@@ -26,10 +28,25 @@ export const Persisted = <TBase extends Constructor<LitElement>, TValue>(superCl
         public setting?: string;
 
         /**
-         * The persisted value; this is loaded from, and saved to, the Stream Deck settings.
+         * Gets the persisted value; this is loaded from, and saved to, the Stream Deck settings.
          */
         @property({ attribute: false })
-        public value?: TValue;
+        public get value() {
+            return this._value;
+        }
+
+        /**
+         * Sets the persisted value; this is loaded from, and saved to, the Stream Deck settings.
+         */
+        public set value(value: TValue | undefined) {
+            if (this._value != value) {
+                const oldValue = this._value;
+                this._value = value;
+
+                this.requestUpdate('value', oldValue);
+                this.dispatchEvent(new Event('valuechange'));
+            }
+        }
 
         /** @inheritdoc */
         protected firstUpdated(_changedProperties: Map<PropertyKey, unknown>): void {

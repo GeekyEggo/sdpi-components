@@ -1,8 +1,8 @@
 /**!
- * @license
- * sdpi-components v2.3.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
- * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
- */
+* @license
+* sdpi-components v2.3.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+* Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
+*/
 (function () {
     'use strict';
 
@@ -850,6 +850,17 @@
                 super(...arguments);
                 this.isGlobal = false;
             }
+            get value() {
+                return this._value;
+            }
+            set value(value) {
+                if (this._value != value) {
+                    const oldValue = this._value;
+                    this._value = value;
+                    this.requestUpdate('value', oldValue);
+                    this.dispatchEvent(new Event('valuechange'));
+                }
+            }
             firstUpdated(_changedProperties) {
                 super.firstUpdated(_changedProperties);
                 if (this.setting) {
@@ -880,8 +891,9 @@
         ], Persisted.prototype, "setting", void 0);
         __decorate([
             e$3({ attribute: false }),
-            __metadata("design:type", Object)
-        ], Persisted.prototype, "value", void 0);
+            __metadata("design:type", Object),
+            __metadata("design:paramtypes", [Object])
+        ], Persisted.prototype, "value", null);
         return Persisted;
     };
 
