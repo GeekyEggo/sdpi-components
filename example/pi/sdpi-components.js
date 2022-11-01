@@ -1545,7 +1545,7 @@
         }
         render() {
             var _a, _b;
-            const selectedValue = ((_b = (_a = this.items.value) === null || _a === void 0 ? void 0 : _a.find((i) => i.value == this.value)) === null || _b === void 0 ? void 0 : _b.value) || undefined;
+            const selectedValue = this.getSelectedValueFrom((_b = (_a = this.items) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : []) || undefined;
             return y `
             <select
                 ${n(this.focusElement)}
@@ -1562,6 +1562,21 @@
         })}
             </select>
         `;
+        }
+        getSelectedValueFrom(items) {
+            for (const item of items) {
+                if ('children' in item) {
+                    const value = this.getSelectedValueFrom(item.children);
+                    if (value !== undefined) {
+                        return value;
+                    }
+                    continue;
+                }
+                if ('value' in item && item.value == this.value) {
+                    return item.value;
+                }
+            }
+            return undefined;
         }
     };
     __decorate([

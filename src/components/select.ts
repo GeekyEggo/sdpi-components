@@ -4,7 +4,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
 import { LocalizedMessage, localizedMessagePropertyOptions } from '../core';
-import { DataSourced, DynamicValueType, Focusable, Input, Item, Persisted } from '../mixins';
+import { DataSourced, DataSourceResult, DynamicValueType, Focusable, Input, Item, Persisted } from '../mixins';
 import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
@@ -40,7 +40,7 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
 
     /** @inheritdoc */
     protected render() {
-        const selectedValue = (<Item>this.items.value?.find((i) => (<Item>i).value == this.value))?.value || undefined;
+        const selectedValue = this.getSelectedValueFrom(this.items?.value ?? []) || undefined;
 
         return html`
             <select
@@ -61,6 +61,30 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
                 })}
             </select>
         `;
+    }
+
+    /**
+     * Attempts to get the selected value from the available items.
+     * @param items The items to traverse and search.
+     * @returns The value as a string; otherwise undefined.
+     */
+    private getSelectedValueFrom(items: DataSourceResult): string | undefined {
+        for (const item of items) {
+            if ('children' in item) {
+                const value = this.getSelectedValueFrom(item.children);
+                if (value !== undefined) {
+                    return value;
+                }
+
+                continue;
+            }
+
+            if ('value' in item && item.value == this.value) {
+                return item.value;
+            }
+        }
+
+        return undefined;
     }
 }
 
