@@ -11,6 +11,11 @@
 
 # Change Log
 
+## v2.3.1
+
+-   🐞 Fix `sdpi-select` not correctly selecting nested options.
+-   ♻️ Update dependencies, including Lit, Jest, and rollup.
+
 ## v2.3.0
 
 -   ✨ Add hot reload to Checkbox List, Radio, and Select data sources (see [`hot-reload`](https://sdpi-components.dev/docs/helpers/data-source)).
