@@ -8,12 +8,12 @@
         "format": "prettier --config .prettierrc './src/**/*.ts' --write",
         "install:example": "node ./scripts/install-example.js",
         "lint": "eslint . --ext .ts",
-        "start": "rollup -c -w & npm run start:example",
-        "start:example": "onchange './example/**/*.*' -- npm run install:example",
         "test": "jest --verbose",
         "test:ci": "jest --verbose --coverage && node ./scripts/coverage-badge.js",
         "preversion": "jest",
-        "version": "rollup -c && git add -A dist package* example/pi"
+        "version": "rollup -c && git add -A dist package* example/pi",
+        "watch": "rollup -c -w & npm run start:example",
+        "watch:example": "onchange './example/**/*.*' -e './example/**/*.js' -- npm run install:example"
     },
     "repository": {
         "type": "git",
