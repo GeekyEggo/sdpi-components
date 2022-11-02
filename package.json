@@ -12,7 +12,7 @@
         "test:ci": "jest --verbose --coverage && node ./scripts/coverage-badge.js",
         "preversion": "jest",
         "version": "rollup -c && git add -A dist package* example/pi",
-        "watch": "rollup -c -w & npm run start:example",
+        "watch": "rollup -c -w & npm run watch:example",
         "watch:example": "onchange './example/**/*.*' -e './example/**/*.js' -- npm run install:example"
     },
     "repository": {
@@ -40,6 +40,7 @@
         "@rollup/plugin-node-resolve": "^15.0.0",
         "@rollup/plugin-typescript": "^9.0.1",
         "@trivago/prettier-plugin-sort-imports": "^3.2.0",
+        "@types/babel__core": "^7.1.19",
         "@types/jest": "^29.1.2",
         "@typescript-eslint/eslint-plugin": "^5.24.0",
         "@typescript-eslint/parser": "^5.24.0",
