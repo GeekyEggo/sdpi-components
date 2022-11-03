@@ -68,6 +68,9 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
     public required = false;
 
     /** @inheritdoc */
+    protected delaySave = true;
+
+    /** @inheritdoc */
     protected render() {
         return html`
             <input

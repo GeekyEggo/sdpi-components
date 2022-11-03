@@ -48,15 +48,21 @@ export const Persisted = <TBase extends Constructor<LitElement>, TValue>(superCl
             }
         }
 
+        /**
+         * Gets or sets a value indicating whether the save should be delayed; this is useful for inputs whereby the onchange is called in quick succession, e.g. a text input.
+         */
+        protected delaySave?: boolean;
+
         /** @inheritdoc */
         protected firstUpdated(_changedProperties: Map<PropertyKey, unknown>): void {
             super.firstUpdated(_changedProperties);
 
             if (this.setting) {
+                const delay = this.delaySave ? 200 : null;
                 if (this.isGlobal) {
-                    [, this.save] = useGlobalSettings<TValue>(this.setting, (value) => (this.value = value));
+                    [, this.save] = useGlobalSettings<TValue>(this.setting, (value) => (this.value = value), delay);
                 } else {
-                    [, this.save] = useSettings<TValue>(this.setting, (value) => (this.value = value));
+                    [, this.save] = useSettings<TValue>(this.setting, (value) => (this.value = value), delay);
                 }
             }
         }

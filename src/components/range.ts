@@ -104,6 +104,9 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
     public step?: number;
 
     /** @inheritdoc */
+    protected delaySave = true;
+
+    /** @inheritdoc */
     protected render() {
         const input = html`
             <input

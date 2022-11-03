@@ -36,6 +36,9 @@ export class Password extends Persisted(Focusable(Input<typeof LitElement, strin
     public maxLength?: number;
 
     /** @inheritdoc */
+    protected delaySave = true;
+
+    /** @inheritdoc */
     protected render() {
         return html`
             <input

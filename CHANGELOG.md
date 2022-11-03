@@ -11,6 +11,10 @@
 
 # Change Log
 
+## v2.x.x
+
+-   ✨ Improve performance of saving, and consistency of concurrent saves.
+
 ## v2.3.1
 
 -   🐞 Fix `sdpi-select` not correctly selecting nested options.

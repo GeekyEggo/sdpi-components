@@ -19,6 +19,7 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
      * @param save The delegate responsible for persisting the settings in the Stream Deck.
      */
     constructor(private didReceive: IEventSubscriber<TEventArgs>, private save: (settings: unknown) => Promise<void>) {
+        this.save = delay(save, 50);
         didReceive.subscribe(async (data: TEventArgs) => this._settings?.setResult(data.payload.settings));
     }
 
@@ -29,7 +30,7 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
      * @param timeout Optional delay awaited before applying a save; this can be useful if a value can change frequently, i.e. if it is being typed.
      * @returns The getter and setter, capable of retrieving and persisting the setting.
      */
-    public use<T>(key: string, changeCallback?: ((value?: T) => void) | null, timeout: number | null = 250): [() => Promise<T>, (value?: T) => Promise<void>] {
+    public use<T>(key: string, changeCallback?: ((value?: T) => void) | null, timeout: number | null = 200): [() => Promise<T>, (value?: T) => Promise<void>] {
         // Register the change callback.
         if (changeCallback) {
             this.didReceive.subscribe((data: TEventArgs) => {

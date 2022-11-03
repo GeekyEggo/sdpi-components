@@ -60,6 +60,9 @@ export class Textarea extends Persisted(Focusable(Input<typeof LitElement, strin
     public showLength = false;
 
     /** @inheritdoc */
+    protected delaySave = true;
+
+    /** @inheritdoc */
     protected render() {
         return html`
             <textarea
