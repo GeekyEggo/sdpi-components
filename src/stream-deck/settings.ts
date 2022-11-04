@@ -19,7 +19,6 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
      * @param save The delegate responsible for persisting the settings in the Stream Deck.
      */
     constructor(private didReceive: IEventSubscriber<TEventArgs>, private save: (settings: unknown) => Promise<void>) {
-        this.save = delay(save, 50);
         didReceive.subscribe(async (data: TEventArgs) => this._settings?.setResult(data.payload.settings));
     }
 
@@ -28,9 +27,10 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
      * @param key The key.
      * @param changeCallback Optional callback invoked when the settings change from the Stream Deck.
      * @param timeout Optional delay awaited before applying a save; this can be useful if a value can change frequently, i.e. if it is being typed.
+     * @param save Indicates whether the setting should be persisted to the Stream Deck.
      * @returns The getter and setter, capable of retrieving and persisting the setting.
      */
-    public use<T>(key: string, changeCallback?: ((value?: T) => void) | null, timeout: number | null = 200): [() => Promise<T>, (value?: T) => Promise<void>] {
+    public use<T>(key: string, changeCallback?: ((value?: T) => void) | null, timeout: number | null = 250, save: boolean | null = true): [() => Promise<T | undefined>, (value?: T) => Promise<void>] {
         // Register the change callback.
         if (changeCallback) {
             this.didReceive.subscribe((data: TEventArgs) => {
@@ -42,7 +42,7 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
 
         // Construct getter and setter.
         const getter = async (): Promise<T> => get(key, await this._settings.promise);
-        const setter = timeout ? delay((value) => this.set(key, value), timeout) : (value?: unknown) => this.set(key, value);
+        const setter = timeout ? delay((value) => this.set(key, value, save), timeout) : (value?: unknown) => this.set(key, value, save);
 
         return [getter, setter];
     }
@@ -51,8 +51,9 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
      * Sets the value, for the specified key, to the persistent settings.
      * @param key The key.
      * @param value The value.
+     * @param save Indicates whether the setting should be persisted to the Stream Deck.
      */
-    private async set(key: string, value?: unknown): Promise<void> {
+    private async set(key: string, value?: unknown, save: boolean | null = true): Promise<void> {
         const _settings = await this._settings.promise;
 
         const oldValue = get(key, _settings);
@@ -61,7 +62,9 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
         }
 
         set(key, _settings, value);
-        await this.save(_settings);
+        if (save) {
+            await this.save(_settings);
+        }
     }
 }
 
@@ -73,11 +76,16 @@ export const useSettings = settings.use.bind(settings);
 let didRequestGlobalSettings = false;
 const globalSettings = new Settings(streamDeckClient.didReceiveGlobalSettings, (value) => streamDeckClient.setGlobalSettings(value));
 
-export const useGlobalSettings = <T>(key: string, changeCallback?: ((value?: T) => void) | null, timeout: number | null = 250): [() => Promise<T>, (value?: T) => Promise<void>] => {
+export const useGlobalSettings = <T>(
+    key: string,
+    changeCallback?: ((value?: T) => void) | null,
+    timeout: number | null = 250,
+    save: boolean | null = true
+): [() => Promise<T | undefined>, (value?: T) => Promise<void>] => {
     if (!didRequestGlobalSettings) {
         streamDeckClient.getGlobalSettings();
         didRequestGlobalSettings = true;
     }
 
-    return globalSettings.use(key, changeCallback, timeout);
+    return globalSettings.use(key, changeCallback, timeout, save);
 };

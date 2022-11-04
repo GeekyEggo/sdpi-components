@@ -13,7 +13,8 @@
 
 ## v2.x.x
 
--   ✨ Improve performance of saving, and consistency of concurrent saves.
+-   ✨ Add `label-setting` to `sdpi-select`; allows the label to be persisted, and rendered if the option becomes unavailable.
+-   ✨ Improve performance of saving.
 
 ## v2.3.1
 

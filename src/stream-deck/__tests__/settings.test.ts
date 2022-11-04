@@ -245,6 +245,40 @@ describe('useSettings', () => {
             foo: 'Hello world'
         });
     });
+
+    it('should not call setSettings when not permitted', async () => {
+        // given.
+        streamDeckClient.setSettings = jest.fn().mockResolvedValue(Promise.resolve());
+        const [, setUnsavedValue] = useSettings('hello', null, null, false);
+        const [, setValue] = useSettings('good');
+
+        streamDeckClient.didReceiveSettings.dispatch({
+            action: 'com.sdpi.plugin.action',
+            context: '<uniqueValue>',
+            device: '<uniqueValue>',
+            event: 'didReceiveSettings',
+            payload: {
+                coordinates: {
+                    column: 1,
+                    row: 1
+                },
+                isInMultiAction: false,
+                settings: {}
+            }
+        });
+
+        // when, then.
+        await setUnsavedValue('world');
+        expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(0);
+
+        // when, then.
+        await setValue('bye');
+        expect(streamDeckClient.setSettings).toHaveBeenCalledTimes(1);
+        expect(streamDeckClient.setSettings).toHaveBeenCalledWith({
+            hello: 'world',
+            good: 'bye'
+        });
+    });
 });
 
 describe('useGlobalSettings', () => {
@@ -321,6 +355,32 @@ describe('useGlobalSettings', () => {
         expect(streamDeckClient.setGlobalSettings).toHaveBeenCalledTimes(1);
         expect(streamDeckClient.setGlobalSettings).toHaveBeenCalledWith({
             foo: 'Hello world'
+        });
+    });
+
+    it('should not call setSettings when not permitted', async () => {
+        // given.
+        streamDeckClient.setGlobalSettings = jest.fn().mockResolvedValue(Promise.resolve());
+        const [, setValueUnsaved] = useGlobalSettings('hello', null, null, false);
+        const [, setValue] = useGlobalSettings('good');
+
+        streamDeckClient.didReceiveGlobalSettings.dispatch({
+            event: 'didReceiveGlobalSettings',
+            payload: {
+                settings: {}
+            }
+        });
+
+        // when, then.
+        await setValueUnsaved('world');
+        expect(streamDeckClient.setGlobalSettings).toHaveBeenCalledTimes(0);
+
+        // then.
+        await setValue('bye');
+        expect(streamDeckClient.setGlobalSettings).toHaveBeenCalledTimes(1);
+        expect(streamDeckClient.setGlobalSettings).toHaveBeenCalledWith({
+            hello: 'world',
+            good: 'bye'
         });
     });
 });
