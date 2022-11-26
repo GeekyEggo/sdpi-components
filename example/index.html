@@ -59,6 +59,8 @@
                 const msg = JSON.parse(e.data);
                 const { event, action, context } = msg;
 
+                console.log(msg);
+
                 switch (event) {
                     case 'keyDown':
                         webSocket.send(

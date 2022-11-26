@@ -9,6 +9,13 @@
             "Icon": "imgs/counter/icon",
             "Tooltip": "A counter action",
             "PropertyInspectorPath": "pi/index.html",
+            "Controllers": [
+                "Encoder",
+                "Keypad"
+            ],
+            "Encoder": {
+                "layout": "$B1"
+            },
             "States": [
                 {
                     "FontSize": "18",
