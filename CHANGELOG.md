@@ -15,6 +15,7 @@
 
 -   ✨ Add `label-setting` to `sdpi-select`; allows the label to be persisted, and rendered if the option becomes unavailable.
 -   ✨ Improve performance of saving.
+-   🐞 Fix font size and styling on Windows.
 
 ## v2.3.1
 
