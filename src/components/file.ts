@@ -11,11 +11,6 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
         return [
             ...super.styles,
             css`
-                .container {
-                    align-items: stretch;
-                    display: flex;
-                }
-
                 input {
                     display: none;
                 }
@@ -28,7 +23,6 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
                     background-color: var(--input-bg-color);
                     color: var(--input-font-color);
                     display: flex;
-                    flex: 1 1 auto;
                     font-family: var(--font-family);
                     font-size: var(--font-size);
                     line-height: 1.5em;
@@ -39,9 +33,8 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
                     align-self: center;
                 }
 
-                label.button {
-                    margin-left: var(--spacer);
-                    flex: 0 0 auto;
+                sdpi-button > div {
+                    min-width: 16px;
                 }
             `
         ];
@@ -62,7 +55,7 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
     /** @inheritdoc */
     render() {
         return html`
-            <div class="container">
+            <div class="flex">
                 <input
                     ${ref(this.focusElement)}
                     type="file"
@@ -71,11 +64,13 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
                     .disabled=${this.disabled}
                     @change="${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = sanitize(ev.target.value))}"
                 />
-                <label class="value" for="file_input">
+                <label class="value flex-grow" for="file_input">
                     <span .title=${this.value || ''}>${getFileName(this.value || '')}</span>
                 </label>
-                <label class="button">
-                    <sdpi-button .disabled=${this.disabled} @click=${() => this.focusElement.value?.click()}> ${this.label} </sdpi-button>
+                <label class="flex-shrink margin-left">
+                    <sdpi-button .disabled=${this.disabled} @click=${() => this.focusElement.value?.click()}>
+                        <div>${this.label}</div>
+                    </sdpi-button>
                 </label>
             </div>
         `;

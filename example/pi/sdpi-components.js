@@ -501,7 +501,11 @@
                     if (dataSource === undefined) {
                         return this.getItemsFromChildNodes();
                     }
-                    const result = (_a = this._itemsDataSource) !== null && _a !== void 0 ? _a : (await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => { var _a; return ((_a = msg.payload) === null || _a === void 0 ? void 0 : _a.event) === this.dataSource; }, { event: this.dataSource }));
+                    const payload = { event: this.dataSource };
+                    if (this._dataSourceInitialized) {
+                        payload.isRefreshing = true;
+                    }
+                    const result = (_a = this._itemsDataSource) !== null && _a !== void 0 ? _a : (await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => { var _a; return ((_a = msg.payload) === null || _a === void 0 ? void 0 : _a.event) === this.dataSource; }, payload));
                     this._dataSourceInitialized = true;
                     this._itemsDataSource = undefined;
                     if (i18n.locales) {
@@ -750,6 +754,25 @@
         return Gridded;
     };
 
+    const commonStyle = i$5 `
+    .flex {
+        align-items: stretch;
+        display: flex;
+    }
+
+    .flex-grow {
+        flex: 1 1 auto;
+    }
+
+    .flex-shrink {
+        flex: 0 0 auto;
+    }
+
+    .margin-left {
+        margin-left: var(--spacer);
+    }
+`;
+
     const hostStyle = i$5 `
     :host {
         /* Box model */
@@ -780,6 +803,7 @@
                 return [
                     asArray(super.styles),
                     hostStyle,
+                    commonStyle,
                     i$5 `
                     button,
                     input,
@@ -803,7 +827,10 @@
             }
         }
         __decorate([
-            e$3({ type: Boolean }),
+            e$3({
+                reflect: true,
+                type: Boolean
+            }),
             __metadata("design:type", Object)
         ], Input.prototype, "disabled", void 0);
         __decorate([
@@ -1196,11 +1223,6 @@
             return [
                 ...super.styles,
                 i$5 `
-                .container {
-                    align-items: stretch;
-                    display: flex;
-                }
-
                 input {
                     display: none;
                 }
@@ -1213,7 +1235,6 @@
                     background-color: var(--input-bg-color);
                     color: var(--input-font-color);
                     display: flex;
-                    flex: 1 1 auto;
                     font-family: var(--font-family);
                     font-size: var(--font-size);
                     line-height: 1.5em;
@@ -1224,16 +1245,15 @@
                     align-self: center;
                 }
 
-                label.button {
-                    margin-left: var(--spacer);
-                    flex: 0 0 auto;
+                sdpi-button > div {
+                    min-width: 16px;
                 }
             `
             ];
         }
         render() {
             return y `
-            <div class="container">
+            <div class="flex">
                 <input
                     ${n$1(this.focusElement)}
                     type="file"
@@ -1242,11 +1262,13 @@
                     .disabled=${this.disabled}
                     @change="${(ev) => (this.value = sanitize(ev.target.value))}"
                 />
-                <label class="value" for="file_input">
+                <label class="value flex-grow" for="file_input">
                     <span .title=${this.value || ''}>${getFileName(this.value || '')}</span>
                 </label>
-                <label class="button">
-                    <sdpi-button .disabled=${this.disabled} @click=${() => { var _a; return (_a = this.focusElement.value) === null || _a === void 0 ? void 0 : _a.click(); }}> ${this.label} </sdpi-button>
+                <label class="flex-shrink margin-left">
+                    <sdpi-button .disabled=${this.disabled} @click=${() => { var _a; return (_a = this.focusElement.value) === null || _a === void 0 ? void 0 : _a.click(); }}>
+                        <div>${this.label}</div>
+                    </sdpi-button>
                 </label>
             </div>
         `;
@@ -1611,14 +1633,17 @@
      */const n=t=>!t$1(t)&&"function"==typeof t.then;class h extends c$1{constructor(){super(...arguments),this._$Cwt=1073741823,this._$Cyt=[],this._$CK=new s(this),this._$CX=new i;}render(...s){var i;return null!==(i=s.find((t=>!n(t))))&&void 0!==i?i:x}update(s,i){const r=this._$Cyt;let e=r.length;this._$Cyt=i;const o=this._$CK,h=this._$CX;this.isConnected||this.disconnected();for(let t=0;t<i.length&&!(t>this._$Cwt);t++){const s=i[t];if(!n(s))return this._$Cwt=t,s;t<e&&s===r[t]||(this._$Cwt=1073741823,e=0,Promise.resolve(s).then((async t=>{for(;h.get();)await h.get();const i=o.deref();if(void 0!==i){const r=i._$Cyt.indexOf(s);r>-1&&r<i._$Cwt&&(i._$Cwt=r,i.setValue(t));}})));}return x}disconnected(){this._$CK.disconnect(),this._$CX.pause();}reconnected(){this._$CK.reconnect(this),this._$CX.resume();}}const c=e$1(h);
 
     let Select = class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Input(s$3))))) {
+        constructor() {
+            super(...arguments);
+            this.showRefresh = false;
+        }
         static get styles() {
             return [
                 ...super.styles,
-                hostStyle,
                 i$5 `
                 select {
                     background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 1px) 0;
+                    padding: calc(var(--spacer) + 2px) 0;
                     text-overflow: ellipsis;
                 }
 
@@ -1628,6 +1653,16 @@
 
                 select:disabled {
                     opacity: 0.5;
+                }
+
+                .refresh {
+                    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTgiIHdpZHRoPSIxOCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjOUM5QzlDIj48cGF0aCBkPSJNMTIgMjBxLTMuMzUgMC01LjY3NS0yLjMyNVE0IDE1LjM1IDQgMTJxMC0zLjM1IDIuMzI1LTUuNjc1UTguNjUgNCAxMiA0cTEuNzI1IDAgMy4zLjcxMyAxLjU3NS43MTIgMi43IDIuMDM3VjRoMnY3aC03VjloNC4ycS0uOC0xLjQtMi4xODctMi4yUTEzLjYyNSA2IDEyIDYgOS41IDYgNy43NSA3Ljc1VDYgMTJxMCAyLjUgMS43NSA0LjI1VDEyIDE4cTEuOTI1IDAgMy40NzUtMS4xVDE3LjY1IDE0aDIuMXEtLjcgMi42NS0yLjg1IDQuMzI1UTE0Ljc1IDIwIDEyIDIwWiIvPjwvc3ZnPg==)
+                        no-repeat -1px -1px;
+                    width: 16px;
+                }
+
+                sdpi-button:not([disabled]):hover .refresh {
+                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTgiIHdpZHRoPSIxOCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjQ0VDRUNFIj48cGF0aCBkPSJNMTIgMjBxLTMuMzUgMC01LjY3NS0yLjMyNVE0IDE1LjM1IDQgMTJxMC0zLjM1IDIuMzI1LTUuNjc1UTguNjUgNCAxMiA0cTEuNzI1IDAgMy4zLjcxMyAxLjU3NS43MTIgMi43IDIuMDM3VjRoMnY3aC03VjloNC4ycS0uOC0xLjQtMi4xODctMi4yUTEzLjYyNSA2IDEyIDYgOS41IDYgNy43NSA3Ljc1VDYgMTJxMCAyLjUgMS43NSA0LjI1VDEyIDE4cTEuOTI1IDAgMy40NzUtMS4xVDE3LjY1IDE0aDIuMXEtLjcgMi42NS0yLjg1IDQuMzI1UTE0Ljc1IDIwIDEyIDIwWiIvPjwvc3ZnPg==);
                 }
             `
             ];
@@ -1640,11 +1675,12 @@
         }
         render() {
             var _a, _b;
+            const disabled = this.disabled || this.items.status !== i$2.COMPLETE;
             const selectedValue = this.getSelectedValueFrom((_b = (_a = this.items) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : []) || this.defaultValue;
-            return y `
+            const select = y `
             <select
                 ${n$1(this.focusElement)}
-                .disabled=${this.disabled || this.items.status !== i$2.COMPLETE}
+                .disabled=${disabled}
                 .value=${(selectedValue === null || selectedValue === void 0 ? void 0 : selectedValue.toString()) || ''}
                 @change=${(ev) => {
             this.setLabel && this.setLabel(ev.target[ev.target.selectedIndex].innerText);
@@ -1659,6 +1695,19 @@
                     `
         })}
             </select>
+        `;
+            if (!this.showRefresh || this.dataSource === undefined) {
+                return select;
+            }
+            return y `
+            <div class="flex">
+                <div class="flex-grow">${select}</div>
+                <div class="flex-shrink margin-left">
+                    <sdpi-button .disabled=${disabled} @click=${() => this.refresh()}>
+                        <div class="refresh">&nbsp;</div>
+                    </sdpi-button>
+                </div>
+            </div>
         `;
         }
         async getLabelOrPlaceholder() {
@@ -1693,6 +1742,13 @@
         e$3({ attribute: 'label-setting' }),
         __metadata("design:type", String)
     ], Select.prototype, "labelSetting", void 0);
+    __decorate([
+        e$3({
+            attribute: 'show-refresh',
+            type: Boolean
+        }),
+        __metadata("design:type", Object)
+    ], Select.prototype, "showRefresh", void 0);
     __decorate([
         e$3(localizedMessagePropertyOptions),
         __metadata("design:type", LocalizedMessage)

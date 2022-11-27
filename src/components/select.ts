@@ -7,7 +7,6 @@ import { until } from 'lit/directives/until.js';
 import { LocalizedMessage, localizedMessagePropertyOptions } from '../core';
 import { DataSourced, DataSourceResult, DynamicValueType, Focusable, Input, Persisted } from '../mixins';
 import { useSettings } from '../stream-deck/settings';
-import { hostStyle } from '../styles/host';
 
 @customElement('sdpi-select')
 export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Input<typeof LitElement, boolean | number | string>(LitElement))))) {
@@ -15,11 +14,10 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
     public static get styles() {
         return [
             ...super.styles,
-            hostStyle,
             css`
                 select {
                     background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 1px) 0;
+                    padding: calc(var(--spacer) + 2px) 0;
                     text-overflow: ellipsis;
                 }
 
@@ -30,6 +28,16 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
                 select:disabled {
                     opacity: 0.5;
                 }
+
+                .refresh {
+                    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTgiIHdpZHRoPSIxOCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjOUM5QzlDIj48cGF0aCBkPSJNMTIgMjBxLTMuMzUgMC01LjY3NS0yLjMyNVE0IDE1LjM1IDQgMTJxMC0zLjM1IDIuMzI1LTUuNjc1UTguNjUgNCAxMiA0cTEuNzI1IDAgMy4zLjcxMyAxLjU3NS43MTIgMi43IDIuMDM3VjRoMnY3aC03VjloNC4ycS0uOC0xLjQtMi4xODctMi4yUTEzLjYyNSA2IDEyIDYgOS41IDYgNy43NSA3Ljc1VDYgMTJxMCAyLjUgMS43NSA0LjI1VDEyIDE4cTEuOTI1IDAgMy40NzUtMS4xVDE3LjY1IDE0aDIuMXEtLjcgMi42NS0yLjg1IDQuMzI1UTE0Ljc1IDIwIDEyIDIwWiIvPjwvc3ZnPg==)
+                        no-repeat -1px -1px;
+                    width: 16px;
+                }
+
+                sdpi-button:not([disabled]):hover .refresh {
+                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTgiIHdpZHRoPSIxOCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjQ0VDRUNFIj48cGF0aCBkPSJNMTIgMjBxLTMuMzUgMC01LjY3NS0yLjMyNVE0IDE1LjM1IDQgMTJxMC0zLjM1IDIuMzI1LTUuNjc1UTguNjUgNCAxMiA0cTEuNzI1IDAgMy4zLjcxMyAxLjU3NS43MTIgMi43IDIuMDM3VjRoMnY3aC03VjloNC4ycS0uOC0xLjQtMi4xODctMi4yUTEzLjYyNSA2IDEyIDYgOS41IDYgNy43NSA3Ljc1VDYgMTJxMCAyLjUgMS43NSA0LjI1VDEyIDE4cTEuOTI1IDAgMy40NzUtMS4xVDE3LjY1IDE0aDIuMXEtLjcgMi42NS0yLjg1IDQuMzI1UTE0Ljc1IDIwIDEyIDIwWiIvPjwvc3ZnPg==);
+                }
             `
         ];
     }
@@ -39,6 +47,15 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
      */
     @property({ attribute: 'label-setting' })
     public labelSetting?: string;
+
+    /**
+     * Determines whether to show the refresh button.
+     */
+    @property({
+        attribute: 'show-refresh',
+        type: Boolean
+    })
+    public showRefresh = false;
 
     /**
      * The optional placeholder text; added as the first item within the select, as a disable option, and selected by default.
@@ -57,12 +74,13 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
 
     /** @inheritdoc */
     protected render() {
+        const disabled = this.disabled || this.items.status !== TaskStatus.COMPLETE;
         const selectedValue = this.getSelectedValueFrom(this.items?.value ?? []) || this.defaultValue;
 
-        return html`
+        const select = html`
             <select
                 ${ref(this.focusElement)}
-                .disabled=${this.disabled || this.items.status !== TaskStatus.COMPLETE}
+                .disabled=${disabled}
                 .value=${selectedValue?.toString() || ''}
                 @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => {
                     this.setLabel && this.setLabel(ev.target[ev.target.selectedIndex].innerText);
@@ -80,6 +98,21 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
                     `
                 })}
             </select>
+        `;
+
+        if (!this.showRefresh || this.dataSource === undefined) {
+            return select;
+        }
+
+        return html`
+            <div class="flex">
+                <div class="flex-grow">${select}</div>
+                <div class="flex-shrink margin-left">
+                    <sdpi-button .disabled=${disabled} @click=${() => this.refresh()}>
+                        <div class="refresh">&nbsp;</div>
+                    </sdpi-button>
+                </div>
+            </div>
         `;
     }
 

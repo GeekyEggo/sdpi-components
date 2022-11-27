@@ -2,6 +2,7 @@ import { css, CSSResultGroup, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 
 import { asArray, getUUID } from '../core';
+import { commonStyle } from '../styles/common';
 import { hostStyle } from '../styles/host';
 
 /**
@@ -16,6 +17,7 @@ export const Input = <TBase extends Constructor<LitElement> & { styles?: CSSResu
             return [
                 asArray(super.styles),
                 hostStyle,
+                commonStyle,
                 css`
                     button,
                     input,
@@ -41,7 +43,10 @@ export const Input = <TBase extends Constructor<LitElement> & { styles?: CSSResu
         /**
          * Gets or sets the value indicating whether the input is disabled.
          */
-        @property({ type: Boolean })
+        @property({
+            reflect: true,
+            type: Boolean
+        })
         public disabled = false;
 
         /**
