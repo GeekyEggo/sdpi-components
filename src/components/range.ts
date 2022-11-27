@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
+import { format } from '../core';
 import { Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-range')
@@ -83,10 +84,22 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
     public max?: number;
 
     /**
+     * The label format used to render the maximum label.
+     */
+    @property({ attribute: 'max-label' })
+    public maxLabel = '{0}';
+
+    /**
      * The minimum value.
      */
     @property({ type: Number })
     public min?: number;
+
+    /**
+     * The label format used to render the minimum label.
+     */
+    @property({ attribute: 'min-label' })
+    public minLabel = '{0}';
 
     /**
      * When `true`, the `min` and `max` values are shown on either side of the input.
@@ -125,9 +138,9 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
 
         if (this.showLabels) {
             return html`<div class="container">
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}>${this.min}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}>${format(this.minLabel, this.min)}</div>
                 <div>${input}</div>
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}>${this.max}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}>${format(this.maxLabel, this.max)}</div>
             </div>`;
         } else {
             return input;

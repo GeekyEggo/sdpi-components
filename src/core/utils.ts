@@ -65,7 +65,10 @@ export function format(format: string, ...args: unknown[]) {
     const type = typeof args[0];
     const formatArgs = type === 'string' || type === 'number' ? Array.prototype.slice.call(args) : args[0];
 
-    return format.replace(/{([A-z0-9-_#@\\.]+)}/g, (match, path) => get(path, formatArgs) || match);
+    return format.replace(/{([A-z0-9-_#@\\.]+)}/g, (match, path) => {
+        const value = get(path, formatArgs);
+        return value !== undefined ? value : match;
+    });
 }
 
 /**

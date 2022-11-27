@@ -201,6 +201,17 @@
             }
         }
     }
+    function format(format, ...args) {
+        if (!args.length) {
+            return format;
+        }
+        const type = typeof args[0];
+        const formatArgs = type === 'string' || type === 'number' ? Array.prototype.slice.call(args) : args[0];
+        return format.replace(/{([A-z0-9-_#@\\.]+)}/g, (match, path) => {
+            const value = get(path, formatArgs);
+            return value !== undefined ? value : match;
+        });
+    }
     function getUUID() {
         const chr4 = () => Math.random().toString(16).slice(-4);
         return chr4() + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + chr4() + chr4();
@@ -1347,6 +1358,8 @@
     let Range = class Range extends Persisted(Focusable(Input(s$3))) {
         constructor() {
             super(...arguments);
+            this.maxLabel = '{0}';
+            this.minLabel = '{0}';
             this.showLabels = false;
             this.delaySave = true;
         }
@@ -1436,9 +1449,9 @@
         `;
             if (this.showLabels) {
                 return y `<div class="container">
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}>${this.min}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}>${format(this.minLabel, this.min)}</div>
                 <div>${input}</div>
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}>${this.max}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}>${format(this.maxLabel, this.max)}</div>
             </div>`;
             }
             else {
@@ -1451,9 +1464,17 @@
         __metadata("design:type", Number)
     ], Range.prototype, "max", void 0);
     __decorate([
+        e$3({ attribute: 'max-label' }),
+        __metadata("design:type", Object)
+    ], Range.prototype, "maxLabel", void 0);
+    __decorate([
         e$3({ type: Number }),
         __metadata("design:type", Number)
     ], Range.prototype, "min", void 0);
+    __decorate([
+        e$3({ attribute: 'min-label' }),
+        __metadata("design:type", Object)
+    ], Range.prototype, "minLabel", void 0);
     __decorate([
         e$3({
             attribute: 'showlabels',

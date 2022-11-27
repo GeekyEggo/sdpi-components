@@ -40,6 +40,12 @@ describe('format', () => {
         const value = format('Hello {0}, the purpose of this test is "{1}".', 'everyone', 'formatting with objects');
         expect(value).toBe('Hello everyone, the purpose of this test is "formatting with objects".');
     });
+
+    it('should format a zero value', () => {
+        // given, when, then.
+        const value = format('{0}', 0);
+        expect(value).toBe('0');
+    });
 });
 
 /**
