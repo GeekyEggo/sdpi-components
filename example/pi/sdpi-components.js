@@ -503,7 +503,7 @@
                     }
                     const payload = { event: this.dataSource };
                     if (this._dataSourceInitialized) {
-                        payload.isRefreshing = true;
+                        payload.isRefresh = true;
                     }
                     const result = (_a = this._itemsDataSource) !== null && _a !== void 0 ? _a : (await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => { var _a; return ((_a = msg.payload) === null || _a === void 0 ? void 0 : _a.event) === this.dataSource; }, payload));
                     this._dataSourceInitialized = true;
