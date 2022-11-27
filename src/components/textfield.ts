@@ -70,17 +70,22 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
     /** @inheritdoc */
     protected delaySave = true;
 
+    /**
+     * Gets the input type; default is 'text'.
+     */
+    protected type: 'text' | 'password' = 'text';
+
     /** @inheritdoc */
     protected render() {
         return html`
             <input
                 ${ref(this.focusElement)}
-                type="text"
                 maxlength=${ifDefined(this.maxLength)}
                 .disabled=${this.disabled}
                 .pattern=${this.pattern}
                 .placeholder=${this.placeholder?.toString() || ''}
                 .required=${this.required}
+                .type=${this.type}
                 .value=${this.value || ''}
                 @input=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
             />

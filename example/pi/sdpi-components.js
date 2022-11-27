@@ -1277,10 +1277,13 @@
         e$4('sdpi-i18n')
     ], i18nElement);
 
-    let Password = class Password extends Persisted(Focusable(Input(s$3))) {
+    let Textfield = class Textfield extends Persisted(Focusable(Input(s$3))) {
         constructor() {
             super(...arguments);
+            this.pattern = '';
+            this.required = false;
             this.delaySave = true;
+            this.type = 'text';
         }
         static get styles() {
             return [
@@ -1295,16 +1298,33 @@
                 input:disabled {
                     opacity: 0.5;
                 }
+
+                input:required {
+                    background-position: 98% center;
+                    background-repeat: no-repeat;
+                }
+
+                input:required:valid {
+                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPjxwb2x5Z29uIGZpbGw9IiNEOEQ4RDgiIHBvaW50cz0iNS4yIDEgNi4yIDEgNi4yIDcgMy4yIDcgMy4yIDYgNS4yIDYiIHRyYW5zZm9ybT0icm90YXRlKDQwIDQuNjc3IDQpIi8+PC9zdmc+);
+                }
+
+                input:required:invalid {
+                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPgogICAgPHBhdGggZmlsbD0iI0Q4RDhEOCIgZD0iTTQuNSwwIEM2Ljk4NTI4MTM3LC00LjU2NTM4NzgyZS0xNiA5LDIuMDE0NzE4NjMgOSw0LjUgQzksNi45ODUyODEzNyA2Ljk4NTI4MTM3LDkgNC41LDkgQzIuMDE0NzE4NjMsOSAzLjA0MzU5MTg4ZS0xNiw2Ljk4NTI4MTM3IDAsNC41IEMtMy4wNDM1OTE4OGUtMTYsMi4wMTQ3MTg2MyAyLjAxNDcxODYzLDQuNTY1Mzg3ODJlLTE2IDQuNSwwIFogTTQsMSBMNCw2IEw1LDYgTDUsMSBMNCwxIFogTTQuNSw4IEM0Ljc3NjE0MjM3LDggNSw3Ljc3NjE0MjM3IDUsNy41IEM1LDcuMjIzODU3NjMgNC43NzYxNDIzNyw3IDQuNSw3IEM0LjIyMzg1NzYzLDcgNCw3LjIyMzg1NzYzIDQsNy41IEM0LDcuNzc2MTQyMzcgNC4yMjM4NTc2Myw4IDQuNSw4IFoiLz4KICA8L3N2Zz4);
+                }
             `
             ];
         }
         render() {
+            var _a;
             return y `
             <input
                 ${n$1(this.focusElement)}
-                type="password"
                 maxlength=${l(this.maxLength)}
                 .disabled=${this.disabled}
+                .pattern=${this.pattern}
+                .placeholder=${((_a = this.placeholder) === null || _a === void 0 ? void 0 : _a.toString()) || ''}
+                .required=${this.required}
+                .type=${this.type}
                 .value=${this.value || ''}
                 @input=${(ev) => (this.value = ev.target.value)}
             />
@@ -1317,7 +1337,29 @@
             type: Number
         }),
         __metadata("design:type", Number)
-    ], Password.prototype, "maxLength", void 0);
+    ], Textfield.prototype, "maxLength", void 0);
+    __decorate([
+        e$3(),
+        __metadata("design:type", Object)
+    ], Textfield.prototype, "pattern", void 0);
+    __decorate([
+        e$3(localizedMessagePropertyOptions),
+        __metadata("design:type", LocalizedMessage)
+    ], Textfield.prototype, "placeholder", void 0);
+    __decorate([
+        e$3({ type: Boolean }),
+        __metadata("design:type", Object)
+    ], Textfield.prototype, "required", void 0);
+    Textfield = __decorate([
+        e$4('sdpi-textfield')
+    ], Textfield);
+
+    let Password = class Password extends Textfield {
+        constructor() {
+            super(...arguments);
+            this.type = 'password';
+        }
+    };
     Password = __decorate([
         e$4('sdpi-password')
     ], Password);
@@ -1736,82 +1778,6 @@
     Textarea = __decorate([
         e$4('sdpi-textarea')
     ], Textarea);
-
-    let Textfield = class Textfield extends Persisted(Focusable(Input(s$3))) {
-        constructor() {
-            super(...arguments);
-            this.pattern = '';
-            this.required = false;
-            this.delaySave = true;
-        }
-        static get styles() {
-            return [
-                ...super.styles,
-                hostStyle,
-                i$5 `
-                input {
-                    background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 3px) var(--spacer);
-                }
-
-                input:disabled {
-                    opacity: 0.5;
-                }
-
-                input:required {
-                    background-position: 98% center;
-                    background-repeat: no-repeat;
-                }
-
-                input:required:valid {
-                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPjxwb2x5Z29uIGZpbGw9IiNEOEQ4RDgiIHBvaW50cz0iNS4yIDEgNi4yIDEgNi4yIDcgMy4yIDcgMy4yIDYgNS4yIDYiIHRyYW5zZm9ybT0icm90YXRlKDQwIDQuNjc3IDQpIi8+PC9zdmc+);
-                }
-
-                input:required:invalid {
-                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPgogICAgPHBhdGggZmlsbD0iI0Q4RDhEOCIgZD0iTTQuNSwwIEM2Ljk4NTI4MTM3LC00LjU2NTM4NzgyZS0xNiA5LDIuMDE0NzE4NjMgOSw0LjUgQzksNi45ODUyODEzNyA2Ljk4NTI4MTM3LDkgNC41LDkgQzIuMDE0NzE4NjMsOSAzLjA0MzU5MTg4ZS0xNiw2Ljk4NTI4MTM3IDAsNC41IEMtMy4wNDM1OTE4OGUtMTYsMi4wMTQ3MTg2MyAyLjAxNDcxODYzLDQuNTY1Mzg3ODJlLTE2IDQuNSwwIFogTTQsMSBMNCw2IEw1LDYgTDUsMSBMNCwxIFogTTQuNSw4IEM0Ljc3NjE0MjM3LDggNSw3Ljc3NjE0MjM3IDUsNy41IEM1LDcuMjIzODU3NjMgNC43NzYxNDIzNyw3IDQuNSw3IEM0LjIyMzg1NzYzLDcgNCw3LjIyMzg1NzYzIDQsNy41IEM0LDcuNzc2MTQyMzcgNC4yMjM4NTc2Myw4IDQuNSw4IFoiLz4KICA8L3N2Zz4);
-                }
-            `
-            ];
-        }
-        render() {
-            var _a;
-            return y `
-            <input
-                ${n$1(this.focusElement)}
-                type="text"
-                maxlength=${l(this.maxLength)}
-                .disabled=${this.disabled}
-                .pattern=${this.pattern}
-                .placeholder=${((_a = this.placeholder) === null || _a === void 0 ? void 0 : _a.toString()) || ''}
-                .required=${this.required}
-                .value=${this.value || ''}
-                @input=${(ev) => (this.value = ev.target.value)}
-            />
-        `;
-        }
-    };
-    __decorate([
-        e$3({
-            attribute: 'maxlength',
-            type: Number
-        }),
-        __metadata("design:type", Number)
-    ], Textfield.prototype, "maxLength", void 0);
-    __decorate([
-        e$3(),
-        __metadata("design:type", Object)
-    ], Textfield.prototype, "pattern", void 0);
-    __decorate([
-        e$3(localizedMessagePropertyOptions),
-        __metadata("design:type", LocalizedMessage)
-    ], Textfield.prototype, "placeholder", void 0);
-    __decorate([
-        e$3({ type: Boolean }),
-        __metadata("design:type", Object)
-    ], Textfield.prototype, "required", void 0);
-    Textfield = __decorate([
-        e$4('sdpi-textfield')
-    ], Textfield);
 
     const existing = window.connectElgatoStreamDeckSocket;
     window.connectElgatoStreamDeckSocket = (port, propertyInspectorUUID, registerEvent, info, actionInfo) => {

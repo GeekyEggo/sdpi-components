@@ -1,56 +1,11 @@
-import { css, html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
-import { ref } from 'lit/directives/ref.js';
+import { customElement } from 'lit/decorators.js';
 
-import { Focusable, Input, Persisted } from '../mixins';
-import { hostStyle } from '../styles/host';
+import { Textfield } from './textfield';
 
 @customElement('sdpi-password')
-export class Password extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
+export class Password extends Textfield {
     /** @inheritdoc */
-    public static get styles() {
-        return [
-            ...super.styles,
-            hostStyle,
-            css`
-                input {
-                    background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 3px) var(--spacer);
-                }
-
-                input:disabled {
-                    opacity: 0.5;
-                }
-            `
-        ];
-    }
-
-    /**
-     * The maximum length the text value can be.
-     */
-    @property({
-        attribute: 'maxlength',
-        type: Number
-    })
-    public maxLength?: number;
-
-    /** @inheritdoc */
-    protected delaySave = true;
-
-    /** @inheritdoc */
-    protected render() {
-        return html`
-            <input
-                ${ref(this.focusElement)}
-                type="password"
-                maxlength=${ifDefined(this.maxLength)}
-                .disabled=${this.disabled}
-                .value=${this.value || ''}
-                @input=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
-            />
-        `;
-    }
+    protected type: 'text' | 'password' = 'password';
 }
 
 declare global {
