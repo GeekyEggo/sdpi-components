@@ -108,6 +108,7 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
 
     /** @inheritdoc */
     protected render() {
+        const value = this.value?.toString() || this.defaultValue?.toString() || '';
         const input = html`
             <input
                 ${ref(this.focusElement)}
@@ -116,8 +117,8 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
                 min=${ifDefined(this.min)}
                 step=${ifDefined(this.step)}
                 .disabled=${this.disabled}
-                .title=${this.value?.toString() || ''}
-                .value=${this.value?.toString() || ''}
+                .title=${value}
+                .value=${value}
                 @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.valueAsNumber)}
             />
         `;

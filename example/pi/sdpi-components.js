@@ -799,6 +799,10 @@
             e$3({ attribute: false }),
             __metadata("design:type", Object)
         ], Input.prototype, "value", void 0);
+        __decorate([
+            e$3({ attribute: 'default' }),
+            __metadata("design:type", Object)
+        ], Input.prototype, "defaultValue", void 0);
         return Input;
     };
 
@@ -1049,7 +1053,7 @@
                 min=${l(this.min)}
                 step=${l(this.step)}
                 .disabled=${this.disabled}
-                .value=${this.value || ''}
+                .value=${this.value || this.defaultValue || ''}
                 @change="${(ev) => (this.value = ev.target.value)}"
             />
             ${this.dataListController.dataList}
@@ -1081,7 +1085,7 @@
             return this.renderCheckable('checkbox', y `<input
                 ${n$1(this.focusElement)}
                 type="checkbox"
-                .checked=${this.value || false}
+                .checked=${this.value || this.defaultValue || false}
                 .disabled=${this.disabled}
                 @change=${(ev) => (this.value = ev.target.checked)}
             />`, this.label);
@@ -1162,7 +1166,7 @@
                 type="color"
                 ${n$1(this.focusElement)}
                 .disabled=${this.disabled}
-                .defaultValue=${this.value || ''}
+                .defaultValue=${this.value || this.defaultValue || ''}
                 @change=${(ev) => (this.value = ev.target.value)}
             />
         `;
@@ -1327,7 +1331,7 @@
                                 <input
                                     type="radio"
                                     name="_"
-                                    .checked=${this.value == item.value}
+                                    .checked=${this.value == item.value || (this.defaultValue != undefined && this.defaultValue == item.value)}
                                     .disabled=${this.disabled || item.disabled || false}
                                     .value=${item.value}
                                     @change=${(ev) => (this.value = this.parseValue(ev.target.value))}
@@ -1416,6 +1420,7 @@
         }
         render() {
             var _a, _b;
+            const value = ((_a = this.value) === null || _a === void 0 ? void 0 : _a.toString()) || ((_b = this.defaultValue) === null || _b === void 0 ? void 0 : _b.toString()) || '';
             const input = y `
             <input
                 ${n$1(this.focusElement)}
@@ -1424,8 +1429,8 @@
                 min=${l(this.min)}
                 step=${l(this.step)}
                 .disabled=${this.disabled}
-                .title=${((_a = this.value) === null || _a === void 0 ? void 0 : _a.toString()) || ''}
-                .value=${((_b = this.value) === null || _b === void 0 ? void 0 : _b.toString()) || ''}
+                .title=${value}
+                .value=${value}
                 @change=${(ev) => (this.value = ev.target.valueAsNumber)}
             />
         `;
@@ -1572,12 +1577,12 @@
         }
         render() {
             var _a, _b;
-            const selectedValue = this.getSelectedValueFrom((_b = (_a = this.items) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : []) || undefined;
+            const selectedValue = this.getSelectedValueFrom((_b = (_a = this.items) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : []) || this.defaultValue;
             return y `
             <select
                 ${n$1(this.focusElement)}
                 .disabled=${this.disabled || this.items.status !== i$2.COMPLETE}
-                .value=${selectedValue || ''}
+                .value=${(selectedValue === null || selectedValue === void 0 ? void 0 : selectedValue.toString()) || ''}
                 @change=${(ev) => {
             this.setLabel && this.setLabel(ev.target[ev.target.selectedIndex].innerText);
             this.value = this.parseValue(ev.target.value);

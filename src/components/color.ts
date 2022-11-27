@@ -29,7 +29,7 @@ export class Color extends Persisted(Focusable(Input<typeof LitElement, string>(
                 type="color"
                 ${ref(this.focusElement)}
                 .disabled=${this.disabled}
-                .defaultValue=${this.value || ''}
+                .defaultValue=${this.value || this.defaultValue || ''}
                 @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}
             />
         `;

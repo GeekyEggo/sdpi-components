@@ -57,13 +57,13 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
 
     /** @inheritdoc */
     protected render() {
-        const selectedValue = this.getSelectedValueFrom(this.items?.value ?? []) || undefined;
+        const selectedValue = this.getSelectedValueFrom(this.items?.value ?? []) || this.defaultValue;
 
         return html`
             <select
                 ${ref(this.focusElement)}
                 .disabled=${this.disabled || this.items.status !== TaskStatus.COMPLETE}
-                .value=${selectedValue || ''}
+                .value=${selectedValue?.toString() || ''}
                 @change=${(ev: HTMLInputEvent<HTMLSelectElement>) => {
                     this.setLabel && this.setLabel(ev.target[ev.target.selectedIndex].innerText);
                     this.value = this.parseValue(ev.target.value);

@@ -86,7 +86,7 @@ export class Calendar extends Persisted(Focusable(Input<typeof LitElement, strin
                 min=${ifDefined(this.min)}
                 step=${ifDefined(this.step)}
                 .disabled=${this.disabled}
-                .value=${this.value || ''}
+                .value=${this.value || this.defaultValue || ''}
                 @change="${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.value)}"
             />
             ${this.dataListController.dataList}

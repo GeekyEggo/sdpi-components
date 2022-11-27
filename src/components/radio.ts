@@ -32,7 +32,7 @@ export class Radio extends Gridded(Persisted(Checkable(DataSourced(DynamicValueT
                                 <input
                                     type="radio"
                                     name="_"
-                                    .checked=${this.value == item.value}
+                                    .checked=${this.value == item.value || (this.defaultValue != undefined && this.defaultValue == item.value)}
                                     .disabled=${this.disabled || item.disabled || false}
                                     .value=${item.value}
                                     @change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = this.parseValue(ev.target.value))}

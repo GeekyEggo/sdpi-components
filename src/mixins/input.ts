@@ -51,6 +51,12 @@ export const Input = <TBase extends Constructor<LitElement> & { styles?: CSSResu
         public value?: TValue;
 
         /**
+         * Gets or sets the optional default value of the input.
+         */
+        @property({ attribute: 'default' })
+        public defaultValue?: TValue;
+
+        /**
          * The input identifier.
          */
         protected inputId = getUUID();

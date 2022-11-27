@@ -14,6 +14,7 @@
 ## v2.x.x
 
 -   ✨ Add `label-setting` to `sdpi-select`; allows the label to be persisted, and rendered if the option becomes unavailable.
+-   ✨ Add `default` value option to `sdpi-calendar`, `sdpi-checkbox`, `sdpi-color`, `sdpi-radio`, `sdpi-range`, and `sdpi-select`.
 -   ✨ Improve performance of saving.
 -   🐞 Fix font size and styling on Windows.
 
