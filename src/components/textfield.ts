@@ -53,7 +53,7 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
      * The optional pattern to be applied when validating the value.
      */
     @property()
-    public pattern = '';
+    public pattern?: string;
 
     /**
      * The optional placeholder text to be shown within the input.
@@ -80,10 +80,10 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
         return html`
             <input
                 ${ref(this.focusElement)}
+                pattern=${ifDefined(this.pattern)}
+                placeholder=${ifDefined(this.placeholder?.toString())}
                 maxlength=${ifDefined(this.maxLength)}
                 .disabled=${this.disabled}
-                .pattern=${this.pattern}
-                .placeholder=${this.placeholder?.toString() || ''}
                 .required=${this.required}
                 .type=${this.type}
                 .value=${this.value || ''}

@@ -19,6 +19,8 @@
 -   ✨ Add `min-label` and `max-label` formats to `sdpi-range`, allowing for custom labels.
 -   ✨ Add support for `placeholder` and `required` attributes to `sdpi-password`.
 -   🐞 Fix font size and styling on Windows.
+-   🐞 Fix `placeholder` always being set on `sdpi-textfield`.
+-   🐞 Fix `pattern` always being set on `sdpi-textfield`, resulting in a validation warning.
 -   ♻️ Improve performance of saving.
 
 ## v2.3.1

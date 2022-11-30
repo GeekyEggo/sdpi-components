@@ -1302,7 +1302,6 @@
     let Textfield = class Textfield extends Persisted(Focusable(Input(s$3))) {
         constructor() {
             super(...arguments);
-            this.pattern = '';
             this.required = false;
             this.delaySave = true;
             this.type = 'text';
@@ -1341,10 +1340,10 @@
             return y `
             <input
                 ${n$1(this.focusElement)}
+                pattern=${l(this.pattern)}
+                placeholder=${l((_a = this.placeholder) === null || _a === void 0 ? void 0 : _a.toString())}
                 maxlength=${l(this.maxLength)}
                 .disabled=${this.disabled}
-                .pattern=${this.pattern}
-                .placeholder=${((_a = this.placeholder) === null || _a === void 0 ? void 0 : _a.toString()) || ''}
                 .required=${this.required}
                 .type=${this.type}
                 .value=${this.value || ''}
@@ -1362,7 +1361,7 @@
     ], Textfield.prototype, "maxLength", void 0);
     __decorate([
         e$3(),
-        __metadata("design:type", Object)
+        __metadata("design:type", String)
     ], Textfield.prototype, "pattern", void 0);
     __decorate([
         e$3(localizedMessagePropertyOptions),
