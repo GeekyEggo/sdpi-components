@@ -11,7 +11,7 @@
 
 # Change Log
 
-## v2.x.x
+## v2.4.0
 
 -   ✨ Add `label-setting` to `sdpi-select`; allows the label to be persisted, and rendered if the option becomes unavailable.
 -   ✨ Add `show-refresh` button option for `sdpi-select`.
