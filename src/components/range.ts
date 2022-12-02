@@ -84,22 +84,10 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
     public max?: number;
 
     /**
-     * The label format used to render the maximum label.
-     */
-    @property({ attribute: 'max-label' })
-    public maxLabel = '{0}';
-
-    /**
      * The minimum value.
      */
     @property({ type: Number })
     public min?: number;
-
-    /**
-     * The label format used to render the minimum label.
-     */
-    @property({ attribute: 'min-label' })
-    public minLabel = '{0}';
 
     /**
      * When `true`, the `min` and `max` values are shown on either side of the input.
@@ -138,9 +126,9 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
 
         if (this.showLabels) {
             return html`<div class="container">
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}>${format(this.minLabel, this.min)}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}><slot name="min">${this.min}</slot></div>
                 <div>${input}</div>
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}>${format(this.maxLabel, this.max)}</div>
+                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}><slot name="max">${this.max}</slot></div>
             </div>`;
         } else {
             return input;
