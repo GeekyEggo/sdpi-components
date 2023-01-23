@@ -2,7 +2,7 @@ import { css, CSSResultGroup, html, LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { asArray } from '../core';
+import { asArray, LocalizedMessage, localizedMessagePropertyOptions } from '../core';
 import { IFocusable } from './focusable';
 import { IInput } from './input';
 
@@ -47,8 +47,8 @@ export const Delegate = <TBase extends Constructor<LitElement & IFocusable & IIn
         /**
          * Gets or sets the label text shown within the button.
          */
-        @property()
-        public label?: string;
+        @property(localizedMessagePropertyOptions)
+        public label?: LocalizedMessage;
 
         /**
          * Renders the delegate element.
@@ -60,7 +60,7 @@ export const Delegate = <TBase extends Constructor<LitElement & IFocusable & IIn
                 <div class="flex container">
                     <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value)}</label>
                     <sdpi-button class="flex-shrink margin-left" ${ref(this.focusElement)} .disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>
-                        <div>${this.label || '...'}</div>
+                        <div>${this.label?.toString() || '...'}</div>
                     </sdpi-button>
                 </div>
             `;

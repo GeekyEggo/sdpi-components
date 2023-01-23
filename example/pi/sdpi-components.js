@@ -656,19 +656,20 @@
                 ];
             }
             renderDelegate(getDisplayValue = (value) => value) {
+                var _a;
                 return y `
                 <div class="flex container">
                     <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value)}</label>
                     <sdpi-button class="flex-shrink margin-left" ${n$1(this.focusElement)} .disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>
-                        <div>${this.label || '...'}</div>
+                        <div>${((_a = this.label) === null || _a === void 0 ? void 0 : _a.toString()) || '...'}</div>
                     </sdpi-button>
                 </div>
             `;
             }
         }
         __decorate([
-            e$3(),
-            __metadata("design:type", String)
+            e$3(localizedMessagePropertyOptions),
+            __metadata("design:type", LocalizedMessage)
         ], Delegate.prototype, "label", void 0);
         return Delegate;
     };
