@@ -19,6 +19,7 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 2px) 0;
                     text-overflow: ellipsis;
+                    width: 100%;
                 }
 
                 select:focus {
