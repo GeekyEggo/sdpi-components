@@ -58,7 +58,7 @@ export const Delegate = <TBase extends Constructor<LitElement & IFocusable & IIn
         renderDelegate(getDisplayValue: (value?: string) => unknown = (value) => value) {
             return html`
                 <div class="flex container">
-                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value)}</label>
+                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value || this.defaultValue)}</label>
                     <sdpi-button class="flex-shrink margin-left" ${ref(this.focusElement)} .disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>
                         <div>${this.label?.toString() || '...'}</div>
                     </sdpi-button>

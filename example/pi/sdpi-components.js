@@ -659,7 +659,7 @@
                 var _a;
                 return y `
                 <div class="flex container">
-                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value)}</label>
+                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value || this.defaultValue)}</label>
                     <sdpi-button class="flex-shrink margin-left" ${n$1(this.focusElement)} .disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>
                         <div>${((_a = this.label) === null || _a === void 0 ? void 0 : _a.toString()) || '...'}</div>
                     </sdpi-button>
