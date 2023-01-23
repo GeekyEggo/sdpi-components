@@ -5,7 +5,7 @@ import { Delegate, Focusable, Input, Persisted } from '../mixins';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 @customElement('sdpi-delegate')
-export class DelegateElement extends Delegate(Persisted(Focusable(Input<typeof LitElement, string>(LitElement)))) {
+export class DelegateElement extends Delegate(Persisted(Focusable(Input<typeof LitElement, unknown>(LitElement)))) {
     /**
      * When specified, the `invoke` name will be sent to the plug-in using the `sendToPlugin` event, allowing for the delegation of setting the value to the plug-in.
      */

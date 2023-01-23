@@ -1301,7 +1301,7 @@
         }
         render() {
             return y `
-            ${super.renderDelegate((path) => getFileName(path || ''))}
+            ${super.renderDelegate((path) => getFileName((path === null || path === void 0 ? void 0 : path.toString()) || ''))}
             <input
                 ${n$1(this.focusElement)}
                 type="file"

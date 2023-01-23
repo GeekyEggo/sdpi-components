@@ -6,7 +6,7 @@ import { asArray, LocalizedMessage, localizedMessagePropertyOptions } from '../c
 import { IFocusable } from './focusable';
 import { IInput } from './input';
 
-export const Delegate = <TBase extends Constructor<LitElement & IFocusable & IInput<string>> & { styles?: CSSResultGroup }>(superClass: TBase) => {
+export const Delegate = <TBase extends Constructor<LitElement & IFocusable & IInput<unknown>> & { styles?: CSSResultGroup }>(superClass: TBase) => {
     class Delegate extends superClass {
         /** @inheritdoc */
         public static get styles() {
@@ -55,7 +55,7 @@ export const Delegate = <TBase extends Constructor<LitElement & IFocusable & IIn
          * @param getDisplayValue The delegate used when rendering the display value.
          * @returns The HTML that represents the delegate element.
          */
-        renderDelegate(getDisplayValue: (value?: string) => unknown = (value) => value) {
+        renderDelegate(getDisplayValue: (value?: unknown) => unknown = (value) => value) {
             return html`
                 <div class="flex container">
                     <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value || this.defaultValue)}</label>

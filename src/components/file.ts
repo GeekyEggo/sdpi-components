@@ -28,7 +28,7 @@ export class File extends Delegate(Persisted(Focusable(Input<typeof LitElement, 
     /** @inheritdoc */
     render() {
         return html`
-            ${super.renderDelegate((path) => getFileName(path || ''))}
+            ${super.renderDelegate((path?: unknown) => getFileName(path?.toString() || ''))}
             <input
                 ${ref(this.focusElement)}
                 type="file"
