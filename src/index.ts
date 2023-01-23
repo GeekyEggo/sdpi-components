@@ -4,6 +4,7 @@ import './components/calendar';
 import './components/checkbox';
 import './components/checkbox-list';
 import './components/color';
+import './components/delegate';
 import './components/file';
 import './components/i18n';
 import './components/password';

@@ -1,6 +1,6 @@
 /**!
 * @license
-* sdpi-components v2.3.1, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+* sdpi-components v2.4.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
 * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
 */
 (function () {
@@ -594,28 +594,6 @@
         return DataSourced;
     };
 
-    const DynamicValueType = (superClass) => {
-        class DynamicValueType extends superClass {
-            parseValue(value) {
-                switch (this.valueType) {
-                    case 'boolean':
-                        return parseBoolean(value);
-                    case 'number':
-                        return parseNumber(value);
-                    case 'string':
-                        return value.toString();
-                    default:
-                        return value;
-                }
-            }
-        }
-        __decorate([
-            e$3({ attribute: 'value-type' }),
-            __metadata("design:type", Object)
-        ], DynamicValueType.prototype, "valueType", void 0);
-        return DynamicValueType;
-    };
-
     /**
      * @license
      * Copyright 2020 Google LLC
@@ -641,6 +619,82 @@
      * SPDX-License-Identifier: BSD-3-Clause
      */const e=()=>new o;class o{}const h$1=new WeakMap,n$1=e$1(class extends c$1{render(t){return b}update(t,[s]){var e;const o=s!==this.Y;return o&&void 0!==this.Y&&this.rt(void 0),(o||this.lt!==this.ct)&&(this.Y=s,this.dt=null===(e=t.options)||void 0===e?void 0:e.host,this.rt(this.ct=t.element)),b}rt(i){var t;if("function"==typeof this.Y){const s=null!==(t=this.dt)&&void 0!==t?t:globalThis;let e=h$1.get(s);void 0===e&&(e=new WeakMap,h$1.set(s,e)),void 0!==e.get(this.Y)&&this.Y.call(this.dt,void 0),e.set(this.Y,i),void 0!==i&&this.Y.call(this.dt,i);}else this.Y.value=i;}get lt(){var i,t,s;return "function"==typeof this.Y?null===(t=h$1.get(null!==(i=this.dt)&&void 0!==i?i:globalThis))||void 0===t?void 0:t.get(this.Y):null===(s=this.Y)||void 0===s?void 0:s.value}disconnected(){this.lt===this.ct&&this.rt(void 0);}reconnected(){this.rt(this.ct);}});
 
+    const Delegate = (superClass) => {
+        class Delegate extends superClass {
+            static get styles() {
+                return [
+                    ...asArray(super.styles),
+                    i$5 `
+                    .container {
+                        width: var(--input-width);
+                    }
+
+                    label {
+                        align-self: center;
+                        background-color: var(--input-bg-color);
+                        color: var(--input-font-color);
+                        font-family: var(--font-family);
+                        font-size: var(--font-size);
+                        line-height: 1.5em;
+                        min-height: calc(var(--input-height) - calc(var(--spacer) * 3));
+                        overflow: hidden;
+                        padding: calc(var(--spacer) * 1.5) var(--spacer);
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        width: 100%;
+                    }
+
+                    label[aria-disabled='true'] {
+                        opacity: 0.5;
+                    }
+
+                    sdpi-button > div {
+                        min-width: 16px;
+                        user-select: none;
+                    }
+                `
+                ];
+            }
+            renderDelegate(getDisplayValue = (value) => value) {
+                return y `
+                <div class="flex container">
+                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value)}</label>
+                    <sdpi-button class="flex-shrink margin-left" ${n$1(this.focusElement)} .disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>
+                        <div>${this.label || '...'}</div>
+                    </sdpi-button>
+                </div>
+            `;
+            }
+        }
+        __decorate([
+            e$3(),
+            __metadata("design:type", String)
+        ], Delegate.prototype, "label", void 0);
+        return Delegate;
+    };
+
+    const DynamicValueType = (superClass) => {
+        class DynamicValueType extends superClass {
+            parseValue(value) {
+                switch (this.valueType) {
+                    case 'boolean':
+                        return parseBoolean(value);
+                    case 'number':
+                        return parseNumber(value);
+                    case 'string':
+                        return value.toString();
+                    default:
+                        return value;
+                }
+            }
+        }
+        __decorate([
+            e$3({ attribute: 'value-type' }),
+            __metadata("design:type", Object)
+        ], DynamicValueType.prototype, "valueType", void 0);
+        return DynamicValueType;
+    };
+
     const Focusable = (superClass) => {
         class Focusable extends superClass {
             constructor() {
@@ -651,23 +705,24 @@
                 return this.focusElement.value !== undefined;
             }
             focus() {
-                if (this.focusElement.value) {
-                    switch (this.focusElement.value.type) {
-                        case 'checkbox': {
-                            const checkbox = this.focusElement.value;
-                            checkbox.checked = !checkbox.checked;
-                            break;
-                        }
-                        case 'file': {
-                            this.focusElement.value.click();
-                            break;
-                        }
-                        default: {
-                            this.focusElement.value.focus();
-                            break;
-                        }
-                    }
+                if (this.focusElement.value === undefined) {
+                    return;
                 }
+                if (this.focusWithClick()) {
+                    this.focusElement.value.click();
+                }
+                else {
+                    this.focusElement.value.focus();
+                }
+            }
+            focusWithClick() {
+                if (this.focusElement.value === undefined) {
+                    throw new Error('focusElement cannot be undefined.');
+                }
+                if (!('type' in this.focusElement.value)) {
+                    return true;
+                }
+                return this.focusElement.value.type === 'checkbox' || this.focusElement.value.type === 'color' || this.focusElement.value.type === 'file';
             }
         }
         return Focusable;
@@ -778,6 +833,10 @@
         /* Typography */
         --font-family: 'Segoe UI', Arial, Roboto, Helvetica sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
         --font-size: 9pt;
+
+        /* Pre-determined dimensions */
+        --input-width: 227px;
+        --input-height: 30px;
     }
 `;
 
@@ -1203,74 +1262,63 @@
         e$4('sdpi-color')
     ], Color);
 
-    let File = class File extends Persisted(Focusable(Input(s$3))) {
-        constructor() {
-            super(...arguments);
-            this.label = '...';
+    let DelegateElement = class DelegateElement extends Delegate(Persisted(Focusable(Input(s$3)))) {
+        render() {
+            return this.renderDelegate();
         }
+        invoked() {
+            if (this.disabled) {
+                return;
+            }
+            if (this.invoke === undefined) {
+                console.warn('Delegation failed, consider setting the "invoke" attribute. When defined, `sendToPlugin` is invoked with the specified attribute value, allowing for the plug-in to determine the persisted value.');
+            }
+            else {
+                streamDeckClient.send('sendToPlugin', { event: this.invoke });
+            }
+        }
+    };
+    __decorate([
+        e$3(),
+        __metadata("design:type", String)
+    ], DelegateElement.prototype, "invoke", void 0);
+    DelegateElement = __decorate([
+        e$4('sdpi-delegate')
+    ], DelegateElement);
+
+    let File = class File extends Delegate(Persisted(Focusable(Input(s$3)))) {
         static get styles() {
             return [
                 ...super.styles,
                 i$5 `
-                input {
+                input[type='file'] {
                     display: none;
-                }
-
-                input:disabled ~ label.value {
-                    opacity: 0.5;
-                }
-
-                label.value {
-                    background-color: var(--input-bg-color);
-                    color: var(--input-font-color);
-                    display: flex;
-                    font-family: var(--font-family);
-                    font-size: var(--font-size);
-                    line-height: 1.5em;
-                    padding: var(--spacer);
-                }
-
-                label.value > span {
-                    align-self: center;
-                }
-
-                sdpi-button > div {
-                    min-width: 16px;
                 }
             `
             ];
         }
         render() {
             return y `
-            <div class="flex">
-                <input
-                    ${n$1(this.focusElement)}
-                    type="file"
-                    id="file_input"
-                    .accept=${this.accept || ''}
-                    .disabled=${this.disabled}
-                    @change="${(ev) => (this.value = sanitize(ev.target.value))}"
-                />
-                <label class="value flex-grow" for="file_input">
-                    <span .title=${this.value || ''}>${getFileName(this.value || '')}</span>
-                </label>
-                <label class="flex-shrink margin-left">
-                    <sdpi-button .disabled=${this.disabled} @click=${() => { var _a; return (_a = this.focusElement.value) === null || _a === void 0 ? void 0 : _a.click(); }}>
-                        <div>${this.label}</div>
-                    </sdpi-button>
-                </label>
-            </div>
+            ${super.renderDelegate((path) => getFileName(path || ''))}
+            <input
+                ${n$1(this.focusElement)}
+                type="file"
+                id="file_input"
+                .accept=${this.accept || ''}
+                .disabled=${this.disabled}
+                @change="${(ev) => (this.value = sanitize(ev.target.value))}"
+            />
         `;
+        }
+        invoked() {
+            var _a;
+            (_a = this.focusElement.value) === null || _a === void 0 ? void 0 : _a.click();
         }
     };
     __decorate([
         e$3(),
         __metadata("design:type", String)
     ], File.prototype, "accept", void 0);
-    __decorate([
-        e$3(),
-        __metadata("design:type", Object)
-    ], File.prototype, "label", void 0);
     File = __decorate([
         e$4('sdpi-file')
     ], File);
@@ -1623,6 +1671,7 @@
                     background-color: var(--input-bg-color);
                     padding: calc(var(--spacer) + 2px) 0;
                     text-overflow: ellipsis;
+                    width: 100%;
                 }
 
                 select:focus {

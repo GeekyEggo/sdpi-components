@@ -16,5 +16,9 @@ export const hostStyle = css`
         /* Typography */
         --font-family: 'Segoe UI', Arial, Roboto, Helvetica sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
         --font-size: 9pt;
+
+        /* Pre-determined dimensions */
+        --input-width: 227px;
+        --input-height: 30px;
     }
 `;

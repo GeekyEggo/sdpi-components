@@ -3,38 +3,17 @@ import { customElement, property } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 
 import { getFileName, sanitize } from '../core';
-import { Focusable, Input, Persisted } from '../mixins';
+import { Delegate, Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-file')
-export class File extends Persisted(Focusable(Input<typeof LitElement, string>(LitElement))) {
+export class File extends Delegate(Persisted(Focusable(Input<typeof LitElement, string>(LitElement)))) {
+    /** @inheritdoc */
     public static get styles() {
         return [
             ...super.styles,
             css`
-                input {
+                input[type='file'] {
                     display: none;
-                }
-
-                input:disabled ~ label.value {
-                    opacity: 0.5;
-                }
-
-                label.value {
-                    background-color: var(--input-bg-color);
-                    color: var(--input-font-color);
-                    display: flex;
-                    font-family: var(--font-family);
-                    font-size: var(--font-size);
-                    line-height: 1.5em;
-                    padding: var(--spacer);
-                }
-
-                label.value > span {
-                    align-self: center;
-                }
-
-                sdpi-button > div {
-                    min-width: 16px;
                 }
             `
         ];
@@ -46,34 +25,24 @@ export class File extends Persisted(Focusable(Input<typeof LitElement, string>(L
     @property()
     public accept?: string;
 
-    /**
-     * The label displayed in the button used to activate the file input.
-     */
-    @property()
-    public label = '...';
-
     /** @inheritdoc */
     render() {
         return html`
-            <div class="flex">
-                <input
-                    ${ref(this.focusElement)}
-                    type="file"
-                    id="file_input"
-                    .accept=${this.accept || ''}
-                    .disabled=${this.disabled}
-                    @change="${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = sanitize(ev.target.value))}"
-                />
-                <label class="value flex-grow" for="file_input">
-                    <span .title=${this.value || ''}>${getFileName(this.value || '')}</span>
-                </label>
-                <label class="flex-shrink margin-left">
-                    <sdpi-button .disabled=${this.disabled} @click=${() => this.focusElement.value?.click()}>
-                        <div>${this.label}</div>
-                    </sdpi-button>
-                </label>
-            </div>
+            ${super.renderDelegate((path) => getFileName(path || ''))}
+            <input
+                ${ref(this.focusElement)}
+                type="file"
+                id="file_input"
+                .accept=${this.accept || ''}
+                .disabled=${this.disabled}
+                @change="${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = sanitize(ev.target.value))}"
+            />
         `;
+    }
+
+    /** @inheritdoc */
+    invoked(): void {
+        this.focusElement.value?.click();
     }
 }
 
