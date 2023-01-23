@@ -33,7 +33,7 @@ export const Delegate = <TBase extends Constructor<LitElement & IFocusable & IIn
                     }
 
                     label[aria-disabled='true'] {
-                        opacity: 0.5;
+                        opacity: var(--opacity-disabled);
                     }
 
                     sdpi-button > div {

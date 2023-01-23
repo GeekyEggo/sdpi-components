@@ -21,7 +21,7 @@ export class Textfield extends Persisted(Focusable(Input<typeof LitElement, stri
                 }
 
                 input:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 input:required {

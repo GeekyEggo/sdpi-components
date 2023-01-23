@@ -31,7 +31,7 @@ export class Button extends Input<typeof LitElement, string>(LitElement) {
                 }
 
                 button:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
             `
         ];

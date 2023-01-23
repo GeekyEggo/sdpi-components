@@ -326,7 +326,7 @@
                     }
 
                     .checkable-container > input:disabled ~ span {
-                        opacity: 0.5;
+                        opacity: var(--opacity-disabled);
                     }
 
                     .checkable-container > .checkable-symbol {
@@ -645,7 +645,7 @@
                     }
 
                     label[aria-disabled='true'] {
-                        opacity: 0.5;
+                        opacity: var(--opacity-disabled);
                     }
 
                     sdpi-button > div {
@@ -821,6 +821,7 @@
     :host {
         /* Box model */
         --spacer: 4px;
+        --opacity-disabled: 0.5;
 
         /* Colors */
         --window-bg-color: #2d2d2d;
@@ -1015,7 +1016,7 @@
                 }
 
                 button:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
             `
             ];
@@ -1103,7 +1104,7 @@
                 }
 
                 input:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 ::-webkit-inner-spin-button,
@@ -1241,7 +1242,7 @@
                 }
 
                 input:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
             `
             ];
@@ -1354,7 +1355,7 @@
                 }
 
                 input:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 input:required {
@@ -1475,7 +1476,7 @@
                 input:disabled,
                 .container > div[aria-disabled='true'] {
                     cursor: default;
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 ::-webkit-slider-runnable-track {
@@ -1679,7 +1680,7 @@
                 }
 
                 select:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 .refresh {
@@ -1803,7 +1804,7 @@
                 }
 
                 textarea:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 .length {

@@ -24,7 +24,7 @@ export class Calendar extends Persisted(Focusable(Input<typeof LitElement, strin
                 }
 
                 input:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 ::-webkit-inner-spin-button,

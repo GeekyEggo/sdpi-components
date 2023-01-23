@@ -22,7 +22,7 @@ export class Range extends Persisted(Focusable(Input<typeof LitElement, number>(
                 input:disabled,
                 .container > div[aria-disabled='true'] {
                     cursor: default;
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 ::-webkit-slider-runnable-track {

@@ -21,7 +21,7 @@ export class Textarea extends Persisted(Focusable(Input<typeof LitElement, strin
                 }
 
                 textarea:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 .length {

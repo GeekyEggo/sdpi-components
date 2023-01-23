@@ -27,7 +27,7 @@ export class Select extends Persisted(Focusable(DataSourced(DynamicValueType(Inp
                 }
 
                 select:disabled {
-                    opacity: 0.5;
+                    opacity: var(--opacity-disabled);
                 }
 
                 .refresh {

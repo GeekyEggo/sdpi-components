@@ -4,6 +4,7 @@ export const hostStyle = css`
     :host {
         /* Box model */
         --spacer: 4px;
+        --opacity-disabled: 0.5;
 
         /* Colors */
         --window-bg-color: #2d2d2d;

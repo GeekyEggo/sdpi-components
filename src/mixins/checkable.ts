@@ -36,7 +36,7 @@ export const Checkable = <TBase extends Constructor<LitElement> & { styles?: CSS
                     }
 
                     .checkable-container > input:disabled ~ span {
-                        opacity: 0.5;
+                        opacity: var(--opacity-disabled);
                     }
 
                     .checkable-container > .checkable-symbol {
