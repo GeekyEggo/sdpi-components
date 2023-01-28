@@ -11,6 +11,12 @@
 
 # Change Log
 
+## v2.5.0
+
+-   ✨ Add `sdpi-delegate` component.
+-   🐞 Fix overflow of long options in `sdpi-select`.
+-   🐞 Fix `sdpi-color` not activating when label is selected.
+
 ## v2.4.0
 
 -   ✨ Add `label-setting` to `sdpi-select`; allows the label to be persisted, and rendered if the option becomes unavailable.
