@@ -90,7 +90,7 @@
                     case 'sendToPlugin':
                         if (msg.payload?.event === 'getNow') {
                             let payload = settingsCache[context] || {};
-                            payload['now'] = (new Date()).toString();
+                            payload['now'] = 'C:\\something\\goes\\here\\';
 
                             webSocket.send(
                                 JSON.stringify({

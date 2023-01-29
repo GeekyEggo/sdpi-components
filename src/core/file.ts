@@ -4,21 +4,39 @@
  * @returns {string} Gets the name of the file.
  */
 export function getFileName(path: string): string {
+    const { done, value } = getSegmentsInReverse(path).next();
+    return done ? '' : value;
+}
+
+/**
+ * Gets each segment from the `path`, split by either forward or backward slash, in reverse.
+ * @param path The path.
+ * @returns Each segment from the path.
+ */
+export function* getSegmentsInReverse(path: string): IterableIterator<string> {
     const sanitizedPath = sanitize(path);
-
-    // Check for Unix-based paths.
-    let i = sanitizedPath.lastIndexOf('/');
-    if (i >= 0) {
-        return sanitizedPath.substring(i + 1);
+    if (sanitizedPath.length === 0) {
+        return;
     }
 
-    // Check for Windows-based paths.
-    i = sanitizedPath.lastIndexOf('\\');
-    if (i >= 0) {
-        return sanitizedPath.substring(i + 1);
+    let end = sanitizedPath.length;
+    for (let i = sanitizedPath.length; i > 0; i--) {
+        if (sanitizedPath[i - 1] === '/' || sanitizedPath[i - 1] === '\\') {
+            if (i != sanitizedPath.length) {
+                const segment = sanitizedPath.substring(i, end);
+                if (segment.length > 0) {
+                    yield segment;
+                }
+            }
+
+            end = i - 1;
+        }
     }
 
-    return sanitizedPath;
+    const segment = sanitizedPath.substring(0, end);
+    if (segment.length > 0) {
+        yield segment;
+    }
 }
 
 /**

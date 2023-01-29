@@ -56,9 +56,13 @@ export const Delegate = <TBase extends Constructor<LitElement & IFocusable & IIn
          * @returns The HTML that represents the delegate element.
          */
         renderDelegate(getDisplayValue: (value?: unknown) => unknown = (value) => value) {
+            const value = this.value !== undefined ? this.value : this.defaultValue;
+
             return html`
                 <div class="flex container">
-                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value || this.defaultValue)}</label>
+                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()} .title=${value?.toString() || ''}>
+                        ${getDisplayValue(value)}
+                    </label>
                     <sdpi-button class="flex-shrink margin-left" ${ref(this.focusElement)} .disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>
                         <div>${this.label?.toString() || '...'}</div>
                     </sdpi-button>

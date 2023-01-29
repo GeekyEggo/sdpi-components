@@ -1,6 +1,6 @@
 /**!
 * @license
-* sdpi-components v2.4.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+* sdpi-components v2.5.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
 * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
 */
 (function () {
@@ -118,16 +118,30 @@
     }
 
     function getFileName(path) {
+        const { done, value } = getSegmentsInReverse(path).next();
+        return done ? '' : value;
+    }
+    function* getSegmentsInReverse(path) {
         const sanitizedPath = sanitize(path);
-        let i = sanitizedPath.lastIndexOf('/');
-        if (i >= 0) {
-            return sanitizedPath.substring(i + 1);
+        if (sanitizedPath.length === 0) {
+            return;
         }
-        i = sanitizedPath.lastIndexOf('\\');
-        if (i >= 0) {
-            return sanitizedPath.substring(i + 1);
+        let end = sanitizedPath.length;
+        for (let i = sanitizedPath.length; i > 0; i--) {
+            if (sanitizedPath[i - 1] === '/' || sanitizedPath[i - 1] === '\\') {
+                if (i != sanitizedPath.length) {
+                    const segment = sanitizedPath.substring(i, end);
+                    if (segment.length > 0) {
+                        yield segment;
+                    }
+                }
+                end = i - 1;
+            }
         }
-        return sanitizedPath;
+        const segment = sanitizedPath.substring(0, end);
+        if (segment.length > 0) {
+            yield segment;
+        }
     }
     function sanitize(path) {
         return decodeURIComponent(path.replace(/^C:\\fakepath\\/, ''));
@@ -657,9 +671,12 @@
             }
             renderDelegate(getDisplayValue = (value) => value) {
                 var _a;
+                const value = this.value !== undefined ? this.value : this.defaultValue;
                 return y `
                 <div class="flex container">
-                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>${getDisplayValue(this.value || this.defaultValue)}</label>
+                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()} .title=${(value === null || value === void 0 ? void 0 : value.toString()) || ''}>
+                        ${getDisplayValue(value)}
+                    </label>
                     <sdpi-button class="flex-shrink margin-left" ${n$1(this.focusElement)} .disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>
                         <div>${((_a = this.label) === null || _a === void 0 ? void 0 : _a.toString()) || '...'}</div>
                     </sdpi-button>
@@ -1266,7 +1283,16 @@
 
     let DelegateElement = class DelegateElement extends Delegate(Persisted(Focusable(Input(s$3)))) {
         render() {
-            return this.renderDelegate();
+            return this.renderDelegate((value) => {
+                if (value === undefined || value === null) {
+                    return value;
+                }
+                if (this.formatType === 'path') {
+                    const { done, value: name } = getSegmentsInReverse(value.toString()).next();
+                    return done ? value : name;
+                }
+                return value;
+            });
         }
         invoked() {
             if (this.disabled) {
@@ -1280,6 +1306,10 @@
             }
         }
     };
+    __decorate([
+        e$3({ attribute: 'format-type' }),
+        __metadata("design:type", Object)
+    ], DelegateElement.prototype, "formatType", void 0);
     __decorate([
         e$3(),
         __metadata("design:type", String)

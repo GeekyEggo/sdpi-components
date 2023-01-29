@@ -1,11 +1,18 @@
 import { LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+import { getSegmentsInReverse } from '../core';
 import { Delegate, Focusable, Input, Persisted } from '../mixins';
 import streamDeckClient from '../stream-deck/stream-deck-client';
 
 @customElement('sdpi-delegate')
 export class DelegateElement extends Delegate(Persisted(Focusable(Input<typeof LitElement, unknown>(LitElement)))) {
+    /**
+     * Gets the optional format type to be used when rendering the value. When `path`, the value is parsed as a local path, and the last segment is rendered, i.e. the directory or file name.
+     */
+    @property({ attribute: 'format-type' })
+    public formatType?: 'path' | undefined;
+
     /**
      * When specified, the `invoke` name will be sent to the plug-in using the `sendToPlugin` event, allowing for the delegation of setting the value to the plug-in.
      */
@@ -14,7 +21,18 @@ export class DelegateElement extends Delegate(Persisted(Focusable(Input<typeof L
 
     /** @inheritdoc */
     render() {
-        return this.renderDelegate();
+        return this.renderDelegate((value) => {
+            if (value === undefined || value === null) {
+                return value;
+            }
+
+            if (this.formatType === 'path') {
+                const { done, value: name } = getSegmentsInReverse(value.toString()).next();
+                return done ? value : name;
+            }
+
+            return value;
+        });
     }
 
     /** @inheritdoc */

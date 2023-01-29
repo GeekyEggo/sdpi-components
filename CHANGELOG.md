@@ -11,6 +11,10 @@
 
 # Change Log
 
+## v2.6.0
+
+-   ✨ Add formatting to `sdpi-delegate` value.
+
 ## v2.5.0
 
 -   ✨ Add `sdpi-delegate` component.
