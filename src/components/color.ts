@@ -13,6 +13,7 @@ export class Color extends Persisted(Focusable(Input<typeof LitElement, string>(
             css`
                 input {
                     background-color: var(--input-bg-color);
+                    height: var(--input-height);
                 }
 
                 input:disabled {

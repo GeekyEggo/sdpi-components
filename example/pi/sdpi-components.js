@@ -1,6 +1,6 @@
 /**!
 * @license
-* sdpi-components v2.5.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+* sdpi-components v2.6.0, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
 * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
 */
 (function () {
@@ -1257,6 +1257,7 @@
                 i$5 `
                 input {
                     background-color: var(--input-bg-color);
+                    height: var(--input-height);
                 }
 
                 input:disabled {

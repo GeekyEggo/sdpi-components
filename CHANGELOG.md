@@ -11,6 +11,10 @@
 
 # Change Log
 
+## v2.6.1
+
+-   🐞 Fix height of `sdpi-color`.
+
 ## v2.6.0
 
 -   ✨ Add formatting to `sdpi-delegate` value.
