@@ -22,7 +22,7 @@ export const Checkable = <TBase extends Constructor<LitElement> & { styles?: CSS
                     .checkable-container {
                         align-items: center;
                         display: inline-flex;
-                        padding: var(--spacer) 0 0 0;
+                        padding: 5px 0 0 0;
                         user-select: none;
                         width: auto;
                     }

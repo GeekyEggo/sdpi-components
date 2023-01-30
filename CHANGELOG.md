@@ -11,6 +11,10 @@
 
 # Change Log
 
+## v2.6.2
+
+-   🐞 Fix alignment of checkbox and radio button labels.
+
 ## v2.6.1
 
 -   🐞 Fix height of `sdpi-color`.
