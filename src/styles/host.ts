@@ -15,7 +15,7 @@ export const hostStyle = css`
         --scrollbar-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 
         /* Typography */
-        --font-family: 'Segoe UI', Arial, Roboto, Helvetica sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+        --font-family: 'Segoe UI', system-ui, Arial, Roboto, Helvetica sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
         --font-size: 9pt;
 
         /* Pre-determined dimensions */
