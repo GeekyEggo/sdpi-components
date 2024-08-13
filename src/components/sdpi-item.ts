@@ -40,9 +40,12 @@ export class SdpiItem extends LitElement {
 			}
 
 			.label {
-				margin-top: 6px;
+				align-items: center;
+				display: flex;
 				justify-self: end;
+				min-height: 28px;
 				padding-right: 11px;
+				text-align: right;
 			}
 		`,
 	];

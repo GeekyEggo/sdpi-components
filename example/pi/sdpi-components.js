@@ -119,7 +119,7 @@
 
     function getFileName(path) {
         const { done, value } = getSegmentsInReverse(path).next();
-        return done ? '' : value;
+        return done ? "" : value;
     }
     function* getSegmentsInReverse(path) {
         const sanitizedPath = sanitize(path);
@@ -128,7 +128,7 @@
         }
         let end = sanitizedPath.length;
         for (let i = sanitizedPath.length; i > 0; i--) {
-            if (sanitizedPath[i - 1] === '/' || sanitizedPath[i - 1] === '\\') {
+            if (sanitizedPath[i - 1] === "/" || sanitizedPath[i - 1] === "\\") {
                 if (i != sanitizedPath.length) {
                     const segment = sanitizedPath.substring(i, end);
                     if (segment.length > 0) {
@@ -144,7 +144,7 @@
         }
     }
     function sanitize(path) {
-        return decodeURIComponent(path.replace(/^C:\\fakepath\\/, ''));
+        return decodeURIComponent(path.replace(/^C:\\fakepath\\/, ""));
     }
 
     class FilteredMutationObserver {
@@ -195,9 +195,9 @@
     }
     function parseNumber(value) {
         switch (typeof value) {
-            case 'boolean':
+            case "boolean":
                 return value ? 1 : 0;
-            case 'number':
+            case "number":
                 return value;
             default:
                 return parseFloat(value);
@@ -205,26 +205,26 @@
     }
     function parseBoolean(value) {
         switch (typeof value) {
-            case 'boolean':
+            case "boolean":
                 return value;
-            case 'number':
+            case "number":
                 return value !== 0;
             default: {
                 const str = value.toString().toLowerCase();
-                return str !== 'false' && str !== '0';
+                return str !== "false" && str !== "0";
             }
         }
     }
     function getUUID() {
         const chr4 = () => Math.random().toString(16).slice(-4);
-        return chr4() + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + chr4() + chr4();
+        return chr4() + chr4() + "-" + chr4() + "-" + chr4() + "-" + chr4() + "-" + chr4() + chr4() + chr4();
     }
     function get(path, source) {
-        const props = path.split('.');
+        const props = path.split(".");
         return props.reduce((obj, prop) => obj && obj[prop], source);
     }
     function set(path, target, value) {
-        const props = path.split('.');
+        const props = path.split(".");
         props.reduce((obj, prop, i) => {
             return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
         }, target);
@@ -233,20 +233,20 @@
     class Internationalization {
         constructor() {
             this.language = this.getUILanguage();
-            this.fallbackLanguage = 'en';
+            this.fallbackLanguage = "en";
         }
         getMessage(messageName) {
             if (!this.locales || messageName === undefined) {
-                return '';
+                return "";
             }
             const localize = (lang) => get(`${lang}.${messageName}`, this.locales);
             if (this.language === this.fallbackLanguage) {
-                return localize(this.language) || '';
+                return localize(this.language) || "";
             }
-            return localize(this.language) || localize(this.fallbackLanguage) || '';
+            return localize(this.language) || localize(this.fallbackLanguage) || "";
         }
         getUILanguage() {
-            return window.navigator.language ? window.navigator.language.split('-')[0] : 'en';
+            return window.navigator.language ? window.navigator.language.split("-")[0] : "en";
         }
     }
     const i18n = new Internationalization();
@@ -261,20 +261,20 @@
             return new LocalizedMessage(key).toString();
         }
         static tryParseMessageName(value) {
-            return value && value.startsWith('__MSG_') && value.endsWith('__')
+            return value && value.startsWith("__MSG_") && value.endsWith("__")
                 ? {
                     success: true,
-                    messageName: value.substring(6, value.length - 2)
+                    messageName: value.substring(6, value.length - 2),
                 }
                 : {
-                    success: false
+                    success: false,
                 };
         }
         equals(other) {
             return other !== undefined && this.key == other.key && this.value == other.value;
         }
         toString() {
-            return this.value || '';
+            return this.value || "";
         }
     }
     const localizedMessagePropertyOptions = {
@@ -293,8 +293,8 @@
             },
             toAttribute(value) {
                 return value === null || value === void 0 ? void 0 : value.key;
-            }
-        }
+            },
+        },
     };
 
     function delay(callback, timeout) {
@@ -319,72 +319,72 @@
                 return [
                     asArray(super.styles),
                     i$5 `
-                    :host {
-                        --checkbox-size: 16px;
-                    }
+					:host {
+						--checkbox-size: 16px;
+					}
 
-                    .checkable-container {
-                        align-items: center;
-                        display: inline-flex;
-                        padding: 5px 0 0 0;
-                        user-select: none;
-                        width: auto;
-                    }
+					.checkable-container {
+						align-items: center;
+						display: inline-flex;
+						padding: 5px 0 0 0;
+						user-select: none;
+						width: auto;
+					}
 
-                    .checkable-container > input {
-                        display: none;
-                    }
+					.checkable-container > input {
+						display: none;
+					}
 
-                    .checkable-container > input:not(:disabled) ~ span {
-                        cursor: pointer;
-                    }
+					.checkable-container > input:not(:disabled) ~ span {
+						cursor: pointer;
+					}
 
-                    .checkable-container > input:disabled ~ span {
-                        opacity: var(--opacity-disabled);
-                    }
+					.checkable-container > input:disabled ~ span {
+						opacity: var(--opacity-disabled);
+					}
 
-                    .checkable-container > .checkable-symbol {
-                        align-self: flex-start;
-                        background: var(--input-bg-color);
-                        border: 1px solid rgba(0, 0, 0, 0.2);
-                        border-radius: 3px;
-                        flex: 0 0 var(--checkbox-size);
-                        height: var(--checkbox-size);
-                        width: var(--checkbox-size);
-                    }
+					.checkable-container > .checkable-symbol {
+						align-self: flex-start;
+						background: var(--input-bg-color);
+						border: 1px solid rgba(0, 0, 0, 0.2);
+						border-radius: 3px;
+						flex: 0 0 var(--checkbox-size);
+						height: var(--checkbox-size);
+						width: var(--checkbox-size);
+					}
 
-                    .checkable-container > input[type='radio'] ~ .checkable-symbol {
-                        border-radius: 50%;
-                    }
+					.checkable-container > input[type="radio"] ~ .checkable-symbol {
+						border-radius: 50%;
+					}
 
-                    .checkable-container > .checkable-text {
-                        flex: 0 1 auto;
-                        margin: 0 0 0 var(--spacer);
-                    }
+					.checkable-container > .checkable-text {
+						flex: 0 1 auto;
+						margin: 0 0 0 var(--spacer);
+					}
 
-                    .checkable-container > input:checked ~ .checkable-symbol {
-                        background: #77f no-repeat center center;
-                        border: 1px solid rgba(0, 0, 0, 0.4);
-                    }
+					.checkable-container > input:checked ~ .checkable-symbol {
+						background: #77f no-repeat center center;
+						border: 1px solid rgba(0, 0, 0, 0.4);
+					}
 
-                    .checkable-container > input[type='checkbox']:checked ~ .checkable-symbol {
-                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10' viewBox='0 0 12 10'%3E%3Cpolygon fill='%23FFF' points='7.2 7.5 7.2 -1.3 8.7 -1.3 8.6 9.1 2.7 8.7 2.7 7.2' transform='rotate(37 5.718 3.896)'/%3E%3C/svg%3E%0A");
-                    }
+					.checkable-container > input[type="checkbox"]:checked ~ .checkable-symbol {
+						background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='10' viewBox='0 0 12 10'%3E%3Cpolygon fill='%23FFF' points='7.2 7.5 7.2 -1.3 8.7 -1.3 8.6 9.1 2.7 8.7 2.7 7.2' transform='rotate(37 5.718 3.896)'/%3E%3C/svg%3E%0A");
+					}
 
-                    .checkable-container > input[type='radio']:checked ~ .checkable-symbol {
-                        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 6 6'%3E%3Ccircle cx='3' cy='3' r='3' fill='%23FFF'/%3E%3C/svg%3E%0A");
-                    }
-                `
+					.checkable-container > input[type="radio"]:checked ~ .checkable-symbol {
+						background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6' viewBox='0 0 6 6'%3E%3Ccircle cx='3' cy='3' r='3' fill='%23FFF'/%3E%3C/svg%3E%0A");
+					}
+				`,
                 ];
             }
             renderCheckable(type, input, label) {
                 return y `
-                <label class="checkable-container">
-                    ${input}
-                    <span class="checkable-symbol" role=${type}></span>
-                    ${label && label ? y `<span class="checkable-text">${label}</span>` : undefined}
-                </label>
-            `;
+				<label class="checkable-container">
+					${input}
+					<span class="checkable-symbol" role=${type}></span>
+					${label && label ? y `<span class="checkable-text">${label}</span>` : undefined}
+				</label>
+			`;
             }
         }
         return Checkable;
@@ -412,7 +412,7 @@
                     actionInfo,
                     info,
                     propertyInspectorUUID,
-                    registerEvent
+                    registerEvent,
                 };
                 if (connectionInfo.actionInfo) {
                     this.didReceiveSettings.dispatch(connectionInfo.actionInfo);
@@ -423,7 +423,7 @@
                 webSocket.onopen = () => {
                     webSocket.send(JSON.stringify({
                         event: connectionInfo.registerEvent,
-                        uuid: connectionInfo.propertyInspectorUUID
+                        uuid: connectionInfo.propertyInspectorUUID,
                     }));
                     this._connection.setResult(webSocket);
                 };
@@ -431,19 +431,19 @@
             }
         }
         async getGlobalSettings() {
-            const response = await this.get('getGlobalSettings', 'didReceiveGlobalSettings');
+            const response = await this.get("getGlobalSettings", "didReceiveGlobalSettings");
             return response.payload.settings;
         }
         setGlobalSettings(value) {
-            return this.send('setGlobalSettings', value);
+            return this.send("setGlobalSettings", value);
         }
         async getSettings() {
             const { actionInfo } = await this.getConnectionInfo();
-            const response = await this.get('getSettings', 'didReceiveSettings', (msg) => msg.action == actionInfo.action && msg.context == actionInfo.context && msg.device == actionInfo.device);
+            const response = await this.get("getSettings", "didReceiveSettings", (msg) => msg.action == actionInfo.action && msg.context == actionInfo.context && msg.device == actionInfo.device);
             return response.payload;
         }
         setSettings(value) {
-            return this.send('setSettings', value);
+            return this.send("setSettings", value);
         }
         async getConnectionInfo() {
             return this._connectionInfo.promise;
@@ -470,19 +470,19 @@
                 event: event,
                 context: connectionInfo.propertyInspectorUUID,
                 payload: payload,
-                action: connectionInfo.actionInfo.action
+                action: connectionInfo.actionInfo.action,
             }));
         }
         handleMessage(ev) {
             const data = JSON.parse(ev.data);
             switch (data.event) {
-                case 'didReceiveGlobalSettings':
+                case "didReceiveGlobalSettings":
                     this.didReceiveGlobalSettings.dispatch(data);
                     break;
-                case 'didReceiveSettings':
+                case "didReceiveSettings":
                     this.didReceiveSettings.dispatch(data);
                     break;
-                case 'sendToPropertyInspector':
+                case "sendToPropertyInspector":
                     this.sendToPropertyInspector.dispatch(data);
                     break;
             }
@@ -496,9 +496,9 @@
             constructor(...args) {
                 super(args);
                 this._dataSourceInitialized = false;
-                this._mutationObserver = new FilteredMutationObserver(['optgroup', 'option'], () => this.refresh());
+                this._mutationObserver = new FilteredMutationObserver(["optgroup", "option"], () => this.refresh());
                 this.hotReload = false;
-                this.loadingText = new LocalizedMessage('Loading...');
+                this.loadingText = new LocalizedMessage("Loading...");
                 this.items = new h$3(this, async ([dataSource]) => {
                     var _a;
                     if (dataSource === undefined) {
@@ -508,7 +508,7 @@
                     if (this._dataSourceInitialized) {
                         payload.isRefresh = true;
                     }
-                    const result = (_a = this._itemsDataSource) !== null && _a !== void 0 ? _a : (await streamDeckClient.get('sendToPlugin', 'sendToPropertyInspector', (msg) => { var _a; return ((_a = msg.payload) === null || _a === void 0 ? void 0 : _a.event) === this.dataSource; }, payload));
+                    const result = (_a = this._itemsDataSource) !== null && _a !== void 0 ? _a : (await streamDeckClient.get("sendToPlugin", "sendToPropertyInspector", (msg) => { var _a; return ((_a = msg.payload) === null || _a === void 0 ? void 0 : _a.event) === this.dataSource; }, payload));
                     this._dataSourceInitialized = true;
                     this._itemsDataSource = undefined;
                     if (i18n.locales) {
@@ -555,14 +555,14 @@
                     if (node instanceof HTMLOptGroupElement) {
                         items.push({
                             label: LocalizedMessage.getMessage(node.label),
-                            children: Array.from(node.childNodes).reduce(reducer, [])
+                            children: Array.from(node.childNodes).reduce(reducer, []),
                         });
                     }
                     else if (node instanceof HTMLOptionElement) {
                         items.push({
                             disabled: node.disabled,
                             label: LocalizedMessage.getMessage(node.text),
-                            value: node.value
+                            value: node.value,
                         });
                     }
                     return items;
@@ -592,16 +592,16 @@
         ], DataSourced.prototype, "dataSource", void 0);
         __decorate([
             e$3({
-                attribute: 'hot-reload',
-                type: Boolean
+                attribute: "hot-reload",
+                type: Boolean,
             }),
             __metadata("design:type", Object)
         ], DataSourced.prototype, "hotReload", void 0);
         __decorate([
             e$3({
-                attribute: 'loading',
+                attribute: "loading",
                 hasChanged: localizedMessagePropertyOptions.hasChanged,
-                converter: localizedMessagePropertyOptions.converter
+                converter: localizedMessagePropertyOptions.converter,
             }),
             __metadata("design:type", Object)
         ], DataSourced.prototype, "loadingText", void 0);
@@ -639,49 +639,59 @@
                 return [
                     ...asArray(super.styles),
                     i$5 `
-                    .container {
-                        width: var(--input-width);
-                    }
+					.container {
+						width: var(--input-width);
+					}
 
-                    label {
-                        align-self: center;
-                        background-color: var(--input-bg-color);
-                        color: var(--input-font-color);
-                        font-family: var(--font-family);
-                        font-size: var(--font-size);
-                        line-height: 1.5em;
-                        min-height: calc(var(--input-height) - calc(var(--spacer) * 3));
-                        overflow: hidden;
-                        padding: calc(var(--spacer) * 1.5) var(--spacer);
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        width: 100%;
-                    }
+					label {
+						align-self: center;
+						background-color: var(--input-bg-color);
+						color: var(--input-font-color);
+						font-family: var(--font-family);
+						font-size: var(--font-size);
+						line-height: 1.5em;
+						min-height: calc(var(--input-height) - calc(var(--spacer) * 3));
+						overflow: hidden;
+						padding: calc(var(--spacer) * 1.5) var(--spacer);
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						width: 100%;
+					}
 
-                    label[aria-disabled='true'] {
-                        opacity: var(--opacity-disabled);
-                    }
+					label[aria-disabled="true"] {
+						opacity: var(--opacity-disabled);
+					}
 
-                    sdpi-button > div {
-                        min-width: 16px;
-                        user-select: none;
-                    }
-                `
+					sdpi-button > div {
+						min-width: 16px;
+						user-select: none;
+					}
+				`,
                 ];
             }
             renderDelegate(getDisplayValue = (value) => value) {
                 var _a;
                 const value = this.value !== undefined ? this.value : this.defaultValue;
                 return y `
-                <div class="flex container">
-                    <label class="flex-grow" aria-disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()} .title=${(value === null || value === void 0 ? void 0 : value.toString()) || ''}>
-                        ${getDisplayValue(value)}
-                    </label>
-                    <sdpi-button class="flex-shrink margin-left" ${n$1(this.focusElement)} .disabled=${this.disabled} @click=${() => !this.disabled && this.invoked && this.invoked()}>
-                        <div>${((_a = this.label) === null || _a === void 0 ? void 0 : _a.toString()) || '...'}</div>
-                    </sdpi-button>
-                </div>
-            `;
+				<div class="flex container">
+					<label
+						class="flex-grow"
+						aria-disabled=${this.disabled}
+						@click=${() => !this.disabled && this.invoked && this.invoked()}
+						.title=${(value === null || value === void 0 ? void 0 : value.toString()) || ""}
+					>
+						${getDisplayValue(value)}
+					</label>
+					<sdpi-button
+						class="flex-shrink margin-left"
+						${n$1(this.focusElement)}
+						.disabled=${this.disabled}
+						@click=${() => !this.disabled && this.invoked && this.invoked()}
+					>
+						<div>${((_a = this.label) === null || _a === void 0 ? void 0 : _a.toString()) || "..."}</div>
+					</sdpi-button>
+				</div>
+			`;
             }
         }
         __decorate([
@@ -695,11 +705,11 @@
         class DynamicValueType extends superClass {
             parseValue(value) {
                 switch (this.valueType) {
-                    case 'boolean':
+                    case "boolean":
                         return parseBoolean(value);
-                    case 'number':
+                    case "number":
                         return parseNumber(value);
-                    case 'string':
+                    case "string":
                         return value.toString();
                     default:
                         return value;
@@ -707,7 +717,7 @@
             }
         }
         __decorate([
-            e$3({ attribute: 'value-type' }),
+            e$3({ attribute: "value-type" }),
             __metadata("design:type", Object)
         ], DynamicValueType.prototype, "valueType", void 0);
         return DynamicValueType;
@@ -735,12 +745,14 @@
             }
             focusWithClick() {
                 if (this.focusElement.value === undefined) {
-                    throw new Error('focusElement cannot be undefined.');
+                    throw new Error("focusElement cannot be undefined.");
                 }
-                if (!('type' in this.focusElement.value)) {
+                if (!("type" in this.focusElement.value)) {
                     return true;
                 }
-                return this.focusElement.value.type === 'checkbox' || this.focusElement.value.type === 'color' || this.focusElement.value.type === 'file';
+                return (this.focusElement.value.type === "checkbox" ||
+                    this.focusElement.value.type === "color" ||
+                    this.focusElement.value.type === "file");
             }
         }
         return Focusable;
@@ -756,57 +768,59 @@
                 return [
                     asArray(super.styles),
                     i$5 `
-                    .gridded-container {
-                        display: flex;
-                        flex-wrap: wrap;
-                    }
+					.gridded-container {
+						display: flex;
+						flex-wrap: wrap;
+					}
 
-                    .gridded-container > .gridded-item {
-                        box-sizing: border-box;
-                        margin: 0 var(--spacer) 0 0;
-                        flex: 0 1;
-                    }
+					.gridded-container > .gridded-item {
+						box-sizing: border-box;
+						margin: 0 var(--spacer) 0 0;
+						flex: 0 1;
+					}
 
-                    .gridded-container > .gridded-col-1 {
-                        flex-basis: 100%;
-                    }
+					.gridded-container > .gridded-col-1 {
+						flex-basis: 100%;
+					}
 
-                    .gridded-container > .gridded-col-2 {
-                        flex-basis: calc((100% / 2) - (var(--spacer) * 1 / 2));
-                    }
+					.gridded-container > .gridded-col-2 {
+						flex-basis: calc((100% / 2) - (var(--spacer) * 1 / 2));
+					}
 
-                    .gridded-container > .gridded-col-3 {
-                        flex-basis: calc((100% / 3 - (var(--spacer) * 2 / 3)));
-                    }
+					.gridded-container > .gridded-col-3 {
+						flex-basis: calc((100% / 3 - (var(--spacer) * 2 / 3)));
+					}
 
-                    .gridded-container > .gridded-col-4 {
-                        flex-basis: calc((100% / 4 - (var(--spacer) * 3 / 4)));
-                    }
+					.gridded-container > .gridded-col-4 {
+						flex-basis: calc((100% / 4 - (var(--spacer) * 3 / 4)));
+					}
 
-                    .gridded-container > .gridded-col-5 {
-                        flex-basis: calc((100% / 5 - (var(--spacer) * 4 / 5)));
-                    }
+					.gridded-container > .gridded-col-5 {
+						flex-basis: calc((100% / 5 - (var(--spacer) * 4 / 5)));
+					}
 
-                    .gridded-container > .gridded-col-6 {
-                        flex-basis: calc((100% / 6 - (var(--spacer) * 5 / 6)));
-                    }
+					.gridded-container > .gridded-col-6 {
+						flex-basis: calc((100% / 6 - (var(--spacer) * 5 / 6)));
+					}
 
-                    .gridded-container > .gridded-col-1,
-                    .gridded-container > .gridded-col-2:nth-child(2n),
-                    .gridded-container > .gridded-col-3:nth-child(3n),
-                    .gridded-container > .gridded-col-4:nth-child(4n),
-                    .gridded-container > .gridded-col-5:nth-child(5n),
-                    .gridded-container > .gridded-col-6:nth-child(6n) {
-                        margin-right: 0;
-                    }
-                `
+					.gridded-container > .gridded-col-1,
+					.gridded-container > .gridded-col-2:nth-child(2n),
+					.gridded-container > .gridded-col-3:nth-child(3n),
+					.gridded-container > .gridded-col-4:nth-child(4n),
+					.gridded-container > .gridded-col-5:nth-child(5n),
+					.gridded-container > .gridded-col-6:nth-child(6n) {
+						margin-right: 0;
+					}
+				`,
                 ];
             }
             renderGrid(items) {
                 if (items.length === 0) {
                     return undefined;
                 }
-                return y `<div class="gridded-container">${items.map((item) => y `<div class="gridded-item gridded-col-${this.columns}">${item}</div>`)}</div>`;
+                return y `<div class="gridded-container">
+				${items.map((item) => y `<div class="gridded-item gridded-col-${this.columns}">${item}</div>`)}
+			</div>`;
             }
         }
         __decorate([
@@ -817,46 +831,47 @@
     };
 
     const commonStyle = i$5 `
-    .flex {
-        align-items: stretch;
-        display: flex;
-    }
+	.flex {
+		align-items: stretch;
+		display: flex;
+	}
 
-    .flex-grow {
-        flex: 1 1 auto;
-    }
+	.flex-grow {
+		flex: 1 1 auto;
+	}
 
-    .flex-shrink {
-        flex: 0 0 auto;
-    }
+	.flex-shrink {
+		flex: 0 0 auto;
+	}
 
-    .margin-left {
-        margin-left: var(--spacer);
-    }
+	.margin-left {
+		margin-left: var(--spacer);
+	}
 `;
 
     const hostStyle = i$5 `
-    :host {
-        /* Box model */
-        --spacer: 4px;
-        --opacity-disabled: 0.5;
+	:host {
+		/* Box model */
+		--spacer: 4px;
+		--opacity-disabled: 0.5;
 
-        /* Colors */
-        --window-bg-color: #2d2d2d;
-        --font-color: #969696;
-        --input-bg-color: #3d3d3d;
-        --input-font-color: #d8d8d8;
+		/* Colors */
+		--window-bg-color: #2d2d2d;
+		--font-color: #969696;
+		--input-bg-color: #3d3d3d;
+		--input-font-color: #d8d8d8;
 
-        --scrollbar-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		--scrollbar-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 
-        /* Typography */
-        --font-family: 'Segoe UI', Arial, Roboto, Helvetica sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-        --font-size: 9pt;
+		/* Typography */
+		--font-family: "Segoe UI", Arial, Roboto, Helvetica sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+			"Segoe UI Symbol";
+		--font-size: 9pt;
 
-        /* Pre-determined dimensions */
-        --input-width: 227px;
-        --input-height: 30px;
-    }
+		/* Pre-determined dimensions */
+		--input-width: 227px;
+		--input-height: 30px;
+	}
 `;
 
     const Input = (superClass) => {
@@ -872,31 +887,31 @@
                     hostStyle,
                     commonStyle,
                     i$5 `
-                    button,
-                    input,
-                    select,
-                    textarea {
-                        /* Box model */
-                        box-sizing: border-box;
-                        outline: none;
-                        border: none;
-                        border-radius: 0;
-                        min-width: 100%;
-                        max-width: 100%;
+					button,
+					input,
+					select,
+					textarea {
+						/* Box model */
+						box-sizing: border-box;
+						outline: none;
+						border: none;
+						border-radius: 0;
+						min-width: 100%;
+						max-width: 100%;
 
-                        /* Background and typography */
-                        color: var(--input-font-color);
-                        font-size: var(--font-size);
-                        font-family: var(--font-family);
-                    }
-                `
+						/* Background and typography */
+						color: var(--input-font-color);
+						font-size: var(--font-size);
+						font-family: var(--font-family);
+					}
+				`,
                 ];
             }
         }
         __decorate([
             e$3({
                 reflect: true,
-                type: Boolean
+                type: Boolean,
             }),
             __metadata("design:type", Object)
         ], Input.prototype, "disabled", void 0);
@@ -905,7 +920,7 @@
             __metadata("design:type", Object)
         ], Input.prototype, "value", void 0);
         __decorate([
-            e$3({ attribute: 'default' }),
+            e$3({ attribute: "default" }),
             __metadata("design:type", Object)
         ], Input.prototype, "defaultValue", void 0);
         return Input;
@@ -915,8 +930,12 @@
         constructor(didReceive, save) {
             this.didReceive = didReceive;
             this.save = save;
-            this._settings = new PromiseCompletionSource();
-            didReceive.subscribe(async (data) => { var _a; return (_a = this._settings) === null || _a === void 0 ? void 0 : _a.setResult(data.payload.settings); });
+            this._initialization = new Promise((resolve) => {
+                didReceive.subscribe((data) => {
+                    this._settings = data.payload.settings;
+                    resolve();
+                });
+            });
         }
         use(key, changeCallback, timeout = 250, save = true) {
             if (changeCallback) {
@@ -927,19 +946,24 @@
                     }
                 });
             }
-            const getter = async () => get(key, await this._settings.promise);
-            const setter = timeout ? delay((value) => this.set(key, value, save), timeout) : (value) => this.set(key, value, save);
+            const getter = async () => {
+                await this._initialization;
+                return get(key, await this._settings);
+            };
+            const setter = timeout
+                ? delay((value) => this.set(key, value, save), timeout)
+                : (value) => this.set(key, value, save);
             return [getter, setter];
         }
         async set(key, value, save = true) {
-            const _settings = await this._settings.promise;
-            const oldValue = get(key, _settings);
+            await this._initialization;
+            const oldValue = get(key, this._settings);
             if (oldValue === value) {
                 return;
             }
-            set(key, _settings, value);
+            set(key, this._settings, value);
             if (save) {
-                await this.save(_settings);
+                await this.save(this._settings);
             }
         }
     }
@@ -968,8 +992,8 @@
                 if (this._value != value) {
                     const oldValue = this._value;
                     this._value = value;
-                    this.requestUpdate('value', oldValue);
-                    this.dispatchEvent(new Event('valuechange'));
+                    this.requestUpdate("value", oldValue);
+                    this.dispatchEvent(new Event("valuechange"));
                 }
             }
             firstUpdated(_changedProperties) {
@@ -985,15 +1009,15 @@
                 }
             }
             willUpdate(_changedProperties) {
-                if (_changedProperties.has('value') && this.save) {
+                if (_changedProperties.has("value") && this.save) {
                     this.save(this.value);
                 }
             }
         }
         __decorate([
             e$3({
-                attribute: 'global',
-                type: Boolean
+                attribute: "global",
+                type: Boolean,
             }),
             __metadata("design:type", Object)
         ], Persisted.prototype, "isGlobal", void 0);
@@ -1015,40 +1039,40 @@
                 ...super.styles,
                 hostStyle,
                 i$5 `
-                button {
-                    background-color: var(--window-bg-color);
-                    border: 1px solid #969696;
-                    border-radius: 3px;
-                    padding: calc(var(--spacer) * 1.5);
-                }
+				button {
+					background-color: var(--window-bg-color);
+					border: 1px solid #969696;
+					border-radius: 3px;
+					padding: calc(var(--spacer) * 1.5);
+				}
 
-                button:not(:disabled):hover {
-                    background-color: #464646;
-                    cursor: pointer;
-                }
+				button:not(:disabled):hover {
+					background-color: #464646;
+					cursor: pointer;
+				}
 
-                button:not(:disabled):active {
-                    background-color: var(--window-bg-color);
-                    border-color: #646464;
-                    color: #969696;
-                }
+				button:not(:disabled):active {
+					background-color: var(--window-bg-color);
+					border-color: #646464;
+					color: #969696;
+				}
 
-                button:disabled {
-                    opacity: var(--opacity-disabled);
-                }
-            `
+				button:disabled {
+					opacity: var(--opacity-disabled);
+				}
+			`,
             ];
         }
         render() {
             return y `
-            <button .disabled=${this.disabled} .value=${this.value || ''}>
-                <slot></slot>
-            </button>
-        `;
+			<button .disabled=${this.disabled} .value=${this.value || ""}>
+				<slot></slot>
+			</button>
+		`;
         }
     };
     Button = __decorate([
-        e$4('sdpi-button')
+        e$4("sdpi-button")
     ], Button);
 
     /**
@@ -1086,7 +1110,7 @@
 
     class DataListController extends FilteredMutationController {
         constructor(host) {
-            super(host, ['datalist']);
+            super(host, ["datalist"]);
         }
         mutated(ev) {
             if (this.items.length === 0) {
@@ -1106,63 +1130,63 @@
         constructor() {
             super(...arguments);
             this.dataListController = new DataListController(this);
-            this.type = 'date';
+            this.type = "date";
         }
         static get styles() {
             return [
                 ...super.styles,
                 i$5 `
-                input {
-                    background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 1px) var(--spacer);
-                }
+				input {
+					background-color: var(--input-bg-color);
+					padding: calc(var(--spacer) + 1px) var(--spacer);
+				}
 
-                input[type='time'] {
-                    padding: calc(var(--spacer) + 2px) var(--spacer);
-                }
+				input[type="time"] {
+					padding: calc(var(--spacer) + 2px) var(--spacer);
+				}
 
-                input:disabled {
-                    opacity: var(--opacity-disabled);
-                }
+				input:disabled {
+					opacity: var(--opacity-disabled);
+				}
 
-                ::-webkit-inner-spin-button,
-                ::-webkit-clear-button {
-                    display: none;
-                }
+				::-webkit-inner-spin-button,
+				::-webkit-clear-button {
+					display: none;
+				}
 
-                ::-webkit-calendar-picker-indicator {
-                    -webkit-appearance: none;
-                    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='%239C9C9C'%3E%3Cpath d='M15,15 L1.77635684e-15,15 L1.77635684e-15,1 L15,1 L15,15 Z M5,7 L5,8 L6,8 L6,7 L5,7 Z M3,7 L3,8 L4,8 L4,7 L3,7 Z M7,7 L7,8 L8,8 L8,7 L7,7 Z M9,7 L9,8 L10,8 L10,7 L9,7 Z M11,7 L11,8 L12,8 L12,7 L11,7 Z M3,9 L3,10 L4,10 L4,9 L3,9 Z M5,9 L5,10 L6,10 L6,9 L5,9 Z M7,9 L7,10 L8,10 L8,9 L7,9 Z M9,9 L9,10 L10,10 L10,9 L9,9 Z M11,9 L11,10 L12,10 L12,9 L11,9 Z M3,11 L3,12 L4,12 L4,11 L3,11 Z M5,11 L5,12 L6,12 L6,11 L5,11 Z M7,11 L7,12 L8,12 L8,11 L7,11 Z M9,11 L9,12 L10,12 L10,11 L9,11 Z M11,11 L11,12 L12,12 L12,11 L11,11 Z M14,4 L14,2 L1,2 L1,4 L14,4 Z'/%3E%3Crect width='1' height='1' x='2'/%3E%3Crect width='1' height='1' x='12'/%3E%3C/g%3E%3C/svg%3E%0A")
-                        top left no-repeat;
-                    cursor: pointer;
-                    font-size: 0;
-                    margin: 0 calc(var(--spacer) / 2) 0 0;
-                    opacity: 1;
-                    padding: 8px;
-                }
+				::-webkit-calendar-picker-indicator {
+					-webkit-appearance: none;
+					background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='%239C9C9C'%3E%3Cpath d='M15,15 L1.77635684e-15,15 L1.77635684e-15,1 L15,1 L15,15 Z M5,7 L5,8 L6,8 L6,7 L5,7 Z M3,7 L3,8 L4,8 L4,7 L3,7 Z M7,7 L7,8 L8,8 L8,7 L7,7 Z M9,7 L9,8 L10,8 L10,7 L9,7 Z M11,7 L11,8 L12,8 L12,7 L11,7 Z M3,9 L3,10 L4,10 L4,9 L3,9 Z M5,9 L5,10 L6,10 L6,9 L5,9 Z M7,9 L7,10 L8,10 L8,9 L7,9 Z M9,9 L9,10 L10,10 L10,9 L9,9 Z M11,9 L11,10 L12,10 L12,9 L11,9 Z M3,11 L3,12 L4,12 L4,11 L3,11 Z M5,11 L5,12 L6,12 L6,11 L5,11 Z M7,11 L7,12 L8,12 L8,11 L7,11 Z M9,11 L9,12 L10,12 L10,11 L9,11 Z M11,11 L11,12 L12,12 L12,11 L11,11 Z M14,4 L14,2 L1,2 L1,4 L14,4 Z'/%3E%3Crect width='1' height='1' x='2'/%3E%3Crect width='1' height='1' x='12'/%3E%3C/g%3E%3C/svg%3E%0A")
+						top left no-repeat;
+					cursor: pointer;
+					font-size: 0;
+					margin: 0 calc(var(--spacer) / 2) 0 0;
+					opacity: 1;
+					padding: 8px;
+				}
 
-                ::-webkit-calendar-picker-indicator:hover {
-                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='%23CECECE'%3E%3Cpath d='M15,15 L1.77635684e-15,15 L1.77635684e-15,1 L15,1 L15,15 Z M5,7 L5,8 L6,8 L6,7 L5,7 Z M3,7 L3,8 L4,8 L4,7 L3,7 Z M7,7 L7,8 L8,8 L8,7 L7,7 Z M9,7 L9,8 L10,8 L10,7 L9,7 Z M11,7 L11,8 L12,8 L12,7 L11,7 Z M3,9 L3,10 L4,10 L4,9 L3,9 Z M5,9 L5,10 L6,10 L6,9 L5,9 Z M7,9 L7,10 L8,10 L8,9 L7,9 Z M9,9 L9,10 L10,10 L10,9 L9,9 Z M11,9 L11,10 L12,10 L12,9 L11,9 Z M3,11 L3,12 L4,12 L4,11 L3,11 Z M5,11 L5,12 L6,12 L6,11 L5,11 Z M7,11 L7,12 L8,12 L8,11 L7,11 Z M9,11 L9,12 L10,12 L10,11 L9,11 Z M11,11 L11,12 L12,12 L12,11 L11,11 Z M14,4 L14,2 L1,2 L1,4 L14,4 Z'/%3E%3Crect width='1' height='1' x='2'/%3E%3Crect width='1' height='1' x='12'/%3E%3C/g%3E%3C/svg%3E%0A");
-                }
-            `
+				::-webkit-calendar-picker-indicator:hover {
+					background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cg fill='%23CECECE'%3E%3Cpath d='M15,15 L1.77635684e-15,15 L1.77635684e-15,1 L15,1 L15,15 Z M5,7 L5,8 L6,8 L6,7 L5,7 Z M3,7 L3,8 L4,8 L4,7 L3,7 Z M7,7 L7,8 L8,8 L8,7 L7,7 Z M9,7 L9,8 L10,8 L10,7 L9,7 Z M11,7 L11,8 L12,8 L12,7 L11,7 Z M3,9 L3,10 L4,10 L4,9 L3,9 Z M5,9 L5,10 L6,10 L6,9 L5,9 Z M7,9 L7,10 L8,10 L8,9 L7,9 Z M9,9 L9,10 L10,10 L10,9 L9,9 Z M11,9 L11,10 L12,10 L12,9 L11,9 Z M3,11 L3,12 L4,12 L4,11 L3,11 Z M5,11 L5,12 L6,12 L6,11 L5,11 Z M7,11 L7,12 L8,12 L8,11 L7,11 Z M9,11 L9,12 L10,12 L10,11 L9,11 Z M11,11 L11,12 L12,12 L12,11 L11,11 Z M14,4 L14,2 L1,2 L1,4 L14,4 Z'/%3E%3Crect width='1' height='1' x='2'/%3E%3Crect width='1' height='1' x='12'/%3E%3C/g%3E%3C/svg%3E%0A");
+				}
+			`,
             ];
         }
         render() {
             var _a;
             return y `
-            <input
-                ${n$1(this.focusElement)}
-                type=${this.type}
-                list=${l((_a = this.dataListController.dataList) === null || _a === void 0 ? void 0 : _a.id)}
-                max=${l(this.max)}
-                min=${l(this.min)}
-                step=${l(this.step)}
-                .disabled=${this.disabled}
-                .value=${this.value || this.defaultValue || ''}
-                @change="${(ev) => (this.value = ev.target.value)}"
-            />
-            ${this.dataListController.dataList}
-        `;
+			<input
+				${n$1(this.focusElement)}
+				type=${this.type}
+				list=${l((_a = this.dataListController.dataList) === null || _a === void 0 ? void 0 : _a.id)}
+				max=${l(this.max)}
+				min=${l(this.min)}
+				step=${l(this.step)}
+				.disabled=${this.disabled}
+				.value=${this.value || this.defaultValue || ""}
+				@change="${(ev) => (this.value = ev.target.value)}"
+			/>
+			${this.dataListController.dataList}
+		`;
         }
     };
     __decorate([
@@ -1182,18 +1206,18 @@
         __metadata("design:type", String)
     ], Calendar.prototype, "type", void 0);
     Calendar = __decorate([
-        e$4('sdpi-calendar')
+        e$4("sdpi-calendar")
     ], Calendar);
 
     let Checkbox = class Checkbox extends Persisted(Focusable(Checkable(Input(s$3)))) {
         render() {
-            return this.renderCheckable('checkbox', y `<input
-                ${n$1(this.focusElement)}
-                type="checkbox"
-                .checked=${this.value || this.defaultValue || false}
-                .disabled=${this.disabled}
-                @change=${(ev) => (this.value = ev.target.checked)}
-            />`, this.label);
+            return this.renderCheckable("checkbox", y `<input
+				${n$1(this.focusElement)}
+				type="checkbox"
+				.checked=${this.value || this.defaultValue || false}
+				.disabled=${this.disabled}
+				@change=${(ev) => (this.value = ev.target.checked)}
+			/>`, this.label);
         }
     };
     __decorate([
@@ -1201,7 +1225,7 @@
         __metadata("design:type", LocalizedMessage)
     ], Checkbox.prototype, "label", void 0);
     Checkbox = __decorate([
-        e$4('sdpi-checkbox')
+        e$4("sdpi-checkbox")
     ], Checkbox);
 
     let CheckboxList = class CheckboxList extends Gridded(Persisted(Checkable(DataSourced(DynamicValueType(Input(s$3)))))) {
@@ -1209,26 +1233,27 @@
             return [
                 ...super.styles,
                 i$5 `
-                .loading {
-                    margin: 0;
-                    padding: calc(var(--spacer) * 1.5) 0;
-                    user-select: none;
-                }
-            `
+				.loading {
+					margin: 0;
+					padding: calc(var(--spacer) * 1.5) 0;
+					user-select: none;
+				}
+			`,
             ];
         }
         render() {
             return this.items.render({
                 pending: () => y `<p class="loading">${this.loadingText}</p>`,
-                complete: () => this.renderGrid(this.renderDataSource((item) => this.renderCheckable('checkbox', y `
-                                <input
-                                    type="checkbox"
-                                    .checked=${(this.value && this.value.findIndex((v) => v == item.value) > -1) || false}
-                                    .disabled=${this.disabled || item.disabled || false}
-                                    .value=${item.value}
-                                    @change=${this.handleChange}
-                                />
-                            `, item.label)))
+                complete: () => this.renderGrid(this.renderDataSource((item) => this.renderCheckable("checkbox", y `
+								<input
+									type="checkbox"
+									.checked=${(this.value && this.value.findIndex((v) => v == item.value) > -1) ||
+                false}
+									.disabled=${this.disabled || item.disabled || false}
+									.value=${item.value}
+									@change=${this.handleChange}
+								/>
+							`, item.label))),
             });
         }
         handleChange(ev) {
@@ -1247,7 +1272,7 @@
         }
     };
     CheckboxList = __decorate([
-        e$4('sdpi-checkbox-list')
+        e$4("sdpi-checkbox-list")
     ], CheckboxList);
 
     let Color = class Color extends Persisted(Focusable(Input(s$3))) {
@@ -1255,31 +1280,31 @@
             return [
                 ...super.styles,
                 i$5 `
-                input {
-                    background-color: var(--input-bg-color);
-                    height: var(--input-height);
-                }
+				input {
+					background-color: var(--input-bg-color);
+					height: var(--input-height);
+				}
 
-                input:disabled {
-                    opacity: var(--opacity-disabled);
-                }
-            `
+				input:disabled {
+					opacity: var(--opacity-disabled);
+				}
+			`,
             ];
         }
         render() {
             return y `
-            <input
-                type="color"
-                ${n$1(this.focusElement)}
-                .disabled=${this.disabled}
-                .defaultValue=${this.value || this.defaultValue || ''}
-                @change=${(ev) => (this.value = ev.target.value)}
-            />
-        `;
+			<input
+				type="color"
+				${n$1(this.focusElement)}
+				.disabled=${this.disabled}
+				.defaultValue=${this.value || this.defaultValue || ""}
+				@change=${(ev) => (this.value = ev.target.value)}
+			/>
+		`;
         }
     };
     Color = __decorate([
-        e$4('sdpi-color')
+        e$4("sdpi-color")
     ], Color);
 
     let DelegateElement = class DelegateElement extends Delegate(Persisted(Focusable(Input(s$3)))) {
@@ -1288,7 +1313,7 @@
                 if (value === undefined || value === null) {
                     return value;
                 }
-                if (this.formatType === 'path') {
+                if (this.formatType === "path") {
                     const { done, value: name } = getSegmentsInReverse(value.toString()).next();
                     return done ? value : name;
                 }
@@ -1303,12 +1328,12 @@
                 console.warn('Delegation failed, consider setting the "invoke" attribute. When defined, `sendToPlugin` is invoked with the specified attribute value, allowing for the plug-in to determine the persisted value.');
             }
             else {
-                streamDeckClient.send('sendToPlugin', { event: this.invoke });
+                streamDeckClient.send("sendToPlugin", { event: this.invoke });
             }
         }
     };
     __decorate([
-        e$3({ attribute: 'format-type' }),
+        e$3({ attribute: "format-type" }),
         __metadata("design:type", Object)
     ], DelegateElement.prototype, "formatType", void 0);
     __decorate([
@@ -1316,7 +1341,7 @@
         __metadata("design:type", String)
     ], DelegateElement.prototype, "invoke", void 0);
     DelegateElement = __decorate([
-        e$4('sdpi-delegate')
+        e$4("sdpi-delegate")
     ], DelegateElement);
 
     let File = class File extends Delegate(Persisted(Focusable(Input(s$3)))) {
@@ -1324,24 +1349,24 @@
             return [
                 ...super.styles,
                 i$5 `
-                input[type='file'] {
-                    display: none;
-                }
-            `
+				input[type="file"] {
+					display: none;
+				}
+			`,
             ];
         }
         render() {
             return y `
-            ${super.renderDelegate((path) => getFileName((path === null || path === void 0 ? void 0 : path.toString()) || ''))}
-            <input
-                ${n$1(this.focusElement)}
-                type="file"
-                id="file_input"
-                .accept=${this.accept || ''}
-                .disabled=${this.disabled}
-                @change="${(ev) => (this.value = sanitize(ev.target.value))}"
-            />
-        `;
+			${super.renderDelegate((path) => getFileName((path === null || path === void 0 ? void 0 : path.toString()) || ""))}
+			<input
+				${n$1(this.focusElement)}
+				type="file"
+				id="file_input"
+				.accept=${this.accept || ""}
+				.disabled=${this.disabled}
+				@change="${(ev) => (this.value = sanitize(ev.target.value))}"
+			/>
+		`;
         }
         invoked() {
             var _a;
@@ -1353,7 +1378,7 @@
         __metadata("design:type", String)
     ], File.prototype, "accept", void 0);
     File = __decorate([
-        e$4('sdpi-file')
+        e$4("sdpi-file")
     ], File);
 
     let i18nElement = class i18nElement extends s$3 {
@@ -1366,7 +1391,7 @@
         __metadata("design:type", String)
     ], i18nElement.prototype, "key", void 0);
     i18nElement = __decorate([
-        e$4('sdpi-i18n')
+        e$4("sdpi-i18n")
     ], i18nElement);
 
     let Textfield = class Textfield extends Persisted(Focusable(Input(s$3))) {
@@ -1374,58 +1399,58 @@
             super(...arguments);
             this.required = false;
             this.delaySave = true;
-            this.type = 'text';
+            this.type = "text";
         }
         static get styles() {
             return [
                 ...super.styles,
                 hostStyle,
                 i$5 `
-                input {
-                    background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 3px) var(--spacer);
-                }
+				input {
+					background-color: var(--input-bg-color);
+					padding: calc(var(--spacer) + 3px) var(--spacer);
+				}
 
-                input:disabled {
-                    opacity: var(--opacity-disabled);
-                }
+				input:disabled {
+					opacity: var(--opacity-disabled);
+				}
 
-                input:required {
-                    background-position: 98% center;
-                    background-repeat: no-repeat;
-                }
+				input:required {
+					background-position: 98% center;
+					background-repeat: no-repeat;
+				}
 
-                input:required:valid {
-                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPjxwb2x5Z29uIGZpbGw9IiNEOEQ4RDgiIHBvaW50cz0iNS4yIDEgNi4yIDEgNi4yIDcgMy4yIDcgMy4yIDYgNS4yIDYiIHRyYW5zZm9ybT0icm90YXRlKDQwIDQuNjc3IDQpIi8+PC9zdmc+);
-                }
+				input:required:valid {
+					background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPjxwb2x5Z29uIGZpbGw9IiNEOEQ4RDgiIHBvaW50cz0iNS4yIDEgNi4yIDEgNi4yIDcgMy4yIDcgMy4yIDYgNS4yIDYiIHRyYW5zZm9ybT0icm90YXRlKDQwIDQuNjc3IDQpIi8+PC9zdmc+);
+				}
 
-                input:required:invalid {
-                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPgogICAgPHBhdGggZmlsbD0iI0Q4RDhEOCIgZD0iTTQuNSwwIEM2Ljk4NTI4MTM3LC00LjU2NTM4NzgyZS0xNiA5LDIuMDE0NzE4NjMgOSw0LjUgQzksNi45ODUyODEzNyA2Ljk4NTI4MTM3LDkgNC41LDkgQzIuMDE0NzE4NjMsOSAzLjA0MzU5MTg4ZS0xNiw2Ljk4NTI4MTM3IDAsNC41IEMtMy4wNDM1OTE4OGUtMTYsMi4wMTQ3MTg2MyAyLjAxNDcxODYzLDQuNTY1Mzg3ODJlLTE2IDQuNSwwIFogTTQsMSBMNCw2IEw1LDYgTDUsMSBMNCwxIFogTTQuNSw4IEM0Ljc3NjE0MjM3LDggNSw3Ljc3NjE0MjM3IDUsNy41IEM1LDcuMjIzODU3NjMgNC43NzYxNDIzNyw3IDQuNSw3IEM0LjIyMzg1NzYzLDcgNCw3LjIyMzg1NzYzIDQsNy41IEM0LDcuNzc2MTQyMzcgNC4yMjM4NTc2Myw4IDQuNSw4IFoiLz4KICA8L3N2Zz4);
-                }
-            `
+				input:required:invalid {
+					background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiIHZpZXdCb3g9IjAgMCA5IDkiPgogICAgPHBhdGggZmlsbD0iI0Q4RDhEOCIgZD0iTTQuNSwwIEM2Ljk4NTI4MTM3LC00LjU2NTM4NzgyZS0xNiA5LDIuMDE0NzE4NjMgOSw0LjUgQzksNi45ODUyODEzNyA2Ljk4NTI4MTM3LDkgNC41LDkgQzIuMDE0NzE4NjMsOSAzLjA0MzU5MTg4ZS0xNiw2Ljk4NTI4MTM3IDAsNC41IEMtMy4wNDM1OTE4OGUtMTYsMi4wMTQ3MTg2MyAyLjAxNDcxODYzLDQuNTY1Mzg3ODJlLTE2IDQuNSwwIFogTTQsMSBMNCw2IEw1LDYgTDUsMSBMNCwxIFogTTQuNSw4IEM0Ljc3NjE0MjM3LDggNSw3Ljc3NjE0MjM3IDUsNy41IEM1LDcuMjIzODU3NjMgNC43NzYxNDIzNyw3IDQuNSw3IEM0LjIyMzg1NzYzLDcgNCw3LjIyMzg1NzYzIDQsNy41IEM0LDcuNzc2MTQyMzcgNC4yMjM4NTc2Myw4IDQuNSw4IFoiLz4KICA8L3N2Zz4);
+				}
+			`,
             ];
         }
         render() {
             var _a;
             return y `
-            <input
-                ${n$1(this.focusElement)}
-                pattern=${l(this.pattern)}
-                placeholder=${l((_a = this.placeholder) === null || _a === void 0 ? void 0 : _a.toString())}
-                maxlength=${l(this.maxLength)}
-                .disabled=${this.disabled}
-                .required=${this.required}
-                .type=${this.type}
-                .value=${this.value || ''}
-                @input=${(ev) => (this.value = ev.target.value)}
-            />
-        `;
+			<input
+				${n$1(this.focusElement)}
+				pattern=${l(this.pattern)}
+				placeholder=${l((_a = this.placeholder) === null || _a === void 0 ? void 0 : _a.toString())}
+				maxlength=${l(this.maxLength)}
+				.disabled=${this.disabled}
+				.required=${this.required}
+				.type=${this.type}
+				.value=${this.value || ""}
+				@input=${(ev) => (this.value = ev.target.value)}
+			/>
+		`;
         }
     };
     __decorate([
         e$3({
-            attribute: 'maxlength',
-            type: Number
+            attribute: "maxlength",
+            type: Number,
         }),
         __metadata("design:type", Number)
     ], Textfield.prototype, "maxLength", void 0);
@@ -1442,17 +1467,17 @@
         __metadata("design:type", Object)
     ], Textfield.prototype, "required", void 0);
     Textfield = __decorate([
-        e$4('sdpi-textfield')
+        e$4("sdpi-textfield")
     ], Textfield);
 
     let Password = class Password extends Textfield {
         constructor() {
             super(...arguments);
-            this.type = 'password';
+            this.type = "password";
         }
     };
     Password = __decorate([
-        e$4('sdpi-password')
+        e$4("sdpi-password")
     ], Password);
 
     let Radio = class Radio extends Gridded(Persisted(Checkable(DataSourced(DynamicValueType(Input(s$3)))))) {
@@ -1460,32 +1485,33 @@
             return [
                 ...super.styles,
                 i$5 `
-                .loading {
-                    margin: 0;
-                    padding: calc(var(--spacer) * 1.5) 0;
-                    user-select: none;
-                }
-            `
+				.loading {
+					margin: 0;
+					padding: calc(var(--spacer) * 1.5) 0;
+					user-select: none;
+				}
+			`,
             ];
         }
         render() {
             return this.items.render({
                 pending: () => y `<p class="loading">${this.loadingText}</p>`,
-                complete: () => this.renderGrid(this.renderDataSource((item) => this.renderCheckable('radio', y `
-                                <input
-                                    type="radio"
-                                    name="_"
-                                    .checked=${this.value == item.value || (this.defaultValue != undefined && this.defaultValue == item.value)}
-                                    .disabled=${this.disabled || item.disabled || false}
-                                    .value=${item.value}
-                                    @change=${(ev) => (this.value = this.parseValue(ev.target.value))}
-                                />
-                            `, item.label)))
+                complete: () => this.renderGrid(this.renderDataSource((item) => this.renderCheckable("radio", y `
+								<input
+									type="radio"
+									name="_"
+									.checked=${this.value == item.value ||
+                (this.defaultValue != undefined && this.defaultValue == item.value)}
+									.disabled=${this.disabled || item.disabled || false}
+									.value=${item.value}
+									@change=${(ev) => (this.value = this.parseValue(ev.target.value))}
+								/>
+							`, item.label))),
             });
         }
     };
     Radio = __decorate([
-        e$4('sdpi-radio')
+        e$4("sdpi-radio")
     ], Radio);
 
     let Range = class Range extends Persisted(Focusable(Input(s$3))) {
@@ -1498,92 +1524,104 @@
             return [
                 ...super.styles,
                 i$5 `
-                input {
-                    -webkit-appearance: none;
-                    margin: 0;
-                    height: 22px;
-                    background-color: transparent;
-                }
+				input {
+					-webkit-appearance: none;
+					margin: 0;
+					height: 22px;
+					background-color: transparent;
+				}
 
-                input:disabled,
-                .container > div[aria-disabled='true'] {
-                    cursor: default;
-                    opacity: var(--opacity-disabled);
-                }
+				input:disabled,
+				.container > div[aria-disabled="true"] {
+					cursor: default;
+					opacity: var(--opacity-disabled);
+				}
 
-                ::-webkit-slider-runnable-track {
-                    margin-top: 2px;
-                    height: 5px;
-                    padding: 0px !important;
+				::-webkit-slider-runnable-track {
+					margin-top: 2px;
+					height: 5px;
+					padding: 0px !important;
 
-                    border: solid 1px var(--input-bg-color);
-                    background: #636363;
-                    border-radius: 3px;
-                }
+					border: solid 1px var(--input-bg-color);
+					background: #636363;
+					border-radius: 3px;
+				}
 
-                ::-webkit-slider-thumb {
-                    -webkit-appearance: none;
-                    background-color: var(--input-font-color);
-                    border-radius: 50%;
-                    cursor: pointer;
-                    top: -4px;
-                    position: relative;
-                    height: 12px;
-                    width: 12px;
-                }
+				::-webkit-slider-thumb {
+					-webkit-appearance: none;
+					background-color: var(--input-font-color);
+					border-radius: 50%;
+					cursor: pointer;
+					top: -4px;
+					position: relative;
+					height: 12px;
+					width: 12px;
+				}
 
-                input:disabled::-webkit-slider-thumb {
-                    cursor: default;
-                }
+				input:disabled::-webkit-slider-thumb {
+					cursor: default;
+				}
 
-                input::-webkit-slider-thumb::before {
-                    position: absolute;
-                    content: '';
-                }
+				input::-webkit-slider-thumb::before {
+					position: absolute;
+					content: "";
+				}
 
-                .container {
-                    display: flex;
-                    align-items: center;
-                }
+				.container {
+					display: flex;
+					align-items: center;
+				}
 
-                .container > div {
-                    flex: 0 1;
-                }
+				.container > div {
+					flex: 0 1;
+				}
 
-                div[role='button'] {
-                    cursor: pointer;
-                    user-select: none;
-                }
+				div[role="button"] {
+					cursor: pointer;
+					user-select: none;
+				}
 
-                .container > div:nth-child(2) {
-                    flex: 1 1;
-                    margin: 0 var(--spacer);
-                }
-            `
+				.container > div:nth-child(2) {
+					flex: 1 1;
+					margin: 0 var(--spacer);
+				}
+			`,
             ];
         }
         render() {
             var _a, _b;
-            const value = ((_a = this.value) === null || _a === void 0 ? void 0 : _a.toString()) || ((_b = this.defaultValue) === null || _b === void 0 ? void 0 : _b.toString()) || '';
+            const value = ((_a = this.value) === null || _a === void 0 ? void 0 : _a.toString()) || ((_b = this.defaultValue) === null || _b === void 0 ? void 0 : _b.toString()) || "";
             const input = y `
-            <input
-                ${n$1(this.focusElement)}
-                type="range"
-                max=${l(this.max)}
-                min=${l(this.min)}
-                step=${l(this.step)}
-                .disabled=${this.disabled}
-                .title=${value}
-                .value=${value}
-                @change=${(ev) => (this.value = ev.target.valueAsNumber)}
-            />
-        `;
+			<input
+				${n$1(this.focusElement)}
+				type="range"
+				max=${l(this.max)}
+				min=${l(this.min)}
+				step=${l(this.step)}
+				.disabled=${this.disabled}
+				.title=${value}
+				.value=${value}
+				@change=${(ev) => (this.value = ev.target.valueAsNumber)}
+			/>
+		`;
             if (this.showLabels) {
                 return y `<div class="container">
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}><slot name="min">${this.min}</slot></div>
-                <div>${input}</div>
-                <div aria-disabled=${this.disabled} role="button" @click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}><slot name="max">${this.max}</slot></div>
-            </div>`;
+				<div
+					aria-disabled=${this.disabled}
+					role="button"
+					@click=${() => !this.disabled && this.min !== undefined && (this.value = this.min)}
+				>
+					<slot name="min">${this.min}</slot>
+				</div>
+				<div>${input}</div>
+				<div
+					aria-disabled=${this.disabled}
+					role="button"
+					@click=${() => !this.disabled && this.max !== undefined && (this.value = this.max)}
+				>
+					<slot name="max">${this.max}</slot>
+				</div>
+			</div>`;
             }
             else {
                 return input;
@@ -1600,8 +1638,8 @@
     ], Range.prototype, "min", void 0);
     __decorate([
         e$3({
-            attribute: 'showlabels',
-            type: Boolean
+            attribute: "showlabels",
+            type: Boolean,
         }),
         __metadata("design:type", Object)
     ], Range.prototype, "showLabels", void 0);
@@ -1610,20 +1648,24 @@
         __metadata("design:type", Number)
     ], Range.prototype, "step", void 0);
     Range = __decorate([
-        e$4('sdpi-range')
+        e$4("sdpi-range")
     ], Range);
 
     let SdpiItem = class SdpiItem extends s$3 {
         render() {
             return y `
-            <div class="container grid">
-                <div class="label"><label @click=${this.handleLabelClick}>${this.label ? this.label.toString() + ':' : undefined}</label></div>
-                <div class="content"><slot></slot></div>
-            </div>
-        `;
+			<div class="container grid">
+				<div class="label">
+					<label @click=${this.handleLabelClick}
+						>${this.label ? this.label.toString() + ":" : undefined}</label
+					>
+				</div>
+				<div class="content"><slot></slot></div>
+			</div>
+		`;
         }
         handleLabelClick() {
-            for (const elem of this.querySelectorAll('*')) {
+            for (const elem of this.querySelectorAll("*")) {
                 const focusable = elem;
                 if (focusable.canFocus) {
                     focusable.focus();
@@ -1635,47 +1677,50 @@
     SdpiItem.styles = [
         hostStyle,
         i$5 `
-            ::-webkit-scrollbar {
-                width: 5px;
-            }
-            ::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-                box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-            }
-            ::-webkit-scrollbar-thumb {
-                background-color: #666666;
-                border-radius: 5px;
-                outline: 1px solid slategrey;
-            }
+			::-webkit-scrollbar {
+				width: 5px;
+			}
+			::-webkit-scrollbar-track {
+				-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+				box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+			}
+			::-webkit-scrollbar-thumb {
+				background-color: #666666;
+				border-radius: 5px;
+				outline: 1px solid slategrey;
+			}
 
-            .container {
-                color: var(--font-color);
-                font-family: var(--font-family);
-                font-size: var(--font-size);
-                margin: 0 0 10px 0;
-                max-width: 322px;
-                -webkit-user-drag: none;
-            }
+			.container {
+				color: var(--font-color);
+				font-family: var(--font-family);
+				font-size: var(--font-size);
+				margin: 0 0 10px 0;
+				max-width: 322px;
+				-webkit-user-drag: none;
+			}
 
-            .grid {
-                align-items: start;
-                display: grid;
-                grid-template-columns: 95px 1fr;
-            }
+			.grid {
+				align-items: start;
+				display: grid;
+				grid-template-columns: 95px 1fr;
+			}
 
-            .label {
-                margin-top: 6px;
-                justify-self: end;
-                padding-right: 11px;
-            }
-        `
+			.label {
+				align-items: center;
+				display: flex;
+				justify-self: end;
+				min-height: 28px;
+				padding-right: 11px;
+				text-align: right;
+			}
+		`,
     ];
     __decorate([
         e$3(localizedMessagePropertyOptions),
         __metadata("design:type", LocalizedMessage)
     ], SdpiItem.prototype, "label", void 0);
     SdpiItem = __decorate([
-        e$4('sdpi-item')
+        e$4("sdpi-item")
     ], SdpiItem);
 
     /**
@@ -1700,31 +1745,31 @@
             return [
                 ...super.styles,
                 i$5 `
-                select {
-                    background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 2px) 0;
-                    text-overflow: ellipsis;
-                    width: 100%;
-                }
+				select {
+					background-color: var(--input-bg-color);
+					padding: calc(var(--spacer) + 2px) 0;
+					text-overflow: ellipsis;
+					width: 100%;
+				}
 
-                select:focus {
-                    box-shadow: inset 0 0 1px var(--font-color);
-                }
+				select:focus {
+					box-shadow: inset 0 0 1px var(--font-color);
+				}
 
-                select:disabled {
-                    opacity: var(--opacity-disabled);
-                }
+				select:disabled {
+					opacity: var(--opacity-disabled);
+				}
 
-                .refresh {
-                    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTgiIHdpZHRoPSIxOCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjOUM5QzlDIj48cGF0aCBkPSJNMTIgMjBxLTMuMzUgMC01LjY3NS0yLjMyNVE0IDE1LjM1IDQgMTJxMC0zLjM1IDIuMzI1LTUuNjc1UTguNjUgNCAxMiA0cTEuNzI1IDAgMy4zLjcxMyAxLjU3NS43MTIgMi43IDIuMDM3VjRoMnY3aC03VjloNC4ycS0uOC0xLjQtMi4xODctMi4yUTEzLjYyNSA2IDEyIDYgOS41IDYgNy43NSA3Ljc1VDYgMTJxMCAyLjUgMS43NSA0LjI1VDEyIDE4cTEuOTI1IDAgMy40NzUtMS4xVDE3LjY1IDE0aDIuMXEtLjcgMi42NS0yLjg1IDQuMzI1UTE0Ljc1IDIwIDEyIDIwWiIvPjwvc3ZnPg==)
-                        no-repeat -1px -1px;
-                    width: 16px;
-                }
+				.refresh {
+					background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTgiIHdpZHRoPSIxOCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjOUM5QzlDIj48cGF0aCBkPSJNMTIgMjBxLTMuMzUgMC01LjY3NS0yLjMyNVE0IDE1LjM1IDQgMTJxMC0zLjM1IDIuMzI1LTUuNjc1UTguNjUgNCAxMiA0cTEuNzI1IDAgMy4zLjcxMyAxLjU3NS43MTIgMi43IDIuMDM3VjRoMnY3aC03VjloNC4ycS0uOC0xLjQtMi4xODctMi4yUTEzLjYyNSA2IDEyIDYgOS41IDYgNy43NSA3Ljc1VDYgMTJxMCAyLjUgMS43NSA0LjI1VDEyIDE4cTEuOTI1IDAgMy40NzUtMS4xVDE3LjY1IDE0aDIuMXEtLjcgMi42NS0yLjg1IDQuMzI1UTE0Ljc1IDIwIDEyIDIwWiIvPjwvc3ZnPg==)
+						no-repeat -1px -1px;
+					width: 16px;
+				}
 
-                sdpi-button:not([disabled]):hover .refresh {
-                    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTgiIHdpZHRoPSIxOCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjQ0VDRUNFIj48cGF0aCBkPSJNMTIgMjBxLTMuMzUgMC01LjY3NS0yLjMyNVE0IDE1LjM1IDQgMTJxMC0zLjM1IDIuMzI1LTUuNjc1UTguNjUgNCAxMiA0cTEuNzI1IDAgMy4zLjcxMyAxLjU3NS43MTIgMi43IDIuMDM3VjRoMnY3aC03VjloNC4ycS0uOC0xLjQtMi4xODctMi4yUTEzLjYyNSA2IDEyIDYgOS41IDYgNy43NSA3Ljc1VDYgMTJxMCAyLjUgMS43NSA0LjI1VDEyIDE4cTEuOTI1IDAgMy40NzUtMS4xVDE3LjY1IDE0aDIuMXEtLjcgMi42NS0yLjg1IDQuMzI1UTE0Ljc1IDIwIDEyIDIwWiIvPjwvc3ZnPg==);
-                }
-            `
+				sdpi-button:not([disabled]):hover .refresh {
+					background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMTgiIHdpZHRoPSIxOCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjQ0VDRUNFIj48cGF0aCBkPSJNMTIgMjBxLTMuMzUgMC01LjY3NS0yLjMyNVE0IDE1LjM1IDQgMTJxMC0zLjM1IDIuMzI1LTUuNjc1UTguNjUgNCAxMiA0cTEuNzI1IDAgMy4zLjcxMyAxLjU3NS43MTIgMi43IDIuMDM3VjRoMnY3aC03VjloNC4ycS0uOC0xLjQtMi4xODctMi4yUTEzLjYyNSA2IDEyIDYgOS41IDYgNy43NSA3Ljc1VDYgMTJxMCAyLjUgMS43NSA0LjI1VDEyIDE4cTEuOTI1IDAgMy40NzUtMS4xVDE3LjY1IDE0aDIuMXEtLjcgMi42NS0yLjg1IDQuMzI1UTE0Ljc1IDIwIDEyIDIwWiIvPjwvc3ZnPg==);
+				}
+			`,
             ];
         }
         firstUpdated(_changedProperties) {
@@ -1738,37 +1783,43 @@
             const disabled = this.disabled || this.items.status !== i$2.COMPLETE;
             const selectedValue = this.getSelectedValueFrom((_b = (_a = this.items) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : []) || this.defaultValue;
             const select = y `
-            <select
-                ${n$1(this.focusElement)}
-                .disabled=${disabled}
-                .value=${(selectedValue === null || selectedValue === void 0 ? void 0 : selectedValue.toString()) || ''}
-                @change=${(ev) => {
+			<select
+				${n$1(this.focusElement)}
+				.disabled=${disabled}
+				.value=${(selectedValue === null || selectedValue === void 0 ? void 0 : selectedValue.toString()) || ""}
+				@change=${(ev) => {
             this.setLabel && this.setLabel(ev.target[ev.target.selectedIndex].innerText);
             this.value = this.parseValue(ev.target.value);
         }}
-            >
-                ${this.items.render({
+			>
+				${this.items.render({
             pending: () => y `<option value="" disabled selected>${this.loadingText}</option>`,
             complete: () => y `
-                        ${selectedValue === undefined ? c(this.getLabelOrPlaceholder()) : undefined}
-                        ${this.renderDataSource((item) => y `<option .disabled=${item.disabled || false} .value=${item.value} .selected=${item.value === selectedValue}>${item.label}</option>`, (group, children) => { var _a; return y `<optgroup .label=${((_a = group.label) === null || _a === void 0 ? void 0 : _a.toString()) || ''}>${children}</optgroup>`; })}
-                    `
+						${selectedValue === undefined ? c(this.getLabelOrPlaceholder()) : undefined}
+						${this.renderDataSource((item) => y `<option
+									.disabled=${item.disabled || false}
+									.value=${item.value}
+									.selected=${item.value === selectedValue}
+								>
+									${item.label}
+								</option>`, (group, children) => { var _a; return y `<optgroup .label=${((_a = group.label) === null || _a === void 0 ? void 0 : _a.toString()) || ""}>${children}</optgroup>`; })}
+					`,
         })}
-            </select>
-        `;
+			</select>
+		`;
             if (!this.showRefresh || this.dataSource === undefined) {
                 return select;
             }
             return y `
-            <div class="flex">
-                <div class="flex-grow">${select}</div>
-                <div class="flex-shrink margin-left">
-                    <sdpi-button .disabled=${disabled} @click=${() => this.refresh()}>
-                        <div class="refresh">&nbsp;</div>
-                    </sdpi-button>
-                </div>
-            </div>
-        `;
+			<div class="flex">
+				<div class="flex-grow">${select}</div>
+				<div class="flex-shrink margin-left">
+					<sdpi-button .disabled=${disabled} @click=${() => this.refresh()}>
+						<div class="refresh">&nbsp;</div>
+					</sdpi-button>
+				</div>
+			</div>
+		`;
         }
         async getLabelOrPlaceholder() {
             if (this.getLabel) {
@@ -1784,14 +1835,14 @@
         }
         getSelectedValueFrom(items) {
             for (const item of items) {
-                if ('children' in item) {
+                if ("children" in item) {
                     const value = this.getSelectedValueFrom(item.children);
                     if (value !== undefined) {
                         return value;
                     }
                     continue;
                 }
-                if ('value' in item && item.value == this.value) {
+                if ("value" in item && item.value == this.value) {
                     return item.value;
                 }
             }
@@ -1799,13 +1850,13 @@
         }
     };
     __decorate([
-        e$3({ attribute: 'label-setting' }),
+        e$3({ attribute: "label-setting" }),
         __metadata("design:type", String)
     ], Select.prototype, "labelSetting", void 0);
     __decorate([
         e$3({
-            attribute: 'show-refresh',
-            type: Boolean
+            attribute: "show-refresh",
+            type: Boolean,
         }),
         __metadata("design:type", Object)
     ], Select.prototype, "showRefresh", void 0);
@@ -1814,7 +1865,7 @@
         __metadata("design:type", LocalizedMessage)
     ], Select.prototype, "placeholder", void 0);
     Select = __decorate([
-        e$4('sdpi-select')
+        e$4("sdpi-select")
     ], Select);
 
     let Textarea = class Textarea extends Persisted(Focusable(Input(s$3))) {
@@ -1829,40 +1880,40 @@
                 ...super.styles,
                 hostStyle,
                 i$5 `
-                textarea {
-                    background-color: var(--input-bg-color);
-                    padding: calc(var(--spacer) + 3px) var(--spacer);
-                    resize: none;
-                }
+				textarea {
+					background-color: var(--input-bg-color);
+					padding: calc(var(--spacer) + 3px) var(--spacer);
+					resize: none;
+				}
 
-                textarea:disabled {
-                    opacity: var(--opacity-disabled);
-                }
+				textarea:disabled {
+					opacity: var(--opacity-disabled);
+				}
 
-                .length {
-                    color: var(--font-color);
-                    display: block;
-                    text-align: right;
-                    font-family: var(--font-family);
-                    font-size: var(--font-size);
-                }
-            `
+				.length {
+					color: var(--font-color);
+					display: block;
+					text-align: right;
+					font-family: var(--font-family);
+					font-size: var(--font-size);
+				}
+			`,
             ];
         }
         render() {
             return y `
-            <textarea
-                ${n$1(this.focusElement)}
-                type="textarea"
-                maxlength=${l(this.maxLength)}
-                .disabled=${this.disabled}
-                .id=${this.inputId}
-                .rows=${this.rows}
-                .value=${this.value || ''}
-                @input=${(ev) => (this.value = ev.target.value)}
-            ></textarea>
-            ${this.getLengthLabel()}
-        `;
+			<textarea
+				${n$1(this.focusElement)}
+				type="textarea"
+				maxlength=${l(this.maxLength)}
+				.disabled=${this.disabled}
+				.id=${this.inputId}
+				.rows=${this.rows}
+				.value=${this.value || ""}
+				@input=${(ev) => (this.value = ev.target.value)}
+			></textarea>
+			${this.getLengthLabel()}
+		`;
         }
         getLengthLabel() {
             var _a;
@@ -1875,8 +1926,8 @@
     };
     __decorate([
         e$3({
-            attribute: 'maxlength',
-            type: Number
+            attribute: "maxlength",
+            type: Number,
         }),
         __metadata("design:type", Number)
     ], Textarea.prototype, "maxLength", void 0);
@@ -1886,13 +1937,13 @@
     ], Textarea.prototype, "rows", void 0);
     __decorate([
         e$3({
-            attribute: 'showlength',
-            type: Boolean
+            attribute: "showlength",
+            type: Boolean,
         }),
         __metadata("design:type", Object)
     ], Textarea.prototype, "showLength", void 0);
     Textarea = __decorate([
-        e$4('sdpi-textarea')
+        e$4("sdpi-textarea")
     ], Textarea);
 
     const existing = window.connectElgatoStreamDeckSocket;
@@ -1912,25 +1963,25 @@
     })(SDPIComponents || (SDPIComponents = {}));
     window.SDPIComponents = SDPIComponents;
 
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.innerHTML = i$5 `
-    /* Styles added by sdpi library. */
-    html,
-    body {
-        background-color: #2d2d2d;
-    }
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    }
-    ::-webkit-scrollbar-thumb {
-        background-color: #666666;
-        border-radius: 5px;
-        outline: 1px solid slategrey;
-    }
+	/* Styles added by sdpi library. */
+	html,
+	body {
+		background-color: #2d2d2d;
+	}
+	::-webkit-scrollbar {
+		width: 5px;
+	}
+	::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+	}
+	::-webkit-scrollbar-thumb {
+		background-color: #666666;
+		border-radius: 5px;
+		outline: 1px solid slategrey;
+	}
 `.cssText;
     document.head.appendChild(style);
 
