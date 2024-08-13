@@ -13,7 +13,7 @@ declare module "stream-deck" {
 		CorsairVoyager = 6,
 		StreamDeckPlus = 7,
 		SCUFController = 8,
-		StreamDeckNeo = 9
+		StreamDeckNeo = 9,
 	}
 
 	/**
