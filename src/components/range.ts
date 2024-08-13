@@ -3,7 +3,6 @@ import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { ref } from 'lit/directives/ref.js';
 
-import { format } from '../core';
 import { Focusable, Input, Persisted } from '../mixins';
 
 @customElement('sdpi-range')
