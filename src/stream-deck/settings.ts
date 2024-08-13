@@ -1,4 +1,4 @@
-import { delay, get, IEventSubscriber, PromiseCompletionSource, set } from '../core';
+import { delay, get, IEventSubscriber, set } from '../core';
 import streamDeckClient from './stream-deck-client';
 
 export type SettingsEventArgs = {
@@ -11,7 +11,8 @@ export type SettingsEventArgs = {
  * Provides a wrapper around loading, managing, and persisting settings within the Stream Deck.
  */
 export class Settings<TEventArgs extends SettingsEventArgs> {
-    private _settings = new PromiseCompletionSource<unknown>();
+    private readonly _initialization;
+    private _settings: unknown;
 
     /**
      * Initializes a new instance of the settings.
@@ -19,7 +20,12 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
      * @param save The delegate responsible for persisting the settings in the Stream Deck.
      */
     constructor(private didReceive: IEventSubscriber<TEventArgs>, private save: (settings: unknown) => Promise<void>) {
-        didReceive.subscribe(async (data: TEventArgs) => this._settings?.setResult(data.payload.settings));
+        this._initialization = new Promise<void>((resolve) => {
+            didReceive.subscribe((data) => {
+                this._settings = data.payload.settings;
+                resolve();
+            });
+        });
     }
 
     /**
@@ -41,7 +47,10 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
         }
 
         // Construct getter and setter.
-        const getter = async (): Promise<T> => get(key, await this._settings.promise);
+        const getter = async (): Promise<T> => {
+            await this._initialization;
+            return get(key, await this._settings);
+        };
         const setter = timeout ? delay((value) => this.set(key, value, save), timeout) : (value?: unknown) => this.set(key, value, save);
 
         return [getter, setter];
@@ -54,16 +63,16 @@ export class Settings<TEventArgs extends SettingsEventArgs> {
      * @param save Indicates whether the setting should be persisted to the Stream Deck.
      */
     private async set(key: string, value?: unknown, save: boolean | null = true): Promise<void> {
-        const _settings = await this._settings.promise;
+        await this._initialization;
 
-        const oldValue = get(key, _settings);
+        const oldValue = get(key, this._settings);
         if (oldValue === value) {
             return;
         }
 
-        set(key, _settings, value);
+        set(key, this._settings, value);
         if (save) {
-            await this.save(_settings);
+            await this.save(this._settings);
         }
     }
 }
