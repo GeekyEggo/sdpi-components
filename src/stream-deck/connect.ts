@@ -1,4 +1,4 @@
-import streamDeckClient from './stream-deck-client';
+import streamDeckClient from "./stream-deck-client";
 
 const existing = window.connectElgatoStreamDeckSocket;
 
@@ -10,10 +10,16 @@ const existing = window.connectElgatoStreamDeckSocket;
  * @param info A json object containing information about the application.
  * @param actionInfo A json object containing information about the action.
  */
-window.connectElgatoStreamDeckSocket = (port: string, propertyInspectorUUID: string, registerEvent: string, info: string, actionInfo: string) => {
-    if (existing) {
-        existing(port, propertyInspectorUUID, registerEvent, info, actionInfo);
-    }
+window.connectElgatoStreamDeckSocket = (
+	port: string,
+	propertyInspectorUUID: string,
+	registerEvent: string,
+	info: string,
+	actionInfo: string,
+) => {
+	if (existing) {
+		existing(port, propertyInspectorUUID, registerEvent, info, actionInfo);
+	}
 
-    streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, JSON.parse(info), JSON.parse(actionInfo));
+	streamDeckClient.connect(port, propertyInspectorUUID, registerEvent, JSON.parse(info), JSON.parse(actionInfo));
 };

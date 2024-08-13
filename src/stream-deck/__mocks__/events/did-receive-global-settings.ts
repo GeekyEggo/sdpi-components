@@ -1,10 +1,10 @@
-import { DidReceiveGlobalSettingsEvent } from 'stream-deck';
+import { DidReceiveGlobalSettingsEvent } from "stream-deck";
 
 export const didReceiveGlobalSettings: DidReceiveGlobalSettingsEvent = {
-    event: 'didReceiveGlobalSettings',
-    payload: {
-        settings: {
-            foo: 'bar'
-        }
-    }
+	event: "didReceiveGlobalSettings",
+	payload: {
+		settings: {
+			foo: "bar",
+		},
+	},
 };

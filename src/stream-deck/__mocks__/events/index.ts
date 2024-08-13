@@ -1,2 +1,2 @@
-export * from './did-receive-global-settings';
-export * from './did-receive-settings';
+export * from "./did-receive-global-settings";
+export * from "./did-receive-settings";

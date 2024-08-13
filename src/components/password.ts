@@ -1,15 +1,15 @@
-import { customElement } from 'lit/decorators.js';
+import { customElement } from "lit/decorators.js";
 
-import { Textfield } from './textfield';
+import { Textfield } from "./textfield";
 
-@customElement('sdpi-password')
+@customElement("sdpi-password")
 export class Password extends Textfield {
-    /** @inheritdoc */
-    protected type: 'text' | 'password' = 'password';
+	/** @inheritdoc */
+	protected type: "text" | "password" = "password";
 }
 
 declare global {
-    interface HTMLElementTagNameMap {
-        'sdpi-password': Password;
-    }
+	interface HTMLElementTagNameMap {
+		"sdpi-password": Password;
+	}
 }

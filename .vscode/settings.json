@@ -2,7 +2,6 @@
     "files.eol": "\n",
     "files.exclude": {
         "src/**/*.js*": true,
-        "node_modules": true,
         "**/.vs/": true
     },
     "importSorter.generalConfiguration.sortOnBeforeSave": true,

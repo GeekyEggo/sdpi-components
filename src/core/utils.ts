@@ -1,4 +1,4 @@
-import { CSSResultArray, CSSResultGroup, CSSResultOrNative } from 'lit';
+import { CSSResultArray, CSSResultGroup, CSSResultOrNative } from "lit";
 
 /**
  * Converts a `CSSResultGroup` to an array.
@@ -6,15 +6,15 @@ import { CSSResultArray, CSSResultGroup, CSSResultOrNative } from 'lit';
  * @returns The array of `CSSResultOrNative` or `CSSResultArray`.
  */
 export function asArray(styles?: CSSResultGroup): (CSSResultOrNative | CSSResultArray)[] {
-    if (styles === undefined) {
-        return [];
-    }
+	if (styles === undefined) {
+		return [];
+	}
 
-    if (Array.isArray(styles)) {
-        return [...styles];
-    }
+	if (Array.isArray(styles)) {
+		return [...styles];
+	}
 
-    return [styles];
+	return [styles];
 }
 
 /**
@@ -23,14 +23,14 @@ export function asArray(styles?: CSSResultGroup): (CSSResultOrNative | CSSResult
  * @returns The parsed value; otherwise undefined.
  */
 export function parseNumber(value: boolean | number | string): number | undefined {
-    switch (typeof value) {
-        case 'boolean':
-            return value ? 1 : 0;
-        case 'number':
-            return value;
-        default:
-            return parseFloat(value);
-    }
+	switch (typeof value) {
+		case "boolean":
+			return value ? 1 : 0;
+		case "number":
+			return value;
+		default:
+			return parseFloat(value);
+	}
 }
 
 /**
@@ -39,16 +39,16 @@ export function parseNumber(value: boolean | number | string): number | undefine
  * @returns The parsed value.
  */
 export function parseBoolean(value: boolean | number | string): boolean {
-    switch (typeof value) {
-        case 'boolean':
-            return value;
-        case 'number':
-            return value !== 0;
-        default: {
-            const str = value.toString().toLowerCase();
-            return str !== 'false' && str !== '0';
-        }
-    }
+	switch (typeof value) {
+		case "boolean":
+			return value;
+		case "number":
+			return value !== 0;
+		default: {
+			const str = value.toString().toLowerCase();
+			return str !== "false" && str !== "0";
+		}
+	}
 }
 
 /**
@@ -58,17 +58,17 @@ export function parseBoolean(value: boolean | number | string): boolean {
  * @returns The formatted string.
  */
 export function format(format: string, ...args: unknown[]) {
-    if (!args.length) {
-        return format;
-    }
+	if (!args.length) {
+		return format;
+	}
 
-    const type = typeof args[0];
-    const formatArgs = type === 'string' || type === 'number' ? Array.prototype.slice.call(args) : args[0];
+	const type = typeof args[0];
+	const formatArgs = type === "string" || type === "number" ? Array.prototype.slice.call(args) : args[0];
 
-    return format.replace(/{([A-z0-9-_#@\\.]+)}/g, (match, path) => {
-        const value = get(path, formatArgs);
-        return value !== undefined ? value : match;
-    });
+	return format.replace(/{([A-z0-9-_#@\\.]+)}/g, (match, path) => {
+		const value = get(path, formatArgs);
+		return value !== undefined ? value : match;
+	});
 }
 
 /**
@@ -76,8 +76,8 @@ export function format(format: string, ...args: unknown[]) {
  * @returns The unique identifier.
  */
 export function getUUID(): string {
-    const chr4 = () => Math.random().toString(16).slice(-4);
-    return chr4() + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + '-' + chr4() + chr4() + chr4();
+	const chr4 = () => Math.random().toString(16).slice(-4);
+	return chr4() + chr4() + "-" + chr4() + "-" + chr4() + "-" + chr4() + "-" + chr4() + chr4() + chr4();
 }
 
 /**
@@ -88,8 +88,8 @@ export function getUUID(): string {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function get(path: string, source: any): any {
-    const props: string[] = path.split('.');
-    return props.reduce((obj, prop) => obj && obj[prop], source);
+	const props: string[] = path.split(".");
+	return props.reduce((obj, prop) => obj && obj[prop], source);
 }
 
 /**
@@ -100,10 +100,10 @@ export function get(path: string, source: any): any {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function set(path: string, target: any, value: unknown): void {
-    const props = path.split('.');
-    props.reduce((obj, prop, i) => {
-        return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
-    }, target);
+	const props = path.split(".");
+	props.reduce((obj, prop, i) => {
+		return i === props.length - 1 ? (obj[prop] = value) : obj[prop] || (obj[prop] = {});
+	}, target);
 }
 
 /**
@@ -112,7 +112,7 @@ export function set(path: string, target: any, value: unknown): void {
  * @returns `true` when the item is an object; otherwise `false`.
  */
 export const isObject = (item: unknown): boolean => {
-    return item && typeof item === 'object' && !Array.isArray(item) ? true : false;
+	return item && typeof item === "object" && !Array.isArray(item) ? true : false;
 };
 
 /**
@@ -124,24 +124,24 @@ export const isObject = (item: unknown): boolean => {
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const merge = <T extends {}>(target: T, ...sources: DeepPartial<T>[]): T => {
-    if (!sources.length) {
-        return target;
-    }
+	if (!sources.length) {
+		return target;
+	}
 
-    const source = sources.shift();
-    if (isObject(target) && isObject(source)) {
-        for (const key in source) {
-            if (isObject(source[key])) {
-                if (!(<Record<string, unknown>>target)[key]) {
-                    Object.assign(target, { [key]: {} });
-                }
+	const source = sources.shift();
+	if (isObject(target) && isObject(source)) {
+		for (const key in source) {
+			if (isObject(source[key])) {
+				if (!(<Record<string, unknown>>target)[key]) {
+					Object.assign(target, { [key]: {} });
+				}
 
-                merge((<Record<string, object>>target)[key], <Record<string, object>>source[key]);
-            } else {
-                Object.assign(target, { [key]: source[key] });
-            }
-        }
-    }
+				merge((<Record<string, object>>target)[key], <Record<string, object>>source[key]);
+			} else {
+				Object.assign(target, { [key]: source[key] });
+			}
+		}
+	}
 
-    return merge(target, ...sources);
+	return merge(target, ...sources);
 };
