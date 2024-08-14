@@ -639,10 +639,6 @@
                 return [
                     ...asArray(super.styles),
                     i$5 `
-					.container {
-						width: var(--input-width);
-					}
-
 					label {
 						align-self: center;
 						background-color: var(--input-bg-color);
@@ -869,7 +865,6 @@
 		--font-size: 9pt;
 
 		/* Pre-determined dimensions */
-		--input-width: 227px;
 		--input-height: 30px;
 	}
 `;
@@ -1695,14 +1690,13 @@
 				font-family: var(--font-family);
 				font-size: var(--font-size);
 				margin: 0 0 10px 0;
-				max-width: 322px;
 				-webkit-user-drag: none;
 			}
 
 			.grid {
 				align-items: start;
 				display: grid;
-				grid-template-columns: 95px 1fr;
+				grid-template-columns: 95px 241px;
 			}
 
 			.label {

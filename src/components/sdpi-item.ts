@@ -29,14 +29,13 @@ export class SdpiItem extends LitElement {
 				font-family: var(--font-family);
 				font-size: var(--font-size);
 				margin: 0 0 10px 0;
-				max-width: 322px;
 				-webkit-user-drag: none;
 			}
 
 			.grid {
 				align-items: start;
 				display: grid;
-				grid-template-columns: 95px 1fr;
+				grid-template-columns: 95px 241px;
 			}
 
 			.label {

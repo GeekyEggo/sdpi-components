@@ -1,6 +1,8 @@
 {
+    "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+    "UUID": "com.geekyeggo.sdpi.counter",
     "Name": "Counter",
-    "Version": "1.0.0",
+    "Version": "1.0.0.0",
     "Author": "Richard Herman",
     "Actions": [
         {
@@ -18,7 +20,7 @@
             },
             "States": [
                 {
-                    "FontSize": "18",
+                    "FontSize": 18,
                     "Image": "imgs/counter/image",
                     "TitleAlignment": "middle"
                 }
@@ -32,7 +34,7 @@
     "Icon": "imgs/plugin/icon",
     "SDKVersion": 2,
     "Software": {
-        "MinimumVersion": "4.1"
+        "MinimumVersion": "6.4"
     },
     "OS": [
         {

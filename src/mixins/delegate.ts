@@ -17,10 +17,6 @@ export const Delegate = <
 			return [
 				...asArray(super.styles),
 				css`
-					.container {
-						width: var(--input-width);
-					}
-
 					label {
 						align-self: center;
 						background-color: var(--input-bg-color);

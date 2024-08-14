@@ -20,7 +20,6 @@ export const hostStyle = css`
 		--font-size: 9pt;
 
 		/* Pre-determined dimensions */
-		--input-width: 227px;
 		--input-height: 30px;
 	}
 `;
