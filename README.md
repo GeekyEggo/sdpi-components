@@ -11,9 +11,9 @@
 
 Designed to complement Stream Deck plugins; sdpi-components provides a collection of web components that focuses on the plugin's property inspector, and makes persisting settings consistent, user-friendly, and hassle-free.
 
--   [✏️ Getting Started](#%EF%B8%8F-getting-started)
--   [📦 Example](#-example)
--   [🪶 Components](#-components)
+-   ✏️ [Getting Started](#%EF%B8%8F-getting-started)
+-   📦 [Example](#-example)
+-   🪶 [Components](#-components)
 
 ## ✏️ Getting Started
 
