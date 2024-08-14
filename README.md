@@ -27,10 +27,10 @@ Getting started is easy; simply reference the following JavaScript file in your 
 
 The example below highlights some of the components available; alternatively you can check out the [property inspector](./example/pi/index.html) in this repositories example plugin.
 
-![The property inspector, in the Elgato Stream Deck software, with components from sdpi-components](./assets/example.png 'Example of sdpi-components in the property inspector')
+![The property inspector, in the Elgato Stream Deck software, with components from sdpi-components](./assets/example.png "Example of sdpi-components in the property inspector")
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <head lang="en-gb">
     <meta charset="utf-8" />
     <script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components@v2/dist/sdpi-components.js"></script>
@@ -69,9 +69,9 @@ The example below highlights some of the components available; alternatively you
 
 To discover all of the components available, check out the [documentation](https://sdpi-components.dev/docs/components).
 
-[![The property inspector with all of the components found in the sdpi-components library](./assets/all-components.png 'Some of the components in sdpi-components')](https://sdpi-components.dev/docs/components)
+[![The property inspector with all of the components found in the sdpi-components library](./assets/all-components.png "Some of the components in sdpi-components")](https://sdpi-components.dev/docs/components)
 
-[build-shield]: https://github.com/GeekyEggo/sdpi-components/workflows/Build/badge.svg?branch=main
+[build-shield]: https://img.shields.io/github/actions/workflow/status/geekyeggo/sdpi-components/build.yml?branch=main&label=Build&logo=GitHub
 [coverage-shield]: assets/coverage.svg
 [docs-shield]: https://img.shields.io/static/v1?style=flat&message=Documentation&label=&color=orange&logoColor=white&labelColor=grey&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjAiIHdpZHRoPSIyMCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTguOTM4IDguODc1SDE0LjE4OFY3LjYyNUg4LjkzOFpNOC45MzggMTEuODMzSDExLjk3OVYxMC41ODNIOC45MzhaTTguOTM4IDUuOTE3SDE0LjE4OFY0LjY2N0g4LjkzOFpNNy4yMDggMTQuNjI1UTYuMzc1IDE0LjYyNSA1LjgwMiAxNC4wNTJRNS4yMjkgMTMuNDc5IDUuMjI5IDEyLjY0NlYzLjg1NFE1LjIyOSAzLjAyMSA1LjgwMiAyLjQ0OFE2LjM3NSAxLjg3NSA3LjIwOCAxLjg3NUgxNlExNi44MzMgMS44NzUgMTcuNDA2IDIuNDQ4UTE3Ljk3OSAzLjAyMSAxNy45NzkgMy44NTRWMTIuNjQ2UTE3Ljk3OSAxMy40NzkgMTcuNDA2IDE0LjA1MlExNi44MzMgMTQuNjI1IDE2IDE0LjYyNVpNNCAxNy44MzNRMy4xNjcgMTcuODMzIDIuNTk0IDE3LjI2UTIuMDIxIDE2LjY4OCAyLjAyMSAxNS44NTRWNS42MDRIMy40NzlWMTUuODU0UTMuNDc5IDE2LjA2MiAzLjYzNSAxNi4yMTlRMy43OTIgMTYuMzc1IDQgMTYuMzc1SDE0LjI1VjE3LjgzM1oiLz48L3N2Zz4=
 [twitter-shield]: https://img.shields.io/static/v1?style=flat&message=GeekyEggo&logo=Twitter&label=&color=blue&logoColor=white&labelColor=grey
