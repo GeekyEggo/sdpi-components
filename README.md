@@ -20,7 +20,7 @@ Designed to complement Stream Deck plugins; sdpi-components provides a collectio
 Getting started is easy; simply reference the following JavaScript file in your property inspector, and you're ready to start adding [components](https://sdpi-components.dev/docs/components).
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components@v2/dist/sdpi-components.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components@v3/dist/sdpi-components.js"></script>
 ```
 
 ## 📦 Example
@@ -33,7 +33,7 @@ The example below highlights some of the components available; alternatively you
 <!doctype html>
 <head lang="en-gb">
     <meta charset="utf-8" />
-    <script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components@v2/dist/sdpi-components.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components@v3/dist/sdpi-components.js"></script>
 </head>
 <html>
     <body>
