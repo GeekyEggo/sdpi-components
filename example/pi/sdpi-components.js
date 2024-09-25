@@ -1,6 +1,6 @@
 /**!
 * @license
-* sdpi-components v2.6.2, Copyright GeekyEggo and other contributors (https://sdpi-components.dev)
+* sdpi-components v3.0.0, Copyright Corsair Memory Inc. and other contributors (https://sdpi-components.dev)
 * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
 */
 (function () {
