@@ -6,8 +6,7 @@
 [![build-shield]](https://github.com/GeekyEggo/sdpi-components/actions?query=workflow%3Abuild)
 [![coverage-shield]](https://github.com/GeekyEggo/sdpi-components/actions?query=workflow%3Abuild)
 [![docs-shield]](https://sdpi-components.dev)
-
-[![twitter-shield]](https://twitter.com/geekyeggo)
+[![x-shield]](https://x.com/elgato)
 
 Designed to complement Stream Deck plugins; sdpi-components provides a collection of web components that focuses on the plugin's property inspector, and makes persisting settings consistent, user-friendly, and hassle-free.
 
@@ -20,7 +19,7 @@ Designed to complement Stream Deck plugins; sdpi-components provides a collectio
 Getting started is easy; simply reference the following JavaScript file in your property inspector, and you're ready to start adding [components](https://sdpi-components.dev/docs/components).
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components@v3/dist/sdpi-components.js"></script>
+<script src="https://sdpi-components.dev/releases/v3/sdpi-components.js"></script>
 ```
 
 ## 📦 Example
@@ -33,7 +32,7 @@ The example below highlights some of the components available; alternatively you
 <!doctype html>
 <head lang="en-gb">
     <meta charset="utf-8" />
-    <script src="https://cdn.jsdelivr.net/gh/geekyeggo/sdpi-components@v3/dist/sdpi-components.js"></script>
+    <script src="https://sdpi-components.dev/releases/v3/sdpi-components.js"></script>
 </head>
 <html>
     <body>
@@ -74,4 +73,4 @@ To discover all of the components available, check out the [documentation](https
 [build-shield]: https://img.shields.io/github/actions/workflow/status/geekyeggo/sdpi-components/build.yml?branch=main&label=Build&logo=GitHub
 [coverage-shield]: assets/coverage.svg
 [docs-shield]: https://img.shields.io/static/v1?style=flat&message=Documentation&label=&color=orange&logoColor=white&labelColor=grey&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjAiIHdpZHRoPSIyMCI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTguOTM4IDguODc1SDE0LjE4OFY3LjYyNUg4LjkzOFpNOC45MzggMTEuODMzSDExLjk3OVYxMC41ODNIOC45MzhaTTguOTM4IDUuOTE3SDE0LjE4OFY0LjY2N0g4LjkzOFpNNy4yMDggMTQuNjI1UTYuMzc1IDE0LjYyNSA1LjgwMiAxNC4wNTJRNS4yMjkgMTMuNDc5IDUuMjI5IDEyLjY0NlYzLjg1NFE1LjIyOSAzLjAyMSA1LjgwMiAyLjQ0OFE2LjM3NSAxLjg3NSA3LjIwOCAxLjg3NUgxNlExNi44MzMgMS44NzUgMTcuNDA2IDIuNDQ4UTE3Ljk3OSAzLjAyMSAxNy45NzkgMy44NTRWMTIuNjQ2UTE3Ljk3OSAxMy40NzkgMTcuNDA2IDE0LjA1MlExNi44MzMgMTQuNjI1IDE2IDE0LjYyNVpNNCAxNy44MzNRMy4xNjcgMTcuODMzIDIuNTk0IDE3LjI2UTIuMDIxIDE2LjY4OCAyLjAyMSAxNS44NTRWNS42MDRIMy40NzlWMTUuODU0UTMuNDc5IDE2LjA2MiAzLjYzNSAxNi4yMTlRMy43OTIgMTYuMzc1IDQgMTYuMzc1SDE0LjI1VjE3LjgzM1oiLz48L3N2Zz4=
-[twitter-shield]: https://img.shields.io/static/v1?style=flat&message=GeekyEggo&logo=Twitter&label=&color=blue&logoColor=white&labelColor=grey
+[x-shield]: https://img.shields.io/static/v1?style=flat&message=Elgato&logo=X&label=&color=blue&logoColor=white&labelColor=grey

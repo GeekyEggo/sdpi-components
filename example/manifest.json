@@ -1,13 +1,13 @@
 {
     "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
-    "UUID": "com.geekyeggo.sdpi.counter",
+    "UUID": "com.elgato.sdpi-samples",
     "Name": "Counter",
     "Version": "1.0.0.0",
-    "Author": "Richard Herman",
+    "Author": "Elgato",
     "Actions": [
         {
             "Name": "Counter",
-            "UUID": "com.geekyeggo.sdpi.counter",
+            "UUID": "com.elgato.sdpi-samples.action",
             "Icon": "imgs/counter/icon",
             "Tooltip": "A counter action",
             "PropertyInspectorPath": "pi/index.html",
