@@ -20,7 +20,7 @@ export class Checkbox extends Persisted(Focusable(Checkable(Input<typeof LitElem
 			html`<input
 				${ref(this.focusElement)}
 				type="checkbox"
-				.checked=${this.value || this.defaultValue || false}
+				.checked=${this.value ?? this.defaultValue ?? false}
 				.disabled=${this.disabled}
 				@change=${(ev: HTMLInputEvent<HTMLInputElement>) => (this.value = ev.target.checked)}
 			/>`,

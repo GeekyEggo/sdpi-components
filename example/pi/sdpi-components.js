@@ -1,6 +1,6 @@
 /**!
 * @license
-* sdpi-components v3.0.0, Copyright Corsair Memory Inc. and other contributors (https://sdpi-components.dev)
+* sdpi-components v3.0.1, Copyright Corsair Memory Inc. and other contributors (https://sdpi-components.dev)
 * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
 */
 (function () {
@@ -1206,10 +1206,11 @@
 
     let Checkbox = class Checkbox extends Persisted(Focusable(Checkable(Input(s$3)))) {
         render() {
+            var _a, _b;
             return this.renderCheckable("checkbox", y `<input
 				${n$1(this.focusElement)}
 				type="checkbox"
-				.checked=${this.value || this.defaultValue || false}
+				.checked=${(_b = (_a = this.value) !== null && _a !== void 0 ? _a : this.defaultValue) !== null && _b !== void 0 ? _b : false}
 				.disabled=${this.disabled}
 				@change=${(ev) => (this.value = ev.target.checked)}
 			/>`, this.label);
