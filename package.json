@@ -1,6 +1,6 @@
 {
     "name": "sdpi-components",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "description": "Web components for your Stream Deck plugin; take the hassle out of the property inspector.",
     "main": "./dist/sdpi-components.js",
     "scripts": {
