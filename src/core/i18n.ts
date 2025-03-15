@@ -9,7 +9,7 @@ type Locales = {
  */
 export class Internationalization {
 	public language = this.getUILanguage();
-	public fallbackLanguage = "en";
+	public fallbackLanguage = this.getFallbackLanguage();
 	public locales?: Locales;
 
 	/**
@@ -40,7 +40,27 @@ export class Internationalization {
 	 * {@link https://developer.chrome.com/docs/extensions/reference/i18n/#method-getUILanguage}
 	 */
 	public getUILanguage(): string {
+		const language = window?.navigator?.language;
+
+		// Chinese Traditional
+		if (language === "zh-Hant" || language === "zh-TW") {
+			return "zh_TW";
+		}
+
+		// Chinese Simplified
+		if (language === "zh-Hans" || language === "zh-CN" || language === "zh") {
+			return "zh_CN";
+		}
+
 		return window.navigator.language ? window.navigator.language.split("-")[0] : "en";
+	}
+
+	/**
+	 * Gets the fallback language based on the current language.
+	 * @returns The fallback language code such as zh or en.
+	 */
+	public getFallbackLanguage(): string {
+		return this.language.startsWith("zh") ? "zh" : "en";
 	}
 }
 
