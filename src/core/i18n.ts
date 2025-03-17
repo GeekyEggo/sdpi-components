@@ -9,7 +9,7 @@ type Locales = {
  */
 export class Internationalization {
 	public language = this.getUILanguage();
-	public fallbackLanguage = this.getFallbackLanguage();
+	public fallbackLanguage = "en";
 	public locales?: Locales;
 
 	/**
@@ -53,14 +53,6 @@ export class Internationalization {
 		}
 
 		return window.navigator.language ? window.navigator.language.split("-")[0] : "en";
-	}
-
-	/**
-	 * Gets the fallback language based on the current language.
-	 * @returns The fallback language code such as zh or en.
-	 */
-	public getFallbackLanguage(): string {
-		return this.language.startsWith("zh") ? "zh" : "en";
 	}
 }
 
