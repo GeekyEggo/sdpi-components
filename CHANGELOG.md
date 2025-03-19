@@ -11,6 +11,27 @@
 
 # Change Log
 
+## v4.0.0
+
+-   ✨ Add support for localizing to Chinese (Traditional).
+
+## v3.0.2
+
+-   🐞 Fix checked state of sdpi-checkbox based on `defaultValue`.
+
+## v3.0.1
+
+-   ♻️ Update package information.
+
+## v3.0.0
+
+-   🐞 Fix settings synchronization when updated from plugin.
+-   🐞 Fix text alignment of sdpi-item label.
+-   🐞 Fix width of input components.
+-   ♻️ Update code style to use Elgato configuration.
+-   ♻️ Update all dependencies.
+-   ♻️ Update ownership.
+
 ## v2.6.2
 
 -   🐞 Fix alignment of checkbox and radio button labels.
