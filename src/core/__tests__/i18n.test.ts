@@ -10,36 +10,84 @@ describe("i18n", () => {
 
 	describe("default language", () => {
 		afterAll(() => jest.spyOn(window.navigator, "language", "get").mockReturnValue("en-GB"));
+		afterEach(() => jest.resetModules());
 
-		const testCases = [
-			{
-				name: "should read window.navigator.language when localized",
-				navigator: "es-ES",
-				language: "es",
-			},
-			{
-				name: "should read window.navigator.language when not localized",
-				navigator: "fr",
-				language: "fr",
-			},
-			{
-				name: "should fallback to en when empty",
-				navigator: "",
-				language: "en",
-			},
-		];
+		it("should read window.navigator.language when localized", async () => {
+			// given.
+			jest.spyOn(window.navigator, "language", "get").mockReturnValue("es-ES");
 
-		testCases.map((testCase) => {
-			it(testCase.name, async () => {
+			// when
+			const i18n = (await import("../i18n")).default;
+
+			// then.
+			expect(i18n.language).toBe("es");
+		});
+
+		it("should read window.navigator.language when not localized", async () => {
+			// given.
+			jest.spyOn(window.navigator, "language", "get").mockReturnValue("fr");
+
+			// when
+			const i18n = (await import("../i18n")).default;
+
+			// then.
+			expect(i18n.language).toBe("fr");
+		});
+
+		it("should fallback to en when empty", async () => {
+			// given.
+			jest.spyOn(window.navigator, "language", "get").mockReturnValue("");
+
+			// when
+			const i18n = (await import("../i18n")).default;
+
+			// then.
+			expect(i18n.language).toBe("en");
+		});
+
+		describe("Simplified/Traditional Chinese", () => {
+			it("should map traditional Chinese zh-TW to zh_TW", async () => {
 				// given.
-				jest.spyOn(window.navigator, "language", "get").mockReturnValue(testCase.navigator);
+				jest.spyOn(window.navigator, "language", "get").mockReturnValue("zh-TW");
 
 				// when
 				const i18n = (await import("../i18n")).default;
-				jest.resetModules();
 
 				// then.
-				expect(i18n.language).toBe(testCase.language);
+				expect(i18n.language).toBe("zh_TW");
+			});
+
+			it("should map traditional Chinese zh-Hant to zh_TW", async () => {
+				// given.
+				jest.spyOn(window.navigator, "language", "get").mockReturnValue("zh-Hant");
+
+				// when
+				const i18n = (await import("../i18n")).default;
+
+				// then.
+				expect(i18n.language).toBe("zh_TW");
+			});
+
+			it("should map simplified Chinese zh-CN to zh_CN", async () => {
+				// given.
+				jest.spyOn(window.navigator, "language", "get").mockReturnValue("zh-CN");
+
+				// when
+				const i18n = (await import("../i18n")).default;
+
+				// then.
+				expect(i18n.language).toBe("zh_CN");
+			});
+
+			it("should map simplified Chinese zh-Hans to zh_CN", async () => {
+				// given.
+				jest.spyOn(window.navigator, "language", "get").mockReturnValue("zh-Hans");
+
+				// when
+				const i18n = (await import("../i18n")).default;
+
+				// then.
+				expect(i18n.language).toBe("zh_CN");
 			});
 		});
 	});

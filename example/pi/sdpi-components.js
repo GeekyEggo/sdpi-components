@@ -1,6 +1,6 @@
 /**!
 * @license
-* sdpi-components v3.0.1, Copyright Corsair Memory Inc. and other contributors (https://sdpi-components.dev)
+* sdpi-components v3.0.2, Copyright Corsair Memory Inc. and other contributors (https://sdpi-components.dev)
 * Lit, Copyright 2019 Google LLC, SPDX-License-Identifier: BSD-3-Clause (https://lit.dev/)
 */
 (function () {
@@ -233,7 +233,7 @@
     class Internationalization {
         constructor() {
             this.language = this.getUILanguage();
-            this.fallbackLanguage = "en";
+            this.fallbackLanguage = this.getFallbackLanguage();
         }
         getMessage(messageName) {
             if (!this.locales || messageName === undefined) {
@@ -246,7 +246,18 @@
             return localize(this.language) || localize(this.fallbackLanguage) || "";
         }
         getUILanguage() {
+            var _a;
+            const language = (_a = window === null || window === void 0 ? void 0 : window.navigator) === null || _a === void 0 ? void 0 : _a.language;
+            if (language === "zh-Hant" || language === "zh-TW") {
+                return "zh_TW";
+            }
+            if (language === "zh-Hans" || language === "zh-CN" || language === "zh") {
+                return "zh_CN";
+            }
             return window.navigator.language ? window.navigator.language.split("-")[0] : "en";
+        }
+        getFallbackLanguage() {
+            return this.language.startsWith("zh") ? "zh" : "en";
         }
     }
     const i18n = new Internationalization();

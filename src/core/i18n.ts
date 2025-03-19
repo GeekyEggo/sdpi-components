@@ -40,6 +40,18 @@ export class Internationalization {
 	 * {@link https://developer.chrome.com/docs/extensions/reference/i18n/#method-getUILanguage}
 	 */
 	public getUILanguage(): string {
+		const language = window.navigator.language;
+
+		// Chinese Traditional
+		if (language === "zh-Hant" || language === "zh-TW") {
+			return "zh_TW";
+		}
+
+		// Chinese Simplified
+		if (language === "zh-Hans" || language === "zh-CN") {
+			return "zh_CN";
+		}
+
 		return window.navigator.language ? window.navigator.language.split("-")[0] : "en";
 	}
 }
