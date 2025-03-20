@@ -89,6 +89,17 @@ describe("i18n", () => {
 				// then.
 				expect(i18n.language).toBe("zh_CN");
 			});
+
+			it("should map to simplified Chinese without region", async () => {
+				// given.
+				jest.spyOn(window.navigator, "language", "get").mockReturnValue("zh");
+
+				// when
+				const i18n = (await import("../i18n")).default;
+
+				// then.
+				expect(i18n.language).toBe("zh_CN");
+			});
 		});
 	});
 
