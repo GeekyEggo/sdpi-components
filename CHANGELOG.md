@@ -11,6 +11,10 @@
 
 # Change Log
 
+## v4.0.1
+
+-   🐞 Fix support for Chinese when no region is specified.
+
 ## v4.0.0
 
 -   ✨ Add support for localizing to Chinese (Traditional).
