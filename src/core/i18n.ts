@@ -48,7 +48,7 @@ export class Internationalization {
 		}
 
 		// Chinese Simplified
-		if (language === "zh-Hans" || language === "zh-CN") {
+		if (language === "zh" || language === "zh-Hans" || language === "zh-CN") {
 			return "zh_CN";
 		}
 
