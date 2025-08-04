@@ -45,6 +45,7 @@ export class SdpiItem extends LitElement {
 				min-height: 28px;
 				padding-right: 11px;
 				text-align: right;
+				user-select: none;
 			}
 		`,
 	];
