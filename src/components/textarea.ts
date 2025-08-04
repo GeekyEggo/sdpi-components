@@ -31,6 +31,22 @@ export class Textarea extends Persisted(Focusable(Input<typeof LitElement, strin
 					font-family: var(--font-family);
 					font-size: var(--font-size);
 				}
+
+				::-webkit-scrollbar {
+					width: 15px;
+					height: 5px;
+				}
+
+				::-webkit-scrollbar-track {
+					-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+					box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+				}
+
+				::-webkit-scrollbar-thumb {
+					background-color: #666666;
+					border-radius: 5px;
+					outline: 1px solid slategrey;
+				}
 			`,
 		];
 	}
