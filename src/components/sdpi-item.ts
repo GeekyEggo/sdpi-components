@@ -12,7 +12,8 @@ export class SdpiItem extends LitElement {
 		hostStyle,
 		css`
 			::-webkit-scrollbar {
-				width: 5px;
+				width: 8px;
+				height: 8px;
 			}
 			::-webkit-scrollbar-track {
 				-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -21,7 +22,6 @@ export class SdpiItem extends LitElement {
 			::-webkit-scrollbar-thumb {
 				background-color: #666666;
 				border-radius: 5px;
-				outline: 1px solid slategrey;
 			}
 
 			.container {

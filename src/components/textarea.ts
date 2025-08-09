@@ -33,8 +33,8 @@ export class Textarea extends Persisted(Focusable(Input<typeof LitElement, strin
 				}
 
 				::-webkit-scrollbar {
-					width: 15px;
-					height: 5px;
+					width: 8px;
+					height: 8px;
 				}
 
 				::-webkit-scrollbar-track {
@@ -45,7 +45,6 @@ export class Textarea extends Persisted(Focusable(Input<typeof LitElement, strin
 				::-webkit-scrollbar-thumb {
 					background-color: #666666;
 					border-radius: 5px;
-					outline: 1px solid slategrey;
 				}
 			`,
 		];
