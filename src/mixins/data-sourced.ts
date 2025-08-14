@@ -3,7 +3,8 @@ import { LitElement } from "lit";
 import { property } from "lit/decorators.js";
 import { SendToPropertyInspectorEvent } from "stream-deck";
 
-import { FilteredMutationObserver, i18n, LocalizedMessage, localizedMessagePropertyOptions } from "../core";
+import { OptionController } from "../controllers/option-controller";
+import { i18n, LocalizedMessage, localizedMessagePropertyOptions } from "../core";
 import streamDeckClient from "../stream-deck/stream-deck-client";
 
 export type DataSourceResult = DataSourceResultItem[];
@@ -29,18 +30,8 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
 	class DataSourced extends superClass {
 		private _dataSourceInitialized = false;
 		private _itemsDataSource?: SendToPropertyInspectorEvent;
-		private _mutationObserver = new FilteredMutationObserver(["optgroup", "option"], () => this.refresh());
 
-		/**
-		 * Initializes a new instance of the data source mixin.
-		 * @param args The arguments.
-		 * @constructor
-		 */
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		constructor(...args: any[]) {
-			super(args);
-			this._mutationObserver.observe(this);
-		}
+		private readonly _optionController = new OptionController(this, () => this.refresh());
 
 		/**
 		 * When specified, the items will be data sourced from the Stream Deck using the specified `dataSource` as the payload (sub) event.
@@ -174,7 +165,7 @@ export const DataSourced = <T extends Constructor<LitElement>>(superClass: T) =>
 				return items;
 			};
 
-			return this._mutationObserver.items.reduce(reducer, []);
+			return (this._optionController.value ?? []).reduce(reducer, []);
 		}
 
 		/**
