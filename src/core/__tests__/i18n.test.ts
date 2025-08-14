@@ -45,6 +45,30 @@ describe("i18n", () => {
 			expect(i18n.language).toBe("en");
 		});
 
+		test.each([
+			{
+				language: "zh-Hant-DE",
+				expected: "zh_TW",
+			},
+			{
+				language: "zh-Hans-DE",
+				expected: "zh_CN",
+			},
+			{
+				language: "en-GB-DE",
+				expected: "en",
+			},
+		])("can parse multi-part language: $language equals $expected", async ({ language, expected }) => {
+			// given.
+			jest.spyOn(window.navigator, "language", "get").mockReturnValue(language);
+
+			// when.
+			const i18n = (await import("../i18n")).default;
+
+			// then.
+			expect(i18n.language).toBe(expected);
+		});
+
 		describe("Simplified/Traditional Chinese", () => {
 			it("should map traditional Chinese zh-TW to zh_TW", async () => {
 				// given.
