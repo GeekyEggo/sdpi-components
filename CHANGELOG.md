@@ -11,6 +11,11 @@
 
 # Change Log
 
+## vNext
+
+-   🐞 Fix scrollbar sizing and style for `sdpi-select` and `sdpi-textarea` ([@IAmPete1](https://github.com/GeekyEggo/sdpi-components/pull/20)).
+-   🐞 Fix `user-select` of item labels ([@IamPete1](https://github.com/GeekyEggo/sdpi-components/pull/22)).
+
 ## v4.0.1
 
 -   🐞 Fix support for Chinese when no region is specified.
