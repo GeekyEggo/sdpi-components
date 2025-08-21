@@ -7,6 +7,7 @@ import "./components/color";
 import "./components/delegate";
 import "./components/file";
 import "./components/i18n";
+import "./components/number";
 import "./components/password";
 import "./components/radio";
 import "./components/range";
