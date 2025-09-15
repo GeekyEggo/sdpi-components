@@ -37,7 +37,7 @@ export class CheckboxList extends Gridded(
 							html`
 								<input
 									type="checkbox"
-									.checked=${(this.value && this.value.findIndex((v) => v == item.value) > -1) ||
+									.checked=${(Array.isArray(this.value) && this.value.findIndex((v) => v == item.value) > -1) ||
 									false}
 									.disabled=${this.disabled || item.disabled || false}
 									.value=${item.value}
